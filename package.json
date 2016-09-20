@@ -1,0 +1,26 @@
+{
+  "name": "weex-pack",
+  "version": "0.0.1",
+  "description": "Weex pack tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "weexpack": "./bin/weexpack"
+  },
+  "keywords": [
+    "weex",
+    "weexpack",
+    "tool",
+    "toolkit"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "chalk": "^1.1.3",
+    "commander": "^2.9.0",
+    "eslint": "^3.5.0",
+    "inquirer": "^1.1.3"
+  }
+}
