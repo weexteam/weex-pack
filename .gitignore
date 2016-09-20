@@ -1,0 +1,17 @@
+.DS_Store
+*.swp
+*.swo
+*.log
+*.iml
+.idea
+.project
+
+node_modules/
+bower_components/
+.svn/
+.sass-cache/
+npm-debug.log*
+
+coverage/
+dist/
+TODO/
