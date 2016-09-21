@@ -1,6 +1,14 @@
 const path = require('path')
 const yeoman = require('yeoman-generator')
 
+const dependencies = [
+]
+
+const devDependencies = [
+  'eslint',
+  'eslint-config-weex',
+]
+
 module.exports = yeoman.Base.extend({
 
   constructor: function () {
@@ -34,6 +42,8 @@ module.exports = yeoman.Base.extend({
   },
 
   install: function() {
+    this.npmInstall(dependencies, { save: true })
+    this.npmInstall(devDependencies, { saveDev: true })
   },
 
   end: function() {
