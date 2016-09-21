@@ -37,7 +37,21 @@ function checkWebEnv(cwd) {
  */
 function install() {
   console.log(`    installing npm packages ...`)
-  child_process.execSync('cnpm install')
+
+  const deps = [
+    'weex-html5',
+  ]
+  const devDeps = [
+    'babel-core',
+    'babel-loader',
+    'eslint',
+    'serve',
+    'webpack',
+    'weex-loader',
+  ]
+
+  child_process.execSync(`cnpm install ${deps.join(' ')} --save`)
+  child_process.execSync(`cnpm install ${devDeps.join(' ')} --save-dev`)
 }
 
 /**
