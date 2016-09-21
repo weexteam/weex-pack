@@ -5,7 +5,8 @@ const chalk = require('chalk')
 const init = require('../src/init/init')
 
 program
-  .usage('[project-name]')
+  .usage('[options] [project-name]')
+  .option('-c, --config [path]', 'specify the configuration file')
   .on('--help', () => {
     console.log('  Examples:')
     console.log()
@@ -23,7 +24,7 @@ if (program.args.length < 1) {
 
 function initProject() {
   // TODO: make sure `program.args[0]` is a valid project name
-  init(program.args[0])
+  init(program.args[0], program.config)
 }
 
 initProject()
