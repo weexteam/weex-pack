@@ -6,7 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Hanks10100/weex-pack.git"
+  },
   "bin": {
+    "weex-pack": "./bin/weexpack",
     "weexpack": "./bin/weexpack"
   },
   "keywords": [
@@ -15,7 +20,16 @@
     "tool",
     "toolkit"
   ],
-  "author": "",
+  "author": "xuxinxin(zhiqian) <873111137@qq.com>",
+  "contributors": [
+    "Hanks <zhanghan.me@gmail.com>",
+    "Fkysly <fkysly@gmail.com>",
+    "VeHan <android_xiaowei@163.com>",
+    "ankokuji <moritaka325@163.com>",
+    "liujiescut <969343185@qq.com>",
+    "shujiewz <rememberwz@gmail.com>",
+    "Icemic <bingfeng.web@gmail.com>"
+  ],
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "^1.1.3",
