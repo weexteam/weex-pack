@@ -32,7 +32,13 @@ function init(projectName, configFile) {
   // TODO: get generator configs from configFile
   const args = []
 
-  const generator = env.create('weex:app', { args })
+  const generator = env.create('weex:app', {
+    args,
+    options: {
+      projectName,
+    }
+  })
+
   generator.destinationRoot(projectName)
   generator.run()
 }

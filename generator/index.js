@@ -1,5 +1,6 @@
 const path = require('path')
 const yeoman = require('yeoman-generator')
+const utils = require('../src/utils')
 
 const dependencies = [
   'weex-html5',
@@ -40,9 +41,17 @@ module.exports = yeoman.Base.extend({
 
     copy('README.md')
     copy('webpack.config.js')
-    copy('package.json')
     copy('src/index.we')
     copy('web/index.html')
+
+    utils.copyAndReplace(
+      this.templatePath('package.json'),
+      this.destinationPath('package.json'),
+      {
+        // replace project name
+        '\\"name\\"\\:\\s*\\"\\w+\\"' : `"name": "${this.options.projectName}"`,
+      }
+    )
   },
 
   install: function() {
