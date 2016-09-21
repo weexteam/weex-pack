@@ -1,3 +1,29 @@
 #!/usr/bin/env node
 
 const program = require('commander')
+const chalk = require('chalk')
+const init = require('../src/init/init')
+
+program
+  .usage('[project-name]')
+  .on('--help', () => {
+    console.log('  Examples:')
+    console.log()
+    console.log(chalk.grey('    # create a standard weex project'))
+    console.log('    $ ' + chalk.blue('weexpack init myProject'))
+    console.log()
+  })
+  .parse(process.argv)
+
+// check if project-name exist
+if (program.args.length < 1) {
+  program.help()
+  process.exit()
+}
+
+function initProject() {
+  // TODO: make sure `program.args[0]` is a valid project name
+  init(program.args[0])
+}
+
+initProject()
