@@ -11,7 +11,6 @@
     "url": "https://github.com/Hanks10100/weex-pack.git"
   },
   "bin": {
-    "weex-pack": "./bin/weexpack",
     "weexpack": "./bin/weexpack"
   },
   "keywords": [
