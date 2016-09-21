@@ -2,11 +2,15 @@ const path = require('path')
 const yeoman = require('yeoman-generator')
 
 const dependencies = [
+  'weex-html5',
 ]
 
 const devDependencies = [
   'eslint',
   'eslint-config-weex',
+  'serve',
+  'webpack',
+  'weex-loader',
 ]
 
 module.exports = yeoman.Base.extend({
@@ -42,8 +46,8 @@ module.exports = yeoman.Base.extend({
   },
 
   install: function() {
-    this.npmInstall(dependencies, { save: true })
-    this.npmInstall(devDependencies, { saveDev: true })
+    // this.npmInstall(dependencies, { save: true })
+    // this.npmInstall(devDependencies, { saveDev: true })
   },
 
   end: function() {
