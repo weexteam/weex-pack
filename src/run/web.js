@@ -50,8 +50,11 @@ function install() {
     'weex-loader',
   ]
 
-  child_process.execSync(`cnpm install ${deps.join(' ')} --save`)
-  child_process.execSync(`cnpm install ${devDeps.join(' ')} --save-dev`)
+  const config = {
+    stdio: [process.stdin, process.stdout, process.stderr]
+  }
+  child_process.execSync(`cnpm install ${deps.join(' ')} --save`, config)
+  child_process.execSync(`cnpm install ${devDeps.join(' ')} --save-dev`, config)
 }
 
 /**
@@ -60,11 +63,14 @@ function install() {
 function startServer() {
   console.log(`    start server`)
 
-  child_process.execSync('npm run build & npm run serve')
+  child_process.execSync('npm run build')
+  child_process.execSync('npm run serve &', {
+    stdio: [process.stdin, process.stdout, process.stderr]
+  })
 
   console.log()
   console.log(` => ${chalk.green('server is running')}`)
-  console.log(`    see {chalk.cyan('http://localhost:8080/web/index.html')}`)
+  console.log(`    see ${chalk.cyan('http://localhost:8080/web/index.html')}`)
 }
 
 module.exports = runWeb
