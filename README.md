@@ -1,3 +1,3 @@
 # Weex Pack Tool
 
-TODO
+[中文版文档](./README.cn.md)
