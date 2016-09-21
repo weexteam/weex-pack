@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander')
+const chalk = require('chalk')
 
 program
   .version(require('../package').version)
@@ -8,3 +9,14 @@ program
   .command('init [name]', 'initialize a standard weex project')
   .command('run [platform]', 'run weex app on the specific platform')
   .parse(process.argv)
+
+function isValidCommand(command) {
+  return command === 'init' || command === 'run'
+}
+
+if (!isValidCommand(program.args[0])) {
+  console.log()
+  console.log(`  ${chalk.red('Unknown command:')} ${chalk.yellow(program.args[0])}`)
+  program.help()
+  process.exit()
+}

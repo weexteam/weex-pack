@@ -34,6 +34,7 @@ function initProject() {
   } else {
     console.log()
     console.log(`  ${chalk.red('Invalid project name:')} ${chalk.yellow(projectName)}`)
+    process.exit()
   }
 
 }

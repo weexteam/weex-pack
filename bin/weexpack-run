@@ -53,7 +53,8 @@ if (isValidPlatform(program.args)) {
   run(program.args[0], program.config)
 
 } else {
-  console.log(`  ${chalk.red('Unknown platform: ' + program.args[0])}`)
+  console.log()
+  console.log(`  ${chalk.red('Unknown platform:')} ${chalk.yellow(program.args[0])}`)
   console.log()
   printExample()
   process.exit()
