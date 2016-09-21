@@ -16,15 +16,26 @@ program
   })
   .parse(process.argv)
 
-// check if project-name exist
+// check if project name exist
 if (program.args.length < 1) {
   program.help()
   process.exit()
 }
 
+/**
+ * Initialize a standard weex project
+ */
 function initProject() {
-  // TODO: make sure `program.args[0]` is a valid project name
-  init(program.args[0], program.config)
+  const projectName = program.args[0]
+
+  // make sure project name is a valid
+  if (projectName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
+    init(projectName, program.config)
+  } else {
+    console.log()
+    console.log(`  ${chalk.red('Invalid project name:')} ${chalk.yellow(projectName)}`)
+  }
+
 }
 
 initProject()
