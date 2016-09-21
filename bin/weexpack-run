@@ -2,6 +2,8 @@
 
 const program = require('commander')
 const chalk = require('chalk')
+const runAndroid = require('../src/run/runAndroid')
+const runIOS = require('../src/run/runIOS')
 
 program
   .usage('<platform> [options]')
@@ -28,13 +30,29 @@ function isValidPlatform(args) {
   return false
 }
 
+/**
+ * Run weex app on the specific platform
+ * @param {String} platform
+ */
+function run(platform, options) {
+  switch (platform) {
+    case 'android' : runAndroid(options); break;
+    case 'ios' : runIOS(options); break;
+  }
+}
+
 // check if platform exist
 if (program.args.length < 1) {
   program.help()
   process.exit()
 }
 
-if (!isValidPlatform(program)) {
+if (isValidPlatform(program.args)) {
+
+  // TODO: parse config file
+  run(program.args[0], program.config)
+
+} else {
   console.log(`  ${chalk.red('Unknown platform: ' + program.args[0])}`)
   console.log()
   printExample()
