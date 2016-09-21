@@ -4,6 +4,7 @@ const program = require('commander')
 const chalk = require('chalk')
 const runAndroid = require('../src/run/Android')
 const runIOS = require('../src/run/iOS')
+const runWeb = require('../src/run/web')
 
 program
   .usage('<platform> [options]')
@@ -25,7 +26,7 @@ program.on('--help', printExample)
 
 function isValidPlatform(args) {
   if (args && args.length) {
-    return args[0] === 'android' || args[0] === 'ios'
+    return args[0] === 'android' || args[0] === 'ios' || args[0] === 'web'
   }
   return false
 }
@@ -38,6 +39,7 @@ function run(platform, options) {
   switch (platform) {
     case 'android' : runAndroid(options); break;
     case 'ios' : runIOS(options); break;
+    case 'web' : runWeb(options); break;
   }
 }
 
