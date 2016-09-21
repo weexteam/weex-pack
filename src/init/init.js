@@ -9,6 +9,7 @@ const yeoman = require('yeoman-environment')
  */
 function init(projectName, configFile) {
   console.log(` => ${chalk.blue('Initialize a new Weex app')} (${chalk.cyan(projectName)})`)
+
   const env = yeoman.createEnv()
 
   env.register(
@@ -16,7 +17,10 @@ function init(projectName, configFile) {
     'weex:app'
   )
 
-  const generator = env.create('weex:app', {args: []})
+  // TODO: get generator configs from configFile
+  const args = []
+
+  const generator = env.create('weex:app', { args })
   generator.destinationRoot(projectName)
   generator.run()
 }
