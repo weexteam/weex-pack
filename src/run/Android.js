@@ -1,8 +1,9 @@
 const chalk = require('chalk')
 const utils = require('../utils')
+const adb = require('./adb')
 
 /**
- * Starts Android app on a connected emulator or device
+ * Build and run Android app on a connected emulator or device
  * @param {Object} options
  */
 function runAndroid(options) {
@@ -16,6 +17,30 @@ function runAndroid(options) {
 
   console.log()
   console.log(` => ${chalk.blue.bold('Will start Android app')}`)
+
+  startServer()
+  buildApp(options)
+  runApp(options)
+}
+
+/**
+ * Start server in new window
+ */
+function startServer() {
+}
+
+/**
+ * Build the Android app
+ * @param {Object} options
+ */
+function buildApp(options) {
+}
+
+/**
+ * Run the Android app on emulator or device
+ * @param {Object} options
+ */
+function runApp(options) {
 }
 
 module.exports = runAndroid
