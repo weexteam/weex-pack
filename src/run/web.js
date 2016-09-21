@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
+const child_process = require('child_process')
 
 /**
  * Start web service
@@ -35,12 +36,21 @@ function checkWebEnv(cwd) {
  * Install npm dependencies
  */
 function install() {
+  console.log(`    installing npm packages ...`)
+  child_process.execSync('cnpm install')
 }
 
 /**
  * Start a web server
  */
 function startServer() {
+  console.log(`    start server`)
+
+  child_process.execSync('npm run build & npm run serve')
+
+  console.log()
+  console.log(` => ${chalk.green('server is running')}`)
+  console.log(`    see {chalk.cyan('http://localhost:8080/web/index.html')}`)
 }
 
 module.exports = runWeb
