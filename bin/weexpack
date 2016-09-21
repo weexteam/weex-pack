@@ -6,6 +6,5 @@ program
   .version(require('../package').version)
   .usage('<command> [options]')
   .command('init [name]', 'initialize a standard weex project')
-  .command('run-ios [options]', 'run the ios project')
-  .command('run-android [options]', 'run the android project')
+  .command('run [platform]', 'run weex app on the specific platform')
   .parse(process.argv)

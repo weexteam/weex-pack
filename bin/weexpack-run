@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+const program = require('commander')
+const chalk = require('chalk')
+
+program
+  .usage('<platform> [options]')
+  .option('-c, --config [path]', 'specify the configuration file')
+  .parse(process.argv)
+
+function printExample() {
+  console.log('  Examples:')
+  console.log()
+  console.log(chalk.grey('    # run weex Android project'))
+  console.log('    $ ' + chalk.blue('weexpack run android'))
+  console.log()
+  console.log(chalk.grey('    # run weex iOS project'))
+  console.log('    $ ' + chalk.blue('weexpack run ios'))
+  console.log()
+}
+
+program.on('--help', printExample)
+
+function isValidPlatform(args) {
+  if (args && args.length) {
+    return args[0] === 'android' || args[0] === 'ios'
+  }
+  return false
+}
+
+// check if platform exist
+if (program.args.length < 1) {
+  program.help()
+  process.exit()
+}
+
+if (!isValidPlatform(program)) {
+  console.log(`  ${chalk.red('Unknown platform: ' + program.args[0])}`)
+  console.log()
+  printExample()
+  process.exit()
+}
