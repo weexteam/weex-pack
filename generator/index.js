@@ -32,17 +32,17 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function() {
-    this.fs.copy(this.templatePath('**/*'), this.destinationPath())
+    // this.fs.copy(this.templatePath('**/*'), this.destinationPath())
 
-    // const copyTo = (src, dist) => {
-    //   if (src && dist) {
-    //     this.fs.copy(this.templatePath(src), this.destinationPath(dist))
-    //   }
-    // }
+    const copy = (file, dist) => {
+      this.fs.copy(this.templatePath(file), this.destinationPath(file))
+    }
 
-    // copyTo('_gitignore', '.gitignore')
-    // copyTo('android', 'android')
-    // copyTo('_buckconfig', '.buckconfig')
+    copy('README.md')
+    copy('webpack.config.js')
+    copy('package.json')
+    copy('src/index.we')
+    copy('web/index.html')
   },
 
   install: function() {
