@@ -71,6 +71,11 @@ function startServer() {
   console.log()
   console.log(` => ${chalk.green('server is running')}`)
   console.log(`    see ${chalk.cyan('http://localhost:8080/web/index.html')}`)
+
+  // open url in browser
+  try {
+    child_process.execSync(`open http://localhost:8080/web/index.html`)
+  } catch(e) {}
 }
 
 module.exports = runWeb
