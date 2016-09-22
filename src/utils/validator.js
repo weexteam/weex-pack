@@ -10,6 +10,14 @@ function checkAndroid(cwd) {
 }
 
 /**
+ * Verifies there has a ios folder
+ * @param {String} root directory path
+ */
+function checkIOS(cwd) {
+  return fs.existsSync(path.join(cwd, 'ios'))
+}
+
+/**
  * Check if current cli is running on Windows platform
  */
 function isOnWindows() {
@@ -32,6 +40,7 @@ function isOnLinux() {
 
 module.exports = {
   checkAndroid,
+  checkIOS,
   isOnWindows,
   isOnMac,
   isOnLinux,
