@@ -1,0 +1,4 @@
+rm -rf ios
+git clone git@github.com:acton393/WeexOCExample.git ios
+cd ios
+git checkout cocoaPods-project
