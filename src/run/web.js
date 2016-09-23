@@ -36,32 +36,16 @@ function checkWebEnv(cwd) {
  * Install npm dependencies
  */
 function install() {
-  console.log(`    installing npm packages ...`)
+  console.log(` => ${chalk.blue.bold('npm install')}`)
 
-  const deps = [
-    'weex-html5',
-  ]
-  const devDeps = [
-    'babel-core',
-    'babel-loader',
-    'eslint',
-    'serve',
-    'webpack',
-    'weex-loader',
-  ]
-
-  const config = {
-    stdio: [process.stdin, process.stdout, process.stderr]
-  }
-  child_process.execSync(`cnpm install ${deps.join(' ')} --save`, config)
-  child_process.execSync(`cnpm install ${devDeps.join(' ')} --save-dev`, config)
+  child_process.execSync(`cnpm install`)
 }
 
 /**
  * Start a web server
  */
 function startServer() {
-  console.log(`    start server`)
+  console.log(` => ${chalk.blue.bold('start server')}`)
 
   child_process.execSync('npm run build')
   child_process.execSync('npm run serve &', {

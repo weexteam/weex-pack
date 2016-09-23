@@ -1,4 +1,0 @@
-rm -rf ./generator/ios/templates
-git clone git@github.com:acton393/WeexOCExample.git ./generator/ios/templates
-cd ./generator/ios/templates
-git checkout cocoaPods-project

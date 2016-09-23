@@ -48,6 +48,25 @@ const utils = {
     return null
   },
 
+  parseIOSDevicesList(text) {
+    const devices = []
+    const REG_DEVICE = /(.*?) \((.*?)\) \[(.*?)\]/
+
+    const lines = text.split('\n')
+    for (const line of lines) {
+      const device = line.match(REG_DEVICE)
+      if (device !== null && line.indexOf('Watch') === -1) {
+        const name = device[1]
+        const version = device[2]
+        const udid = device[3]
+        const isSimulator = line.indexOf('Simulator') >= 0
+        devices.push({name, version, udid, isSimulator})
+      }
+    }
+
+    return devices
+  }
+
 }
 
 module.exports = Object.assign(utils, output, validator)
