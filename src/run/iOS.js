@@ -15,8 +15,10 @@ function runIOS(options) {
     .then(chooseDevice)
     .then(buildApp)
     .then(runApp)
-    .catch((e) => {
-      console.log(e)
+    .catch((err) => {
+      if (err) {
+        console.log(err)
+      }
     })
 }
 
@@ -97,12 +99,12 @@ function findIOSDevice({xcodeProject, options}) {
  * @param {Array} devicesList: name, version, id, isSimulator
  * @param {Object} xcode project
  * @param {Object} options
- * @return {String} deviceId
+ * @return {Object} device
  */
 function chooseDevice({devicesList, xcodeProject, options}) {
   return new Promise((resolve, reject) => {
-    if (devicesList) {
-      const listNames = [new inquirer.Separator(' = Real devices = ')]
+    if (devicesList && devicesList.length > 0) {
+      const listNames = []
       for (const device of devicesList) {
         listNames.unshift(
           {
@@ -111,6 +113,8 @@ function chooseDevice({devicesList, xcodeProject, options}) {
           }
         )
       }
+
+      listNames.unshift(new inquirer.Separator(' = devices = '))
 
       inquirer.prompt([
         {
@@ -130,6 +134,12 @@ function chooseDevice({devicesList, xcodeProject, options}) {
   })
 }
 
+/**
+ * build the iOS app on simulator or real device
+ * @param {Object} device
+ * @param {Object} xcode project
+ * @param {Object} options
+ */
 function buildApp({device, xcodeProject, options}) {
   return new Promise((resolve, reject) => {
     let projectInfo = ''
@@ -152,6 +162,9 @@ function buildApp({device, xcodeProject, options}) {
 
 /**
  * build the iOS app on simulator
+ * @param {Object} device
+ * @param {Object} xcode project
+ * @param {Object} options
  */
 function _buildOnSimulator({scheme, device, xcodeProject, options, resolve, reject}) {
   console.log('project is building ...')
@@ -161,12 +174,14 @@ function _buildOnSimulator({scheme, device, xcodeProject, options, resolve, reje
   } catch (e) {
     reject(e)
   }
-  // console.log(buildInfo)
   resolve({device, xcodeProject, options})
 }
 
 /**
  * build the iOS app on real device
+ * @param {Object} device
+ * @param {Object} xcode project
+ * @param {Object} options
  */
 function _buildOnRealDevice({scheme, device, xcodeProject, options, resolve, reject}) {
   // @TODO support debug on real device
@@ -175,7 +190,7 @@ function _buildOnRealDevice({scheme, device, xcodeProject, options, resolve, rej
 
 /**
  * Run the iOS app on simulator or device
- * @param {String} device
+ * @param {Object} device
  * @param {Object} xcode project
  * @param {Object} options
  */
@@ -191,7 +206,7 @@ function runApp({device, xcodeProject, options}) {
 
 /**
  * Run the iOS app on simulator
- * @param {String} device
+ * @param {Object} device
  * @param {Object} xcode project
  * @param {Object} options
  */
@@ -260,7 +275,7 @@ function simulatorIsAvailable(info, device) {
 
 /**
  * Run the iOS app on device
- * @param {String} device
+ * @param {Object} device
  * @param {Object} xcode project
  * @param {Object} options
  */

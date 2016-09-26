@@ -2,72 +2,192 @@ const path = require('path')
 const chalk = require('chalk')
 const child_process = require('child_process')
 const utils = require('../utils')
-const adb = require('./adb')
+const fs = require('fs')
+const inquirer = require('inquirer')
 
 /**
  * Build and run Android app on a connected emulator or device
  * @param {Object} options
  */
 function runAndroid(options) {
-  const rootPath = process.cwd()
-
-  if (!utils.checkAndroid(rootPath)) {
-    console.log()
-    console.log(chalk.red('  Android project not found !'))
-    console.log()
-    console.log(`  You should run ${chalk.blue('weexpack init')} first`)
-    return
-  }
-
-  console.log()
-  console.log(` => ${chalk.blue.bold('Will start Android app')}`)
-
-  // change working directory to android
-  process.chdir(path.join(rootPath, 'android'))
-
-  startServer()
-  buildApp(options)
-  runApp(options)
+  prepareAndroid({options})
+    .then(findAndroidDevice)
+    .then(chooseDevice)
+    .then(buildApp)
+    .then(installApp)
+    .then(runApp)
+    .catch((err) => {
+      if (err) {
+        console.log(err)
+      }
+    })
 }
 
 /**
- * Start server in new window
+ * Prepare
+ * @param {Object} options
  */
-function startServer() {
+function prepareAndroid({options}) {
+  return new Promise((resolve, reject) => {
+    const rootPath = process.cwd()
+
+    if (!utils.checkAndroid(rootPath)) {
+      console.log()
+      console.log(chalk.red('  Android project not found !'))
+      console.log()
+      console.log(`  You should run ${chalk.blue('weexpack init')} first`)
+      reject()
+    }
+
+    console.log()
+    console.log(` => ${chalk.blue.bold('Will start Android app')}`)
+
+    // change working directory to android
+    process.chdir(path.join(rootPath, 'android'))
+
+    if (!process.env.ANDROID_HOME) {
+      console.log()
+      console.log(chalk.red('  Environment variable $ANDROID_HOME not found !'))
+      console.log()
+      console.log(`  You should set $ANDROID_HOME first.`)
+      console.log(`  See ${chalk.cyan('http://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x')}`)
+      reject()
+    }
+
+    try {
+      child_process.execSync(`adb kill-server`, {encoding: 'utf8'})
+    } catch(e) {
+      reject()
+    }
+    try {
+      child_process.execSync(`adb start-server`, {encoding: 'utf8'})
+    } catch(e) {
+      reject()
+    }
+
+    resolve({options})
+  })
+}
+
+/**
+ * find android devices
+ * @param {Object} options
+ */
+function findAndroidDevice({options}) {
+  return new Promise((resolve, reject) => {
+    let devicesInfo = ''
+    try {
+      devicesInfo = child_process.execSync(`adb devices`, {encoding: 'utf8'})
+    } catch(e) {
+      console.log(chalk.red(`adb devices failed, please make sure you have adb in your PATH.`))
+      console.log(`See ${chalk.cyan('http://stackoverflow.com/questions/27301960/errorunable-to-locate-adb-within-sdk-in-android-studio')}`)
+      reject()
+    }
+
+    let devicesList = utils.parseDevicesResult(devicesInfo)
+
+    resolve({devicesList, options})
+  })
+}
+
+/**
+ * Choose one device to run
+ * @param {Array} devicesList: name, version, id, isSimulator
+ * @param {Object} options
+ */
+function chooseDevice({devicesList, options}) {
+  return new Promise((resolve, reject) => {
+    if (devicesList) {
+      const listNames = []
+      for (const device of devicesList) {
+        listNames.unshift(
+          {
+            name: `${device}`,
+            value: device
+          }
+        )
+      }
+      listNames.unshift(new inquirer.Separator(' = devices = '))
+
+      inquirer.prompt([
+        {
+          type: 'list',
+          message: 'Choose one of the following devices',
+          name: 'chooseDevice',
+          choices: listNames
+        }
+      ])
+      .then((answers) => {
+        const device = answers.chooseDevice
+        resolve({device, options})
+      })
+    } else {
+      reject('No android devices found.')
+    }
+  })
 }
 
 /**
  * Build the Android app
+ * @param {String} device
  * @param {Object} options
  */
-function buildApp(options) {
-  try {
-    const cmdFile = utils.isOnWindows()
-      ? path.join(process.cwd(), './bin/gradlew.bat')
-      : path.join(process.cwd(), './bin/gradlew')
+function buildApp({device, options}) {
+  return new Promise((resolve, reject) => {
+    console.log(` => ${chalk.blue.bold('Building app ...')}`)
+    try {
+      child_process.execSync(`./gradlew clean assemble`, {encoding: 'utf8', stdio: [0,1,2]})
+    } catch(e) {
+      reject()
+    } 
 
-    // TODO: setup gradle configs
-    const gradleArgs = []
+    resolve({device, options})
+  })
+}
 
-    // run gradle command file
-    console.log(` => ${chalk.bold('Building the app on device')}`)
-    child_process.execFileSync(cmdFile, gradleArgs, {
-      stdio: [process.stdin, process.stdout, process.stderr],
-    })
-  } catch (e) {
-    console.log()
-    console.log(`    ${chalk.red.bold('Could not install the app on the device !')}`)
-    console.log()
-    console.log(`    Please make sure you have an Android emulator running or a device connected`)
-    console.log(`    See ${chalk.cyan('http://alibaba.github.io/weex/doc/advanced/integrate-to-android.html')}`)
-  }
+/**
+ * Install the Android app
+ * @param {String} device
+ * @param {Object} options
+ */
+function installApp({device, options}) {
+  return new Promise((resolve, reject) => {
+    console.log(` => ${chalk.blue.bold('Install app ...')}`)
+    
+    const apkName = 'app/build/outputs/apk/playground.apk'
+    try {
+      child_process.execSync(`adb -s ${device} install -r  ${apkName}`, {encoding: 'utf8'})
+    } catch(e) {
+      reject()
+    }
+
+    resolve({device, options})
+  })
 }
 
 /**
  * Run the Android app on emulator or device
+ * @param {String} device
  * @param {Object} options
  */
-function runApp(options) {
+function runApp({device, options}) {
+  return new Promise((resolve, reject) => {
+    console.log(` => ${chalk.blue.bold('Running app ...')}`)
+
+    const packageName = fs.readFileSync(
+      'app/src/main/AndroidManifest.xml',
+      'utf8'
+    ).match(/package="(.+?)"/)[1]
+    
+
+    try {
+      child_process.execSync(`adb -s ${device} shell am start -n ${packageName}/.SplashActivity`, {encoding: 'utf8'})
+    } catch(e) {
+      reject()
+    }
+
+    resolve()
+  })
 }
 
 module.exports = runAndroid
