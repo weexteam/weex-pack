@@ -1,9 +1,21 @@
-# called by native
-THIS_DIR=$(dirname "$0")
-pushd "$THIS_DIR"
+echo "*****************************************************************************"
+echo "*                             Welcome to Weex                               *"
+echo "*                                                                           *"
+echo "*             A framework for building Mobile cross-platform UI.            *"
+echo "*                                                                           *"
+echo "*                      https://github.com/alibaba/weex                      *"
+echo "*****************************************************************************"
+       
+if nc -w 5 -z localhost 8080 ; then
+    echo "Port 8080 already in use, server is running"
+else
+    THIS_DIR=$(dirname "$0")
+    pushd "$THIS_DIR"
+    cnpm install
+    cnpm run build
+    cnpm run serve
 
-cnpm install
-cnpm run build
-cnpm run serve
+    open http://localhost:8080/web/index.html
 
-popd
+    popd  
+fi

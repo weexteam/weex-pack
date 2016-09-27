@@ -1,18 +1,23 @@
 const path = require('path')
 const chalk = require('chalk')
 const child_process = require('child_process')
-const utils = require('../utils')
 const fs = require('fs')
 const inquirer = require('inquirer')
+
+const utils = require('../utils')
+const startJSServer = require('./server')
 
 /**
  * Build and run Android app on a connected emulator or device
  * @param {Object} options
  */
 function runAndroid(options) {
+  startJSServer()
+  
   prepareAndroid({options})
     .then(findAndroidDevice)
     .then(chooseDevice)
+    .then(reverseDevice)
     .then(buildApp)
     .then(installApp)
     .then(runApp)
@@ -124,6 +129,23 @@ function chooseDevice({devicesList, options}) {
     } else {
       reject('No android devices found.')
     }
+  })
+}
+
+/**
+ * Adb reverse device, allow device connect host network
+ * @param {String} device
+ * @param {Object} options
+ */
+function reverseDevice({device, options}) {
+  return new Promise((resolve, reject) => {
+    try {
+      child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, {encoding: 'utf8'})
+    } catch(e) {
+      reject()
+    } 
+
+    resolve({device, options})
   })
 }
 

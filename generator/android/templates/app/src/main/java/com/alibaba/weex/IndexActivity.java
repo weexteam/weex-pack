@@ -34,8 +34,8 @@ public class IndexActivity extends AbstractWeexActivity {
   private static final int CAMARA_PERMISSION_REQUEST_CODE = 0x1;
   private static final String TAG = "IndexActivity";
   private static final String DEFAULT_IP = "your_current_IP";
-  private static String CURRENT_IP= DEFAULT_IP; // your_current_IP
-  private static final String WEEX_INDEX_URL = "http://"+CURRENT_IP+":12580/examples/build/index.js";
+  private static String CURRENT_IP= "127.0.0.1"; // your_current_IP
+  private static final String WEEX_INDEX_URL = "http://"+CURRENT_IP+":8080/dist/index.js";
 
   private ProgressBar mProgressBar;
   private TextView mTipView;

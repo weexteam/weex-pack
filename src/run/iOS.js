@@ -1,14 +1,18 @@
 const path = require('path')
 const chalk = require('chalk')
 const child_process = require('child_process')
-const utils = require('../utils')
 const inquirer = require('inquirer')
+
+const utils = require('../utils')
+const startJSServer = require('./server')
 
 /**
  * Run iOS app
  * @param {Object} options
  */
 function runIOS(options) {
+  startJSServer()
+
   prepareIOS({options})
     .then(installDep)
     .then(findIOSDevice)
@@ -64,15 +68,15 @@ function prepareIOS({options}) {
  */
 function installDep({xcodeProject, options}) {
   return new Promise((resolve, reject) => {
-    resolve({xcodeProject, options})
-    console.log(` => ${chalk.blue.bold('pod install')}`)
     try {
+      console.log(` => ${chalk.blue.bold('pod install')}`)
       child_process.execSync('pod install', {encoding: 'utf8'})
     } catch(e) {
       reject(e)
     }
-    resolve(xcodeProject, options)
+    resolve({xcodeProject, options})
   })
+  
 }
 
 /**
