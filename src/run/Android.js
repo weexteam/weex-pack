@@ -204,7 +204,7 @@ function runApp({device, options}) {
     try {
       child_process.execSync(`adb -s ${device} shell am start -n ${packageName}/.SplashActivity`, {encoding: 'utf8'})
     } catch(e) {
-      reject()
+      reject(e)
     }
 
     resolve()
