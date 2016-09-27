@@ -108,17 +108,15 @@ function findIOSDevice({xcodeProject, options}) {
 function chooseDevice({devicesList, xcodeProject, options}) {
   return new Promise((resolve, reject) => {
     if (devicesList && devicesList.length > 0) {
-      const listNames = []
+      const listNames = [new inquirer.Separator(' = devices = ')]
       for (const device of devicesList) {
-        listNames.unshift(
+        listNames.push(
           {
             name: `${device.name} ios: ${device.version}`,
             value: device
           }
         )
       }
-
-      listNames.unshift(new inquirer.Separator(' = devices = '))
 
       inquirer.prompt([
         {

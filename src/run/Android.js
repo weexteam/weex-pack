@@ -103,16 +103,15 @@ function findAndroidDevice({options}) {
 function chooseDevice({devicesList, options}) {
   return new Promise((resolve, reject) => {
     if (devicesList) {
-      const listNames = []
+      const listNames = [new inquirer.Separator(' = devices = ')]
       for (const device of devicesList) {
-        listNames.unshift(
+        listNames.push(
           {
             name: `${device}`,
             value: device
           }
         )
       }
-      listNames.unshift(new inquirer.Separator(' = devices = '))
 
       inquirer.prompt([
         {

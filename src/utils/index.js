@@ -54,8 +54,11 @@ const utils = {
 
     const lines = text.split('\n')
     for (const line of lines) {
+      if (line.indexOf('Watch') >= 0 || line.indexOf('TV') >= 0 || line.indexOf('iPad') >= 0) {
+        continue
+      }
       const device = line.match(REG_DEVICE)
-      if (device !== null && line.indexOf('Watch') === -1) {
+      if (device !== null) {
         const name = device[1]
         const version = device[2]
         const udid = device[3]
