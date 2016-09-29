@@ -42,7 +42,7 @@ function prepareIOS({options}) {
     }
 
     // change working directory to ios
-    process.chdir(path.join(rootPath, 'ios'))
+    process.chdir(path.join(rootPath, 'ios/playground'))
 
     const xcodeProject = utils.findXcodeProject(process.cwd())
 

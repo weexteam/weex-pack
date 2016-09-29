@@ -11,9 +11,9 @@ if nc -w 5 -z localhost 8080 ; then
 else
     THIS_DIR=$(dirname "$0")
     pushd "$THIS_DIR"
-    cnpm install
-    cnpm run build
-    cnpm run serve
+    npm install
+    npm run build
+    npm run serve
 
     open http://localhost:8080/web/index.html
 

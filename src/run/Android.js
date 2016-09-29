@@ -48,7 +48,7 @@ function prepareAndroid({options}) {
     console.log(` => ${chalk.blue.bold('Will start Android app')}`)
 
     // change working directory to android
-    process.chdir(path.join(rootPath, 'android'))
+    process.chdir(path.join(rootPath, 'android/playground'))
 
     if (!process.env.ANDROID_HOME) {
       console.log()
