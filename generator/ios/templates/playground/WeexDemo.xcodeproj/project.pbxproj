@@ -494,7 +494,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -x\n\nif nc -w 5 -z localhost 8080 ; then\n    echo \"Port 8080 already in use, server is running\"\nelse\n    open \"$SRCROOT/../start\"\n\nfi\n\n";
+			shellScript = "";
 		};
 		84361D271CA10F8E00F43825 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
