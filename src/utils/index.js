@@ -54,8 +54,11 @@ const utils = {
 
     const lines = text.split('\n')
     for (const line of lines) {
+      if (line.indexOf('Watch') >= 0 || line.indexOf('TV') >= 0 || line.indexOf('iPad') >= 0) {
+        continue
+      }
       const device = line.match(REG_DEVICE)
-      if (device !== null && line.indexOf('Watch') === -1) {
+      if (device !== null) {
         const name = device[1]
         const version = device[2]
         const udid = device[3]
@@ -65,6 +68,23 @@ const utils = {
     }
 
     return devices
+  },
+  parseDevicesResult(result) {
+    if (!result) {
+      return [];
+    }
+
+    const devices = [];
+    const lines = result.trim().split(/\r?\n/);
+
+    for (let i=0; i < lines.length; i++) {
+      let words = lines[i].split(/[ ,\t]+/).filter((w) => w !== '');
+
+      if (words[1] === 'device') {
+        devices.push(words[0]);
+      }
+    }
+    return devices;
   }
 
 }

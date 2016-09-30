@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
 const child_process = require('child_process')
+const startJSServer = require('./server')
 
 /**
  * Start web service
@@ -19,8 +20,9 @@ function runWeb(options) {
   console.log()
   console.log(` => ${chalk.blue.bold('Starting web service')}`)
 
-  install()
-  startServer()
+
+  startJSServer()
+  preview()
 }
 
 /**
@@ -33,33 +35,16 @@ function checkWebEnv(cwd) {
 }
 
 /**
- * Install npm dependencies
+ * Preview in browser
  */
-function install() {
-  console.log(` => ${chalk.blue.bold('npm install')}`)
-
-  child_process.execSync(`cnpm install`)
-}
-
-/**
- * Start a web server
- */
-function startServer() {
-  console.log(` => ${chalk.blue.bold('start server')}`)
-
-  child_process.execSync('npm run build')
-  child_process.execSync('npm run serve &', {
-    stdio: [process.stdin, process.stdout, process.stderr]
-  })
-
-  console.log()
+function preview() {
   console.log(` => ${chalk.green('server is running')}`)
-  console.log(`    see ${chalk.cyan('http://localhost:8080/web/index.html')}`)
+  console.log(`    please open ${chalk.cyan('http://localhost:8080/web/index.html')}`)
 
   // open url in browser
-  try {
-    child_process.execSync(`open http://localhost:8080/web/index.html`)
-  } catch(e) {}
+  // try {
+  //   child_process.execSync(`open http://localhost:8080/web/index.html`, {encoding: 'utf8'})
+  // } catch(e) {}
 }
 
 module.exports = runWeb

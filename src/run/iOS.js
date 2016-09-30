@@ -1,22 +1,28 @@
 const path = require('path')
 const chalk = require('chalk')
 const child_process = require('child_process')
-const utils = require('../utils')
 const inquirer = require('inquirer')
+
+const utils = require('../utils')
+const startJSServer = require('./server')
 
 /**
  * Run iOS app
  * @param {Object} options
  */
 function runIOS(options) {
+  startJSServer()
+
   prepareIOS({options})
     .then(installDep)
     .then(findIOSDevice)
     .then(chooseDevice)
     .then(buildApp)
     .then(runApp)
-    .catch((e) => {
-      console.log(e)
+    .catch((err) => {
+      if (err) {
+        console.log(err)
+      }
     })
 }
 
@@ -36,7 +42,7 @@ function prepareIOS({options}) {
     }
 
     // change working directory to ios
-    process.chdir(path.join(rootPath, 'ios'))
+    process.chdir(path.join(rootPath, 'ios/playground'))
 
     const xcodeProject = utils.findXcodeProject(process.cwd())
 
@@ -62,15 +68,15 @@ function prepareIOS({options}) {
  */
 function installDep({xcodeProject, options}) {
   return new Promise((resolve, reject) => {
-    resolve({xcodeProject, options})
-    console.log(` => ${chalk.blue.bold('pod install')}`)
     try {
+      console.log(` => ${chalk.blue.bold('pod install')}`)
       child_process.execSync('pod install', {encoding: 'utf8'})
     } catch(e) {
       reject(e)
     }
-    resolve(xcodeProject, options)
+    resolve({xcodeProject, options})
   })
+  
 }
 
 /**
@@ -97,14 +103,14 @@ function findIOSDevice({xcodeProject, options}) {
  * @param {Array} devicesList: name, version, id, isSimulator
  * @param {Object} xcode project
  * @param {Object} options
- * @return {String} deviceId
+ * @return {Object} device
  */
 function chooseDevice({devicesList, xcodeProject, options}) {
   return new Promise((resolve, reject) => {
-    if (devicesList) {
-      const listNames = [new inquirer.Separator(' = Real devices = ')]
+    if (devicesList && devicesList.length > 0) {
+      const listNames = [new inquirer.Separator(' = devices = ')]
       for (const device of devicesList) {
-        listNames.unshift(
+        listNames.push(
           {
             name: `${device.name} ios: ${device.version}`,
             value: device
@@ -130,6 +136,12 @@ function chooseDevice({devicesList, xcodeProject, options}) {
   })
 }
 
+/**
+ * build the iOS app on simulator or real device
+ * @param {Object} device
+ * @param {Object} xcode project
+ * @param {Object} options
+ */
 function buildApp({device, xcodeProject, options}) {
   return new Promise((resolve, reject) => {
     let projectInfo = ''
@@ -152,6 +164,9 @@ function buildApp({device, xcodeProject, options}) {
 
 /**
  * build the iOS app on simulator
+ * @param {Object} device
+ * @param {Object} xcode project
+ * @param {Object} options
  */
 function _buildOnSimulator({scheme, device, xcodeProject, options, resolve, reject}) {
   console.log('project is building ...')
@@ -161,12 +176,14 @@ function _buildOnSimulator({scheme, device, xcodeProject, options, resolve, reje
   } catch (e) {
     reject(e)
   }
-  // console.log(buildInfo)
   resolve({device, xcodeProject, options})
 }
 
 /**
  * build the iOS app on real device
+ * @param {Object} device
+ * @param {Object} xcode project
+ * @param {Object} options
  */
 function _buildOnRealDevice({scheme, device, xcodeProject, options, resolve, reject}) {
   // @TODO support debug on real device
@@ -175,7 +192,7 @@ function _buildOnRealDevice({scheme, device, xcodeProject, options, resolve, rej
 
 /**
  * Run the iOS app on simulator or device
- * @param {String} device
+ * @param {Object} device
  * @param {Object} xcode project
  * @param {Object} options
  */
@@ -191,7 +208,7 @@ function runApp({device, xcodeProject, options}) {
 
 /**
  * Run the iOS app on simulator
- * @param {String} device
+ * @param {Object} device
  * @param {Object} xcode project
  * @param {Object} options
  */
@@ -260,7 +277,7 @@ function simulatorIsAvailable(info, device) {
 
 /**
  * Run the iOS app on device
- * @param {String} device
+ * @param {Object} device
  * @param {Object} xcode project
  * @param {Object} options
  */
