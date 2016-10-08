@@ -1,5 +1,7 @@
 # Weex Engineering Development Kit
-***
+
+[中文版文档](./README.cn.md)
+
 ### Weexpack introduction
 Weexpack is our next generation of engineering development kits. It allows developers to create weex projects with simple commands and run the project on different development platforms.
 
@@ -47,7 +49,7 @@ The final resulting directory structure looks like this:
     |     |—— /sdk
     |     |—— /inspector
     |     |—— /weex_debug
-    
+
 Next, go to the directory, and install the dependencies:
 
     $ cd appName && npm install
@@ -55,7 +57,7 @@ Next, go to the directory, and install the dependencies:
 On the ios platform, run the project:
 
     $ weexpack run ios
-    
+
 In the android platform, run the project:
 
     $ weexpack run android
@@ -63,7 +65,7 @@ In the android platform, run the project:
 On the html5 platform, run the project:
 
     $ weexpack run html5
-    
+
 For developers who have a packaged release, you can make changes directly to the playground project. Follow-up, weexpack will be further added to the packaging, testing and other functions.
 
 
@@ -75,5 +77,3 @@ For developers who have a packaged release, you can make changes directly to the
   [6]: https://www.docker.com/
   [7]: https://developer.android.com/studio/releases/sdk-tools.html
   [8]: https://developer.android.com/studio/run/managing-avds.html
-
-[中文版文档](./README.cn.md)

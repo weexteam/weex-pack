@@ -1,5 +1,7 @@
 # Weex 工程开发套件
-***
+
+[English Version](./README.md)
+
 ### weexpack 介绍
 weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简单的命令，创建 weex 工程项目，将项目运行在不同的开发平台上。
 
@@ -10,7 +12,7 @@ weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简�
  - 配置 iOS 开发环境：
      - 安装 [Xcode IDE][3] ，启动一次 Xcode ，使 Xcode 自动安装开发者工具和确认使用协议。
  - 配置 Android 开发环境：
-    - 安装 [Android Studio][4] 并打开，新建项目。上方菜单栏，打开 [AVD Manager][5] ，新建 Android 模拟器并启动 。（如果有安装 [Docker][6] ，请关闭 Docker Server 。） 
+    - 安装 [Android Studio][4] 并打开，新建项目。上方菜单栏，打开 [AVD Manager][5] ，新建 Android 模拟器并启动 。（如果有安装 [Docker][6] ，请关闭 Docker Server 。）
     - 或者 只下载 [Android SDK][7] ， 命令行运行 [AVD Manager][8] ，新建 Android 模拟器并启动。
 
 ### 使用方法
@@ -47,7 +49,7 @@ weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取�
     |     |—— /sdk
     |     |—— /inspector
     |     |—— /weex_debug
-    
+
 紧接着，进入目录，并且安装依赖：
 
     $ cd appName && npm install
@@ -55,7 +57,7 @@ weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取�
 在 ios 平台上，运行项目：
 
     $ weexpack run ios
-    
+
 在 android 平台上，运行项目：
 
     $ weexpack run android
@@ -63,7 +65,7 @@ weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取�
 在 html5 平台上，运行项目：
 
     $ weexpack run html5
-    
+
 对于有打包发布的需求的开发者，可以直接基于 playground 工程进行修改。后续，weexpack 将会进一步加入打包、测试等功能。
 
 
