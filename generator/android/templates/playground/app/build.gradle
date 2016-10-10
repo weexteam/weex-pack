@@ -69,10 +69,10 @@ dependencies {
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test:runner:0.5'
-    //compile 'com.taobao.android:weex_sdk:0.4.+'
     /*source dependency*/
-    compile project(':weex_sdk')
-    debugCompile project(':weex_debug')
+    // compile project(':weex_sdk')
+    compile 'com.taobao.android:weex_sdk:0.8.0.1'
+    // debugCompile project(':weex_debug')
     compile project(':commons')
     compile 'com.taobao.android:dexposed:0.1.8'
     compile 'com.loopj.android:android-async-http:1.4.9@aar'
@@ -88,5 +88,5 @@ dependencies {
     compile 'com.android.support:support-annotations:23.1.1'
     compile 'com.jakewharton.scalpel:scalpel:1.1.2'
     //compile 'com.google.android.gms:play-services-appindexing:8.1.0'
-    compile project(':inspector')
+    compile 'com.taobao.android:weex_inspector:0.0.8.1'
 }
