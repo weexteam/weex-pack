@@ -202,32 +202,55 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package com.alibaba.weex.commons;
+package com.alibaba.weex.commons.adapter;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.ViewGroup;
-import com.taobao.weex.WXSDKInstance;
+import android.content.Context;
+import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import com.facebook.drawee.view.DraweeView;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.taobao.weex.ui.view.border.BorderDrawable;
+import com.taobao.weex.ui.view.gesture.WXGesture;
+import com.taobao.weex.ui.view.gesture.WXGestureObservable;
+import com.taobao.weex.utils.WXViewUtils;
 
 /**
- * Basic Weex powered Activity.
- * Created by sospartan on 5/31/16.
+ * Created by sospartan on 8/19/16.
  */
-public abstract class SimpleWeexActivity extends AbstractWeexActivity {
+public class FrescoImageView extends SimpleDraweeView implements WXGestureObservable {
+  public FrescoImageView(Context context) {
+    super(context);
+  }
+
+  public FrescoImageView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
+
+  public FrescoImageView(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
+  }
+
+  public FrescoImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    super(context, attrs, defStyleAttr, defStyleRes);
+  }
+
+  private WXGesture wxGesture;
 
   @Override
-  protected void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContainer((ViewGroup) findViewById(android.R.id.content));
+  public void registerGestureListener(WXGesture wxGesture) {
+    this.wxGesture = wxGesture;
   }
 
   @Override
-  public void onRenderSuccess(WXSDKInstance instance, int width, int height) {
-
-  }
-
-  @Override
-  public void onException(WXSDKInstance instance, String errCode, String msg) {
-
+  public boolean onTouchEvent(MotionEvent event) {
+    boolean result = super.onTouchEvent(event);
+    if (wxGesture != null) {
+      result |= wxGesture.onTouch(this, event);
+    }
+    return result;
   }
 }
