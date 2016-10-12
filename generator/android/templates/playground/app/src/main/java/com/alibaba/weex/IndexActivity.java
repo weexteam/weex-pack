@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.weex.commons.AbsWeexActivity;
+import com.alibaba.weex.commons.util.AppConfig;
 import com.google.zxing.client.android.CaptureActivity;
 import com.taobao.weex.WXRenderErrorCode;
 import com.taobao.weex.WXSDKInstance;
@@ -27,7 +28,7 @@ public class IndexActivity extends AbsWeexActivity {
   private static final String TAG = "IndexActivity";
   private static final int CAMERA_PERMISSION_REQUEST_CODE = 0x1;
   private static final String DEFAULT_IP = "your_current_IP";
-  private static String sCurrentIp = "127.0.0.1"; // your_current_IP
+  private static String sCurrentIp = DEFAULT_IP;//"127.0.0.1"; // your_current_IP
 
   private ProgressBar mProgressBar;
   private TextView mTipView;
@@ -52,16 +53,17 @@ public class IndexActivity extends AbsWeexActivity {
       return;
     }
     if (isLocalPage()) {
-      setUrl("file://assets/index.js");
+      setUrl(AppConfig.getLocalUrl());
     } else {
-      setUrl("http://" + sCurrentIp + ":8080/dist/index.js");
+      setUrl(AppConfig.getLaunchUrl());
     }
     renderPage();
   }
 
   @Override
   protected boolean isLocalPage() {
-    return TextUtils.equals(sCurrentIp, DEFAULT_IP);
+    // return TextUtils.equals(sCurrentIp, DEFAULT_IP);
+    return AppConfig.isLaunchLocally();
   }
 
   @Override

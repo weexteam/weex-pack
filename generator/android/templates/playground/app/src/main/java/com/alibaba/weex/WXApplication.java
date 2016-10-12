@@ -3,6 +3,7 @@ package com.alibaba.weex;
 import android.app.Application;
 
 import com.alibaba.weex.commons.adapter.ImageAdapter;
+import com.alibaba.weex.commons.util.AppConfig;
 import com.alibaba.weex.extend.component.RichText;
 import com.alibaba.weex.extend.module.MyModule;
 import com.alibaba.weex.extend.module.RenderModule;
@@ -38,6 +39,7 @@ public class WXApplication extends Application {
       e.printStackTrace();
     }
 
+    AppConfig.init(this);
   }
 
   /**
