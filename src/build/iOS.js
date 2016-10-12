@@ -2,23 +2,20 @@ const path = require('path')
 const chalk = require('chalk')
 const child_process = require('child_process')
 const inquirer = require('inquirer')
-
+const fs = require('fs');
 const utils = require('../utils')
-const startJSServer = require('./server')
+const child_process=require('child_process')
 
 /**
  * Run iOS app
  * @param {Object} options
  */
-function runIOS(options) {
-  startJSServer()
+function buildIOS(options) {
 
   prepareIOS({options})
     .then(installDep)
-    .then(findIOSDevice)
-    .then(chooseDevice)
-    .then(buildApp)
-    .then(runApp)
+    .then(resolveConfig)
+    .then(doBuild())
     .catch((err) => {
       if (err) {
         console.log(err)
@@ -48,7 +45,6 @@ function prepareIOS({options}) {
 
     if (xcodeProject) {
       console.log()
-      console.log(` => ${chalk.blue.bold('Will start iOS app')}`)
       resolve({xcodeProject, options})
     } else {
       console.log()
@@ -71,14 +67,42 @@ function installDep({xcodeProject, options}) {
     try {
       console.log(` => ${chalk.blue.bold('pod install')}`)
       child_process.execSync('pod install', {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject(e)
     }
     resolve({xcodeProject, options})
   })
 
 }
-
+function resolveConfig() {
+  return new Promise((resolve, reject) => {
+    inquirer.prompt([
+        {
+          type: 'input',
+          message: 'Please input your code sign identify',
+          name: 'codeSign'
+        }, {
+          type: 'input',
+          message: 'Please input your Provisioning Profile',
+          name: 'profile'
+        }
+      ])
+      .then((answers) => {
+        var p = path.join(process.cwd(), 'WeexDemo.xcodeproj/project.pbxproj');
+        var config = fs.readFileSync(p).toString();
+        config = config.replace(/(PROVISIONING_PROFILE\s*=\s*)""/g, '$1"' + answers.profile + '"')
+          .replace(/("?CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?"?\s*=\s*)"iPhone Developer"/g, '$1"' + answers.codeSign + '"');
+        fs.writeFileSync(p, config);
+        resolve();
+      })
+  })
+}
+function doBuild(){
+    return new Promise((resolve,reject)=>{
+      child_process.execSync(path.join(__dirname,'lib/cocoapods-build')+' . Debug', {encoding: 'utf8'})
+      resolve();
+    });
+}
 /**
  * find ios devices
  * @param {Object} xcode project
@@ -119,17 +143,17 @@ function chooseDevice({devicesList, xcodeProject, options}) {
       }
 
       inquirer.prompt([
-        {
-          type: 'list',
-          message: 'Choose one of the following devices',
-          name: 'chooseDevice',
-          choices: listNames
-        }
-      ])
-      .then((answers) => {
-        const device = answers.chooseDevice
-        resolve({device, xcodeProject, options})
-      })
+          {
+            type: 'list',
+            message: 'Choose one of the following devices',
+            name: 'chooseDevice',
+            choices: listNames
+          }
+        ])
+        .then((answers) => {
+          const device = answers.chooseDevice
+          resolve({device, xcodeProject, options})
+        })
     } else {
       reject('No ios devices found.')
     }
@@ -287,4 +311,4 @@ function _runAppOnDevice({device, xcodeProject, options, resolve, reject}) {
 }
 
 
-module.exports = runIOS
+module.exports = buildIOS

@@ -8,12 +8,11 @@ program
   .usage('<command> [options]')
   .command('init [name]', 'initialize a standard weex project')
   .command('run [platform]', 'run weex app on the specific platform')
+  .command('build [platform]', 'abc')
   .parse(process.argv)
-
 function isValidCommand(command) {
-  return command === 'init' || command === 'run'
+  return command === 'init' || command === 'run' || command === 'build'
 }
-
 if (!isValidCommand(program.args[0])) {
   console.log()
   console.log(`  ${chalk.red('Unknown command:')} ${chalk.yellow(program.args[0])}`)
