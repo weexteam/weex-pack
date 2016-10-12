@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<app_config version="1">
+    <bool name="launch_locally">true</bool>
+    <string name="launch_url">http://127.0.0.1:8080/dist/index.js</string>
+    <string name="local_url">file://assets/index.js</string>
+</app_config>
