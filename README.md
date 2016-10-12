@@ -45,10 +45,8 @@ The final resulting directory structure looks like this:
     |     |—— /WXDevtool
     |—— /android
     |     |—— /playground
-    |     |—— /commons
-    |     |—— /sdk
-    |     |—— /inspector
-    |     |—— /weex_debug
+    |     |—— /appframework
+
 
 Next, go to the directory, and install the dependencies:
 
