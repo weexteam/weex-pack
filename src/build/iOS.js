@@ -4,7 +4,6 @@ const child_process = require('child_process')
 const inquirer = require('inquirer')
 const fs = require('fs');
 const utils = require('../utils')
-const child_process=require('child_process')
 
 /**
  * Run iOS app
@@ -15,7 +14,7 @@ function buildIOS(options) {
   prepareIOS({options})
     .then(installDep)
     .then(resolveConfig)
-    .then(doBuild())
+    .then(doBuild)
     .catch((err) => {
       if (err) {
         console.log(err)
