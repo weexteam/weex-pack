@@ -9,9 +9,9 @@
 #import "AppDelegate.h"
 #import "WXDemoViewController.h"
 #import "UIViewController+WXDemoNaviBar.h"
-#import "WXStreamModule.h"
+#import <WeexSDK/WeexSDK.h>
 #import "WXEventModule.h"
-#import "WXNavigationDefaultImpl.h"
+#import <WeexSDK/WeexSDK.h>
 #import "WXImgLoaderDefaultImpl.h"
 #import "DemoDefine.h"
 #import "WXScannerVC.h"
