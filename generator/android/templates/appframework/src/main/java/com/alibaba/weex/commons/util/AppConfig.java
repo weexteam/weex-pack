@@ -75,7 +75,7 @@ public class AppConfig {
 //               mMaxMessageSize = Integer.parseInt(text);
 //            }
           } else if ("string".equals(tag)) {
-            if ("url".equalsIgnoreCase(value)) {
+            if ("launch_url".equalsIgnoreCase(value)) {
               mLaunchUrl = text;
             } else if ("local_url".equalsIgnoreCase(value)) {
               mLocalUrl = text;
