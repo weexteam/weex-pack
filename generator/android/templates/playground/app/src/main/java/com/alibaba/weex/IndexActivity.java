@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -84,15 +82,7 @@ public class IndexActivity extends AbsWeexActivity {
         renderPage();
         break;
       case R.id.action_scan:
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-          if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-            Toast.makeText(this, "please give me the permission", Toast.LENGTH_SHORT).show();
-          } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
-          }
-        } else {
-          startActivity(new Intent(this, CaptureActivity.class));
-        }
+        scanQrCode();
         break;
       default:
         break;
@@ -101,11 +91,22 @@ public class IndexActivity extends AbsWeexActivity {
     return super.onOptionsItemSelected(item);
   }
 
+  private void scanQrCode() {
+    runWithPermissionsCheck(CAMERA_PERMISSION_REQUEST_CODE, Manifest.permission.CAMERA, new Runnable() {
+      @Override
+      public void run() {
+        Intent intent = new Intent(IndexActivity.this, CaptureActivity.class);
+        intent.setPackage(getPackageName());
+        startActivity(intent);
+      }
+    });
+  }
+
   @Override
   public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     if (requestCode == CAMERA_PERMISSION_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-      startActivity(new Intent(this, CaptureActivity.class));
+      scanQrCode();
     } else {
       Toast.makeText(this, "request camera permission fail!", Toast.LENGTH_SHORT).show();
     }
