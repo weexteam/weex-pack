@@ -14,7 +14,7 @@ function runIOS(options) {
   startJSServer()
 
   prepareIOS({options})
-    .then(installDep)
+    // .then(installDep)
     .then(findIOSDevice)
     .then(chooseDevice)
     .then(buildApp)
@@ -187,7 +187,7 @@ function _buildOnSimulator({scheme, device, xcodeProject, options, resolve, reje
  */
 function _buildOnRealDevice({scheme, device, xcodeProject, options, resolve, reject}) {
   // @TODO support debug on real device
-  reject('Weex-Pack don\'t support debug on real device. see you next version!')
+  resolve({device,xcodeProject,options});
 }
 
 /**
@@ -283,7 +283,13 @@ function simulatorIsAvailable(info, device) {
  */
 function _runAppOnDevice({device, xcodeProject, options, resolve, reject}) {
   // @TODO support run on real device
-  reject('Weex-Pack don\'t support run on real device. see you next version!')
+  const appPath = `build/Debug-iphoneos/WeexDemo.app`
+  try {
+    child_process.execSync(`ios-deploy --justlaunch --debug --bundle ${appPath}`, {encoding: 'utf8'})
+  } catch (e) {
+    reject(e)
+  }
+  // reject('Weex-Pack don\'t support run on real device. see you next version!')
 }
 
 

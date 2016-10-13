@@ -306,7 +306,14 @@ function simulatorIsAvailable(info, device) {
  */
 function _runAppOnDevice({device, xcodeProject, options, resolve, reject}) {
   // @TODO support run on real device
-  reject('Weex-Pack don\'t support run on real device. see you next version!')
+  const appPath = `build/Debug-iphoneos/WeexDemo.app`
+  try {
+    child_process.execSync(`ios-deploy --justlaunch --debug --bundle ${appPath}`, {encoding: 'utf8'})
+  } catch (e) {
+    console.log(e)
+    reject(e)
+  }
+  // reject('Weex-Pack don\'t support run on real device. see you next version!')
 }
 
 
