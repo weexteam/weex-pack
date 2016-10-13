@@ -200,11 +200,14 @@ if [ "$build_workspace" != "" ];then
 		exit 2
 	fi
 	
-	# code_sing=iPhone Developer: Xing Zhang (TAHS8SABV2)
-	# build_cmd=${build_cmd}' -workspace '${build_workspace}' -scheme '${build_scheme}' -configuration '${build_config}' CONFIGURATION_BUILD_DIR='${compiled_path}' ONLY_ACTIVE_ARCH=NO clean build'
-	# build_cmd="xcodebuild -workspace WeexDemo.xcworkspace -scheme WeexDemo -configuration Debug -sdk iphoneos build CODE_SIGN_IDENTITY='iPhone Developer: Xing Zhang (TAHS8SABV2)' PROVISIONING_PROFILE=comweexteamplayground CONFIGURATION_BUILD_DIR=./build/Debug-iphoneos ONLY_ACTIVE_ARCH=NO"
-	# build_cmd='xcodebuild -workspace WeexDemo.xcworkspace -scheme WeexDemo -configuration Debug -sdk iphoneos build CONFIGURATION_BUILD_DIR=./build/Debug-iphoneos ONLY_ACTIVE_ARCH=NO'
-	echo $build_cmd
+	LIBRARY_SEARCH_PATHS=${project_path}/Pods/build/Debug-iphoneos
+	if [ $build_config = Debug ];then
+		LIBRARY_SEARCH_PATHS=${project_path}/Pods/build/Debug-iphoneos
+	fi
+	if [ $build_config = Release ];then
+		LIBRARY_SEARCH_PATHS=${project_path}/Pods/build/Release-iphoneos
+	fi
+	build_cmd=${build_cmd}' -workspace '${build_workspace}' -scheme '${build_scheme}' -configuration '${build_config}' -sdk iphoneos build CONFIGURATION_BUILD_DIR='${compiled_path}' ONLY_ACTIVE_ARCH=NO LIBRARY_SEARCH_PATHS='${LIBRARY_SEARCH_PATHS}''
 else
 	#编译project
 	build_cmd=${build_cmd}' -configuration '${build_config}
@@ -218,8 +221,8 @@ fi
 
 #编译工程
 cd $project_path
-# $build_cmd || exit
-xcodebuild -workspace WeexDemo.xcworkspace -scheme WeexDemo -configuration Debug -sdk iphoneos build CONFIGURATION_BUILD_DIR=./build/Debug-iphoneos ONLY_ACTIVE_ARCH=NO LIBRARY_SEARCH_PATHS="./Pods/build/Debug-iphoneos" || exit
+$build_cmd || exit
+# xcodebuild -workspace WeexDemo.xcworkspace -scheme WeexDemo -configuration Debug -sdk iphoneos build CONFIGURATION_BUILD_DIR=./build/Debug-iphoneos ONLY_ACTIVE_ARCH=NO LIBRARY_SEARCH_PATHS="./Pods/build/Debug-iphoneos" || exit
 
 #进入build路径
 cd $build_path
