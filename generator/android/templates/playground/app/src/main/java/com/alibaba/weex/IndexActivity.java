@@ -50,12 +50,8 @@ public class IndexActivity extends AbsWeexActivity {
       mTipView.setText(R.string.cpu_not_support_tip);
       return;
     }
-    if (isLocalPage()) {
-      setUrl(AppConfig.getLocalUrl());
-    } else {
-      setUrl(AppConfig.getLaunchUrl());
-    }
-    renderPage();
+
+    loadUrl(isLocalPage() ? AppConfig.getLocalUrl() : AppConfig.getLaunchUrl());
   }
 
   @Override

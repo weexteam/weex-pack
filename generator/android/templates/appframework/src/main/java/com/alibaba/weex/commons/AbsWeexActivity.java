@@ -433,6 +433,11 @@ public abstract class AbsWeexActivity extends AppCompatActivity implements IWXRe
     mUrl = url;
   }
 
+  public void loadUrl(String url) {
+    setUrl(url);
+    renderPage();
+  }
+
   protected void preRenderPage() {
 
   }

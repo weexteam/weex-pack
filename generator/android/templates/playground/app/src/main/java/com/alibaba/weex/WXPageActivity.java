@@ -88,8 +88,7 @@ public class WXPageActivity extends AbsWeexActivity implements Handler.Callback,
     Log.e("TestScript_Guide mUri==", mUri.toString());
     initUIAndData();
 
-
-    renderPage();
+    loadUrl(getUrl(mUri));
     if (!isLocalPage()) {
       startHotRefresh();
     }
@@ -120,7 +119,6 @@ public class WXPageActivity extends AbsWeexActivity implements Handler.Callback,
 
     mContainer = (ViewGroup) findViewById(R.id.container);
     mProgressBar = (ProgressBar) findViewById(R.id.progress);
-    setUrl(getUrl(mUri));
     mWXHandler = new Handler(this);
     HotRefreshManager.getInstance().setHandler(mWXHandler);
   }
