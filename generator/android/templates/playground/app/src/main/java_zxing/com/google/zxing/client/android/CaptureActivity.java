@@ -46,7 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.weex.R;
-import com.alibaba.weex.WXPageActivity;
+import com.alibaba.weex.constants.Constants;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
@@ -593,7 +593,7 @@ public final class CaptureActivity extends Activity implements
       } else {
         Toast.makeText(this, rawResult.getText(), Toast.LENGTH_SHORT)
             .show();
-        Intent intent = new Intent(CaptureActivity.this, WXPageActivity.class);
+        Intent intent = new Intent(Constants.ACTION_OPEN_URL);
         intent.setPackage(getPackageName());
         intent.setData(Uri.parse(code));
         startActivity(intent);
