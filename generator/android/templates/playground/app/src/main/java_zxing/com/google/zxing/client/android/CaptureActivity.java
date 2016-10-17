@@ -46,7 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.weex.R;
-import com.alibaba.weex.WXPageActivity;
+import com.alibaba.weex.constants.Constants;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
@@ -86,15 +86,15 @@ public final class CaptureActivity extends Activity implements
   private static final long BULK_MODE_SCAN_DELAY_MS = 1000L;
 
   private static final String[] ZXING_URLS = {
-      "http://zxing.appspot.com/scan", "zxing://scan/" };
+      "http://zxing.appspot.com/scan", "zxing://scan/"};
 
   public static final int HISTORY_REQUEST_CODE = 0x0000bacc;
 
   private static final Collection<ResultMetadataType> DISPLAYABLE_METADATA_TYPES = EnumSet
       .of(ResultMetadataType.ISSUE_NUMBER,
-                            ResultMetadataType.SUGGESTED_PRICE,
-                            ResultMetadataType.ERROR_CORRECTION_LEVEL,
-                            ResultMetadataType.POSSIBLE_COUNTRY);
+          ResultMetadataType.SUGGESTED_PRICE,
+          ResultMetadataType.ERROR_CORRECTION_LEVEL,
+          ResultMetadataType.POSSIBLE_COUNTRY);
 
   private CameraManager cameraManager;
   private CaptureActivityHandler handler;
@@ -144,10 +144,10 @@ public final class CaptureActivity extends Activity implements
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    } else {
+      setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
   }
 
   @Override
@@ -199,7 +199,7 @@ public final class CaptureActivity extends Activity implements
     copyToClipboard = prefs.getBoolean(
         PreferencesActivity.KEY_COPY_TO_CLIPBOARD, true)
         && (intent == null || intent.getBooleanExtra(
-            Intents.Scan.SAVE_HISTORY, true));
+        Intents.Scan.SAVE_HISTORY, true));
 
     source = IntentSource.NONE;
     sourceUrl = null;
@@ -292,19 +292,19 @@ public final class CaptureActivity extends Activity implements
     int rotation = getWindowManager().getDefaultDisplay().getRotation();
     if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
       switch (rotation) {
-      case Surface.ROTATION_0:
-      case Surface.ROTATION_90:
-        return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-      default:
-        return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+        case Surface.ROTATION_0:
+        case Surface.ROTATION_90:
+          return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        default:
+          return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
       }
     } else {
       switch (rotation) {
-      case Surface.ROTATION_0:
-      case Surface.ROTATION_270:
-        return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-      default:
-        return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+        case Surface.ROTATION_0:
+        case Surface.ROTATION_270:
+          return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        default:
+          return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
       }
     }
   }
@@ -349,29 +349,29 @@ public final class CaptureActivity extends Activity implements
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     switch (keyCode) {
-    case KeyEvent.KEYCODE_BACK:
-      if (source == IntentSource.NATIVE_APP_INTENT) {
-        setResult(RESULT_CANCELED);
-        finish();
+      case KeyEvent.KEYCODE_BACK:
+        if (source == IntentSource.NATIVE_APP_INTENT) {
+          setResult(RESULT_CANCELED);
+          finish();
+          return true;
+        }
+        if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK)
+            && lastResult != null) {
+          restartPreviewAfterDelay(0L);
+          return true;
+        }
+        break;
+      case KeyEvent.KEYCODE_FOCUS:
+      case KeyEvent.KEYCODE_CAMERA:
+        // Handle these events so they don't launch the Camera app
         return true;
-      }
-      if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK)
-          && lastResult != null) {
-        restartPreviewAfterDelay(0L);
-        return true;
-      }
-      break;
-    case KeyEvent.KEYCODE_FOCUS:
-    case KeyEvent.KEYCODE_CAMERA:
-      // Handle these events so they don't launch the Camera app
-      return true;
       // Use volume up/down to turn on light
-    case KeyEvent.KEYCODE_VOLUME_DOWN:
-      cameraManager.setTorch(false);
-      return true;
-    case KeyEvent.KEYCODE_VOLUME_UP:
-      cameraManager.setTorch(true);
-      return true;
+      case KeyEvent.KEYCODE_VOLUME_DOWN:
+        cameraManager.setTorch(false);
+        return true;
+      case KeyEvent.KEYCODE_VOLUME_UP:
+        cameraManager.setTorch(true);
+        return true;
     }
     return super.onKeyDown(keyCode, event);
   }
@@ -456,7 +456,7 @@ public final class CaptureActivity extends Activity implements
 
   @Override
   public void surfaceChanged(SurfaceHolder holder, int format, int width,
-      int height) {
+                             int height) {
 
   }
 
@@ -464,12 +464,9 @@ public final class CaptureActivity extends Activity implements
    * A valid barcode has been found, so give an indication of success and show
    * the results.
    *
-   * @param rawResult
-   *            The contents of the barcode.
-   * @param scaleFactor
-   *            amount by which thumbnail was scaled
-   * @param barcode
-   *            A greyscale bitmap of the camera data which was decoded.
+   * @param rawResult   The contents of the barcode.
+   * @param scaleFactor amount by which thumbnail was scaled
+   * @param barcode     A greyscale bitmap of the camera data which was decoded.
    */
   public void handleDecode(Result rawResult, Bitmap barcode, float scaleFactor) {
     inactivityTimer.onActivity();
@@ -487,37 +484,37 @@ public final class CaptureActivity extends Activity implements
     }
 
     switch (source) {
-    case NATIVE_APP_INTENT:
-    case PRODUCT_SEARCH_LINK:
-      handleDecodeExternally(rawResult, resultHandler, barcode);
-      break;
-    case ZXING_LINK:
-      if (scanFromWebPageManager == null
-          || !scanFromWebPageManager.isScanFromWebPage()) {
-        handleDecodeInternally(rawResult, resultHandler, barcode);
-      } else {
+      case NATIVE_APP_INTENT:
+      case PRODUCT_SEARCH_LINK:
         handleDecodeExternally(rawResult, resultHandler, barcode);
-      }
-      break;
-    case NONE:
-      SharedPreferences prefs = PreferenceManager
-          .getDefaultSharedPreferences(this);
-      if (fromLiveScan
-          && prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE,
-              false)) {
-        Toast.makeText(
-            getApplicationContext(),
-            getResources()
-                .getString(R.string.msg_bulk_mode_scanned)
-                + " (" + rawResult.getText() + ')',
-            Toast.LENGTH_SHORT).show();
-        // Wait a moment or else it will scan the same barcode
-        // continuously about 3 times
-        restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
-      } else {
-        handleDecodeInternally(rawResult, resultHandler, barcode);
-      }
-      break;
+        break;
+      case ZXING_LINK:
+        if (scanFromWebPageManager == null
+            || !scanFromWebPageManager.isScanFromWebPage()) {
+          handleDecodeInternally(rawResult, resultHandler, barcode);
+        } else {
+          handleDecodeExternally(rawResult, resultHandler, barcode);
+        }
+        break;
+      case NONE:
+        SharedPreferences prefs = PreferenceManager
+            .getDefaultSharedPreferences(this);
+        if (fromLiveScan
+            && prefs.getBoolean(PreferencesActivity.KEY_BULK_MODE,
+            false)) {
+          Toast.makeText(
+              getApplicationContext(),
+              getResources()
+                  .getString(R.string.msg_bulk_mode_scanned)
+                  + " (" + rawResult.getText() + ')',
+              Toast.LENGTH_SHORT).show();
+          // Wait a moment or else it will scan the same barcode
+          // continuously about 3 times
+          restartPreviewAfterDelay(BULK_MODE_SCAN_DELAY_MS);
+        } else {
+          handleDecodeInternally(rawResult, resultHandler, barcode);
+        }
+        break;
     }
   }
 
@@ -525,15 +522,12 @@ public final class CaptureActivity extends Activity implements
    * Superimpose a line for 1D or dots for 2D to highlight the key features of
    * the barcode.
    *
-   * @param barcode
-   *            A bitmap of the captured image.
-   * @param scaleFactor
-   *            amount by which thumbnail was scaled
-   * @param rawResult
-   *            The decoded results which contains the points to draw.
+   * @param barcode     A bitmap of the captured image.
+   * @param scaleFactor amount by which thumbnail was scaled
+   * @param rawResult   The decoded results which contains the points to draw.
    */
   private void drawResultPoints(Bitmap barcode, float scaleFactor,
-      Result rawResult) {
+                                Result rawResult) {
     ResultPoint[] points = rawResult.getResultPoints();
     if (points != null && points.length > 0) {
       Canvas canvas = new Canvas(barcode);
@@ -544,7 +538,7 @@ public final class CaptureActivity extends Activity implements
         drawLine(canvas, paint, points[0], points[1], scaleFactor);
       } else if (points.length == 4
           && (rawResult.getBarcodeFormat() == BarcodeFormat.UPC_A || rawResult
-              .getBarcodeFormat() == BarcodeFormat.EAN_13)) {
+          .getBarcodeFormat() == BarcodeFormat.EAN_13)) {
         // Hacky special case -- draw two lines, for the barcode and
         // metadata
         drawLine(canvas, paint, points[0], points[1], scaleFactor);
@@ -562,7 +556,7 @@ public final class CaptureActivity extends Activity implements
   }
 
   private static void drawLine(Canvas canvas, Paint paint, ResultPoint a,
-      ResultPoint b, float scaleFactor) {
+                               ResultPoint b, float scaleFactor) {
     if (a != null && b != null) {
       canvas.drawLine(scaleFactor * a.getX(), scaleFactor * a.getY(),
           scaleFactor * b.getX(), scaleFactor * b.getY(), paint);
@@ -571,46 +565,46 @@ public final class CaptureActivity extends Activity implements
 
   // Put up our own UI for how to handle the decoded contents.
   private void handleDecodeInternally(Result rawResult,
-      ResultHandler resultHandler, Bitmap barcode) {
+                                      ResultHandler resultHandler, Bitmap barcode) {
 
-          String code = rawResult.getText();
-          if (!TextUtils.isEmpty(code)) {
-            Uri uri = Uri.parse(code);
-            if (uri.getQueryParameterNames().contains("bundle")) {
-              WXEnvironment.sDynamicMode = uri.getBooleanQueryParameter("debug", false);
-              WXEnvironment.sDynamicUrl = uri.getQueryParameter("bundle");
-              String tip=WXEnvironment.sDynamicMode?"Has switched to Dynamic Mode":"Has switched to Normal Mode";
-              Toast.makeText(this,tip,Toast.LENGTH_SHORT).show();
-              finish();
-        return;
-            } else if (uri.getQueryParameterNames().contains("_wx_devtool")) {
-        WXEnvironment.sRemoteDebugProxyUrl=uri.getQueryParameter("_wx_devtool");
-        WXSDKEngine.reload();
-        Toast.makeText(this,"devtool",Toast.LENGTH_SHORT).show();
+    String code = rawResult.getText();
+    if (!TextUtils.isEmpty(code)) {
+      Uri uri = Uri.parse(code);
+      if (uri.getQueryParameterNames().contains("bundle")) {
+        WXEnvironment.sDynamicMode = uri.getBooleanQueryParameter("debug", false);
+        WXEnvironment.sDynamicUrl = uri.getQueryParameter("bundle");
+        String tip = WXEnvironment.sDynamicMode ? "Has switched to Dynamic Mode" : "Has switched to Normal Mode";
+        Toast.makeText(this, tip, Toast.LENGTH_SHORT).show();
         finish();
         return;
-            }
+      } else if (uri.getQueryParameterNames().contains("_wx_devtool")) {
+        WXEnvironment.sRemoteDebugProxyUrl = uri.getQueryParameter("_wx_devtool");
+        WXSDKEngine.reload();
+        Toast.makeText(this, "devtool", Toast.LENGTH_SHORT).show();
+        finish();
+        return;
+      }
 
-            if (code.contains("_wx_debug")) {
-              uri = Uri.parse(code);
-              String debug_url = uri.getQueryParameter("_wx_debug");
-        WXSDKEngine.switchDebugModel(true,debug_url);
-              finish();
-            } else {
-              Toast.makeText(this, rawResult.getText(), Toast.LENGTH_SHORT)
-                  .show();
-              Intent intent = new Intent(CaptureActivity.this, WXPageActivity.class);
-              intent.setPackage(getPackageName());
-              intent.setData(Uri.parse(code));
-              startActivity(intent);
-            }
-          }
-        }
+      if (code.contains("_wx_debug")) {
+        uri = Uri.parse(code);
+        String debug_url = uri.getQueryParameter("_wx_debug");
+        WXSDKEngine.switchDebugModel(true, debug_url);
+        finish();
+      } else {
+        Toast.makeText(this, rawResult.getText(), Toast.LENGTH_SHORT)
+            .show();
+        Intent intent = new Intent(Constants.ACTION_OPEN_URL);
+        intent.setPackage(getPackageName());
+        intent.setData(Uri.parse(code));
+        startActivity(intent);
+      }
+    }
+  }
 
   // Briefly show the contents of the barcode, then handle the result outside
   // Barcode Scanner.
   private void handleDecodeExternally(Result rawResult,
-      ResultHandler resultHandler, Bitmap barcode) {
+                                      ResultHandler resultHandler, Bitmap barcode) {
 
     if (barcode != null) {
       viewfinderView.drawResultBitmap(barcode);
