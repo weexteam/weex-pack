@@ -67,19 +67,19 @@ function prepareAndroid({options}) {
       reject()
     }
 
-    resolve({options})
+    resolve({options,rootPath})
   })
 }
 
-function resolveConfig(){
-  let androidConfig = new Config('ApplicationId,AppName,SplashText');
+function resolveConfig({options,rootPath}){
+  let androidConfig = new Config('ApplicationId,AppName,SplashText',Path.join(rootPath,'android.config.json'));
   return androidConfig.getConfig().then((config) => {
     console.log(config,process.cwd());
-    let bundleConfigPath=Path.join(process.cwd(),'app/bundle.gradle');
+    let bundleConfigPath=Path.join(process.cwd(),'app/build.gradle');
     let bundleConfig=Fs.readFileSync(bundleConfigPath).toString();
-    bundleConfig=bundleConfig.replace(/applicationId "[^"]*"/g,'applicationId "'+config.ApplicationId+'""')
+    bundleConfig=bundleConfig.replace(/applicationId "[^"]*"/g,'applicationId "'+config.ApplicationId+'"')
     Fs.writeFileSync(bundleConfigPath,bundleConfig);
-    let stringConfigPath=Path.join(process.cwd(),'app/src/main/res/values/string.xml');
+    let stringConfigPath=Path.join(process.cwd(),'app/src/main/res/values/strings.xml');
     let stringConfig=Fs.readFileSync(stringConfigPath).toString();
     stringConfig=stringConfig.replace(/<string name="app_name">[^<>]+<\/string>/g,'<string name="app_name">'+config.AppName+'</string>')
     stringConfig=stringConfig.replace(/<string name="dummy_content">[^<>]+<\/string>/g,'<string name="dummy_content">'+config.SplashText.replace(/\n/g,'\\n')+'</string>')

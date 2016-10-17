@@ -44,7 +44,7 @@ function prepareIOS({options}) {
 
     if (xcodeProject) {
       console.log()
-      resolve({xcodeProject, options})
+      resolve({xcodeProject, options,rootPath})
     } else {
       console.log()
       console.log(`  ${chalk.red.bold('Could not find Xcode project files in ios folder')}`)
@@ -61,12 +61,12 @@ function prepareIOS({options}) {
  * @param {Object} xcode project
  * @param {Object} options
  */
-function installDep({xcodeProject, options}) {
+function installDep({xcodeProject, options,rootPath}) {
   return new Promise((resolve, reject) => {
     try {
       console.log(` => ${chalk.blue.bold('pod install')}`)
       let child=child_process.exec('pod install', {encoding: 'utf8'},function(){
-        resolve({xcodeProject, options});
+        resolve({xcodeProject, options,rootPath});
       });
       child.stdout.pipe(process.stdout);
       child.stderr.pipe(process.stderr);
@@ -77,15 +77,15 @@ function installDep({xcodeProject, options}) {
   })
 
 }
-function resolveConfig() {
-  let iOSConfig = new Config('codeSign,profile');
+function resolveConfig({xcodeProject, options,rootPath}) {
+  let iOSConfig = new Config('codeSign,profile',Path.join(rootPath,'ios.config.json'));
   return iOSConfig.getConfig().then((config) => {
     var p = path.join(process.cwd(), 'WeexDemo.xcodeproj/project.pbxproj');
     var buildConfig = fs.readFileSync(p).toString();
     buildConfig = buildConfig.replace(/(PROVISIONING_PROFILE\s*=\s*)""/g, '$1"' + config.profile + '"')
       .replace(/("?CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?"?\s*=\s*)"iPhone Developer"/g, '$1"' + config.codeSign + '"');
     buildConfig=buildConfig.replace(/(<key>CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?<\/key>\s*<string>)iPhone Developer<\/string>/g,'$1'+config.codeSign+'</string>')
-    replace(/(<key>PROVISIONING_PROFILE<\/key>\s*<string>)[^<>]*?<\/string>/g,'$1'+config.profile+'</string>');
+    .replace(/(<key>PROVISIONING_PROFILE<\/key>\s*<string>)[^<>]*?<\/string>/g,'$1'+config.profile+'</string>');
     fs.writeFileSync(p, buildConfig);
     return {};
   })

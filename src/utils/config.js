@@ -5,8 +5,8 @@ const Fs = require('fs');
 const Path = require('path');
 const Inquirer = require('inquirer');
 class Config {
-  constructor(properties, name) {
-    this.name = name || 'config';
+  constructor(properties, path) {
+    this.path = path;
     this.properties = properties.split(',').map(prop=> {
       var splits = prop.split('|');
       return {
@@ -19,9 +19,8 @@ class Config {
   getConfig() {
     return new Promise((resolve, reject)=> {
       let config = {};
-      let path = Path.join(process.cwd(), this.name + '.json');
       try {
-        config = require(path);
+        config = require(this.path);
       }
       catch (e) {
       }
@@ -44,12 +43,12 @@ class Config {
         Inquirer.prompt(questions)
           .then((answers) => {
             Object.assign(config, answers);
-            Fs.writeFileSync(path, JSON.stringify(config, null, 4))
+            Fs.writeFileSync(this.path, JSON.stringify(config, null, 4))
             resolve(config);
           })
       }
       else {
-        console.log('if you want to change build config.please modify config.json');
+        console.log('if you want to change build config.please modify '+Path.basename(this.path));
         resolve(config)
       }
     })
