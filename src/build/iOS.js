@@ -93,6 +93,7 @@ function resolveConfig({xcodeProject, options,rootPath}) {
 function doBuild() {
   return new Promise((resolve, reject)=> {
     let child=child_process.exec(path.join(__dirname, 'lib/cocoapods-build') + ' . Debug', {encoding: 'utf8'},function(){
+      console.log('Build success!');
       resolve();
     })
     child.stdout.pipe(process.stdout);
