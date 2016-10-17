@@ -1,5 +1,5 @@
 {
-  "name": "weex-pack",
+  "name": "weexpack",
   "version": "0.0.1",
   "description": "Weex pack tool",
   "main": "index.js",
@@ -30,7 +30,8 @@
     "ankokuji <moritaka325@163.com>",
     "liujiescut <969343185@qq.com>",
     "shujiewz <rememberwz@gmail.com>",
-    "Icemic <bingfeng.web@gmail.com>"
+    "Icemic <bingfeng.web@gmail.com>",
+    "exolution <exolution@163.com>"
   ],
   "license": "Apache-2.0",
   "dependencies": {

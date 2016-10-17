@@ -1,39 +1,42 @@
-# Weex Engineering Development Kit
+# Weex 工程开发套件
 
-[中文版文档](./README.cn.md)
+[English Version](./README.en.md)
 
-### Weexpack introduction
-Weexpack is our next generation of engineering development kits. It allows developers to create weex projects with simple commands and run the project on different development platforms.
+### weexpack 介绍
+weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简单的命令，创建 weex 工程项目，将项目运行在不同的开发平台上。
 
-### pre-environmental requirements
+### 前期环境要求
 
-- Currently only supported on Mac.
-- Configure the [Node.js] [1] environment and install the [npm] [2] package manager.
-- Configure iOS development environment:
-    - Install [Xcode IDE] [3] to launch Xcode once so that Xcode automatically installs the Developer Tools and confirms the usage protocol.
-- Configure the Android development environment:
-    - Install [Android Studio] [4] and open the new project. Open the menu bar, open the [AVD Manager] [5], the new Android emulator and start. (If you have installed [Docker] [6], close the Docker Server.)
-    - Or just download the [Android SDK] [7], run the command line [AVD Manager] [8], create a new Android emulator and launch it.
+ - 目前只支持 Mac 平台。
+ - 配置 [Node.js][1] 环境，并且安装 [npm][2] 包管理器。
+ - 配置 iOS 开发环境：
+     - 安装 [Xcode IDE][3] ，启动一次 Xcode ，使 Xcode 自动安装开发者工具和确认使用协议。
+     - 安装 cocoaPods
+ - 配置 Android 开发环境：
+    - 安装 [Android Studio][4] 并打开，新建项目。上方菜单栏，打开 [AVD Manager][5] ，新建 Android 模拟器并启动 。（如果有安装 [Docker][6] ，请关闭 Docker Server 。）
+    - 或者 只下载 [Android SDK][7] ， 命令行运行 [AVD Manager][8] ，新建 Android 模拟器并启动。
+    - 保证Android build-tool的版本为23.0.2
+### 使用方法
 
-### Instructions
-
-First, install the weex-pack command globally:
+首先，全局安装 weex-pack 命令：
 
     $ npm install -g weexpack
 
-Then, create the weex project:
+然后，创建 weex 工程：
 
     $ weexpack init appName
 
-Weexpack automatically creates a new directory named appName and pulls the project template to that directory.
+weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取到该目录。
 
-The final resulting directory structure looks like this:
+最终形成的目录结构，如下所示：
 
-    -> / appName
+    -> /appName
     .
     |—— .gitignore
     |—— README.md
     |—— package.json
+    |-- android.config.json
+    |-- ios.config.json
     |—— webpack.config.js
     |—— /src
     |     |—— index.we
@@ -47,24 +50,41 @@ The final resulting directory structure looks like this:
     |     |—— /playground
     |     |—— /appframework
 
-
-Next, go to the directory, and install the dependencies:
+紧接着，进入目录，并且安装依赖：
 
     $ cd appName && npm install
 
-On the ios platform, run the project:
+## IOS平台打包&运行
 
+#### 模拟器运行
     $ weexpack run ios
+#### 构建ipa包
+    $ weexpack build ios
 
-In the android platform, run the project:
+构建包的过程中，将会提示让您输入`CodeSign（证书）`，`Profile(provisioning profile)`,`AppId`，只有输入真实的这些信息才能成功打包。
+其余如AppName,和入口weex bundle文件可以编辑项目目录下的ios.config.json配置。
+
+## Android平台打包&运行
+android的打包和构建是一体的 ：
 
     $ weexpack run android
 
-On the html5 platform, run the project:
+同样的你可以更改项目目录下的android.config.json
+
+* AppName: 应用名
+* AppId: application_id 包名
+* SplashText: 欢迎页上面的文字
+* WeexBundle: 指定的weex bundle文件（支持文件名和url的形式）
+
+
+文件名则以本地文件的方式加载bundle,url则以远程的方式加载bundle
+如果以本地方式指定bundle  .we文件请放到src目录。
+
+
+## 在 html5 平台上，运行项目：
 
     $ weexpack run html5
 
-For developers who have a packaged release, you can make changes directly to the playground project. Follow-up, weexpack will be further added to the packaging, testing and other functions.
 
 
   [1]: https://nodejs.org/
@@ -75,3 +95,6 @@ For developers who have a packaged release, you can make changes directly to the
   [6]: https://www.docker.com/
   [7]: https://developer.android.com/studio/releases/sdk-tools.html
   [8]: https://developer.android.com/studio/run/managing-avds.html
+
+
+
