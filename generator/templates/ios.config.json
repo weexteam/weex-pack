@@ -4,5 +4,6 @@
    "BuildVersion":"0.1.0",
    "AppId":"",
    "CodeSign":"",
-   "Profile":""
+   "Profile":"",
+   "WeexBundle":"index.js"
 }

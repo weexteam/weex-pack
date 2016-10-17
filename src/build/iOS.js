@@ -4,50 +4,8 @@ const child_process = require('child_process')
 const inquirer = require('inquirer')
 const fs = require('fs');
 const utils = require('../utils')
-const {Config,ConfigResolver} = require('../utils/config')
+const {Config,iOSConfigResolver} = require('../utils/config')
 
-const iOSConfigResolver = new ConfigResolver({
-  'WeexDemo/Info.plist': {
-    AppName: {
-      type: 'plist',
-      key: 'CFBundleDisplayName'
-    },
-    Version: {
-      type: 'plist',
-      key: 'CFBundleShortVersionString'
-    },
-    BuildVersion: {
-      type: 'plist',
-      key: 'CFBundleVersion'
-    },
-    AppId: {
-      type: 'plist',
-      key: 'CFBundleIdentifier'
-    }
-
-  },
-  'WeexDemo.xcodeproj/project.pbxproj': {
-    CodeSign: [{
-      type: 'regexp',
-      key: /("?CODE_SIGN_IDENTITY(?:\[sdk=iphoneos\*])?"?\s*=\s*")iPhone Developer(")/g
-    }, {
-      type: 'plist',
-      key: 'CODE_SIGN_IDENTITY(\\[sdk=iphoneos\\*])?'
-    }
-    ],
-    Profile: [
-      {
-        type: 'regexp',
-        key: /(PROVISIONING_PROFILE\s*=\s*")[^"]*?(")/g
-      },
-      {
-        type: 'plist',
-        key: 'PROVISIONING_PROFILE'
-      }
-    ]
-  }
-
-})
 /**
  * Run iOS app
  * @param {Object} options
@@ -124,6 +82,8 @@ function resolveConfig({xcodeProject, options,rootPath}) {
   let iOSConfig = new Config(iOSConfigResolver,path.join(rootPath, 'ios.config.json'))
   return iOSConfig.getConfig().then((config) => {
     iOSConfigResolver.resolve(config);
+    let input = fs.createReadStream(path.join(process.cwd(), '../../dist', config.WeexBundle.replace(/\.we$/, '.js')));
+    let out = fs.createWriteStream(path.join(process.cwd(), 'bundlejs/index.js'));
     return {};
   })
 }

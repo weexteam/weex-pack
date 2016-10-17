@@ -6,18 +6,20 @@ const inquirer = require('inquirer')
 
 const utils = require('../utils')
 const startJSServer = require('./server')
-
+const {Config,androidConfigResolver} = require('../utils/config')
 /**
  * Build and run Android app on a connected emulator or device
  * @param {Object} options
  */
 function runAndroid(options) {
   startJSServer()
-  
+
   prepareAndroid({options})
+    .then(resolveConfig)
     .then(findAndroidDevice)
     .then(chooseDevice)
     .then(reverseDevice)
+
     .then(buildApp)
     .then(installApp)
     .then(runApp)
@@ -70,10 +72,16 @@ function prepareAndroid({options}) {
       reject()
     }
 
-    resolve({options})
+    resolve({options,rootPath})
   })
 }
-
+function resolveConfig({options,rootPath}){
+  let androidConfig = new Config(androidConfigResolver,path.join(rootPath,'android.config.json'));
+  return androidConfig.getConfig().then((config) => {
+    androidConfigResolver.resolve(config);
+    return {};
+  })
+}
 /**
  * find android devices
  * @param {Object} options
@@ -142,7 +150,7 @@ function reverseDevice({device, options}) {
       child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, {encoding: 'utf8'})
     } catch(e) {
       reject()
-    } 
+    }
 
     resolve({device, options})
   })
@@ -160,7 +168,7 @@ function buildApp({device, options}) {
       child_process.execSync(`./gradlew clean assemble`, {encoding: 'utf8', stdio: [0,1,2]})
     } catch(e) {
       reject()
-    } 
+    }
 
     resolve({device, options})
   })
@@ -174,7 +182,7 @@ function buildApp({device, options}) {
 function installApp({device, options}) {
   return new Promise((resolve, reject) => {
     console.log(` => ${chalk.blue.bold('Install app ...')}`)
-    
+
     const apkName = 'app/build/outputs/apk/playground.apk'
     try {
       child_process.execSync(`adb -s ${device} install -r  ${apkName}`, {encoding: 'utf8'})
@@ -199,7 +207,7 @@ function runApp({device, options}) {
       'app/src/main/AndroidManifest.xml',
       'utf8'
     ).match(/package="(.+?)"/)[1]
-    
+
 
     try {
       child_process.execSync(`adb -s ${device} shell am start -n ${packageName}/.SplashActivity`, {encoding: 'utf8'})

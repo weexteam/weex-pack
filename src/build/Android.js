@@ -3,18 +3,17 @@ const chalk = require('chalk')
 const child_process = require('child_process')
 const fs = require('fs')
 const inquirer = require('inquirer')
-const Config = require('../utils/config')
+const {Config,androidConfigResolver} = require('../utils/config')
 const utils = require('../utils')
 const Path = require('path')
 const Fs = require('fs')
-//const startJSServer = require('./server')
-
+const startJSServer = require('../run/server')
 /**
  * Build and run Android app on a connected emulator or device
  * @param {Object} options
  */
 function buildAndroid(options) {
-  //startJSServer()
+  startJSServer()
   prepareAndroid({options})
     .then(resolveConfig)
     .then(buildApp)
@@ -72,17 +71,9 @@ function prepareAndroid({options}) {
 }
 
 function resolveConfig({options,rootPath}){
-  let androidConfig = new Config('ApplicationId,AppName,SplashText',Path.join(rootPath,'android.config.json'));
+  let androidConfig = new Config(androidConfigResolver,Path.join(rootPath,'android.config.json'));
   return androidConfig.getConfig().then((config) => {
-    let bundleConfigPath=Path.join(process.cwd(),'app/build.gradle');
-    let bundleConfig=Fs.readFileSync(bundleConfigPath).toString();
-    bundleConfig=bundleConfig.replace(/applicationId "[^"]*"/g,'applicationId "'+config.ApplicationId+'"')
-    Fs.writeFileSync(bundleConfigPath,bundleConfig);
-    let stringConfigPath=Path.join(process.cwd(),'app/src/main/res/values/strings.xml');
-    let stringConfig=Fs.readFileSync(stringConfigPath).toString();
-    stringConfig=stringConfig.replace(/<string name="app_name">[^<>]+<\/string>/g,'<string name="app_name">'+config.AppName+'</string>')
-    stringConfig=stringConfig.replace(/<string name="dummy_content">[^<>]+<\/string>/g,'<string name="dummy_content">'+config.SplashText.replace(/\n/g,'\\n')+'</string>')
-    Fs.writeFileSync(stringConfigPath,stringConfig);
+    androidConfigResolver.resolve(config);
     return {};
   })
 }
