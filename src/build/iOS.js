@@ -4,7 +4,7 @@ const child_process = require('child_process')
 const inquirer = require('inquirer')
 const fs = require('fs');
 const utils = require('../utils')
-
+const Config = require('../utils/config')
 /**
  * Run iOS app
  * @param {Object} options
@@ -65,42 +65,39 @@ function installDep({xcodeProject, options}) {
   return new Promise((resolve, reject) => {
     try {
       console.log(` => ${chalk.blue.bold('pod install')}`)
-      child_process.execSync('pod install', {encoding: 'utf8'})
+      let child=child_process.exec('pod install', {encoding: 'utf8'},function(){
+        resolve({xcodeProject, options});
+      });
+      child.stdout.pipe(process.stdout);
+      child.stderr.pipe(process.stderr);
     } catch (e) {
       reject(e)
     }
-    resolve({xcodeProject, options})
+
   })
 
 }
 function resolveConfig() {
-  return new Promise((resolve, reject) => {
-    inquirer.prompt([
-        {
-          type: 'input',
-          message: 'Please input your code sign identify',
-          name: 'codeSign'
-        }, {
-          type: 'input',
-          message: 'Please input your Provisioning Profile',
-          name: 'profile'
-        }
-      ])
-      .then((answers) => {
-        var p = path.join(process.cwd(), 'WeexDemo.xcodeproj/project.pbxproj');
-        var config = fs.readFileSync(p).toString();
-        config = config.replace(/(PROVISIONING_PROFILE\s*=\s*)""/g, '$1"' + answers.profile + '"')
-          .replace(/("?CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?"?\s*=\s*)"iPhone Developer"/g, '$1"' + answers.codeSign + '"');
-        fs.writeFileSync(p, config);
-        resolve();
-      })
+  let iOSConfig = new Config('codeSign,profile');
+  return iOSConfig.getConfig().then((config) => {
+    var p = path.join(process.cwd(), 'WeexDemo.xcodeproj/project.pbxproj');
+    var buildConfig = fs.readFileSync(p).toString();
+    buildConfig = buildConfig.replace(/(PROVISIONING_PROFILE\s*=\s*)""/g, '$1"' + config.profile + '"')
+      .replace(/("?CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?"?\s*=\s*)"iPhone Developer"/g, '$1"' + config.codeSign + '"');
+    buildConfig=buildConfig.replace(/(<key>PROVISIONING_PROFILE(\[sdk=iphoneos\*])?<\/div>\s*<string>)iPhone Developer<\/string>/g,'$1'+config.codeSign+'</string>');
+    fs.writeFileSync(p, config);
+    return {};
   })
 }
-function doBuild(){
-    return new Promise((resolve,reject)=>{
-      child_process.execSync(path.join(__dirname,'lib/cocoapods-build')+' . Debug', {encoding: 'utf8'})
+function doBuild() {
+  return new Promise((resolve, reject)=> {
+    let child=child_process.exec(path.join(__dirname, 'lib/cocoapods-build') + ' . Debug', {encoding: 'utf8'},function(){
       resolve();
-    });
+    })
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stderr);
+
+  });
 }
 /**
  * find ios devices

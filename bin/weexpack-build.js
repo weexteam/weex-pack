@@ -49,7 +49,6 @@ if (program.args.length < 1) {
 }
 
 if (isValidPlatform(program.args)) {
-  console.log(program.args);
   // TODO: parse config file
   build(program.args[0], program.config)
 
