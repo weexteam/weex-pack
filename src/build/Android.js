@@ -6,7 +6,7 @@ const inquirer = require('inquirer')
 const Config = require('../utils/config')
 const utils = require('../utils')
 const Path = require('path')
-const Fs = require('fs');
+const Fs = require('fs')
 //const startJSServer = require('./server')
 
 /**
@@ -83,7 +83,6 @@ function resolveConfig({options,rootPath}){
     stringConfig=stringConfig.replace(/<string name="app_name">[^<>]+<\/string>/g,'<string name="app_name">'+config.AppName+'</string>')
     stringConfig=stringConfig.replace(/<string name="dummy_content">[^<>]+<\/string>/g,'<string name="dummy_content">'+config.SplashText.replace(/\n/g,'\\n')+'</string>')
     Fs.writeFileSync(stringConfigPath,stringConfig);
-
     return {};
   })
 }

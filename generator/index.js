@@ -44,6 +44,8 @@ module.exports = yeoman.Base.extend({
     copy('start')
     copy('src/index.we')
     copy('web/index.html')
+    copy('android.config.json')
+    copy('ios.config.json')
 
     utils.copyAndReplace(
       this.templatePath('package.json'),

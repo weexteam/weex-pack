@@ -7,15 +7,32 @@ const Inquirer = require('inquirer');
 class Config {
   constructor(properties, path) {
     this.path = path;
-    this.properties = properties.split(',').map(prop=> {
-      var splits = prop.split('|');
-      return {
-        name: splits[0],
-        desc: splits[1] || 'enter your ' + splits[0] + ':'
+    if(properties instanceof ConfigResolver){
+      let map={};
+      this.properties=[];
+      for(let key in properties.def){
+        for(let propName in properties.def[key]){
+          if(!map[propName]){
+            this.properties.push({
+              name:propName,
+              desc:properties.def[key].desc||'enter your ' + propName + ':'
+            });
+            map[propName]=true;
+          }
+        }
       }
-    });
+  console.log(this.properties)
+    }
+    else {
+      this.properties = properties.split(',').map(prop=> {
+        var splits = prop.split('|');
+        return {
+          name: splits[0],
+          desc: splits[1] || 'enter your ' + splits[0] + ':'
+        }
+      });
+    }
   }
-
   getConfig() {
     return new Promise((resolve, reject)=> {
       let config = {};
@@ -27,7 +44,7 @@ class Config {
       var questions = [], answers = {};
       console.log('============build config============')
       this.properties.forEach(function (prop) {
-        if (config[prop.name] !== undefined) {
+        if (config[prop.name] !== undefined&&config[prop.name]!='') {
           answers[prop.name] = config[prop.name];
           console.log(prop.name + '=>' + answers[prop.name]);
         }
@@ -55,4 +72,61 @@ class Config {
 
   }
 }
-module.exports=Config;
+class ConfigResolver{
+    constructor(def){
+      this.def=def;
+    }
+    resolve(config,basePath){
+      basePath=basePath||process.cwd();
+      for(let path in this.def){
+        if(this.def.hasOwnProperty(path)) {
+          let targetPath=Path.join(basePath, path);
+          let source = Fs.readFileSync(targetPath).toString();
+          for(let key in this.def[path]){
+            if(this.def[path].hasOwnProperty(key)) {
+              let configDef = this.def[path][key];
+              if (Array.isArray(configDef)) {
+                configDef.forEach((def)=> {
+                  source = _resolveConfigDef(source, def, config, key)
+                })
+              }
+              else {
+                source = _resolveConfigDef(source, configDef, config, key);
+              }
+            }
+          }
+          Fs.writeFileSync(targetPath,source);
+        }
+
+      }
+    }
+}
+function _resolveConfigDef(source,configDef,config,key){
+  if(configDef.type){
+    if(config[key]===undefined){
+      throw new Error('Config:['+key+'] must have a value!');
+    }
+    return replacer[configDef.type](source,configDef.key,config[key]);
+  }
+  else{
+    return configDef.handler(source,configDef.key,config[key]);
+  }
+}
+const replacer={
+  plist(source,key,value){
+    let r=new RegExp('(<key>'+key+'</key>\\s*<string>)[^<>]*?<\/string>','g');
+    return source.replace(r,'$1'+value+'</string>')
+  },
+  xml(source,key,value,type='string'){
+    let r=new RegExp(`<${type} name="${key}">[^<]+?</${type}>`,'g');
+    return source.replace(r,`<${type} name="${key}">${value}</${type}>`);
+  },
+  regexp(source,regexp,value){
+    return source.replace(regexp,function(m,a,b){
+      return a+value+b;
+    })
+  }
+};
+
+exports.Config=Config;
+exports.ConfigResolver=ConfigResolver;

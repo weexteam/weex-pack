@@ -4,7 +4,50 @@ const child_process = require('child_process')
 const inquirer = require('inquirer')
 const fs = require('fs');
 const utils = require('../utils')
-const Config = require('../utils/config')
+const {Config,ConfigResolver} = require('../utils/config')
+
+const iOSConfigResolver = new ConfigResolver({
+  'WeexDemo/Info.plist': {
+    AppName: {
+      type: 'plist',
+      key: 'CFBundleDisplayName'
+    },
+    Version: {
+      type: 'plist',
+      key: 'CFBundleShortVersionString'
+    },
+    BuildVersion: {
+      type: 'plist',
+      key: 'CFBundleVersion'
+    },
+    AppId: {
+      type: 'plist',
+      key: 'CFBundleIdentifier'
+    }
+
+  },
+  'WeexDemo.xcodeproj/project.pbxproj': {
+    CodeSign: [{
+      type: 'regexp',
+      key: /("?CODE_SIGN_IDENTITY(?:\[sdk=iphoneos\*])?"?\s*=\s*")iPhone Developer(")/g
+    }, {
+      type: 'plist',
+      key: 'CODE_SIGN_IDENTITY(\\[sdk=iphoneos\\*])?'
+    }
+    ],
+    Profile: [
+      {
+        type: 'regexp',
+        key: /(PROVISIONING_PROFILE\s*=\s*")[^"]*?(")/g
+      },
+      {
+        type: 'plist',
+        key: 'PROVISIONING_PROFILE'
+      }
+    ]
+  }
+
+})
 /**
  * Run iOS app
  * @param {Object} options
@@ -44,7 +87,7 @@ function prepareIOS({options}) {
 
     if (xcodeProject) {
       console.log()
-      resolve({xcodeProject, options,rootPath})
+      resolve({xcodeProject, options, rootPath})
     } else {
       console.log()
       console.log(`  ${chalk.red.bold('Could not find Xcode project files in ios folder')}`)
@@ -65,11 +108,11 @@ function installDep({xcodeProject, options,rootPath}) {
   return new Promise((resolve, reject) => {
     try {
       console.log(` => ${chalk.blue.bold('pod install')}`)
-      let child=child_process.exec('pod install', {encoding: 'utf8'},function(){
-        resolve({xcodeProject, options,rootPath});
+      let child = child_process.exec('pod install', {encoding: 'utf8'}, function () {
+        resolve({xcodeProject, options, rootPath})
       });
-      child.stdout.pipe(process.stdout);
-      child.stderr.pipe(process.stderr);
+      child.stdout.pipe(process.stdout)
+      child.stderr.pipe(process.stderr)
     } catch (e) {
       reject(e)
     }
@@ -78,21 +121,15 @@ function installDep({xcodeProject, options,rootPath}) {
 
 }
 function resolveConfig({xcodeProject, options,rootPath}) {
-  let iOSConfig = new Config('codeSign,profile',path.join(rootPath,'ios.config.json'));
+  let iOSConfig = new Config(iOSConfigResolver,path.join(rootPath, 'ios.config.json'))
   return iOSConfig.getConfig().then((config) => {
-    var p = path.join(process.cwd(), 'WeexDemo.xcodeproj/project.pbxproj');
-    var buildConfig = fs.readFileSync(p).toString();
-    buildConfig = buildConfig.replace(/(PROVISIONING_PROFILE\s*=\s*)""/g, '$1"' + config.profile + '"')
-      .replace(/("?CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?"?\s*=\s*)"iPhone Developer"/g, '$1"' + config.codeSign + '"');
-    buildConfig=buildConfig.replace(/(<key>CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?<\/key>\s*<string>)iPhone Developer<\/string>/g,'$1'+config.codeSign+'</string>')
-    .replace(/(<key>PROVISIONING_PROFILE<\/key>\s*<string>)[^<>]*?<\/string>/g,'$1'+config.profile+'</string>');
-    fs.writeFileSync(p, buildConfig);
+    iOSConfigResolver.resolve(config);
     return {};
   })
 }
 function doBuild() {
   return new Promise((resolve, reject)=> {
-    let child=child_process.exec(path.join(__dirname, 'lib/cocoapods-build') + ' . Debug', {encoding: 'utf8'},function(){
+    let child = child_process.exec(path.join(__dirname, 'lib/cocoapods-build') + ' . Debug', {encoding: 'utf8'}, function () {
       console.log('Build success!');
       resolve();
     })
