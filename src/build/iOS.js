@@ -84,7 +84,8 @@ function resolveConfig() {
     var buildConfig = fs.readFileSync(p).toString();
     buildConfig = buildConfig.replace(/(PROVISIONING_PROFILE\s*=\s*)""/g, '$1"' + config.profile + '"')
       .replace(/("?CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?"?\s*=\s*)"iPhone Developer"/g, '$1"' + config.codeSign + '"');
-    buildConfig=buildConfig.replace(/(<key>PROVISIONING_PROFILE(\[sdk=iphoneos\*])?<\/div>\s*<string>)iPhone Developer<\/string>/g,'$1'+config.codeSign+'</string>');
+    buildConfig=buildConfig.replace(/(<key>CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?<\/key>\s*<string>)iPhone Developer<\/string>/g,'$1'+config.codeSign+'</string>')
+    replace(/(<key>PROVISIONING_PROFILE<\/key>\s*<string>)[^<>]*?<\/string>/g,'$1'+config.profile+'</string>');
     fs.writeFileSync(p, config);
     return {};
   })
