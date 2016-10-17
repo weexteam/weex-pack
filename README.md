@@ -63,6 +63,12 @@ weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取�
 
 构建包的过程中，将会提示让您输入`CodeSign（证书）`，`Profile(provisioning profile)`,`AppId`，只有输入真实的这些信息才能成功打包。
 其余如AppName,和入口weex bundle文件可以编辑项目目录下的ios.config.json配置。
+打完包成功之后，可以在/playground/build/ipa_build/目录下获取ipa文件
+
+**注：证书需要预先安装到keychain中，在keychain中点击右键获取证书id（证书名称），provisioning profile文件（*mobileprovision）需要获取UUID，进入[目录](https://github.com/weexteam/weex-pack/tree/master/generator/ios) 可以看到mobileprovision_UUID.sh文件，此文件可以获取到UUID**
+
+mobileprovision_UUID.sh用法如下：  
+$  ./mobileprovision_UUID.sh   \*mobileprovision,参数（\*mobileprovision）为provisioning profile文件路径
 
 ## Android平台打包&运行
 android的打包和构建是一体的 ：
