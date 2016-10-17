@@ -5,14 +5,18 @@ const inquirer = require('inquirer')
 const fs = require('fs');
 const utils = require('../utils')
 const {Config,iOSConfigResolver} = require('../utils/config')
-
+const startJSServer = require('../run/server')
 /**
  * Run iOS app
  * @param {Object} options
  */
 function buildIOS(options) {
 
-  prepareIOS({options})
+  utils.buildJS()
+    .then(()=>{
+      startJSServer()
+      return {options}
+    }).then(prepareIOS)
     .then(installDep)
     .then(resolveConfig)
     .then(doBuild)
@@ -82,8 +86,7 @@ function resolveConfig({xcodeProject, options,rootPath}) {
   let iOSConfig = new Config(iOSConfigResolver,path.join(rootPath, 'ios.config.json'))
   return iOSConfig.getConfig().then((config) => {
     iOSConfigResolver.resolve(config);
-    let input = fs.createReadStream(path.join(process.cwd(), '../../dist', config.WeexBundle.replace(/\.we$/, '.js')));
-    let out = fs.createWriteStream(path.join(process.cwd(), 'bundlejs/index.js'));
+    fs.writeFileSync(path.join(process.cwd(), 'bundlejs/index.js'),fs.readFileSync(path.join(process.cwd(), '../../dist', config.WeexBundle.replace(/\.we$/, '.js'))));
     return {};
   })
 }

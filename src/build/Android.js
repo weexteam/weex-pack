@@ -13,8 +13,12 @@ const startJSServer = require('../run/server')
  * @param {Object} options
  */
 function buildAndroid(options) {
-  startJSServer()
-  prepareAndroid({options})
+  utils.buildJS()
+    .then(()=>{
+      startJSServer()
+      return {options}
+    })
+    .then(prepareAndroid)
     .then(resolveConfig)
     .then(buildApp)
     .catch((err) => {

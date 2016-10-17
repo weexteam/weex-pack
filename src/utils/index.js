@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const output = require('./output')
 const validator = require('./validator')
-
+const child_process=require('child_process')
 const utils = {
 
   copyAndReplace(src, dest, replacements) {
@@ -85,8 +85,22 @@ const utils = {
       }
     }
     return devices;
-  }
+  },
+  exec(command){
+    return new Promise((resolve,reject)=>{
+      let child = child_process.exec(command, {encoding: 'utf8'}, function () {
+        resolve();
+      })
+      child.stdout.pipe(process.stdout);
+      child.stderr.pipe(process.stderr);
+    })
 
+  },
+  buildJS(){
+    return this.exec('npm install').then(()=>{
+      return this.exec('npm run build')
+    })
+}
 }
 
 module.exports = Object.assign(utils, output, validator)

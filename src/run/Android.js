@@ -12,9 +12,13 @@ const {Config,androidConfigResolver} = require('../utils/config')
  * @param {Object} options
  */
 function runAndroid(options) {
-  startJSServer()
 
-  prepareAndroid({options})
+  utils.buildJS()
+    .then(()=>{
+      startJSServer()
+      return {options}
+    })
+    .then(prepareAndroid)
     .then(resolveConfig)
     .then(findAndroidDevice)
     .then(chooseDevice)
@@ -110,7 +114,7 @@ function findAndroidDevice({options}) {
  */
 function chooseDevice({devicesList, options}) {
   return new Promise((resolve, reject) => {
-    if (devicesList) {
+    if (devicesList&&devicesList.length>1) {
       const listNames = [new inquirer.Separator(' = devices = ')]
       for (const device of devicesList) {
         listNames.push(
@@ -133,7 +137,10 @@ function chooseDevice({devicesList, options}) {
         const device = answers.chooseDevice
         resolve({device, options})
       })
-    } else {
+    } else if(devicesList.length==1){
+      resolve({device:devicesList[0], options})
+    }
+    else {
       reject('No android devices found.')
     }
   })
