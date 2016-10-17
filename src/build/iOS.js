@@ -4,14 +4,19 @@ const child_process = require('child_process')
 const inquirer = require('inquirer')
 const fs = require('fs');
 const utils = require('../utils')
-
+const {Config,iOSConfigResolver} = require('../utils/config')
+const startJSServer = require('../run/server')
 /**
  * Run iOS app
  * @param {Object} options
  */
 function buildIOS(options) {
 
-  prepareIOS({options})
+  utils.buildJS()
+    .then(()=>{
+      startJSServer()
+      return {options}
+    }).then(prepareIOS)
     .then(installDep)
     .then(resolveConfig)
     .then(doBuild)
@@ -44,7 +49,7 @@ function prepareIOS({options}) {
 
     if (xcodeProject) {
       console.log()
-      resolve({xcodeProject, options})
+      resolve({xcodeProject, options, rootPath})
     } else {
       console.log()
       console.log(`  ${chalk.red.bold('Could not find Xcode project files in ios folder')}`)
@@ -61,46 +66,40 @@ function prepareIOS({options}) {
  * @param {Object} xcode project
  * @param {Object} options
  */
-function installDep({xcodeProject, options}) {
+function installDep({xcodeProject, options,rootPath}) {
   return new Promise((resolve, reject) => {
     try {
       console.log(` => ${chalk.blue.bold('pod install')}`)
-      child_process.execSync('pod install', {encoding: 'utf8'})
+      let child = child_process.exec('pod install', {encoding: 'utf8'}, function () {
+        resolve({xcodeProject, options, rootPath})
+      });
+      child.stdout.pipe(process.stdout)
+      child.stderr.pipe(process.stderr)
     } catch (e) {
       reject(e)
     }
-    resolve({xcodeProject, options})
+
   })
 
 }
-function resolveConfig() {
-  return new Promise((resolve, reject) => {
-    inquirer.prompt([
-        {
-          type: 'input',
-          message: 'Please input your code sign identify',
-          name: 'codeSign'
-        }, {
-          type: 'input',
-          message: 'Please input your Provisioning Profile',
-          name: 'profile'
-        }
-      ])
-      .then((answers) => {
-        var p = path.join(process.cwd(), 'WeexDemo.xcodeproj/project.pbxproj');
-        var config = fs.readFileSync(p).toString();
-        config = config.replace(/(PROVISIONING_PROFILE\s*=\s*)""/g, '$1"' + answers.profile + '"')
-          .replace(/("?CODE_SIGN_IDENTITY(\[sdk=iphoneos\*])?"?\s*=\s*)"iPhone Developer"/g, '$1"' + answers.codeSign + '"');
-        fs.writeFileSync(p, config);
-        resolve();
-      })
+function resolveConfig({xcodeProject, options,rootPath}) {
+  let iOSConfig = new Config(iOSConfigResolver,path.join(rootPath, 'ios.config.json'))
+  return iOSConfig.getConfig().then((config) => {
+    iOSConfigResolver.resolve(config);
+    fs.writeFileSync(path.join(process.cwd(), 'bundlejs/index.js'),fs.readFileSync(path.join(process.cwd(), '../../dist', config.WeexBundle.replace(/\.we$/, '.js'))));
+    return {};
   })
 }
-function doBuild(){
-    return new Promise((resolve,reject)=>{
-      child_process.execSync(path.join(__dirname,'lib/cocoapods-build')+' . Debug', {encoding: 'utf8'})
+function doBuild() {
+  return new Promise((resolve, reject)=> {
+    let child = child_process.exec(path.join(__dirname, 'lib/cocoapods-build') + ' . Debug', {encoding: 'utf8'}, function () {
+      console.log('Build success!');
       resolve();
-    });
+    })
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stderr);
+
+  });
 }
 /**
  * find ios devices

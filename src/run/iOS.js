@@ -11,10 +11,12 @@ const startJSServer = require('./server')
  * @param {Object} options
  */
 function runIOS(options) {
-  startJSServer()
-
-  prepareIOS({options})
-    // .then(installDep)
+  utils.buildJS()
+    .then(()=>{
+      startJSServer()
+      return {options}
+    }).then(prepareIOS)
+    .then(installDep)
     .then(findIOSDevice)
     .then(chooseDevice)
     .then(buildApp)
