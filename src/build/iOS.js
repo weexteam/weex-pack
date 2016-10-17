@@ -78,7 +78,7 @@ function installDep({xcodeProject, options,rootPath}) {
 
 }
 function resolveConfig({xcodeProject, options,rootPath}) {
-  let iOSConfig = new Config('codeSign,profile',Path.join(rootPath,'ios.config.json'));
+  let iOSConfig = new Config('codeSign,profile',path.join(rootPath,'ios.config.json'));
   return iOSConfig.getConfig().then((config) => {
     var p = path.join(process.cwd(), 'WeexDemo.xcodeproj/project.pbxproj');
     var buildConfig = fs.readFileSync(p).toString();

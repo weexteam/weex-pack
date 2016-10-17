@@ -74,7 +74,6 @@ function prepareAndroid({options}) {
 function resolveConfig({options,rootPath}){
   let androidConfig = new Config('ApplicationId,AppName,SplashText',Path.join(rootPath,'android.config.json'));
   return androidConfig.getConfig().then((config) => {
-    console.log(config,process.cwd());
     let bundleConfigPath=Path.join(process.cwd(),'app/build.gradle');
     let bundleConfig=Fs.readFileSync(bundleConfigPath).toString();
     bundleConfig=bundleConfig.replace(/applicationId "[^"]*"/g,'applicationId "'+config.ApplicationId+'"')
