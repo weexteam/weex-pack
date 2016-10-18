@@ -2,21 +2,21 @@ const path = require('path')
 const chalk = require('chalk')
 const child_process = require('child_process')
 const inquirer = require('inquirer')
-
+const fs = require('fs')
 const utils = require('../utils')
 const startJSServer = require('./server')
-
+const {Config,iOSConfigResolver} = require('../utils/config')
 /**
  * Run iOS app
  * @param {Object} options
  */
 function runIOS(options) {
   utils.buildJS()
-    .then(()=>{
+    .then(()=> {
       startJSServer()
       return {options}
     }).then(prepareIOS)
-    .then(installDep)
+    // .then(installDep)
     .then(findIOSDevice)
     .then(chooseDevice)
     .then(buildApp)
@@ -51,7 +51,7 @@ function prepareIOS({options}) {
     if (xcodeProject) {
       console.log()
       console.log(` => ${chalk.blue.bold('Will start iOS app')}`)
-      resolve({xcodeProject, options})
+      resolve({xcodeProject, options, rootPath})
     } else {
       console.log()
       console.log(`  ${chalk.red.bold('Could not find Xcode project files in ios folder')}`)
@@ -68,17 +68,9 @@ function prepareIOS({options}) {
  * @param {Object} xcode project
  * @param {Object} options
  */
-function installDep({xcodeProject, options}) {
-  return new Promise((resolve, reject) => {
-    try {
-      console.log(` => ${chalk.blue.bold('pod install')}`)
-      child_process.execSync('pod install', {encoding: 'utf8'})
-    } catch(e) {
-      reject(e)
-    }
-    resolve({xcodeProject, options})
-  })
-
+function installDep({xcodeProject, options,rootPath}) {
+  console.log(` => ${chalk.blue.bold('pod install')}`)
+  return utils.exec('pod install --no-repo-update').then(()=>({xcodeProject, options, rootPath}))
 }
 
 /**
@@ -87,7 +79,7 @@ function installDep({xcodeProject, options}) {
  * @param {Object} options
  * @return {Array} devices lists
  */
-function findIOSDevice({xcodeProject, options}) {
+function findIOSDevice({xcodeProject, options,rootPath}) {
   return new Promise((resolve, reject) => {
     let deviceInfo = ''
     try {
@@ -96,7 +88,7 @@ function findIOSDevice({xcodeProject, options}) {
       reject(e)
     }
     let devicesList = utils.parseIOSDevicesList(deviceInfo)
-    resolve({devicesList, xcodeProject, options})
+    resolve({devicesList, xcodeProject, options, rootPath})
   })
 }
 
@@ -107,7 +99,7 @@ function findIOSDevice({xcodeProject, options}) {
  * @param {Object} options
  * @return {Object} device
  */
-function chooseDevice({devicesList, xcodeProject, options}) {
+function chooseDevice({devicesList, xcodeProject, options,rootPath}) {
   return new Promise((resolve, reject) => {
     if (devicesList && devicesList.length > 0) {
       const listNames = [new inquirer.Separator(' = devices = ')]
@@ -121,17 +113,17 @@ function chooseDevice({devicesList, xcodeProject, options}) {
       }
 
       inquirer.prompt([
-        {
-          type: 'list',
-          message: 'Choose one of the following devices',
-          name: 'chooseDevice',
-          choices: listNames
-        }
-      ])
-      .then((answers) => {
-        const device = answers.chooseDevice
-        resolve({device, xcodeProject, options})
-      })
+          {
+            type: 'list',
+            message: 'Choose one of the following devices',
+            name: 'chooseDevice',
+            choices: listNames
+          }
+        ])
+        .then((answers) => {
+          const device = answers.chooseDevice
+          resolve({device, xcodeProject, options, rootPath})
+        })
     } else {
       reject('No ios devices found.')
     }
@@ -144,22 +136,21 @@ function chooseDevice({devicesList, xcodeProject, options}) {
  * @param {Object} xcode project
  * @param {Object} options
  */
-function buildApp({device, xcodeProject, options}) {
+function buildApp({device, xcodeProject, options,rootPath}) {
   return new Promise((resolve, reject) => {
     let projectInfo = ''
     try {
-      projectInfo = child_process.execSync('xcodebuild -list -json', {encoding: 'utf8'})
+      projectInfo = utils.getIOSProjectInfo();
     } catch (e) {
       reject(e)
     }
-    projectInfo = JSON.parse(projectInfo)
 
     const scheme = projectInfo.project.schemes[0]
 
     if (device.isSimulator) {
-      _buildOnSimulator({scheme, device, xcodeProject, options, resolve, reject})
+      _buildOnSimulator({scheme, device, xcodeProject, options, resolve, reject, rootPath})
     } else {
-      _buildOnRealDevice({scheme, device, xcodeProject, options, resolve, reject})
+      _buildOnRealDevice({scheme, device, xcodeProject, options, resolve, reject, rootPath})
     }
   })
 }
@@ -187,9 +178,21 @@ function _buildOnSimulator({scheme, device, xcodeProject, options, resolve, reje
  * @param {Object} xcode project
  * @param {Object} options
  */
-function _buildOnRealDevice({scheme, device, xcodeProject, options, resolve, reject}) {
+function _buildOnRealDevice({scheme, device, xcodeProject, options, resolve, reject,rootPath}) {
   // @TODO support debug on real device
-  resolve({device,xcodeProject,options});
+  let iOSConfig = new Config(iOSConfigResolver, path.join(rootPath, 'ios.config.json'))
+  iOSConfig.getConfig().then((config) => {
+    try {
+      iOSConfigResolver.resolve(config);
+      fs.writeFileSync(path.join(process.cwd(), 'bundlejs/index.js'), fs.readFileSync(path.join(process.cwd(), '../../dist', config.WeexBundle.replace(/\.we$/, '.js'))));
+      resolve({device, xcodeProject, options, rootPath});
+    }
+    catch (e) {
+      console.log(e);
+    }
+
+  }, (e)=>reject(e))
+
 }
 
 /**
@@ -286,8 +289,15 @@ function simulatorIsAvailable(info, device) {
 function _runAppOnDevice({device, xcodeProject, options, resolve, reject}) {
   // @TODO support run on real device
   const appPath = `build/Debug-iphoneos/WeexDemo.app`
+  const deviceId = device.udid
   try {
-    child_process.execSync(`ios-deploy --justlaunch --debug --bundle ${appPath}`, {encoding: 'utf8'})
+    if (!fs.existsSync(appPath)) {
+      console.log('building...');
+      child_process.execSync(path.join(__dirname, '../build/lib/cocoapods-build') + ' . Debug', {encoding: 'utf8'})
+
+    }
+
+    console.log(child_process.execSync(`../../node_modules/.bin/ios-deploy --justlaunch --debug --id ${deviceId} --bundle ${path.resolve(appPath)}`, {encoding: 'utf8'}))
   } catch (e) {
     reject(e)
   }
