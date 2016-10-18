@@ -16,7 +16,7 @@ function runIOS(options) {
       startJSServer()
       return {options}
     }).then(prepareIOS)
-    .then(installDep)
+    // .then(installDep)
     .then(findIOSDevice)
     .then(chooseDevice)
     .then(buildApp)
@@ -70,7 +70,7 @@ function prepareIOS({options}) {
  */
 function installDep({xcodeProject, options,rootPath}) {
   console.log(` => ${chalk.blue.bold('pod install')}`)
-  return utils.exec('pod install').then(()=>({xcodeProject, options, rootPath}))
+  return utils.exec('pod install --no-repo-update').then(()=>({xcodeProject, options, rootPath}))
 }
 
 /**
@@ -289,6 +289,7 @@ function simulatorIsAvailable(info, device) {
 function _runAppOnDevice({device, xcodeProject, options, resolve, reject}) {
   // @TODO support run on real device
   const appPath = `build/Debug-iphoneos/WeexDemo.app`
+  const deviceId = device.udid
   try {
     if (!fs.existsSync(appPath)) {
       console.log('building...');
@@ -296,7 +297,7 @@ function _runAppOnDevice({device, xcodeProject, options, resolve, reject}) {
 
     }
 
-    console.log(child_process.execSync(`../../node_modules/.bin/ios-deploy --justlaunch --debug --bundle ${path.resolve(appPath)}`, {encoding: 'utf8'}))
+    console.log(child_process.execSync(`../../node_modules/.bin/ios-deploy --justlaunch --debug --id ${deviceId} --bundle ${path.resolve(appPath)}`, {encoding: 'utf8'}))
   } catch (e) {
     reject(e)
   }

@@ -17,7 +17,7 @@ function buildIOS(options) {
       startJSServer()
       return {options}
     }).then(prepareIOS)
-    .then(installDep)
+    // .then(installDep)
     .then(resolveConfig)
     .then(doBuild)
     .catch((err) => {
@@ -70,7 +70,7 @@ function installDep({xcodeProject, options,rootPath}) {
   return new Promise((resolve, reject) => {
     try {
       console.log(` => ${chalk.blue.bold('pod install')}`)
-      let child = child_process.exec('pod install', {encoding: 'utf8'}, function () {
+      let child = child_process.exec('pod install --no-repo-update', {encoding: 'utf8'}, function () {
         resolve({xcodeProject, options, rootPath})
       });
       child.stdout.pipe(process.stdout)
