@@ -50,7 +50,7 @@ const utils = {
 
   parseIOSDevicesList(text) {
     const devices = []
-    const REG_DEVICE = /(.*?) \((.*?)\) \[(.*?)\]/
+    const REG_DEVICE = /(.*?) \((.*?)\) \[(.*?)]/
 
     const lines = text.split('\n')
     for (const line of lines) {
@@ -62,7 +62,7 @@ const utils = {
         const name = device[1]
         const version = device[2]
         const udid = device[3]
-        const isSimulator = line.indexOf('Simulator') >= 0
+        const isSimulator = line.indexOf('Simulator') >= 0||udid.indexOf('-')>=0
         devices.push({name, version, udid, isSimulator})
       }
     }
