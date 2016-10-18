@@ -21,7 +21,6 @@ class Config {
           }
         }
       }
-      console.log(this.properties)
     }
     else {
       this.properties = properties.split(',').map(prop=> {
@@ -190,7 +189,7 @@ exports.iOSConfigResolver = new ConfigResolver({
   'WeexDemo.xcodeproj/project.pbxproj': {
     CodeSign: [{
       type: 'regexp',
-      key: /("?CODE_SIGN_IDENTITY(?:\[sdk=iphoneos\*])?"?\s*=\s*")iPhone Developer(")/g
+      key: /("?CODE_SIGN_IDENTITY(?:\[sdk=iphoneos\*])?"?\s*=\s*").*?(")/g
     }, {
       type: 'plist',
       key: 'CODE_SIGN_IDENTITY(\\[sdk=iphoneos\\*])?'

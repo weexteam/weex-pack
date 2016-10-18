@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const output = require('./output')
 const validator = require('./validator')
-const child_process=require('child_process')
+const child_process = require('child_process')
 const utils = {
 
   copyAndReplace(src, dest, replacements) {
@@ -77,7 +77,7 @@ const utils = {
     const devices = [];
     const lines = result.trim().split(/\r?\n/);
 
-    for (let i=0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       let words = lines[i].split(/[ ,\t]+/).filter((w) => w !== '');
 
       if (words[1] === 'device') {
@@ -87,20 +87,34 @@ const utils = {
     return devices;
   },
   exec(command){
-    return new Promise((resolve,reject)=>{
-      let child = child_process.exec(command, {encoding: 'utf8'}, function () {
-        resolve();
-      })
-      child.stdout.pipe(process.stdout);
-      child.stderr.pipe(process.stderr);
+    return new Promise((resolve, reject)=> {
+      try {
+        let child = child_process.exec(command, {encoding: 'utf8'}, function () {
+          resolve();
+        })
+        child.stdout.pipe(process.stdout);
+        child.stderr.pipe(process.stderr);
+      }catch(e){
+        reject(e);
+      }
     })
 
   },
   buildJS(){
-    return this.exec('npm install').then(()=>{
+    return this.exec('npm install').then(()=> {
       return this.exec('npm run build')
     })
-}
+  },
+  getIOSProjectInfo(){
+    let projectInfoText=child_process.execSync('xcodebuild  -list', {encoding: 'utf8'});
+    let splits=projectInfoText.split(/Targets:|Build Configurations:|Schemes:/);
+    let projectInfo={};
+    projectInfo.name=splits[0].match(/Information about project "([^"]+?)"/)[1];
+    projectInfo.targets=splits[1]?splits[1].split('\n').filter(e=>!!e.trim()).map(e=>e.trim()):[];
+    projectInfo.configurations=splits[2]?splits[2].split('\n').filter((e,i)=>!!e.trim()&&i<3).map(e=>e.trim()):[];
+    projectInfo.schemes=splits[3]?splits[3].split('\n').filter(e=>!!e.trim()).map(e=>e.trim()):[];
+    return {project:projectInfo}
+  }
 }
 
 module.exports = Object.assign(utils, output, validator)
