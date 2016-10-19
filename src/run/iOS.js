@@ -161,10 +161,13 @@ function buildApp({device, xcodeProject, options,rootPath}) {
  * @param {Object} xcode project
  * @param {Object} options
  */
-function _buildOnSimulator({scheme, device, xcodeProject, options, resolve, reject}) {
+function _buildOnSimulator({scheme, device, rootPath,xcodeProject, options, resolve, reject}) {
   console.log('project is building ...')
   let buildInfo = ''
   try {
+    let config=require(path.join(rootPath,'ios.config.json'));
+    fs.writeFileSync(path.join(process.cwd(), 'bundlejs/index.js'), fs.readFileSync(path.join(process.cwd(), '../../dist', config.WeexBundle.replace(/\.we$/, '.js'))));
+
     buildInfo = child_process.execSync(`xcodebuild -${xcodeProject.isWorkspace ? 'workspace' : 'project'} ${xcodeProject.name} -scheme ${scheme} -configuration Debug -destination id=${device.udid} -sdk iphonesimulator -derivedDataPath build clean build`, {encoding: 'utf8'})
   } catch (e) {
     reject(e)
