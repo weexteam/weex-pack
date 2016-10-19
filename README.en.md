@@ -66,8 +66,10 @@ Build ipa
     
 this command will prompt for CodeSign, Profile(provisioning profile), AppId to build ipa. Other information like AppName, weex bundle could be configured as you like in the file ios.config.json. After this command, ipa file could be created under the directory /playground/build/ipa_build/.
 
-Note: CodeSign should be installed to keychain, click keychain to get the id; 
-      provisioning profile need UUID. you could use the file mobileprovision_UUID.sh to generate UUID as follows:
+Note: For details about various requirements to deploy to a device, refer to the Launch Your App On Devices section of Apple's [About App Distribution Workflows][9]. Briefly, you need to do the following before deploying:
+
+      1.CodeSign should be installed to keychain, click keychain to get the id; 
+      2.provisioning profile need UUID. you could use the file mobileprovision_UUID.sh to generate UUID as follows:
       
      $ ./mobileprovision_UUID.sh abcpath
      abcpath is the path of provisioning profile file.
@@ -102,3 +104,4 @@ For developers who have a packaged release, you can make changes directly to the
   [6]: https://www.docker.com/
   [7]: https://developer.android.com/studio/releases/sdk-tools.html
   [8]: https://developer.android.com/studio/run/managing-avds.html
+  [9]: https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/Introduction/Introduction.html
