@@ -11,9 +11,11 @@ Weexpack is our next generation of engineering development kits. It allows devel
 - Configure the [Node.js] [1] environment and install the [npm] [2] package manager.
 - Configure iOS development environment:
     - Install [Xcode IDE] [3] to launch Xcode once so that Xcode automatically installs the Developer Tools and confirms the usage protocol.
+    - Install cocoaPods
 - Configure the Android development environment:
     - Install [Android Studio] [4] and open the new project. Open the menu bar, open the [AVD Manager] [5], the new Android emulator and start. (If you have installed [Docker] [6], close the Docker Server.)
     - Or just download the [Android SDK] [7], run the command line [AVD Manager] [8], create a new Android emulator and launch it.
+    - Make sure that Android build-tool version is 23.0.2
 
 ### Instructions
 
@@ -52,13 +54,38 @@ Next, go to the directory, and install the dependencies:
 
     $ cd appName && npm install
 
-On the ios platform, run the project:
+### IOS platform
+
+For simulator
 
     $ weexpack run ios
+    
+Build ipa
 
-In the android platform, run the project:
+    $ weexpack build ios
+    
+this command will prompt for CodeSign, Profile(provisioning profile), AppId to build ipa. Other information like AppName, weex bundle could be configured as you like in the file ios.config.json. After this command, ipa file could be created under the directory /playground/build/ipa_build/.
+
+Note: CodeSign should be installed to keychain, click keychain to get the id; 
+      provisioning profile need UUID. you could use the file mobileprovision_UUID.sh to generate UUID as follows:
+      
+     $ ./mobileprovision_UUID.sh abcpath
+     abcpath is the path of provisioning profile file.
+
+### Android platform
+
+In the android platform, package and running could be done with one command:
 
     $ weexpack run android
+    
+You could configure the following in android.config.json
+
+    -AppName: the name of the project
+    -AppId: application_id the name of the package
+    -SplashText: the text in welcome page
+    -WeexBundle: the bundle file (could be local file or remote url). Local file please put under the src directory 
+
+### Html5 platform
 
 On the html5 platform, run the project:
 
