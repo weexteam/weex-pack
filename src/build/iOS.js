@@ -17,7 +17,7 @@ function buildIOS(options) {
       startJSServer()
       return {options}
     }).then(prepareIOS)
-    // .then(installDep)
+    .then(installDep)
     .then(resolveConfig)
     .then(doBuild)
     .catch((err) => {

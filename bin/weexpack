@@ -8,7 +8,7 @@ program
   .usage('<command> [options]')
   .command('init [name]', 'initialize a standard weex project')
   .command('run [platform]', 'run weex app on the specific platform')
-  .command('build [platform]', 'abc')
+  .command('build [platform]', 'build weex app generator package(apk or ipa)')
   .parse(process.argv)
 function isValidCommand(command) {
   return command === 'init' || command === 'run' || command === 'build'
