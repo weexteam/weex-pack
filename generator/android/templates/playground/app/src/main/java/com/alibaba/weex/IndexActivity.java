@@ -1,8 +1,7 @@
 package com.alibaba.weex;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -16,15 +15,18 @@ import android.widget.Toast;
 
 import com.alibaba.weex.commons.AbsWeexActivity;
 import com.alibaba.weex.commons.util.AppConfig;
-import com.google.zxing.client.android.CaptureActivity;
+import com.alibaba.weex.constants.Constants;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXRenderErrorCode;
+import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.utils.WXSoInstallMgrSdk;
 
 public class IndexActivity extends AbsWeexActivity {
 
   private static final String TAG = "IndexActivity";
-  private static final int CAMERA_PERMISSION_REQUEST_CODE = 0x1;
   private static final String DEFAULT_IP = "your_current_IP";
   private static String sCurrentIp = DEFAULT_IP;//"127.0.0.1"; // your_current_IP
 
@@ -78,34 +80,21 @@ public class IndexActivity extends AbsWeexActivity {
         renderPage();
         break;
       case R.id.action_scan:
-        scanQrCode();
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        integrator.setPrompt("Scan a barcode");
+        //integrator.setCameraId(0);  // Use a specific camera of the device
+        integrator.setBeepEnabled(true);
+        integrator.setOrientationLocked(false);
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
+        //scanQrCode();
         break;
       default:
         break;
     }
 
     return super.onOptionsItemSelected(item);
-  }
-
-  private void scanQrCode() {
-    runWithPermissionsCheck(CAMERA_PERMISSION_REQUEST_CODE, Manifest.permission.CAMERA, new Runnable() {
-      @Override
-      public void run() {
-        Intent intent = new Intent(IndexActivity.this, CaptureActivity.class);
-        intent.setPackage(getPackageName());
-        startActivity(intent);
-      }
-    });
-  }
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    if (requestCode == CAMERA_PERMISSION_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-      scanQrCode();
-    } else {
-      Toast.makeText(this, "request camera permission fail!", Toast.LENGTH_SHORT).show();
-    }
   }
 
   @Override
@@ -125,5 +114,52 @@ public class IndexActivity extends AbsWeexActivity {
     }
   }
 
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+    if(result != null) {
+      if(result.getContents() == null) {
+        Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+      } else {
+        handleDecodeInternally(result.getContents());
+      }
+    } else {
+      super.onActivityResult(requestCode, resultCode, data);
+    }
+  }
+
+  // Put up our own UI for how to handle the decoded contents.
+  private void handleDecodeInternally(String code) {
+
+    if (!TextUtils.isEmpty(code)) {
+      Uri uri = Uri.parse(code);
+      if (uri.getQueryParameterNames().contains("bundle")) {
+        WXEnvironment.sDynamicMode = uri.getBooleanQueryParameter("debug", false);
+        WXEnvironment.sDynamicUrl = uri.getQueryParameter("bundle");
+        String tip = WXEnvironment.sDynamicMode ? "Has switched to Dynamic Mode" : "Has switched to Normal Mode";
+        Toast.makeText(this, tip, Toast.LENGTH_SHORT).show();
+        finish();
+        return;
+      } else if (uri.getQueryParameterNames().contains("_wx_devtool")) {
+        WXEnvironment.sRemoteDebugProxyUrl = uri.getQueryParameter("_wx_devtool");
+        WXSDKEngine.reload();
+        Toast.makeText(this, "devtool", Toast.LENGTH_SHORT).show();
+        finish();
+        return;
+      }else if (code.contains("_wx_debug")) {
+        uri = Uri.parse(code);
+        String debug_url = uri.getQueryParameter("_wx_debug");
+        WXSDKEngine.switchDebugModel(true, debug_url);
+        finish();
+      } else {
+        Toast.makeText(this, code, Toast.LENGTH_SHORT)
+            .show();
+        Intent intent = new Intent(Constants.ACTION_OPEN_URL);
+        intent.setPackage(getPackageName());
+        intent.setData(Uri.parse(code));
+        startActivity(intent);
+      }
+    }
+  }
 }
 
