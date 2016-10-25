@@ -248,7 +248,7 @@ public class ScreenUtil {
             height -= smartBarHeight;
         }
 
-        if (activity.getSupportActionBar() != null) {
+        if (activity != null && activity.getSupportActionBar() != null) {
           int actionbar= activity.getSupportActionBar().getHeight();
           if(actionbar==0){
             TypedArray actionbarSizeTypedArray=activity.obtainStyledAttributes(new int[]{android.R.attr.actionBarSize});
@@ -302,11 +302,15 @@ public class ScreenUtil {
     }
 
     private static boolean isSupportSmartBar() {
+        boolean hasSmartBar = false;
         try {
             final Method method = Build.class.getMethod("hasSmartBar");
-            return method != null;
+            if (method != null) {
+                hasSmartBar = true;
+            }
         } catch (final Exception e) {
-            return false;
+            // return false;
         }
+        return hasSmartBar;
     }
 }

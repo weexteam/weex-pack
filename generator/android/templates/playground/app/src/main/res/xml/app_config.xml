@@ -4,4 +4,10 @@
     <bool name="launch_locally">false</bool>
     <string name="launch_url">http://127.0.0.1:8080/dist/index.js</string>
     <string name="local_url">file://assets/index.js</string>
+
+    <component name="richtext">com.alibaba.weex.extend.component.RichText</component>
+
+    <module name="render">com.alibaba.weex.extend.module.RenderModule</module>
+    <module name="event">com.alibaba.weex.extend.module.WXEventModule</module>
+    <module name="myModule">com.alibaba.weex.extend.module.MyModule</module>
 </app_config>
