@@ -91,7 +91,7 @@ You could configure the following in android.config.json
 
 On the html5 platform, run the project:
 
-    $ weexpack run html5
+    $ weexpack run web
 
 For developers who have a packaged release, you can make changes directly to the playground project. Follow-up, weexpack will be further added to the packaging, testing and other functions.
 
