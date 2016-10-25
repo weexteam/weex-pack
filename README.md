@@ -90,7 +90,7 @@ android的打包和构建是一体的 ：
 
 ## 在 html5 平台上，运行项目：
 
-    $ weexpack run html5
+    $ weexpack run web
 
 
 
