@@ -1,3 +1,4 @@
+[![GitHub release](https://img.shields.io/github/release/weexteam/weex-pack.svg)](https://github.com/weexteam/weex-pack/releases)  [![GitHub issues](https://img.shields.io/github/issues/weexteam/weex-pack.svg)](https://github.com/weexteam/weex-pack/issues)
 # Weex 工程开发套件
 
 [English Version](./README.en.md)
@@ -89,7 +90,7 @@ android的打包和构建是一体的 ：
 
 ## 在 html5 平台上，运行项目：
 
-    $ weexpack run html5
+    $ weexpack run web
 
 
 

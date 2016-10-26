@@ -8,6 +8,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Created by budao on 2016/10/12.
@@ -18,6 +19,8 @@ public class AppConfig {
   private static String mLocalUrl = "file://assets/index.js";
   private static String mLaunchUrl = "http://127.0.0.1:8080/dist/index.js";
   private static Boolean mIsLaunchLocally = false;
+  private static HashMap<String, String> sComponents = new HashMap<>();
+  private static HashMap<String, String> sModules = new HashMap<>();
 
   public static void init(Context context) {
     loadAppSettings(context);
@@ -80,6 +83,10 @@ public class AppConfig {
             } else if ("local_url".equalsIgnoreCase(value)) {
               mLocalUrl = text;
             }
+          } else if ("component".equals(tag)) {
+            sComponents.put(value, text);
+          } else if ("module".equals(tag)) {
+            sModules.put(value, text);
           }
         }
       }
@@ -92,5 +99,21 @@ public class AppConfig {
     } finally {
       parser.close();
     }
+  }
+
+  public static HashMap<String, String> getComponents() {
+    return sComponents;
+  }
+
+  public static void setComponents(HashMap<String, String> sComponents) {
+    AppConfig.sComponents = sComponents;
+  }
+
+  public static HashMap<String, String> getModules() {
+    return sModules;
+  }
+
+  public static void setModules(HashMap<String, String> sModules) {
+    AppConfig.sModules = sModules;
   }
 }

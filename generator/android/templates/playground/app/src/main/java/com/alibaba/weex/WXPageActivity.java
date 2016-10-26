@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
@@ -22,17 +21,14 @@ import android.widget.Toast;
 
 import com.alibaba.weex.commons.AbsWeexActivity;
 import com.alibaba.weex.constants.Constants;
-import com.alibaba.weex.https.HotRefreshManager;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.ui.component.NestedContainer;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 
 
-public class WXPageActivity extends AbsWeexActivity implements Handler.Callback,
+public class WXPageActivity extends AbsWeexActivity implements
     WXSDKInstance.NestedInstanceInterceptor {
 
   private static final String TAG = "WXPageActivity";
@@ -89,9 +85,6 @@ public class WXPageActivity extends AbsWeexActivity implements Handler.Callback,
     initUIAndData();
 
     loadUrl(getUrl(mUri));
-    if (!isLocalPage()) {
-      startHotRefresh();
-    }
   }
 
   private String getUrl(Uri uri) {
@@ -119,32 +112,10 @@ public class WXPageActivity extends AbsWeexActivity implements Handler.Callback,
 
     mContainer = (ViewGroup) findViewById(R.id.container);
     mProgressBar = (ProgressBar) findViewById(R.id.progress);
-    mWXHandler = new Handler(this);
-    HotRefreshManager.getInstance().setHandler(mWXHandler);
   }
 
   protected void preRenderPage() {
     mProgressBar.setVisibility(View.VISIBLE);
-  }
-
-  /**
-   * hot refresh
-   */
-  private void startHotRefresh() {
-    try {
-      String host = new URL(mUri.toString()).getHost();
-      String wsUrl = "ws://" + host + ":8082";
-      mWXHandler.obtainMessage(Constants.HOT_REFRESH_CONNECT, 0, 0, wsUrl).sendToTarget();
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
-    }
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    // TopScrollHelper.getInstance(getApplicationContext()).onDestory();
-    mWXHandler.obtainMessage(Constants.HOT_REFRESH_DISCONNECT).sendToTarget();
   }
 
   @Override
@@ -157,29 +128,6 @@ public class WXPageActivity extends AbsWeexActivity implements Handler.Callback,
     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
   }
 
-  @Override
-  public boolean handleMessage(Message msg) {
-
-    switch (msg.what) {
-      case Constants.HOT_REFRESH_CONNECT:
-        HotRefreshManager.getInstance().connect(msg.obj.toString());
-        break;
-      case Constants.HOT_REFRESH_DISCONNECT:
-        HotRefreshManager.getInstance().disConnect();
-        break;
-      case Constants.HOT_REFRESH_REFRESH:
-        createWeexInstance();
-        renderPage();
-        break;
-      case Constants.HOT_REFRESH_CONNECT_ERROR:
-        Toast.makeText(this, "hot refresh connect error!", Toast.LENGTH_SHORT).show();
-        break;
-      default:
-        break;
-    }
-
-    return false;
-  }
 
   @Override
   public void onRenderSuccess(WXSDKInstance instance, int width, int height) {

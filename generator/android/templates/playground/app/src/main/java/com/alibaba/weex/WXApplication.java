@@ -4,15 +4,11 @@ import android.app.Application;
 
 import com.alibaba.weex.commons.adapter.ImageAdapter;
 import com.alibaba.weex.commons.util.AppConfig;
-import com.alibaba.weex.extend.component.RichText;
-import com.alibaba.weex.extend.module.MyModule;
-import com.alibaba.weex.extend.module.RenderModule;
-import com.alibaba.weex.extend.module.WXEventModule;
+import com.alibaba.weex.commons.util.ExtensionManager;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKEngine;
-import com.taobao.weex.common.WXException;
 
 public class WXApplication extends Application {
 
@@ -28,18 +24,11 @@ public class WXApplication extends Application {
             .build()
     );
 
-    try {
-      Fresco.initialize(this);
-      WXSDKEngine.registerComponent("richtext", RichText.class);
-      WXSDKEngine.registerModule("render", RenderModule.class);
-      WXSDKEngine.registerModule("event", WXEventModule.class);
-      WXSDKEngine.registerModule("myModule", MyModule.class);
-
-    } catch (WXException e) {
-      e.printStackTrace();
-    }
-
+    Fresco.initialize(this);
     AppConfig.init(this);
+    ExtensionManager.registerComponents(AppConfig.getComponents());
+    ExtensionManager.registerModules(AppConfig.getModules());
+
   }
 
   /**
