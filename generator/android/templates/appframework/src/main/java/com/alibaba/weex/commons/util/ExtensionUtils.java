@@ -1,7 +1,6 @@
 package com.alibaba.weex.commons.util;
 
 import com.taobao.weex.WXSDKEngine;
-import com.taobao.weex.bridge.WXModuleManager;
 import com.taobao.weex.common.WXException;
 
 import java.util.HashMap;
@@ -10,7 +9,7 @@ import java.util.Map;
 /**
  * Created by budao on 2016/10/25.
  */
-public class ExtensionManager {
+public class ExtensionUtils {
   public static void registerComponent(String name, String className) {
     try {
       Class clazz = Class.forName(className);
