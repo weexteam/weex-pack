@@ -214,7 +214,7 @@ import android.util.Log;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class ScreenUtil {
+public class CommonUtils {
     private static final String TAG = "WXTBUtil";
 
     private static boolean isSupportSmartBar = false;
@@ -312,5 +312,11 @@ public class ScreenUtil {
             // return false;
         }
         return hasSmartBar;
+    }
+
+    public static<T extends Exception> void throwIfNull(Object object,T e) throws T {
+      if(object == null){
+        throw e;
+      }
     }
 }
