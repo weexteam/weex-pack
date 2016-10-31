@@ -267,7 +267,6 @@ public class WXPageActivity extends AbsWeexActivity implements
         WXEnvironment.sRemoteDebugProxyUrl = uri.getQueryParameter("_wx_devtool");
         WXSDKEngine.reload();
         Toast.makeText(this, "devtool", Toast.LENGTH_SHORT).show();
-        finish();
         return;
       }else if (code.contains("_wx_debug")) {
         uri = Uri.parse(code);
