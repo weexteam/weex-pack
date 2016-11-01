@@ -158,8 +158,8 @@ exports.androidConfigResolver = new ConfigResolver({
         else {
           source = replacer.xml(source, 'launch_locally', 'true', 'bool');
           let name=value.replace(/\.we$/, '.js');
-          Fs.writeFileSync(Path.join(process.cwd(), 'app/src/main/assets/'+name),Fs.readFileSync(Path.join(process.cwd(), '../../dist', name)));
-          return replacer.xml(source, 'local_url', 'file://assets/'+name);
+          //Fs.writeFileSync(Path.join(process.cwd(), 'app/src/main/assets/'+name),Fs.readFileSync(Path.join(process.cwd(), '../../dist', name)));
+          return replacer.xml(source, 'local_url', 'file://assets/dist/'+name);
         }
       }
     }

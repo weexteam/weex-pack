@@ -11,7 +11,7 @@ bower_components/
 .svn/
 .sass-cache/
 npm-debug.log*
-
+test/
 coverage/
 dist/
 TODO/

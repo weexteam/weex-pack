@@ -23,6 +23,10 @@
   },
   "dependencies": {
     "weex-html5": "^0.3.2",
+    "weex-components":"*"
+  },
+  "optionalDependencies":{
     "ios-deploy": "^1.9.0"
   }
+
 }

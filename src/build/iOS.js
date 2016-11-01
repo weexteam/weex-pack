@@ -11,12 +11,16 @@ const startJSServer = require('../run/server')
  * @param {Object} options
  */
 function buildIOS(options) {
-
-  utils.buildJS()
+  utils.checkAndInstallForIosDeploy()
+    .then(utils.buildJS)
+    .then(()=>{
+      return utils.exec('rsync  -r -q ./dist/* ios/playground/bundlejs/')
+    })
     .then(()=>{
       startJSServer()
       return {options}
-    }).then(prepareIOS)
+    })
+    .then(prepareIOS)
     .then(installDep)
     .then(resolveConfig)
     .then(doBuild)

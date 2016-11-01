@@ -11,7 +11,11 @@ const {Config,iOSConfigResolver} = require('../utils/config')
  * @param {Object} options
  */
 function runIOS(options) {
-  utils.buildJS()
+  utils.checkAndInstallForIosDeploy()
+    .then(utils.buildJS)
+    .then(()=>{
+      return utils.exec('rsync  -r -q ./dist/* ios/playground/bundlejs/')
+    })
     .then(()=> {
       startJSServer()
       return {options}

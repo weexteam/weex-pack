@@ -29,6 +29,7 @@ module.exports = {
     path: 'dist',
     filename: '[name].js'
   },
+  devtool:'inline-source-map',
   module: {
     loaders: [
       {

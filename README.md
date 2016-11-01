@@ -68,7 +68,7 @@ weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取�
 
 **注：证书需要预先安装到keychain中，在keychain中点击右键获取证书id（证书名称），provisioning profile文件（*mobileprovision）需要获取UUID，进入[目录](https://github.com/weexteam/weex-pack/tree/master/generator/ios) 可以看到mobileprovision_UUID.sh文件，此文件可以获取到UUID**
 
-mobileprovision_UUID.sh用法如下：  
+mobileprovision_UUID.sh用法如下：
 $  ./mobileprovision_UUID.sh   \*mobileprovision,参数（\*mobileprovision）为provisioning profile文件路径
 
 ## Android平台打包&运行
@@ -92,6 +92,18 @@ android的打包和构建是一体的 ：
 
     $ weexpack run web
 
+## 示例
+[使用Weexpack打包出一个Weex版的 《One App》](https://github.com/weexteam/weex-pack/wiki/Create-Weex-One-App-with-Weexpack)
+
+
+## changelog
+0.2.0
+* 优化操作流程，去掉了以前会重复出现的server窗口
+* 修复个别打包失败的错误 增强稳定性
+* 消除ios-deploy的依赖，只在ios打包时再动态安装ios-deploy
+* 修复了EI Capitan系统下安装失败的问题
+* 支持windows，不再依赖ios相关的环境
+* 以WeexOne作为测试用例
 
 
   [1]: https://nodejs.org/

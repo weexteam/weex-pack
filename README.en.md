@@ -59,18 +59,18 @@ Next, go to the directory, and install the dependencies:
 For simulator
 
     $ weexpack run ios
-    
+
 Build ipa
 
     $ weexpack build ios
-    
+
 this command will prompt for CodeSign, Profile(provisioning profile), AppId to build ipa. Other information like AppName, weex bundle could be configured as you like in the file ios.config.json. After this command, ipa file could be created under the directory /playground/build/ipa_build/.
 
 Note: For details about various requirements to deploy to a device, refer to the Launch Your App On Devices section of Apple's [About App Distribution Workflows][9]. Briefly, you need to do the following before deploying:
 
-      1.CodeSign should be installed to keychain, click keychain to get the id; 
+      1.CodeSign should be installed to keychain, click keychain to get the id;
       2.provisioning profile need UUID. you could use the file mobileprovision_UUID.sh to generate UUID as follows:
-      
+
      $ ./mobileprovision_UUID.sh abcpath
      abcpath is the path of provisioning profile file.
 
@@ -79,13 +79,13 @@ Note: For details about various requirements to deploy to a device, refer to the
 In the android platform, package and running could be done with one command:
 
     $ weexpack run android
-    
+
 You could configure the following in android.config.json
 
     -AppName: the name of the project
     -AppId: application_id the name of the package
     -SplashText: the text in welcome page
-    -WeexBundle: the bundle file (could be local file or remote url). Local file please put under the src directory 
+    -WeexBundle: the bundle file (could be local file or remote url). Local file please put under the src directory
 
 ### Html5 platform
 
@@ -95,6 +95,8 @@ On the html5 platform, run the project:
 
 For developers who have a packaged release, you can make changes directly to the playground project. Follow-up, weexpack will be further added to the packaging, testing and other functions.
 
+### examples
+ [Create Weex One App with Weexpack](https://github.com/weexteam/weex-pack/wiki/Create-Weex-One-App-with-Weexpack)
 
   [1]: https://nodejs.org/
   [2]: https://www.npmjs.com/

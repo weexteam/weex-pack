@@ -15,6 +15,9 @@ const startJSServer = require('../run/server')
 function buildAndroid(options) {
   utils.buildJS()
     .then(()=>{
+      return utils.exec('rsync  -r -R -q ./dist/* android/playground/app/src/main/assets/')
+    })
+    .then(()=>{
       startJSServer()
       return {options}
     })

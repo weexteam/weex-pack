@@ -15,6 +15,9 @@ function runAndroid(options) {
 
   utils.buildJS()
     .then(()=>{
+      return utils.exec('rsync  -r -R -q ./dist/* android/playground/app/src/main/assets/')
+    })
+    .then(()=>{
       startJSServer()
       return {options}
     })
@@ -29,7 +32,7 @@ function runAndroid(options) {
     .then(runApp)
     .catch((err) => {
       if (err) {
-        console.log(err)
+        console.log(111,err)
       }
     })
 }
@@ -154,7 +157,7 @@ function chooseDevice({devicesList, options}) {
 function reverseDevice({device, options}) {
   return new Promise((resolve, reject) => {
     try {
-      child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, {encoding: 'utf8'})
+      let s=child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, {encoding: 'utf8'})
     } catch(e) {
       reject()
     }
