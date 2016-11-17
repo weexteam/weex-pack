@@ -8,7 +8,7 @@ Weexpack is our next generation of engineering development kits. It allows devel
 ### pre-environmental requirements
 
 - Currently only supported on Mac.
-- Configure the [Node.js] [1] environment and install the [npm] [2] package manager.
+- Configure the [Node.js] [1] environment and install the [npm] [2] package manager.(need node 6.0+)
 - Configure iOS development environment:
     - Install [Xcode IDE] [3] to launch Xcode once so that Xcode automatically installs the Developer Tools and confirms the usage protocol.
     - Install cocoaPods

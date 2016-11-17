@@ -123,7 +123,10 @@ const utils = {
     let hasIosDeploy=fs.existsSync('./node_modules/.bin/ios-deploy');
     if(!hasIosDeploy) {
       let args='';
-
+      if(process.platform==='win32'){
+        console.log('run ios unsupported on windows');
+        process.exit(1);
+      }
       if (os.release() >= '15.0.0') {
         args=' --unsafe-perm=true --allow-root'
       }
@@ -131,6 +134,11 @@ const utils = {
     }
     else {
       return Promise.resolve();
+    }
+  },
+  xcopy(source,dest){
+    if(process.platform==='win32'){
+      cmd
     }
   }
 }
