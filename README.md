@@ -8,8 +8,8 @@ weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简�
 
 ### 前期环境要求
 
- - 目前只支持 Mac 平台。
- - 配置 [Node.js][1] 环境，并且安装 [npm][2] 包管理器。(需要node6.0+)
+ - 目前支持 Mac、windows、linux平台(windows下仅能打包android)。
+ - 配置 [Node.js][1] 环境，并且安装 [npm][2] 包管理器。(`需要node6.0+`)
  - 配置 iOS 开发环境：
      - 安装 [Xcode IDE][3] ，启动一次 Xcode ，使 Xcode 自动安装开发者工具和确认使用协议。
      - 安装 cocoaPods
