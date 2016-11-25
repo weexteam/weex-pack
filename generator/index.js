@@ -24,8 +24,11 @@ module.exports = yeoman.Base.extend({
     this.composeWith('weex:android', args, {
       local: require.resolve(path.resolve(__dirname, 'android'))
     })
-    this.composeWith('weex:ios', args, {
-      local: require.resolve(path.resolve(__dirname, 'ios'))
+    // this.composeWith('weex:ios', args, {
+    //   local: require.resolve(path.resolve(__dirname, 'ios'))
+    // })
+    this.composeWith('weex:platforms', args, {
+      local: require.resolve(path.resolve(__dirname, 'platforms'))
     })
   },
 
@@ -46,6 +49,10 @@ module.exports = yeoman.Base.extend({
     copy('web/index.html')
     copy('android.config.json')
     copy('ios.config.json')
+    copy('config.xml')
+    copy('www/')
+    copy('hooks/')
+    copy('plugins/')
 
     utils.copyAndReplace(
       this.templatePath('package.json'),
