@@ -7,7 +7,6 @@
 //
 
 #import "WeexPlugin.h"
-#import "WXEventModule.h"
 #import "WXImgLoaderDefaultImpl.h"
 #import "WeexConfigParser.h"
 #import <WeexSDK/WeexSDK.h>

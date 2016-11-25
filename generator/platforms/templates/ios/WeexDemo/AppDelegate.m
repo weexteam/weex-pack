@@ -7,7 +7,6 @@
  */
 
 #import "AppDelegate.h"
-#import "WXEventModule.h"
 #import "WXImgLoaderDefaultImpl.h"
 #import "DemoDefine.h"
 #import "WXScannerVC.h"

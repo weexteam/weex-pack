@@ -14,7 +14,7 @@ function buildIOS(options) {
   utils.checkAndInstallForIosDeploy()
     .then(utils.buildJS)
     .then(()=>{
-      return utils.exec('rsync  -r -q ./dist/* ios/playground/bundlejs/')
+      return utils.exec('rsync  -r -q ./dist/* platforms/ios/bundlejs/')
     })
     .then(()=>{
       startJSServer()
@@ -47,7 +47,8 @@ function prepareIOS({options}) {
     }
 
     // change working directory to ios
-    process.chdir(path.join(rootPath, 'ios/playground'))
+    // process.chdir(path.join(rootPath, 'ios/playground'))
+    process.chdir(path.join(rootPath, 'platforms/ios'))
 
     const xcodeProject = utils.findXcodeProject(process.cwd())
 
@@ -243,7 +244,7 @@ function _runAppOnSimulator({device, xcodeProject, options, resolve, reject}) {
   const appPath = `build/Build/Products/Debug-iphonesimulator/${inferredSchemeName}.app`
   const bundleID = child_process.execFileSync(
     '/usr/libexec/PlistBuddy',
-    ['-c', 'Print:CFBundleIdentifier', path.join(appPath, 'Info.plist')],
+    ['-c', 'Print:CFBundleIdentifier', path.join(appPath, 'WeexDemo-Info.plist')],
     {encoding: 'utf8'}
   ).trim()
 
