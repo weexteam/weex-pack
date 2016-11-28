@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<plugin xmlns="http://apache.org/weexpack/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    id="**"
+    version="1.0.0">
+    <name>EventModule</name>
+    <description>**</description>
+    <license>Apache 2.0</license>
+    <keywords>weex,event</keywords>
+    <repo>https://*.git</repo>
+    <issue>https://*</issue>
+
+
+    <js-module src="www/*" />
+
+
+     <!-- ios -->
+     <platform name="ios">
+
+         <config-file target="config.xml" parent="/*">
+             <feature name="module">
+                 <param name="ios-package" value="WXEventModule" />
+                 <param name="api" value="event" />
+             </feature>
+             <preference name="CameraUsesGeolocation" value="false" />
+         </config-file>
+
+         <header-file src="src/ios/*.h" />
+         <source-file src="src/ios/*.m" />
+
+         <framework src="ImageIO.framework" weak="true" />
+         <framework src="CoreLocation.framework" />
+         <framework src="CoreGraphics.framework" />
+         <framework src="AssetsLibrary.framework" />
+         <framework src="MobileCoreServices.framework" />
+         <framework src="CoreGraphics.framework" />
+         <framework src="AVFoundation.framework" />
+
+        <!--
+         <preference name="CAMERA_USAGE_DESCRIPTION" default=" " />
+         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
+             <string>$CAMERA_USAGE_DESCRIPTION</string>
+         </config-file>
+
+         <preference name="PHOTOLIBRARY_USAGE_DESCRIPTION" default=" " />
+         <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
+             <string>$PHOTOLIBRARY_USAGE_DESCRIPTION</string>
+         </config-file>
+
+         <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+             <string></string>
+         </config-file>
+         -->
+
+     </platform>
+
+
+
+</plugin>
