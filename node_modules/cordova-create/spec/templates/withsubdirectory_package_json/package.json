@@ -1,0 +1,12 @@
+{
+  "name": "template",
+  "version": "1.0.0",
+  "description": "Apache Cordova Application",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apache/cordova-app-hello-world.git"
+  },
+  "license": "Apache-2.0",
+  "test": "false"
+}

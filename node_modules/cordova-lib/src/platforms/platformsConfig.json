@@ -1,0 +1,96 @@
+{
+    "ios": {
+        "hostos": ["darwin"],
+        "parser_file": "../cordova/metadata/ios_parser",
+        "handler_file": "../plugman/platforms/ios",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-ios.git",
+        "version": "~4.3.0",
+        "apiCompatibleSince": "4.0.0",
+        "deprecated": false
+    },
+    "osx": {
+        "hostos": ["darwin"],
+        "parser_file": "../cordova/metadata/osx_parser",
+        "handler_file": "../plugman/platforms/ios",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-osx.git",
+        "version": "~4.0.1",
+        "apiCompatibleSince": "4.0.0",
+        "deprecated": false
+    },
+    "android": {
+        "parser_file": "../cordova/metadata/android_parser",
+        "handler_file": "../plugman/platforms/android",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-android.git",
+        "version": "~6.0.0",
+        "apiCompatibleSince": "5.0.0",
+        "deprecated": false
+    },
+    "ubuntu": {
+        "hostos": ["linux"],
+        "parser_file": "../cordova/metadata/ubuntu_parser",
+        "handler_file": "../plugman/platforms/ubuntu",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-ubuntu.git",
+        "version": "~4.3.4",
+        "deprecated": false
+    },
+    "amazon-fireos": {
+        "parser_file": "../cordova/metadata/amazon_fireos_parser",
+        "handler_file": "../plugman/platforms/amazon-fireos",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-amazon-fireos.git",
+        "version": "~3.6.3",
+        "deprecated": true
+    },
+    "wp8": {
+        "hostos": ["win32"],
+        "parser_file": "../cordova/metadata/wp8_parser",
+        "handler_file": "../plugman/platforms/wp8",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-wp8.git",
+        "version": "~3.8.2",
+        "altplatform": "wp",
+        "deprecated": true
+    },
+    "blackberry10": {
+        "parser_file": "../cordova/metadata/blackberry10_parser",
+        "handler_file": "../plugman/platforms/blackberry10",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-blackberry.git",
+        "version": "~3.8.0",
+        "deprecated": false
+    },
+    "www": {
+        "hostos": [],
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-app-hello-world.git",
+        "source": "git",
+        "version": "~3.10.0",
+        "deprecated": false
+    },
+    "firefoxos": {
+        "parser_file": "../cordova/metadata/firefoxos_parser",
+        "handler_file": "../plugman/platforms/firefoxos",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-firefoxos.git",
+        "version": "~3.6.3",
+        "deprecated": false
+    },
+    "windows": {
+        "hostos": ["win32"],
+        "parser_file": "../cordova/metadata/windows_parser",
+        "handler_file": "../plugman/platforms/windows",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-windows.git",
+        "version": "~4.4.0",
+        "apiCompatibleSince": "4.3.0",
+        "deprecated": false
+    },
+    "webos": {
+        "parser_file": "../cordova/metadata/webos_parser",
+        "handler_file": "../plugman/platforms/webos",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-webos.git",
+        "version": "~3.7.0",
+        "deprecated": false
+    },
+    "browser": {
+        "parser_file": "../cordova/metadata/browser_parser",
+        "handler_file": "../plugman/platforms/browser",
+        "url": "https://git-wip-us.apache.org/repos/asf?p=cordova-browser.git",
+        "version": "~4.1.0",
+        "deprecated": false
+    }
+}
