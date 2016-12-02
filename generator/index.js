@@ -50,7 +50,6 @@ module.exports = yeoman.Base.extend({
     copy('android.config.json')
     copy('ios.config.json')
     copy('config.xml')
-    copy('www/')
     copy('hooks/')
     copy('plugins/')
 
