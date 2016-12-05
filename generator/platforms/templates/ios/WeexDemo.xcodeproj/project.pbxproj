@@ -155,13 +155,6 @@
 			name = WeexConfig;
 			sourceTree = "<group>";
 		};
-		0A8B0B2A1DE2EFE8006848F4 /* Plugins */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Plugins;
-			sourceTree = "<group>";
-		};
 		2AE88A291C8544D7003329DE /* scanner */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,7 +180,6 @@
 		74CC79EC1C2B9FC600829368 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				0A8B0B2A1DE2EFE8006848F4 /* Plugins */,
 				DCABAFF51D0296DB001C8592 /* extend */,
 				D5ADF0861C77133B00597CA6 /* Source */,
 			);
