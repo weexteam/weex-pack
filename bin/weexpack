@@ -30,7 +30,7 @@ function weexpackUnplugin() {
     .command('init [name]', 'initialize a standard weex project')
     .command('run [platform]', 'run weex app on the specific platform')
     .command('build [platform]', 'build weex app generator package(apk or ipa)')
-    .command('create [pluginID]', 'create weex plugin template')
+    .command('plugin [command]', 'create weex plugin template')
     .parse(process.argv)
 }
 

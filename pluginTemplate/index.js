@@ -5,7 +5,7 @@
 const path = require('path')
 const yeoman = require('yeoman-generator')
 const utils = require('../src/utils')
-
+const NPM_PREFIX='$Weex_Plugins_'
 module.exports = yeoman.Base.extend({
   constructor: function () {
     yeoman.Base.apply(this, arguments)
@@ -34,7 +34,7 @@ module.exports = yeoman.Base.extend({
       this.destinationPath('package.json'),
       {
         // replace project name
-        '\\"name\\"\\:\\s*\\"\\w+\\"' : `"name": "${this.options.pluginName}"`,
+        '\\"name\\"\\:\\s*\\"\\w+\\"' : `"name": "${NPM_PREFIX+this.options.pluginName}"`,
       }
     )
   },
@@ -45,4 +45,4 @@ module.exports = yeoman.Base.extend({
   end: function() {
   }
 
-})
+});
