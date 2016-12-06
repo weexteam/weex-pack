@@ -4,6 +4,8 @@ const child_process = require('child_process')
 const fs = require('fs')
 const inquirer = require('inquirer')
 const copy=require('copy')
+const ncp=require('ncp').ncp
+ncp.limit = 16;
 const utils = require('../utils')
 const startJSServer = require('./server')
 const {Config,androidConfigResolver} = require('../utils/config')
@@ -16,7 +18,7 @@ function runAndroid(options) {
   utils.buildJS()
     .then(()=>{
       return new Promise((resolve,reject)=>{
-        copy('./dist/*','android/playground/app/src/main/assets/',function(err){
+        ncp('./dist','android/playground/app/src/main/assets/dist',function(err){
           if(err) return reject(err);
           else resolve();
         })
