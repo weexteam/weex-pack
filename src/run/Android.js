@@ -18,7 +18,7 @@ function runAndroid(options) {
   utils.buildJS()
     .then(()=>{
       return new Promise((resolve,reject)=>{
-        ncp('./dist/','android/playground/app/src/main/assets/',function(err){
+        ncp('./dist','android/playground/app/src/main/assets/dist',function(err){
           if(err) return reject(err);
           else resolve();
         })
