@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
         StringBuilder builder = new StringBuilder();
         if (TextUtils.equals("file", scheme)) {
           intent.putExtra("isLocal", true);
-        } else {
+        } else if (!TextUtils.equals("http", scheme) && !TextUtils.equals("https", scheme)) {
           builder.append("http:");
         }
         builder.append(url);
