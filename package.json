@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
@@ -46,6 +46,7 @@
     "dep-graph": "1.1.0",
     "elementtree": "0.1.6",
     "express": "^4.13.3",
+    "copy": "^0.3.0",
     "eslint": "^3.5.0",
     "glob": "^5.0.3",
     "inquirer": "^1.1.3",

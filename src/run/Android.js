@@ -3,7 +3,7 @@ const chalk = require('chalk')
 const child_process = require('child_process')
 const fs = require('fs')
 const inquirer = require('inquirer')
-
+const copy=require('copy')
 const utils = require('../utils')
 const startJSServer = require('./server')
 const {Config,androidConfigResolver} = require('../utils/config')
@@ -12,10 +12,15 @@ const {Config,androidConfigResolver} = require('../utils/config')
  * @param {Object} options
  */
 function runAndroid(options) {
-
+  console.log(` => ${chalk.blue.bold('npm install&build')}`)
   utils.buildJS()
     .then(()=>{
-      return utils.exec('rsync  -r -R -q ./dist/* android/playground/app/src/main/assets/')
+      return new Promise((resolve,reject)=>{
+        copy('./dist/*','android/playground/app/src/main/assets/',function(err){
+          if(err) return reject(err);
+          else resolve();
+        })
+      });
     })
     .then(()=>{
       startJSServer()
@@ -32,7 +37,7 @@ function runAndroid(options) {
     .then(runApp)
     .catch((err) => {
       if (err) {
-        console.log(111,err)
+        console.log(chalk.red('Error:',err));
       }
     })
 }
@@ -86,7 +91,7 @@ function resolveConfig({options,rootPath}){
   let androidConfig = new Config(androidConfigResolver,path.join(rootPath,'android.config.json'));
   return androidConfig.getConfig().then((config) => {
     androidConfigResolver.resolve(config);
-    return {};
+    return {options,rootPath};
   })
 }
 /**
@@ -174,8 +179,11 @@ function reverseDevice({device, options}) {
 function buildApp({device, options}) {
   return new Promise((resolve, reject) => {
     console.log(` => ${chalk.blue.bold('Building app ...')}`)
+
+    let clean=options.clean?' clean':'';
+    console.log(options,clean);
     try {
-      child_process.execSync(`./gradlew clean assemble`, {encoding: 'utf8', stdio: [0,1,2]})
+      child_process.execSync(process.platform==='win32'?`call gradlew.bat${clean} assemble`:`./gradlew${clean} assemble`, {encoding: 'utf8', stdio: [0,1,2]})
     } catch(e) {
       reject()
     }
