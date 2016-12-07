@@ -21,12 +21,14 @@ module.exports = yeoman.Base.extend({
 
     // compose with Android and iOS generator
     const args = { args: arguments[0], options: this.options }
-    this.composeWith('weex:android', args, {
-      local: require.resolve(path.resolve(__dirname, 'android'))
-    })
+    // WEEX_HOOK_START
+    // this.composeWith('weex:android', args, {
+    //   local: require.resolve(path.resolve(__dirname, 'android'))
+    // })
     // this.composeWith('weex:ios', args, {
     //   local: require.resolve(path.resolve(__dirname, 'ios'))
     // })
+    // WEEX_HOOK_END
     this.composeWith('weex:platforms', args, {
       local: require.resolve(path.resolve(__dirname, 'platforms'))
     })
