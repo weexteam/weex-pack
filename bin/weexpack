@@ -56,7 +56,5 @@ function pluginTest() {
   addTs('start');
   var cli = require('../src/cli');
   cli(process.argv);
-  // var argvAry = ["/Users/yangshengtao/.nvm/versions/node/v6.2.0/bin/node","/Users/yangshengtao/Desktop/git_repo/weex-pack/bin/weexpack",'plugin','add','/Users/yangshengtao/Desktop/weex-plugin-eventmodule','--save'];
-  // cli(argvAry);
   addTs('end');
 }

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0A25ADF81DD9D8DB00CDB7B0 /* WeexSDKManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A25ADF71DD9D8DB00CDB7B0 /* WeexSDKManager.m */; };
-		0A25ADFA1DD9DB9E00CDB7B0 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0A25ADF91DD9DB9E00CDB7B0 /* config.xml */; };
 		0A8B0B051DDAA81C006848F4 /* WeexPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B0B041DDAA81C006848F4 /* WeexPlugin.m */; };
 		0A8B0B081DDAADBB006848F4 /* WeexConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B0B071DDAADBB006848F4 /* WeexConfigParser.m */; };
 		0A8B0B0C1DDC0FA2006848F4 /* WXDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B0B0B1DDC0FA2006848F4 /* WXDemoViewController.m */; };
@@ -58,7 +57,6 @@
 /* Begin PBXFileReference section */
 		0A25ADF61DD9D8DB00CDB7B0 /* WeexSDKManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeexSDKManager.h; path = WeexConfig/WeexSDKManager.h; sourceTree = "<group>"; };
 		0A25ADF71DD9D8DB00CDB7B0 /* WeexSDKManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeexSDKManager.m; path = WeexConfig/WeexSDKManager.m; sourceTree = "<group>"; };
-		0A25ADF91DD9DB9E00CDB7B0 /* config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = config.xml; path = WeexConfig/config.xml; sourceTree = "<group>"; };
 		0A8B0B031DDAA81C006848F4 /* WeexPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeexPlugin.h; path = WeexConfig/WeexPlugin.h; sourceTree = "<group>"; };
 		0A8B0B041DDAA81C006848F4 /* WeexPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeexPlugin.m; path = WeexConfig/WeexPlugin.m; sourceTree = "<group>"; };
 		0A8B0B061DDAADBB006848F4 /* WeexConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeexConfigParser.h; path = WeexConfig/WeexConfigParser.h; sourceTree = "<group>"; };
@@ -144,7 +142,6 @@
 		0A25ADF51DD9D85200CDB7B0 /* WeexConfig */ = {
 			isa = PBXGroup;
 			children = (
-				0A25ADF91DD9DB9E00CDB7B0 /* config.xml */,
 				0A25ADF61DD9D8DB00CDB7B0 /* WeexSDKManager.h */,
 				0A25ADF71DD9D8DB00CDB7B0 /* WeexSDKManager.m */,
 				0A8B0B031DDAA81C006848F4 /* WeexPlugin.h */,
@@ -436,7 +433,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC5E503E1D0D97130059F0EB /* weex.png in Resources */,
-				0A25ADFA1DD9DB9E00CDB7B0 /* config.xml in Resources */,
 				DC5E503F1D0D97130059F0EB /* weex@2x.png in Resources */,
 				DCD286E01CF491AC00C601CA /* weex-icon.png in Resources */,
 				0A8B0B591DE567FF006848F4 /* WeexDemo-Info.plist in Resources */,
