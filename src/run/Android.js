@@ -3,7 +3,7 @@ const chalk = require('chalk')
 const child_process = require('child_process')
 const fs = require('fs')
 const inquirer = require('inquirer')
-
+const copy = require('recursive-copy')
 const utils = require('../utils')
 const startJSServer = require('./server')
 const {Config,androidConfigResolver} = require('../utils/config')
@@ -12,12 +12,17 @@ const {Config,androidConfigResolver} = require('../utils/config')
  * @param {Object} options
  */
 function runAndroid(options) {
-
+  console.log(` => ${chalk.blue.bold('npm install&build')}`)
   utils.buildJS()
-    .then(()=>{
-      return utils.exec('rsync  -r -R -q ./dist/* android/playground/app/src/main/assets/')
+    .then(()=> {
+      return new Promise((resolve, reject)=> {
+        copy('./dist/', 'android/playground/app/src/main/assets/dist', {overwrite: true}, function (err) {
+          if (err) return reject(err);
+          else resolve();
+        })
+      });
     })
-    .then(()=>{
+    .then(()=> {
       startJSServer()
       return {options}
     })
@@ -32,7 +37,7 @@ function runAndroid(options) {
     .then(runApp)
     .catch((err) => {
       if (err) {
-        console.log(111,err)
+        console.log(chalk.red('Error:', err));
       }
     })
 }
@@ -70,23 +75,23 @@ function prepareAndroid({options}) {
 
     try {
       child_process.execSync(`adb kill-server`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject()
     }
     try {
       child_process.execSync(`adb start-server`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject()
     }
 
-    resolve({options,rootPath})
+    resolve({options, rootPath})
   })
 }
-function resolveConfig({options,rootPath}){
-  let androidConfig = new Config(androidConfigResolver,path.join(rootPath,'android.config.json'));
+function resolveConfig({options,rootPath}) {
+  let androidConfig = new Config(androidConfigResolver, path.join(rootPath, 'android.config.json'));
   return androidConfig.getConfig().then((config) => {
     androidConfigResolver.resolve(config);
-    return {};
+    return {options, rootPath};
   })
 }
 /**
@@ -98,7 +103,7 @@ function findAndroidDevice({options}) {
     let devicesInfo = ''
     try {
       devicesInfo = child_process.execSync(`adb devices`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       console.log(chalk.red(`adb devices failed, please make sure you have adb in your PATH.`))
       console.log(`See ${chalk.cyan('http://stackoverflow.com/questions/27301960/errorunable-to-locate-adb-within-sdk-in-android-studio')}`)
       reject()
@@ -117,7 +122,7 @@ function findAndroidDevice({options}) {
  */
 function chooseDevice({devicesList, options}) {
   return new Promise((resolve, reject) => {
-    if (devicesList&&devicesList.length>1) {
+    if (devicesList && devicesList.length > 1) {
       const listNames = [new inquirer.Separator(' = devices = ')]
       for (const device of devicesList) {
         listNames.push(
@@ -129,19 +134,19 @@ function chooseDevice({devicesList, options}) {
       }
 
       inquirer.prompt([
-        {
-          type: 'list',
-          message: 'Choose one of the following devices',
-          name: 'chooseDevice',
-          choices: listNames
-        }
-      ])
-      .then((answers) => {
-        const device = answers.chooseDevice
-        resolve({device, options})
-      })
-    } else if(devicesList.length==1){
-      resolve({device:devicesList[0], options})
+          {
+            type: 'list',
+            message: 'Choose one of the following devices',
+            name: 'chooseDevice',
+            choices: listNames
+          }
+        ])
+        .then((answers) => {
+          const device = answers.chooseDevice
+          resolve({device, options})
+        })
+    } else if (devicesList.length == 1) {
+      resolve({device: devicesList[0], options})
     }
     else {
       reject('No android devices found.')
@@ -157,8 +162,8 @@ function chooseDevice({devicesList, options}) {
 function reverseDevice({device, options}) {
   return new Promise((resolve, reject) => {
     try {
-      let s=child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, {encoding: 'utf8'})
-    } catch(e) {
+      let s = child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, {encoding: 'utf8'})
+    } catch (e) {
       reject()
     }
 
@@ -174,9 +179,15 @@ function reverseDevice({device, options}) {
 function buildApp({device, options}) {
   return new Promise((resolve, reject) => {
     console.log(` => ${chalk.blue.bold('Building app ...')}`)
+
+    let clean = options.clean ? ' clean' : '';
+    console.log(options, clean);
     try {
-      child_process.execSync(`./gradlew clean assemble`, {encoding: 'utf8', stdio: [0,1,2]})
-    } catch(e) {
+      child_process.execSync(process.platform === 'win32' ? `call gradlew.bat${clean} assemble` : `./gradlew${clean} assemble`, {
+        encoding: 'utf8',
+        stdio: [0, 1, 2]
+      })
+    } catch (e) {
       reject()
     }
 
@@ -196,7 +207,7 @@ function installApp({device, options}) {
     const apkName = 'app/build/outputs/apk/playground.apk'
     try {
       child_process.execSync(`adb -s ${device} install -r  ${apkName}`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject()
     }
 
@@ -221,7 +232,7 @@ function runApp({device, options}) {
 
     try {
       child_process.execSync(`adb -s ${device} shell am start -n ${packageName}/.SplashActivity`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject(e)
     }
 

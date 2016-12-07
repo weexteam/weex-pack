@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
@@ -71,6 +71,7 @@
     "update-notifier": "^0.5.0",
     "valid-identifier": "0.0.1",
     "xcode": "^0.8.5",
+    "recursive-copy": "^2.0.5",
     "yeoman-environment": "^1.6.3",
     "yeoman-generator": "^0.24.1"
   }

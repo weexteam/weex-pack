@@ -45,6 +45,7 @@ module.exports = yeoman.Base.extend({
     copy('README.md')
     copy('webpack.config.js')
     copy('start')
+    copy('start.bat')
     copy('src/index.we')
     copy('web/index.html')
     copy('android.config.json')

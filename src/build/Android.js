@@ -7,6 +7,7 @@ const {Config,androidConfigResolver} = require('../utils/config')
 const utils = require('../utils')
 const Path = require('path')
 const Fs = require('fs')
+const copy = require('recursive-copy')
 const startJSServer = require('../run/server')
 /**
  * Build and run Android app on a connected emulator or device
@@ -14,10 +15,15 @@ const startJSServer = require('../run/server')
  */
 function buildAndroid(options) {
   utils.buildJS()
-    .then(()=>{
-      return utils.exec('rsync  -r -R -q ./dist/* android/playground/app/src/main/assets/')
+    .then(()=> {
+      return new Promise((resolve, reject)=> {
+        copy('./dist/', 'android/playground/app/src/main/assets/dist', {overwrite: true}, function (err) {
+          if (err) return reject(err);
+          else resolve();
+        })
+      });
     })
-    .then(()=>{
+    .then(()=> {
       startJSServer()
       return {options}
     })
@@ -64,21 +70,21 @@ function prepareAndroid({options}) {
 
     try {
       child_process.execSync(`adb kill-server`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject()
     }
     try {
       child_process.execSync(`adb start-server`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject()
     }
 
-    resolve({options,rootPath})
+    resolve({options, rootPath})
   })
 }
 
-function resolveConfig({options,rootPath}){
-  let androidConfig = new Config(androidConfigResolver,Path.join(rootPath,'android.config.json'));
+function resolveConfig({options,rootPath}) {
+  let androidConfig = new Config(androidConfigResolver, Path.join(rootPath, 'android.config.json'));
   return androidConfig.getConfig().then((config) => {
     androidConfigResolver.resolve(config);
     return {};
@@ -95,7 +101,7 @@ function findAndroidDevice({options}) {
     let devicesInfo = ''
     try {
       devicesInfo = child_process.execSync(`adb devices`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       console.log(chalk.red(`adb devices failed, please make sure you have adb in your PATH.`))
       console.log(`See ${chalk.cyan('http://stackoverflow.com/questions/27301960/errorunable-to-locate-adb-within-sdk-in-android-studio')}`)
       reject()
@@ -152,7 +158,7 @@ function reverseDevice({device, options}) {
   return new Promise((resolve, reject) => {
     try {
       child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject()
     }
 
@@ -169,8 +175,8 @@ function buildApp({device, options}) {
   return new Promise((resolve, reject) => {
     console.log(` => ${chalk.blue.bold('Building app ...')}`)
     try {
-      child_process.execSync(`./gradlew clean assemble`, {encoding: 'utf8', stdio: [0,1,2]})
-    } catch(e) {
+      child_process.execSync(`./gradlew clean assemble`, {encoding: 'utf8', stdio: [0, 1, 2]})
+    } catch (e) {
       reject()
     }
 
@@ -190,7 +196,7 @@ function installApp({device, options}) {
     const apkName = 'app/build/outputs/apk/playground.apk'
     try {
       child_process.execSync(`adb -s ${device} install -r  ${apkName}`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject()
     }
 
@@ -215,7 +221,7 @@ function runApp({device, options}) {
 
     try {
       child_process.execSync(`adb -s ${device} shell am start -n ${packageName}/.SplashActivity`, {encoding: 'utf8'})
-    } catch(e) {
+    } catch (e) {
       reject(e)
     }
 
