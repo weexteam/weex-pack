@@ -8,8 +8,8 @@ weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简�
 
 ### 前期环境要求
 
- - 目前只支持 Mac 平台。
- - 配置 [Node.js][1] 环境，并且安装 [npm][2] 包管理器。
+ - 目前支持 Mac、windows、linux平台(windows下仅能打包android)。
+ - 配置 [Node.js][1] 环境，并且安装 [npm][2] 包管理器。(`需要node6.0+`)
  - 配置 iOS 开发环境：
      - 安装 [Xcode IDE][3] ，启动一次 Xcode ，使 Xcode 自动安装开发者工具和确认使用协议。
      - 安装 cocoaPods
@@ -17,6 +17,7 @@ weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简�
     - 安装 [Android Studio][4] 并打开，新建项目。上方菜单栏，打开 [AVD Manager][5] ，新建 Android 模拟器并启动 。（如果有安装 [Docker][6] ，请关闭 Docker Server 。）
     - 或者 只下载 [Android SDK][7] ， 命令行运行 [AVD Manager][8] ，新建 Android 模拟器并启动。
     - 保证Android build-tool的版本为23.0.2
+
 ### 使用方法
 
 首先，全局安装 weex-pack 命令：
@@ -97,6 +98,13 @@ android的打包和构建是一体的 ：
 
 
 ## changelog
+0.2.2
+* 更换copy库 之前用的库还是存在windows的兼容问题，被坑了。
+
+0.2.1
+* 修复windows平台的bug 重新用bat重写了start脚本
+* 修复了错误把build文件夹ignore的问题。
+
 0.2.0
 * 优化操作流程，去掉了以前会重复出现的server窗口
 * 修复个别打包失败的错误 增强稳定性

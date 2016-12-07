@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+.idea/*
+*.jar
+.*.swp
+._*
+.DS_Store
+.git
+.hg
+.npmrc
+.lock-wscript
+.svn
+.wafpickle-*
+config.gypi
+CVS
+node_modules/*
+node_module/.bin/*

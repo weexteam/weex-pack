@@ -2,7 +2,6 @@ coverage
 docs
 node_modules
 test
-build
 demo
 .editorconfig
 .esdocrc
