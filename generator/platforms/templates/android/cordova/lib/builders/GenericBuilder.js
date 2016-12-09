@@ -24,7 +24,8 @@ var shell = require('shelljs');
 var events = require('cordova-common').events;
 var CordovaError = require('cordova-common').CordovaError;
 
-function GenericBuilder (projectDir) {
+function GenericBuilder(projectDir) {
+
     this.root = projectDir || path.resolve(__dirname, '../../..');
     this.binDirs = {
         ant: path.join(this.root, hasCustomRules(this.root) ? 'ant-build' : 'bin'),
@@ -69,12 +70,20 @@ GenericBuilder.prototype.readProjectProperties = function () {
         return Object.keys(s);
     }
 
-    var data = fs.readFileSync(path.join(this.root, 'project.properties'), 'utf8');
-    return {
+    // WEEX_HOOK_START
+    // var data = fs.readFileSync(path.join(this.root, 'project.properties'), 'utf8');
+    // return {
+    //     libs: findAllUniq(data, /^\s*android\.library\.reference\.\d+=(.*)(?:\s|$)/mg),
+    //     gradleIncludes: findAllUniq(data, /^\s*cordova\.gradle\.include\.\d+=(.*)(?:\s|$)/mg),
+    //     systemLibs: findAllUniq(data, /^\s*cordova\.system\.library\.\d+=(.*)(?:\s|$)/mg)
+    // };
+  // WEEX_HOOK_END
+  var data = {};
+  return {
         libs: findAllUniq(data, /^\s*android\.library\.reference\.\d+=(.*)(?:\s|$)/mg),
         gradleIncludes: findAllUniq(data, /^\s*cordova\.gradle\.include\.\d+=(.*)(?:\s|$)/mg),
         systemLibs: findAllUniq(data, /^\s*cordova\.system\.library\.\d+=(.*)(?:\s|$)/mg)
-    };
+  };
 };
 
 GenericBuilder.prototype.extractRealProjectNameFromManifest = function () {

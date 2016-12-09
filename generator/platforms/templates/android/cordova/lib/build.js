@@ -127,7 +127,9 @@ function parseOpts(options, resolvedTarget, projectRoot) {
  */
 module.exports.runClean = function(options) {
     var opts = parseOpts(options, null, this.root);
+   // WEEX_HOOK
     var builder = builders.getBuilder(opts.buildMethod);
+   // var builder = builders.getBuilder(opts.buildMethod);
     return builder.prepEnv(opts)
     .then(function() {
         return builder.clean(opts);

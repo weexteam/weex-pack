@@ -18,6 +18,7 @@
 */
 
 var CordovaError = require('cordova-common').CordovaError;
+var AndroidStudio = require('../AndroidStudio');
 
 var knownBuilders = {
     ant: 'AntBuilder',
@@ -40,6 +41,9 @@ module.exports.getBuilder = function (builderType, projectRoot) {
 
     try {
         var Builder = require('./' + knownBuilders[builderType]);
+        // if (AndroidStudio.isAndroidStudioProject(projectDir)) {
+        //   return new Builder(path.join(projectRoot, "app");
+        // }
         return new Builder(projectRoot);
     } catch (err) {
         throw new CordovaError('Failed to instantiate ' + knownBuilders[builderType] + ' builder: ' + err);

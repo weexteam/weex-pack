@@ -26,7 +26,7 @@ var spawn = require('cordova-common').superspawn.spawn;
 var CordovaError = require('cordova-common').CordovaError;
 var check_reqs = require('../check_reqs');
 
-var GenericBuilder = require('./GenericBuilder');
+var GenericBuilder = require('./AndroidStudioBuilder');
 
 var MARKER = 'YOUR CHANGES WILL BE ERASED!';
 var SIGNING_PROPERTIES = '-signing.properties';
@@ -36,7 +36,6 @@ var TEMPLATE =
 
 function GradleBuilder (projectRoot) {
     GenericBuilder.call(this, projectRoot);
-
     this.binDirs = {gradle: this.binDirs.gradle};
 }
 
@@ -161,7 +160,7 @@ GradleBuilder.prototype.prepEnv = function(opts) {
     return check_reqs.check_gradle()
     .then(function() {
       // WEEX_HOOK_START
-        //return self.prepBuildFiles();
+        return self.prepBuildFiles();
       // WEEX_HOOK_END
     }).then(function() {
         // Copy the gradle wrapper on each build so that:
