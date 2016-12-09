@@ -164,7 +164,8 @@ function reverseDevice({device, options}) {
     try {
       let s = child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, {encoding: 'utf8'})
     } catch (e) {
-      reject()
+      console.error('reverse error[ignored]');
+      resolve({device, options})
     }
 
     resolve({device, options})
@@ -181,7 +182,6 @@ function buildApp({device, options}) {
     console.log(` => ${chalk.blue.bold('Building app ...')}`)
 
     let clean = options.clean ? ' clean' : '';
-    console.log(options, clean);
     try {
       child_process.execSync(process.platform === 'win32' ? `call gradlew.bat${clean} assemble` : `./gradlew${clean} assemble`, {
         encoding: 'utf8',
