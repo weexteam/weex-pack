@@ -101,6 +101,7 @@ android的打包和构建是一体的 ：
 
 0.2.3
 * suppress adb reverse error(android 5.0- will cause error)
+
 0.2.2
 * 更换copy库 之前用的库还是存在windows的兼容问题，被坑了。
 
