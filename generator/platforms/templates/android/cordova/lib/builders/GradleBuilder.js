@@ -81,7 +81,8 @@ GradleBuilder.prototype.prepBuildFiles = function() {
       }
     };
     for (var i = 0; i < subProjects.length; ++i) {
-        if (subProjects[i] !== 'CordovaLib') {
+        // WEEX_HOOK
+        if (subProjects[i] !== 'appframework') {
           checkAndCopy(subProjects[i], this.root);
         }
     }
@@ -99,7 +100,8 @@ GradleBuilder.prototype.prepBuildFiles = function() {
     // Write the settings.gradle file.
     fs.writeFileSync(path.join(this.root, 'settings.gradle'),
         '// GENERATED FILE - DO NOT EDIT\n' +
-        'include ":"\n' + settingsGradlePaths.join(''));
+        'include ":app"\n' +
+        'include ":appframework"\n' + settingsGradlePaths.join(''));
     // Update dependencies within build.gradle.
     var buildGradle = fs.readFileSync(path.join(this.root, 'build.gradle'), 'utf8');
     var depsList = '';
