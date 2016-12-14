@@ -1,29 +1,24 @@
 #!/usr/bin/env node
 
+const program = require('commander')
+const chalk = require('chalk')
+
 function isValidCommand(command) {
-  return command === 'init' || command === 'run' || command === 'build' || command === "create"
+  const orderList = ['init','run','build',"create"];
+  return orderList.indexOf(command)>=0;
 }
 
-console.log(process.argv[2]);
+
 if (!isValidCommand(process.argv[2])) {
+  console.log(`${chalk.red('Unknown command:')} ${chalk.yellow(process.argv[2])}`);
+  //process.exit();
   pluginTest();
 }else {
   weexpackUnplugin();
 }
 
-/*
-if (!isValidCommand(program.args[0])) {
-  console.log()
-  console.log(`  ${chalk.red('Unknown command:')} ${chalk.yellow(program.args[0])}`)
-  program.help()
-  process.exit()
-}
-*/
 
 function weexpackUnplugin() {
-  const program = require('commander')
-  const chalk = require('chalk')
-
   program
     .version(require('../package').version)
     .usage('<command> [options]')
@@ -35,7 +30,6 @@ function weexpackUnplugin() {
 }
 
 function pluginTest() {
-  console.log(process.cwd())
   if (0) {
     var ts = [];
     addTs = function(name) {
