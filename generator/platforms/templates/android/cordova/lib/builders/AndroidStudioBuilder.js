@@ -76,14 +76,12 @@ AndroidStudioBuilder.prototype.readProjectProperties = function () {
   }
 
   // WEEX_HOOK_START
-  // var data = fs.readFileSync(path.join(this.root, 'project.properties'), 'utf8');
-  // return {
-  //     libs: findAllUniq(data, /^\s*android\.library\.reference\.\d+=(.*)(?:\s|$)/mg),
-  //     gradleIncludes: findAllUniq(data, /^\s*cordova\.gradle\.include\.\d+=(.*)(?:\s|$)/mg),
-  //     systemLibs: findAllUniq(data, /^\s*cordova\.system\.library\.\d+=(.*)(?:\s|$)/mg)
-  // };
-  // WEEX_HOOK_END
   var data = {};
+  if (fs.existsSync(path.join(this.root, 'project.properties'))) {
+    data = fs.readFileSync(path.join(this.root, 'project.properties'), 'utf8');
+    console.log("WEEXPACK", "data" + data);
+  }
+  // WEEX_HOOK_END
   return {
     libs: findAllUniq(data, /^\s*android\.library\.reference\.\d+=(.*)(?:\s|$)/mg),
     gradleIncludes: findAllUniq(data, /^\s*cordova\.gradle\.include\.\d+=(.*)(?:\s|$)/mg),

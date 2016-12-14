@@ -45,7 +45,7 @@ var handlers = {
         },
         uninstall:function(obj, plugin, project, options) {
             var dest = path.join(obj.targetDir, path.basename(obj.src));
-            
+
             if(options && options.android_studio === true) {
               dest = path.join('app/src/main/java', obj.targetDir.substring(4), path.basename(obj.src));
             }
@@ -91,7 +91,9 @@ var handlers = {
                 copyNewFile(plugin.dir, src, project.projectDir, subRelativeDir, !!(options && options.link));
                 subDir = path.resolve(project.projectDir, subRelativeDir);
             } else {
-                obj.type = 'sys';
+                // WEEX_HOOK
+                obj.type = 'gradleReference';
+                //obj.type = 'sys';
                 subDir = src;
             }
 

@@ -54,6 +54,7 @@ function removeFromPropertyList(projectProperties, key, value) {
 
 function getRelativeLibraryPath (parentDir, subDir) {
     var libraryPath = path.relative(parentDir, subDir);
+    console.log('WEEXPACK' + __dirname + 'getRelativeLibraryPath:' + parentDir + ',' + subDir);
     return (path.sep == '\\') ? libraryPath.replace(/\\/g, '/') : libraryPath;
 }
 
@@ -137,14 +138,18 @@ AndroidProject.prototype.removeSubProject = function(parentDir, subDir) {
 AndroidProject.prototype.addGradleReference = function(parentDir, subDir) {
     var parentProjectFile = path.resolve(parentDir, 'project.properties');
     var parentProperties = this._getPropertiesFile(parentProjectFile);
-    addToPropertyList(parentProperties, 'cordova.gradle.include', getRelativeLibraryPath(parentDir, subDir));
+    //WEEX_HOOK
+    //addToPropertyList(parentProperties, 'cordova.gradle.include', getRelativeLibraryPath(parentDir, subDir));
+    addToPropertyList(parentProperties, 'cordova.gradle.include', subDir);
     this._dirty = true;
 };
 
 AndroidProject.prototype.removeGradleReference = function(parentDir, subDir) {
     var parentProjectFile = path.resolve(parentDir, 'project.properties');
     var parentProperties = this._getPropertiesFile(parentProjectFile);
-    removeFromPropertyList(parentProperties, 'cordova.gradle.include', getRelativeLibraryPath(parentDir, subDir));
+  //WEEX_HOOK
+  //removeFromPropertyList(parentProperties, 'cordova.gradle.include', getRelativeLibraryPath(parentDir, subDir));
+  removeFromPropertyList(parentProperties, 'cordova.gradle.include', subDir);
     this._dirty = true;
 };
 

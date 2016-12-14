@@ -80,6 +80,7 @@ GradleBuilder.prototype.prepBuildFiles = function() {
           shell.cp('-f', pluginBuildGradle, subProjectGradle);
       }
     };
+    // 遍历子项目
     for (var i = 0; i < subProjects.length; ++i) {
         // WEEX_HOOK
         if (subProjects[i] !== 'appframework') {
@@ -103,14 +104,17 @@ GradleBuilder.prototype.prepBuildFiles = function() {
         'include ":app"\n' +
         'include ":appframework"\n' + settingsGradlePaths.join(''));
     // Update dependencies within build.gradle.
-    var buildGradle = fs.readFileSync(path.join(this.root, 'build.gradle'), 'utf8');
+    // WEEX_HOOK_START
+    // var buildGradle = fs.readFileSync(path.join(this.root, 'build.gradle'), 'utf8');
+    var buildGradle = fs.readFileSync(path.join(this.mainAppDirs, 'build.gradle'), 'utf8');
+    // WEEX_HOOK_END
     var depsList = '';
     var root = this.root;
     var insertExclude = function(p) {
           var gradlePath = path.join(root, p, 'build.gradle');
           var projectGradleFile = fs.readFileSync(gradlePath, 'utf-8');
-          if(projectGradleFile.indexOf('CordovaLib') != -1) {
-            depsList += '{\n        exclude module:("CordovaLib")\n    }\n';
+          if(projectGradleFile.indexOf('appframework') != -1) {
+            depsList += '{\n        exclude module:("appframework")\n    }\n';
           }
           else {
             depsList +='\n';
@@ -148,13 +152,21 @@ GradleBuilder.prototype.prepBuildFiles = function() {
         }
         depsList += '    compile "' + mavenRef + '"\n';
     });
-    buildGradle = buildGradle.replace(/(SUB-PROJECT DEPENDENCIES START)[\s\S]*(\/\/ SUB-PROJECT DEPENDENCIES END)/, '$1\n' + depsList + '    $2');
-    var includeList = '';
-    propertiesObj.gradleIncludes.forEach(function(includePath) {
-        includeList += 'apply from: "' + includePath + '"\n';
-    });
-    buildGradle = buildGradle.replace(/(PLUGIN GRADLE EXTENSIONS START)[\s\S]*(\/\/ PLUGIN GRADLE EXTENSIONS END)/, '$1\n' + includeList + '$2');
-    fs.writeFileSync(path.join(this.root, 'build.gradle'), buildGradle);
+    // WEEX_HOOK_START
+    // buildGradle = buildGradle.replace(/(SUB-PROJECT DEPENDENCIES START)[\s\S]*(\/\/ SUB-PROJECT DEPENDENCIES END)/, '$1\n' + depsList + '    $2');
+    // var includeList = '';
+    // propertiesObj.gradleIncludes.forEach(function(includePath) {
+    //     includeList += 'apply from: "' + includePath + '"\n';
+    // });
+    // buildGradle = buildGradle.replace(/(PLUGIN GRADLE EXTENSIONS START)[\s\S]*(\/\/ PLUGIN GRADLE EXTENSIONS END)/, '$1\n' + includeList + '$2');
+    // fs.writeFileSync(path.join(this.root, 'build.gradle'), buildGradle);
+  var includeList = '';
+  propertiesObj.gradleIncludes.forEach(function(includePath) {
+    includeList += '    compile \'' + includePath + '\'\n';
+  });
+  buildGradle = buildGradle.replace(/(PLUGIN GRADLE EXTENSIONS START)[\s\S]*(\/\/ PLUGIN GRADLE EXTENSIONS END)/, '$1\n' + includeList + '$2');
+  fs.writeFileSync(path.join(this.mainAppDirs, 'build.gradle'), buildGradle);
+    // WEEX_HOOK_END
 };
 
 GradleBuilder.prototype.prepEnv = function(opts) {

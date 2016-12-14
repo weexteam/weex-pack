@@ -10,7 +10,7 @@ var path = require('path');
 var fs = require('fs');
 
 function isAndroidStudioProject(root) {
-    var eclipseFiles = ['AndroidManifest.xml', 'libs', 'res', 'project.properties'/*, 'platform_www' WEEX_HOOK*/];
+    var eclipseFiles = ['AndroidManifest.xml', 'libs', 'res'/*, 'project.properties', 'platform_www' WEEX_HOOK*/];
     var androidStudioFiles = ['app', 'gradle', /*'build',*/ 'app/src/main/assets'];
     var file;
     for(file of eclipseFiles) {
