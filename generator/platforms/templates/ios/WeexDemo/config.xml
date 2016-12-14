@@ -30,7 +30,7 @@
     <preference name="PageLength" value="0" />
     <preference name="PaginationBreakingMode" value="page" />
     <preference name="PaginationMode" value="unpaginated" />
-    <preference name="launch_locally" value="true" />
-    <preference name="launch_url" value="http://127.0.0.1:8080/dist/index.js"/>
+    <preference name="launch_locally" value="ture" />
+    <preference name="launch_url" value=""/>
     <preference name="local_url" value="index.js" />
 </widget>

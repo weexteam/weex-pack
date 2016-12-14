@@ -97,11 +97,11 @@
 
 - (NSURL *)jsBundleURL
 {
-    if (self.settings) {
+    if (!self.settings) {
         return nil;
     }
     NSURL *jsBundleUrl = nil;
-    if (self.settings[@"launch_locally"]) {
+    if (self.settings[@"launch_locally"] && [self.settings[@"launch_locally"] boolValue]) {
         NSString *jsFile = self.settings[@"local_url"];
         if (jsFile && ![jsFile isEqualToString:@""]) {
             jsBundleUrl = [NSURL URLWithString:[NSString stringWithFormat:@"file://%@/bundlejs/%@",[NSBundle mainBundle].bundlePath,jsFile]];
@@ -113,10 +113,24 @@
         if (hostAddress && ![hostAddress isEqualToString:@""]) {
             jsBundleUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/dist/index.js",hostAddress]];
         }else {
-            jsBundleUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/dist/index.js", DEMO_HOST]];
+            jsBundleUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/dist/index.js", [self getPackageHost]]];
         }
     }
     return jsBundleUrl;
+}
+
+- (NSString *)getPackageHost
+{
+    static NSString *ipGuess;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *ipPath = [[NSBundle mainBundle] pathForResource:@"ip" ofType:@"txt"];
+        ipGuess = [[NSString stringWithContentsOfFile:ipPath encoding:NSUTF8StringEncoding error:nil]
+                   stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    });
+    
+    NSString *host = ipGuess ?: @"localhost";
+    return host;
 }
 
 @end
