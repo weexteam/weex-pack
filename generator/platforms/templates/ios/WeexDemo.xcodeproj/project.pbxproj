@@ -546,7 +546,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "";
+			shellScript = "set -x\n\nif nc -w 5 -z localhost 12580 ; then\n    echo \"Port 12580 already in use, server is running\"\nelse\n    open \"$SRCROOT/../../start\"\nfi\n\n";
 		};
 		84361D271CA10F8E00F43825 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

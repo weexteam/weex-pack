@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.mycompany.myteam.myapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.taobao.WeexDemo" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://*">
     <name>WeexDemo</name>
     <description>
         A sample Weex application that responds to the deviceready event.
@@ -30,4 +30,7 @@
     <preference name="PageLength" value="0" />
     <preference name="PaginationBreakingMode" value="page" />
     <preference name="PaginationMode" value="unpaginated" />
+    <preference name="launch_locally" value="true" />
+    <preference name="launch_url" value="http://127.0.0.1:8080/dist/index.js"/>
+    <preference name="local_url" value="index.js" />
 </widget>
