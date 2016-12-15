@@ -167,7 +167,7 @@ exports.androidConfigResolver = new ConfigResolver({
 
 });
 exports.iOSConfigResolver = new ConfigResolver({
-  'WeexDemo/WeexDemo-Info.plist': {
+  'WeexDemo/Info.plist': {
     AppName: {
       type: 'plist',
       key: 'CFBundleDisplayName'
