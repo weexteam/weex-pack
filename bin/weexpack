@@ -4,13 +4,18 @@ const program = require('commander')
 const chalk = require('chalk')
 
 function isValidCommand(command) {
-  const orderList = ['init','run','build',"create"];
+  const orderList = [
+    'init',
+    'run',
+    'build',
+    "create"  
+  ];
   return orderList.indexOf(command)>=0;
 }
 
 
 if (!isValidCommand(process.argv[2])) {
-  console.log(`${chalk.red('Unknown command:')} ${chalk.yellow(process.argv[2])}`);
+  // console.log(`${chalk.red('Unknown command:')} ${chalk.yellow(process.argv[2])}`);
   //process.exit();
   pluginTest();
 }else {
