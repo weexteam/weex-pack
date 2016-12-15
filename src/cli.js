@@ -356,7 +356,7 @@ function cli(inputArgs) {
       'clean'
     ];
 
-    if (cmdList.indexOf(cmd)) {
+    if (cmdList.indexOf(cmd)>=0) {
         // All options without dashes are assumed to be platform names
         opts.platforms = undashed.slice(1);
         var badPlatforms = _.difference(opts.platforms, known_platforms);
