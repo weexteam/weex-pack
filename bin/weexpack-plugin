@@ -21,7 +21,10 @@ program
   .command('add [plugin_name]')
   .description('setup specific plugin into your project')
   .action(function(pluginName){
-      cli(process.argv);
+    var arr = process.argv.slice(0,2);
+    arr.push('plugin');
+    arr = arr.concat(process.argv.slice(2));
+    cli(arr);
   });
 program
   .option('--ali','publish to alibaba internal market(only for alibaba internal network)')
