@@ -2,6 +2,14 @@
 
 const program = require('commander')
 const chalk = require('chalk')
+program
+  .version(require('../package').version)
+  .usage('<command> [options]')
+  .command('init [name]', 'initialize a standard weex project')
+  .command('run [platform]', 'run weex app on the specific platform')
+  .command('build [platform]', 'build weex app generator package(apk or ipa)')
+  .command('plugin [command]', 'command for add or create and publish weex plugins')
+  .parse(process.argv)
 
 function isValidCommand(command) {
   const orderList = [
@@ -58,3 +66,4 @@ function pluginTest() {
   cli(process.argv);
   addTs('end');
 }
+
