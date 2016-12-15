@@ -1,8 +1,14 @@
 {
   "name": "xx",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Weex Plugin",
-
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack --watch",
+    "serve": "serve -p 8080",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "keywords": [
     "Weex",
     "Plugin",
@@ -10,6 +16,6 @@
     "module",
     "handle",
     "weexpack"
-  ]
-
+  ],
+  "author": ""
 }
