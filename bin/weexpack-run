@@ -21,6 +21,9 @@ function printExample() {
   console.log(chalk.grey('    # run weex iOS project'))
   console.log('    $ ' + chalk.blue('weexpack run ios'))
   console.log()
+  console.log(chalk.grey('    # run weex web'))
+  console.log('    $ ' + chalk.blue('weexpack run web'))
+  console.log()
 }
 
 program.on('--help', printExample)
@@ -51,13 +54,12 @@ if (program.args.length < 1) {
 }
 
 if (isValidPlatform(program.args)) {
-
   // TODO: parse config file
   run(program.args[0], {configPath:program.config,clean:program.clean})
 
 } else {
   console.log()
-  console.log(`  ${chalk.red('Unknown platform:')} ${chalk.yellow(program.args[0])}`)
+  console.log(`${chalk.red('Unknown platform:')} ${chalk.yellow(program.args[0])}`)
   console.log()
   printExample()
   process.exit()
