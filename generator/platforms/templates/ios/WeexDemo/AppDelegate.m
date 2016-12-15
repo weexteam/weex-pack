@@ -7,9 +7,7 @@
  */
 
 #import "AppDelegate.h"
-#import "WXImgLoaderDefaultImpl.h"
 #import "DemoDefine.h"
-#import "WXScannerVC.h"
 #import <WeexSDK/WeexSDK.h>
 #import <AVFoundation/AVFoundation.h>
 #import <ATSDK/ATManager.h>
@@ -42,10 +40,7 @@
 
 -(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
 {
-    if ([shortcutItem.type isEqualToString:QRSCAN]) {
-        WXScannerVC * scanViewController = [[WXScannerVC alloc] init];
-        [(WXRootViewController*)self.window.rootViewController pushViewController:scanViewController animated:YES];
-    }
+    
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
