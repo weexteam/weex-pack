@@ -102,6 +102,8 @@ GradleBuilder.prototype.prepBuildFiles = function() {
     fs.writeFileSync(path.join(this.root, 'settings.gradle'),
         '// GENERATED FILE - DO NOT EDIT\n' +
         'include ":app"\n' +
+        'include ":gcanvas_library"\n' +
+        'include ":gcanvas_weex_plugin"\n' +
         'include ":appframework"\n' + settingsGradlePaths.join(''));
     // Update dependencies within build.gradle.
     // WEEX_HOOK_START
