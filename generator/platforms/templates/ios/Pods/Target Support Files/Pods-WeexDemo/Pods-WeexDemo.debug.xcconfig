@@ -1,7 +1,0 @@
-FRAMEWORK_SEARCH_PATHS = $(inherited) '$(PODS_ROOT)/WeexSDK' "${PODS_ROOT}/ATSDK-Weex" "${PODS_ROOT}/WXDevtool" "${PODS_ROOT}/WeexSDK"
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/ATSDK-Weex" "${PODS_ROOT}/Headers/Public/SDWebImage" "${PODS_ROOT}/Headers/Public/SocketRocket" "${PODS_ROOT}/Headers/Public/WXDevtool" "${PODS_ROOT}/Headers/Public/WeexSDK"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/ATSDK-Weex" -isystem "${PODS_ROOT}/Headers/Public/SDWebImage" -isystem "${PODS_ROOT}/Headers/Public/SocketRocket" -isystem "${PODS_ROOT}/Headers/Public/WXDevtool" -isystem "${PODS_ROOT}/Headers/Public/WeexSDK"
-OTHER_LDFLAGS = $(inherited) -ObjC -l"SDWebImage" -l"SocketRocket" -l"icucore" -framework "ATSDK" -framework "AVFoundation" -framework "AVKit" -framework "AudioToolbox" -framework "CFNetwork" -framework "CoreData" -framework "CoreMedia" -framework "Foundation" -framework "GLKit" -framework "ImageIO" -framework "JavaScriptCore" -framework "MediaPlayer" -framework "MobileCoreServices" -framework "Security" -framework "TBWXDevTool" -framework "WeexSDK"
-OTHER_LINK_FLAG = $(inherited) -ObjC
-PODS_ROOT = ${SRCROOT}/Pods
