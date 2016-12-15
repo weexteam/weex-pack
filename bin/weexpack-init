@@ -41,7 +41,6 @@ if (fs.existsSync(path.join(process.cwd(), projectName))) {
       }
     }
   }, function (err, result) {
-    console.log(result);
     var c = result.confirm.toLowerCase();
     if (c == 'y' || c == 'yes') {
       init(projectName, program.config);
