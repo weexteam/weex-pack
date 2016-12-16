@@ -19,28 +19,26 @@
 -->
 
 <plugin xmlns="http://www.w3.org/ns/widgets"
-    id="**"
+    id="${pluginId}"
     version="0.1.0">
-    <name>**</name>
-    <description>**</description>
+    <name>${pluginName}</name>
+    <description></description>
     <license>Apache 2.0</license>
-    <keywords>weex,event</keywords>
+    <keywords>weex,plugin</keywords>
     <repo>https://*.git</repo>
     <issue>https://*</issue>
-
      <!-- ios -->
      <platform name="ios">
 
-
      </platform>
-     
+
      <!-- android -->
      <platform name="android">
-         
-         
+
+
      </platform>
-     
-     
+
+
 
 
 
