@@ -99,6 +99,9 @@ android的打包和构建是一体的 ：
 
 ## changelog
 
+0.2.4
+* 修复weexpack run web的bug 并且加了自动打开浏览器的功能
+
 0.2.3
 * suppress adb reverse error(android 5.0- will cause error)
 
