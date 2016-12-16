@@ -61,5 +61,3 @@ var post = function (url, data) {
     req.end();
   })
 };
-console.log(chalk.yellow('plugin [+name+] publish success! sync to market maybe need a few minutes.'));
-console.log(chalk.yellow(`you can visit ${exports.domain} see your plugin. if not exist you can retry ${chalk.blue('weexpack plugin publish')}` ))
