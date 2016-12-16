@@ -32,6 +32,7 @@ var path = require('path'),
     pkg = require('../package.json'),
     telemetry = require('./telemetry'),
     Q = require('q');
+var { prefix } = require('./utils/npm'); 
 
 var cordova_lib = require('cordova-lib'),
     CordovaError = cordova_lib.CordovaError,
@@ -445,6 +446,9 @@ function cli(inputArgs) {
                             , shrinkwrap: args.shrinkwrap || false
                             , force: args.force || false
                             };
+        if(!/\./.test(targets)) {
+          targets = prefix + targets;
+        }
         return cordova.raw[cmd](subcommand, targets, download_opts);
     }
 

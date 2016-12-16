@@ -35,13 +35,13 @@
 {
     [self.pluginNames enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSDictionary *pluginInfo = (NSDictionary *)obj;
-        if ([pluginInfo[@"name"] isEqualToString:@"handle"] && pluginInfo[@"protocol"]) {
+        if ([pluginInfo[@"category"] isEqualToString:@"handle"] && pluginInfo[@"protocol"]) {
             
             [WXSDKEngine registerHandler:[NSClassFromString(pluginInfo[@"ios-package"]) new]
                             withProtocol:NSProtocolFromString(pluginInfo[@"protocol"])];
-        }else if ([pluginInfo[@"name"] isEqualToString:@"component"] && pluginInfo[@"ios-package"]) {
+        }else if ([pluginInfo[@"category"] isEqualToString:@"component"] && pluginInfo[@"ios-package"]) {
             [WXSDKEngine registerComponent:pluginInfo[@"api"] withClass:NSClassFromString(pluginInfo[@"ios-package"])];
-        }else if ([pluginInfo[@"name"] isEqualToString:@"module"] && pluginInfo[@"ios-package"]) {
+        }else if ([pluginInfo[@"category"] isEqualToString:@"module"] && pluginInfo[@"ios-package"]) {
             [WXSDKEngine registerModule:pluginInfo[@"api"] withClass:NSClassFromString(pluginInfo[@"ios-package"])];
         }
     }];

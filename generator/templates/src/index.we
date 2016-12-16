@@ -34,7 +34,7 @@
   module.exports = {
     data: {
       message: 'Welcome to Use Weexpack!',
-      quotes: 'A Tool Help To Build WEEX Faster',
+      quotes: 'A Tool To Build WEEX Faster',
     }
   }
 </script>
