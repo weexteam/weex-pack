@@ -10,6 +10,7 @@
 
 @interface WeexSDKManager : NSObject
 
-+ (void)setup;
++ (void)setupWithScanner:(BOOL)loadScanner;
+
 
 @end
