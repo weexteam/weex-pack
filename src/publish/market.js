@@ -3,8 +3,9 @@ const Http = require('http');
 const chalk=require('chalk');
 exports.publish = function (name, readme) {
   return new Promise(function(resolve,reject){
-    post('http://10.218.136.234//json/sync/sync.json?name='+name).then(function(data){
-      console.log(chalk.yellow('plugin ['+name+']publish success!'));
+    post('http://10.218.136.234/json/sync/sync.json?name='+name).then(function(data){
+      console.log(chalk.yellow('plugin ['+name+'] publish success! sync to market maybe need a few minutes.'));
+      console.log(chalk.yellow(`you can visit ${exports.domain} see your plugin. if not exist you can retry ${chalk.blue('weexpack plugin publish')}` ))
       resolve()
     }).catch(function(){
       console.log(chalk.red('market sync failed!'));
@@ -13,10 +14,9 @@ exports.publish = function (name, readme) {
   })
 
 };
+exports.domain='http://weex-market.taobao.net/';
 var post = function (url, data) {
   return new Promise(function (resolve, reject) {
-
-
     var urlObj = Url.parse(url);
     if (data) {
       data = new Buffer(JSON.stringify(data));
@@ -61,3 +61,5 @@ var post = function (url, data) {
     req.end();
   })
 };
+console.log(chalk.yellow('plugin [+name+] publish success! sync to market maybe need a few minutes.'));
+console.log(chalk.yellow(`you can visit ${exports.domain} see your plugin. if not exist you can retry ${chalk.blue('weexpack plugin publish')}` ))
