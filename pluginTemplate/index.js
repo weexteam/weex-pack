@@ -38,7 +38,7 @@ module.exports = yeoman.Base.extend({
         '\\$\\{pluginName\\}': this.options.pluginName
       }
     );
-    copyAndReplace('js/package.json','js/package.json',
+    copyAndReplace('package.json','js/package.json',
       {
         '\\$\\{pluginName\\}': this.options.pluginName
       }

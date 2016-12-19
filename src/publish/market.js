@@ -1,16 +1,16 @@
 const Url = require('url');
 const Http = require('http');
 const chalk=require('chalk');
-exports.publish = function (name, readme) {
+exports.publish = function (name, version) {
   return new Promise(function(resolve,reject){
     post('http://10.218.136.234/json/sync/sync.json?name='+name).then(function(data){
       console.log();
-      console.log(chalk.yellow('plugin ['+name+'] publish success! sync to market maybe need a few minutes.'));
+      console.log(chalk.yellow('plugin ['+name+'@'+version+'] publish success! sync to market maybe need a few minutes.'));
       console.log(chalk.yellow(`you can visit ${exports.domain} see your plugin. if not exist you can retry ${chalk.blue('weexpack plugin publish')}` ))
       console.log();
       resolve()
     }).catch(function(){
-      console.log(chalk.red('market sync failed!'));
+      console.log(chalk.red(`Market sync failed! Please retry ${chalk.blue('weexpack plugin publish')}`));
       reject();
     })
   })
