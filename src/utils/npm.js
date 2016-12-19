@@ -12,13 +12,17 @@ exports.publish = function publish(tnpm, verbose, dir) {
       pb.complete(function () {
         if (error) {
           console.log();
-          console.log(stderr.toString().match(/\n[^\n]+\n/));
-
+          let match=stderr.toString().match(/\n\n([^\n]+)\n/);
+          if(match[1]){
+            console.error(chalk.red(match[1].replace(/nnpm ERR!|"/g,'')))
+          }
+          else{
+            console.error(chalk.red(stderr.toString()))
+          }
           console.log();
-          return;
+         return  resolve(false);
         }
-        console.log(stdout.toString());
-        resolve();
+        resolve(true);
       })
     });
   });

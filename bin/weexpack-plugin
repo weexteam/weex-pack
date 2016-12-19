@@ -4,7 +4,7 @@ const program = require('commander');
 const chalk = require('chalk');
 const create = require('../src/create/create');
 const cli = require('../src/cli');
-const publish=require('../src/publish/publish');
+const publish = require('../src/publish/publish');
 program
   .command('create [plugin_name]')
   .description('create a empty plugin project')
@@ -18,16 +18,7 @@ program
     }
   });
 program
-  .command('add [plugin_name]')
-  .description('setup specific plugin into your project')
-  .action(function(pluginName){
-    var arr = process.argv.slice(0,2);
-    arr.push('plugin');
-    arr = arr.concat(process.argv.slice(2));
-    cli(arr);
-  });
-program
-  .option('--ali','publish to alibaba internal market(only for alibaba internal network)')
+  .option('--ali', 'publish to alibaba internal market(only for alibaba internal network)')
   .option('-d,--verbose')
   .option('-v,--version')
   .option('--help')
@@ -57,10 +48,18 @@ program
   .option('-t,--template [template]')
   .command('publish')
   .description('publish current plugin')
-  .action(function(){
+  .action(function () {
     publish(program.ali);
   });
-
+program
+  .command('*')
+  .description('setup specific plugin into your project')
+  .action(function (pluginName) {
+    var arr = process.argv.slice(0, 2);
+    arr.push('plugin');
+    arr = arr.concat(process.argv.slice(2));
+    cli(arr);
+  });
 program.parse(process.argv);
 
 if (program.args.length < 1) {

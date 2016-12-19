@@ -2,6 +2,7 @@
 
 const program = require('commander')
 const chalk = require('chalk')
+const cli = require('../src/cli')
 program
   .version(require('../package').version)
   .usage('<command> [options]')
@@ -9,4 +10,12 @@ program
   .command('run [platform]', 'run weex app on the specific platform')
   .command('build [platform]', 'build weex app generator package(apk or ipa)')
   .command('plugin [command]', 'command for add or create and publish weex plugins')
-  .parse(process.argv)
+program.command('*')
+  .description('')
+  .action(function (cmd) {
+    if (!(/init|run|build|plugin/.test(cmd))) {
+      cli(process.argv);
+    }
+
+  })
+program.parse(process.argv)

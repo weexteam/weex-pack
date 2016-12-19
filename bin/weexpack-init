@@ -23,7 +23,6 @@ if (!projectName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
   var msg = chalk.red('Invalid project name:') + chalk.yellow(projectName);
   console.log(msg);
   process.exit();
-  return;
 }
 if (fs.existsSync(path.join(process.cwd(), projectName))) {
   _prompt.start();
