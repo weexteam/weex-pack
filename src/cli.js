@@ -32,9 +32,11 @@ var path = require('path'),
     pkg = require('../package.json'),
     telemetry = require('./telemetry'),
     Q = require('q');
+var { prefix } = require('./utils/npm'); 
 
 var cordova_lib = require('cordova-lib'),
     CordovaError = cordova_lib.CordovaError,
+    WeexpackError = cordova_lib.CordovaError,
     cordova = cordova_lib.cordova,
     events = cordova_lib.events,
     logger = require('cordova-common').CordovaLogger.get();
@@ -95,7 +97,7 @@ module.exports = function (inputArgs, cb) {
     inputArgs = inputArgs || process.argv;
     var cmd = inputArgs[2]; // e.g: inputArgs= 'node cordova run ios'
     var subcommand = getSubCommand(inputArgs, cmd);
-    var isTelemetryCmd = (cmd === 'telemetry');
+    var isTelemetryCmd = (false && cmd === 'telemetry');
 
     // ToDO: Move nopt-based parsing of args up here
     if(cmd === '--version' || cmd === '-v') {
@@ -158,8 +160,15 @@ module.exports = function (inputArgs, cb) {
 };
 
 function getSubCommand(args, cmd) {
-    if(cmd === 'platform' || cmd === 'platforms' || cmd === 'plugin' || cmd === 'plugins' || cmd === 'telemetry') {
-        return args[3]; // e.g: args='node cordova platform rm ios', 'node cordova telemetry on'
+    var subCommands = [
+        'platform',
+        'platforms',
+        'plugin',
+        'plugins',
+       // 'telemetry'
+    ];
+    if(subCommands.indexOf(cmd)) {
+        return args[3]; 
     }
     return null;
 }
@@ -178,10 +187,10 @@ function handleTelemetryCmd(subcommand, isOptedIn) {
     try {
         if (turnOn) {
             telemetry.turnOn();
-            console.log("Thanks for opting into telemetry to help us improve cordova.");
+            console.log("Thanks for opting into telemetry to help us improve weexpack.");
         } else {
             telemetry.turnOff();
-            console.log("You have been opted out of telemetry. To change this, run: cordova telemetry on.");
+            console.log("You have been opted out of telemetry. To change this, run: weexpack telemetry on.");
         }
     } catch (ex) {
         cmdSuccess = false;
@@ -324,9 +333,8 @@ function cli(inputArgs) {
 
     if ( !cordova.hasOwnProperty(cmd) ) {
         msg =
-            'Cordova does not know ' + cmd + '; try `' + cordova_lib.binname +
-            ' help` for a list of all the available commands.';
-        throw new CordovaError(msg);
+            'weexpack doesn\'t know command: ' + cmd + '; try ` weexpack help` for a list of all the available commands.';
+        throw new WeexpackError(msg);
     }
 
     var opts = {
@@ -339,15 +347,23 @@ function cli(inputArgs) {
         nohooks: args.nohooks || [],
         searchpath : args.searchpath
     };
+    
+    var cmdList = [
+      'emulate',
+     // 'build',
+     //  'run'
+      'prepare',
+      'compile',
+      'clean'
+    ];
 
-
-    if (cmd == 'emulate' || cmd == 'build' || cmd == 'prepare' || cmd == 'compile' || cmd == 'run' || cmd === 'clean') {
+    if (cmdList.indexOf(cmd)>=0) {
         // All options without dashes are assumed to be platform names
         opts.platforms = undashed.slice(1);
         var badPlatforms = _.difference(opts.platforms, known_platforms);
         if( !_.isEmpty(badPlatforms) ) {
             msg = 'Unknown platforms: ' + badPlatforms.join(', ');
-            throw new CordovaError(msg);
+            throw new WeexpackError(msg);
         }
 
         // Pass nopt-parsed args to PlatformApi through opts.options
@@ -413,7 +429,7 @@ function cli(inputArgs) {
                 // CB-9171
                 var eq = s.indexOf('=');
                 if (eq == -1)
-                    throw new CordovaError("invalid variable format: " + s);
+                    throw new WeexpackError("invalid variable format: " + s);
                 var key = s.substr(0, eq).toUpperCase();
                 var val = s.substr(eq + 1, s.length);
                 cli_vars[key] = val;
@@ -430,6 +446,9 @@ function cli(inputArgs) {
                             , shrinkwrap: args.shrinkwrap || false
                             , force: args.force || false
                             };
+        if(!/[\.\/]+/.test(targets)) {
+          targets = prefix + targets;
+        }
         return cordova.raw[cmd](subcommand, targets, download_opts);
     }
 

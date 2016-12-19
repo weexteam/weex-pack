@@ -1,10 +1,9 @@
 {
-  "name": "xx",
-  "version": "1.0.0",
-  "description": "Weex Plugin",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/weexteam"
+  "name": "${pluginName}",
+  "version": "0.1.0",
+  "description": "Weex Plugin-${pluginName}",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "Weex",
@@ -12,13 +11,7 @@
     "commponent",
     "module",
     "handle",
-    "weexpack",
+    "weexpack"
   ],
-  "scripts": {
-    "build": "webpack",
-    "dev": "webpack --watch",
-    "serve": "serve -p 8080"
-  },
-  "author": "Apache Software Foundation",
-  "license": "Apache-2.0"
+  "author": ""
 }

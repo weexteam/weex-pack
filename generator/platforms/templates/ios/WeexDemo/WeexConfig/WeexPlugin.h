@@ -15,4 +15,6 @@
 
 - (void)registerWeexPlugin;
 
+- (NSURL *)jsBundleURL;
+
 @end

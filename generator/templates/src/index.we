@@ -1,54 +1,39 @@
 <template>
-  <example-list items="{{items}}" root="{{root}}"></example-list>
+  <div class="container">
+      <image src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/7d42775b8f0d0c86589082dc9ee179c2.png" class="bannar-image"/>
+      <text class="message">{{ message }}</text>
+      <text class="quotes">{{ quotes }}</text>    
+  </div>
 </template>
 
+<style>
+  .container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bannar-image{
+    width:200;
+    height:200;
+  }
+  .message{
+    padding-top: 20;
+    padding-bottom: 40;
+    color: #0055dd;
+    font-size: 28; 
+  }
+  .quotes{
+    font-size: 16;
+    color:#666; 
+  }
+</style>
+
 <script>
-  require('./include/example-list.we');
   module.exports = {
     data: {
-      root: 'examples',
-      items: [
-        // FORMAT:
-        // `name` key is the example filename without '.we'
-        // Support sub directory, e.g. 'new-fashion/index'
-
-        // common
-        {name: 'hello', title: 'Hello World'},
-        {name: 'syntax/index', title: 'More Syntax'},
-        {name: 'style/index', title: 'Common Style'},
-        {name: 'animation', title: 'Animation'},
-
-        // component
-        {name: 'component/text-demo', title: 'Text'},
-        {name: 'component/image-demo', title: 'Image'},
-        {name: 'component/input-demo', title: 'Input'},
-        {name: 'component/scroller-demo', title: 'Scroller'},
-        {name: 'component/list/list-basic', title: 'List (Basic)'},
-        {name: 'component/list/list-demo', title: 'List (Advanced)'},
-        {name: 'component/slider/index', title: 'Slider'},
-        {name: 'component/a-demo', title: 'A'},
-        {name: 'component/video-demo', title: 'Video'},
-        {name: 'component/countdown-demo', title: 'Countdown'},
-        {name: 'component/marquee-demo', title: 'Marquee'},
-        {name: 'component/web-demo', title: 'Web'},
-        {name: 'component/navigator-demo', title: 'Navigator'},
-        {name: 'component/tabbar/tabbar-demo', title: 'Tabbar'},
-        {name: 'component/process-bar-demo', title: 'ProcessBar'},
-
-        // module
-        {name: 'module/instance-api', title: 'Instance API'},
-        {name: 'module/modal', title: 'Modal'},
-        {name: 'module/stream-demo', title: 'Stream'},
-        {name: 'module/storage-demo',title:'Storage'},
-        // {name: 'module/clipboard', title: 'Clipboard'}, // 0.8 , developing
-
-        // showcase
-        {name: 'showcase/new-fashion/index', title: 'Activity'},
-        {name: 'showcase/calculator', title: 'Calculator'},
-        {name: 'showcase/minesweeper', title: 'Minesweeper'},
-        {name: 'showcase/ui', title: 'UI Gallery'},
-        {name: 'showcase/dropdown/dropdown-demo', title: 'Dropdown'}
-      ]
+      message: 'Welcome to Use Weexpack!',
+      quotes: 'A Tool To Build WEEX Faster',
     }
   }
 </script>

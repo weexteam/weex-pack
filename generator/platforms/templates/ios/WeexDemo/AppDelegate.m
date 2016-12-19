@@ -7,13 +7,12 @@
  */
 
 #import "AppDelegate.h"
-#import "WXImgLoaderDefaultImpl.h"
 #import "DemoDefine.h"
-#import "WXScannerVC.h"
 #import <WeexSDK/WeexSDK.h>
 #import <AVFoundation/AVFoundation.h>
 #import <ATSDK/ATManager.h>
 #import "WeexSDKManager.h"
+#import "WXScannerVC.h"
 
 @interface AppDelegate ()
 @end
@@ -28,7 +27,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    [WeexSDKManager setup];
+    [WeexSDKManager setupWithScanner:NO];
     
     [self.window makeKeyAndVisible];
     

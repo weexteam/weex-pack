@@ -98,9 +98,13 @@ android的打包和构建是一体的 ：
 
 
 ## changelog
+0.2.2
+* 更换copy库 之前用的库还是存在windows的兼容问题，被坑了。
+
 0.2.1
 * 修复windows平台的bug 重新用bat重写了start脚本
 * 修复了错误把build文件夹ignore的问题。
+
 0.2.0
 * 优化操作流程，去掉了以前会重复出现的server窗口
 * 修复个别打包失败的错误 增强稳定性

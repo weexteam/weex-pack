@@ -18,61 +18,27 @@
   under the License.
 -->
 
-<plugin xmlns="http://apache.org/weexpack/ns/plugins/1.0"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:rim="http://www.blackberry.com/ns/widgets"
-    id="**"
-    version="1.0.0">
-    <name>EventModule</name>
-    <description>**</description>
+<plugin xmlns="http://www.w3.org/ns/widgets"
+    id="${pluginId}"
+    version="0.1.0">
+    <name>${pluginName}</name>
+    <description></description>
     <license>Apache 2.0</license>
-    <keywords>weex,event</keywords>
+    <keywords>weex,plugin</keywords>
     <repo>https://*.git</repo>
     <issue>https://*</issue>
-
-
-    <js-module src="www/*" />
-
-
      <!-- ios -->
      <platform name="ios">
 
-         <config-file target="config.xml" parent="/*">
-             <feature name="module">
-                 <param name="ios-package" value="WXEventModule" />
-                 <param name="api" value="event" />
-             </feature>
-             <preference name="CameraUsesGeolocation" value="false" />
-         </config-file>
+     </platform>
 
-         <header-file src="src/ios/*.h" />
-         <source-file src="src/ios/*.m" />
+     <!-- android -->
+     <platform name="android">
 
-         <framework src="ImageIO.framework" weak="true" />
-         <framework src="CoreLocation.framework" />
-         <framework src="CoreGraphics.framework" />
-         <framework src="AssetsLibrary.framework" />
-         <framework src="MobileCoreServices.framework" />
-         <framework src="CoreGraphics.framework" />
-         <framework src="AVFoundation.framework" />
-
-        <!--
-         <preference name="CAMERA_USAGE_DESCRIPTION" default=" " />
-         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
-             <string>$CAMERA_USAGE_DESCRIPTION</string>
-         </config-file>
-
-         <preference name="PHOTOLIBRARY_USAGE_DESCRIPTION" default=" " />
-         <config-file target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
-             <string>$PHOTOLIBRARY_USAGE_DESCRIPTION</string>
-         </config-file>
-
-         <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
-             <string></string>
-         </config-file>
-         -->
 
      </platform>
+
+
 
 
 

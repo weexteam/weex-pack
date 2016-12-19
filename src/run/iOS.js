@@ -234,7 +234,7 @@ function _runAppOnSimulator({device, xcodeProject, options, resolve, reject}) {
   const appPath = `build/Build/Products/Debug-iphonesimulator/${inferredSchemeName}.app`
   const bundleID = child_process.execFileSync(
     '/usr/libexec/PlistBuddy',
-    ['-c', 'Print:CFBundleIdentifier', path.join(appPath, 'WeexDemo-Info.plist')],
+    ['-c', 'Print:CFBundleIdentifier', path.join(appPath, 'Info.plist')],
     {encoding: 'utf8'}
   ).trim()
 

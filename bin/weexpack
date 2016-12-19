@@ -1,62 +1,12 @@
 #!/usr/bin/env node
 
-function isValidCommand(command) {
-  return command === 'init' || command === 'run' || command === 'build' || command === "create"
-}
-
-console.log(process.argv[2]);
-if (!isValidCommand(process.argv[2])) {
-  pluginTest();
-}else {
-  weexpackUnplugin();
-}
-
-/*
-if (!isValidCommand(program.args[0])) {
-  console.log()
-  console.log(`  ${chalk.red('Unknown command:')} ${chalk.yellow(program.args[0])}`)
-  program.help()
-  process.exit()
-}
-*/
-
-function weexpackUnplugin() {
-  const program = require('commander')
-  const chalk = require('chalk')
-
-  program
-    .version(require('../package').version)
-    .usage('<command> [options]')
-    .command('init [name]', 'initialize a standard weex project')
-    .command('run [platform]', 'run weex app on the specific platform')
-    .command('build [platform]', 'build weex app generator package(apk or ipa)')
-    .command('create [pluginID]', 'create weex plugin template')
-    .parse(process.argv)
-}
-
-function pluginTest() {
-  console.log(process.cwd())
-  if (0) {
-    var ts = [];
-    addTs = function(name) {
-      ts.push([name, new Date]);
-    }
-    process.on('exit', function() {
-      for (var i = 0; i < ts.length - 1; ++i) {
-        var e1 = ts[i];
-        var e2 = ts[i+1];
-        console.log(e1[0] + ' -> ' + e2[0] + ' = ' + (e2[1] - e1[1]));
-      }
-      console.log('total: ' + (ts[ts.length-1][1] - ts[0][1]));
-    });
-  } else {
-    addTs = function() {};
-  }
-
-  addTs('start');
-  var cli = require('../src/cli');
-  cli(process.argv);
-  // var argvAry = ["/Users/yangshengtao/.nvm/versions/node/v6.2.0/bin/node","/Users/yangshengtao/Desktop/git_repo/weex-pack/bin/weexpack",'plugin','add','/Users/yangshengtao/Desktop/weex-plugin-eventmodule','--save'];
-  // cli(argvAry);
-  addTs('end');
-}
+const program = require('commander')
+const chalk = require('chalk')
+program
+  .version(require('../package').version)
+  .usage('<command> [options]')
+  .command('init [name]', 'initialize a standard weex project')
+  .command('run [platform]', 'run weex app on the specific platform')
+  .command('build [platform]', 'build weex app generator package(apk or ipa)')
+  .command('plugin [command]', 'command for add or create and publish weex plugins')
+  .parse(process.argv)
