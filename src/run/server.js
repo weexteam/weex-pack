@@ -15,12 +15,14 @@ function startJSServer() {
   }
   if (!occupied) {
     try {
-      child_process.exec(process.platform==='win32'?'start start.bat':`open ./start`, {encoding: 'utf8'});
+        child_process.exec(process.platform==='win32'?'start start.bat':`open ./start`, {encoding: 'utf8'})
     }
     catch (e){
       console.error(e);
     }
+
   }
+  return occupied;
 }
 
 module.exports = startJSServer

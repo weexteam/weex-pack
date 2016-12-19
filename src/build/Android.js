@@ -159,7 +159,8 @@ function reverseDevice({device, options}) {
     try {
       child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, {encoding: 'utf8'})
     } catch (e) {
-      reject()
+      console.error('reverse error[ignored]');
+      resolve({device, options})
     }
 
     resolve({device, options})

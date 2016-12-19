@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
@@ -62,6 +62,7 @@
     "prompt": "^1.0.0",
     "properties-parser": "0.2.3",
     "q": "1.0.1",
+    "opener": "^1.4.2",
     "recursive-copy": "^2.0.5",
     "request": "2.47.0",
     "semver": "^4.3.x",
