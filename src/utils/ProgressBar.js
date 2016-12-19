@@ -27,7 +27,7 @@ class ProgressBar {
       }
       if (completed <= duration) {
         gauge.show(this.title, completed / duration * factor);
-        if (Math.random() * 10 < 4&&completed < duration) {
+        if (Math.random() * 10 < 6&&completed < duration) {
           completed += interval;
         }
       }

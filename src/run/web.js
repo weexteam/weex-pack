@@ -3,7 +3,8 @@ const path = require('path')
 const chalk = require('chalk')
 const child_process = require('child_process')
 const startJSServer = require('./server')
-
+const util = require('../utils')
+const opener = require('opener');
 /**
  * Start web service
  * @param {Object} options
@@ -20,9 +21,16 @@ function runWeb(options) {
   console.log()
   console.log(` => ${chalk.blue.bold('Starting web service')}`)
 
+  util.buildJS().then(function () {
+    let exist = startJSServer();
+    //没办法无法预知服务器啥时候完成
+    setTimeout(function () {
+      preview()
+    }, exist ? 0 : 2000)
 
-  startJSServer()
-  preview()
+
+  })
+
 }
 
 /**
@@ -31,7 +39,7 @@ function runWeb(options) {
  */
 function checkWebEnv(cwd) {
   return fs.existsSync(path.join(cwd, 'package.json'))
-      && fs.existsSync(path.join(cwd, 'web'))
+    && fs.existsSync(path.join(cwd, 'web'))
 }
 
 /**
@@ -40,6 +48,8 @@ function checkWebEnv(cwd) {
 function preview() {
   console.log(` => ${chalk.green('server is running')}`)
   console.log(`    please open ${chalk.cyan('http://localhost:8080/web/index.html')}`)
+  opener('http://localhost:8080/web/index.html');
+
 
   // open url in browser
   // try {

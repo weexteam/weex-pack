@@ -32,7 +32,7 @@ var path = require('path'),
     pkg = require('../package.json'),
     telemetry = require('./telemetry'),
     Q = require('q');
-var { prefix } = require('./utils/npm'); 
+var { prefix } = require('./utils/npm');
 
 var cordova_lib = require('cordova-lib'),
     CordovaError = cordova_lib.CordovaError,
@@ -90,9 +90,9 @@ module.exports = function (inputArgs, cb) {
      * mainly used for testing.
      */
     cb = cb || function(){};
-    
+
     init();
-    
+
     // If no inputArgs given, use process.argv.
     inputArgs = inputArgs || process.argv;
     var cmd = inputArgs[2]; // e.g: inputArgs= 'node cordova run ios'
@@ -105,20 +105,20 @@ module.exports = function (inputArgs, cb) {
     } else if(!cmd || cmd === '--help' || cmd === 'h') {
         cmd = 'help';
     }
-            
+
     Q().then(function() {
-        
+
         /**
          * Skip telemetry prompt if:
          * - CI environment variable is present
          * - Command is run with `--no-telemetry` flag
          * - Command ran is: `cordova telemetry on | off | ...`
          */
-        
+
         if(telemetry.isCI(process.env) || telemetry.isNoTelemetryFlag(inputArgs)) {
             return Q(false);
         }
-        
+
         /**
          * We shouldn't prompt for telemetry if user issues a command of the form: `cordova telemetry on | off | ...x`
          * Also, if the user has already been prompted and made a decision, use his saved answer
@@ -127,11 +127,11 @@ module.exports = function (inputArgs, cb) {
             var isOptedIn = telemetry.isOptedIn();
             return handleTelemetryCmd(subcommand, isOptedIn);
         }
-        
+
         if(telemetry.hasUserOptedInOrOut()) {
             return Q(telemetry.isOptedIn());
         }
-        
+
         /**
          * Otherwise, prompt user to opt-in or out
          * Note: the prompt is shown for 30 seconds. If no choice is made by that time, User is considered to have opted out.
@@ -168,18 +168,18 @@ function getSubCommand(args, cmd) {
        // 'telemetry'
     ];
     if(subCommands.indexOf(cmd)) {
-        return args[3]; 
+        return args[3];
     }
     return null;
 }
 
 function handleTelemetryCmd(subcommand, isOptedIn) {
-    
+
     if (subcommand !== 'on' && subcommand !== 'off') {
         logger.subscribe(events);
         return help(['telemetry']);
     }
-    
+
     var turnOn = subcommand === 'on' ? true : false;
     var cmdSuccess = true;
 
@@ -203,11 +203,11 @@ function handleTelemetryCmd(subcommand, isOptedIn) {
         telemetry.track('telemetry', 'off', 'via-cordova-telemetry-cmd', cmdSuccess ? 'successful': 'unsuccessful');
         return Q();
     }
-    
+
     if(isOptedIn) {
         telemetry.track('telemetry', 'on', 'via-cordova-telemetry-cmd', cmdSuccess ? 'successful' : 'unsuccessful');
     }
-    
+
     return Q();
 }
 
@@ -255,7 +255,6 @@ function cli(inputArgs) {
     checkForUpdates();
 
     var args = nopt(knownOpts, shortHands, inputArgs);
-
     // For CordovaError print only the message without stack trace unless we
     // are in a verbose mode.
     process.on('uncaughtException', function(err) {
@@ -296,7 +295,7 @@ function cli(inputArgs) {
         }
     }
 
-    if (/^v0.\d+[.\d+]*/.exec(process.version)) { // matches v0.* 
+    if (/^v0.\d+[.\d+]*/.exec(process.version)) { // matches v0.*
         var msg = 'Warning: using node version ' + process.version +
                 ' which has been deprecated. Please upgrade to the latest node version available (v6.x is recommended).';
         logger.warn(msg);
@@ -347,7 +346,7 @@ function cli(inputArgs) {
         nohooks: args.nohooks || [],
         searchpath : args.searchpath
     };
-    
+
     var cmdList = [
       'emulate',
      // 'build',
