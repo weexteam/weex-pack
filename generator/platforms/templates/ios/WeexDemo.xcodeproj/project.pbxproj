@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0A25ADF81DD9D8DB00CDB7B0 /* WeexSDKManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A25ADF71DD9D8DB00CDB7B0 /* WeexSDKManager.m */; };
 		0A43356B1E02765C00C8A778 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A43356A1E02765C00C8A778 /* Info.plist */; };
+		0A4A05F91E0405070046E1BE /* UIViewController+WXDemoNaviBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A05F41E0405070046E1BE /* UIViewController+WXDemoNaviBar.m */; };
+		0A4A05FA1E0405070046E1BE /* WXDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A05F61E0405070046E1BE /* WXDemoViewController.m */; };
+		0A4A05FB1E0405070046E1BE /* WXScannerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A4A05F81E0405070046E1BE /* WXScannerVC.m */; };
 		0A8B0B051DDAA81C006848F4 /* WeexPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B0B041DDAA81C006848F4 /* WeexPlugin.m */; };
 		0A8B0B081DDAADBB006848F4 /* WeexConfigParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A8B0B071DDAADBB006848F4 /* WeexConfigParser.m */; };
 		0AE277DC1DE56A5600C6D86A /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0AE277DB1DE56A5600C6D86A /* config.xml */; };
@@ -48,6 +51,12 @@
 		0A25ADF61DD9D8DB00CDB7B0 /* WeexSDKManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeexSDKManager.h; path = WeexConfig/WeexSDKManager.h; sourceTree = "<group>"; };
 		0A25ADF71DD9D8DB00CDB7B0 /* WeexSDKManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeexSDKManager.m; path = WeexConfig/WeexSDKManager.m; sourceTree = "<group>"; };
 		0A43356A1E02765C00C8A778 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0A4A05F31E0405070046E1BE /* UIViewController+WXDemoNaviBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+WXDemoNaviBar.h"; sourceTree = "<group>"; };
+		0A4A05F41E0405070046E1BE /* UIViewController+WXDemoNaviBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+WXDemoNaviBar.m"; sourceTree = "<group>"; };
+		0A4A05F51E0405070046E1BE /* WXDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXDemoViewController.h; sourceTree = "<group>"; };
+		0A4A05F61E0405070046E1BE /* WXDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXDemoViewController.m; sourceTree = "<group>"; };
+		0A4A05F71E0405070046E1BE /* WXScannerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXScannerVC.h; sourceTree = "<group>"; };
+		0A4A05F81E0405070046E1BE /* WXScannerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXScannerVC.m; sourceTree = "<group>"; };
 		0A8B0B031DDAA81C006848F4 /* WeexPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeexPlugin.h; path = WeexConfig/WeexPlugin.h; sourceTree = "<group>"; };
 		0A8B0B041DDAA81C006848F4 /* WeexPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WeexPlugin.m; path = WeexConfig/WeexPlugin.m; sourceTree = "<group>"; };
 		0A8B0B061DDAADBB006848F4 /* WeexConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WeexConfigParser.h; path = WeexConfig/WeexConfigParser.h; sourceTree = "<group>"; };
@@ -126,6 +135,19 @@
 				0A8B0B071DDAADBB006848F4 /* WeexConfigParser.m */,
 			);
 			name = WeexConfig;
+			sourceTree = "<group>";
+		};
+		0A4A05F21E0405070046E1BE /* WeexScanner */ = {
+			isa = PBXGroup;
+			children = (
+				0A4A05F31E0405070046E1BE /* UIViewController+WXDemoNaviBar.h */,
+				0A4A05F41E0405070046E1BE /* UIViewController+WXDemoNaviBar.m */,
+				0A4A05F51E0405070046E1BE /* WXDemoViewController.h */,
+				0A4A05F61E0405070046E1BE /* WXDemoViewController.m */,
+				0A4A05F71E0405070046E1BE /* WXScannerVC.h */,
+				0A4A05F81E0405070046E1BE /* WXScannerVC.m */,
+			);
+			path = WeexScanner;
 			sourceTree = "<group>";
 		};
 		327BB19797F63D5309FB91BF /* Frameworks */ = {
@@ -217,6 +239,7 @@
 		D5ADF0861C77133B00597CA6 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				0A4A05F21E0405070046E1BE /* WeexScanner */,
 				0A25ADF51DD9D85200CDB7B0 /* WeexConfig */,
 				775BEE811C1E8ECC008D1629 /* AppDelegate.h */,
 				775BEE821C1E8ECC008D1629 /* AppDelegate.m */,
@@ -547,8 +570,11 @@
 			files = (
 				0A8B0B081DDAADBB006848F4 /* WeexConfigParser.m in Sources */,
 				0A8B0B051DDAA81C006848F4 /* WeexPlugin.m in Sources */,
+				0A4A05FB1E0405070046E1BE /* WXScannerVC.m in Sources */,
+				0A4A05FA1E0405070046E1BE /* WXDemoViewController.m in Sources */,
 				0A25ADF81DD9D8DB00CDB7B0 /* WeexSDKManager.m in Sources */,
 				775BEE831C1E8ECC008D1629 /* AppDelegate.m in Sources */,
+				0A4A05F91E0405070046E1BE /* UIViewController+WXDemoNaviBar.m in Sources */,
 				775BEE801C1E8ECC008D1629 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
