@@ -12,8 +12,8 @@ exports.publish = function publish(tnpm, verbose, dir) {
       pb.complete(function () {
         if (error) {
           console.log();
-          let err = verbose ? stderr.toString() : stderr.toString().split('\n')[0].replace(/npm ERR! /ig, '');
-          console.log(err);
+          console.log(stderr.toString().match(/\n[^\n]+\n/));
+
           console.log();
           return;
         }
