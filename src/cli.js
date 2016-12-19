@@ -255,7 +255,6 @@ function cli(inputArgs) {
     checkForUpdates();
 
     var args = nopt(knownOpts, shortHands, inputArgs);
-    console.log(args);
     // For CordovaError print only the message without stack trace unless we
     // are in a verbose mode.
     process.on('uncaughtException', function(err) {
