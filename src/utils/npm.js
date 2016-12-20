@@ -3,7 +3,7 @@
  */
 const child_process = require('child_process');
 const ProgressBar = require('./ProgressBar');
-
+const Chalk = require('chalk');
 exports.publish = function publish(tnpm, verbose, dir) {
   let pb = new ProgressBar(3000, 'publish', 'uploading...');
   let cmd = tnpm ? 'tnpm' : 'npm';
@@ -12,12 +12,12 @@ exports.publish = function publish(tnpm, verbose, dir) {
       pb.complete(function () {
         if (error) {
           console.log();
-          let match=stderr.toString().match(/\n\n([^\n]+)\n/);
+          let match=stderr.toString().replace(/npm ERR! /g,'').match(/\n\n([\s\w\W]+?)\n\n/);
           if(match[1]){
-            console.error(chalk.red(match[1].replace(/nnpm ERR!|"/g,'')))
+            console.error(Chalk.red(match[1]))
           }
           else{
-            console.error(chalk.red(stderr.toString()))
+            console.error(Chalk.red(stderr.toString()))
           }
           console.log();
          return  resolve(false);

@@ -18,7 +18,13 @@ module.exports = function (ali) {
     console.log();
     process.exit();
   }
-  var packageJSON = require('../../package.json');
+  var weexpackCache;
+  if(Fs.existsSync('./.weexpack.cache')){
+    weexpackCache=JSON.parse(Fs.readFileSync('./.weexpack.cache').toString());
+  }
+  else{
+    weexpackCache={latest:'0.0.0'};
+  }
   var package = {};
   package.name = Npm.prefix + plugin.id;
   package.version = plugin.version;
@@ -32,11 +38,14 @@ module.exports = function (ali) {
       registry: 'http://registry.npm.alibaba-inc.com'
     }
   }
-  if (package.version > packageJSON.version) {
+  if (package.version > weexpackCache.latest) {
     Fs.writeFileSync('./package.json', JSON.stringify(package, null, 4));
     Npm.publish(ali, true).then(function (success) {
       if (success) {
+        weexpackCache.latest=package.version;
         Market.publish(package.name, package.version);
+        Fs.writeFileSync('./.weexpack.cache',JSON.stringify(weexpackCache,null,4));
+
       }
 
     })
