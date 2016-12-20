@@ -16,7 +16,7 @@ function runAndroid(options) {
   utils.buildJS()
     .then(()=> {
       return new Promise((resolve, reject)=> {
-        copy('./dist/', 'android/playground/app/src/main/assets/dist', {overwrite: true}, function (err) {
+        copy('./dist/', 'platforms/android/app/src/main/assets/dist', {overwrite: true}, function (err) {
           if (err) return reject(err);
           else resolve();
         })
@@ -51,7 +51,7 @@ function prepareAndroid({options}) {
     const rootPath = process.cwd()
 
     if (!utils.checkAndroid(rootPath)) {
-      console.log()
+      console.log(rootPath)
       console.log(chalk.red('  Android project not found !'))
       console.log()
       console.log(`  You should run ${chalk.blue('weexpack init')} first`)
@@ -62,7 +62,7 @@ function prepareAndroid({options}) {
     console.log(` => ${chalk.blue.bold('Will start Android app')}`)
 
     // change working directory to android
-    process.chdir(path.join(rootPath, 'android/playground'))
+    process.chdir(path.join(rootPath, 'platforms/android'))
 
     if (!process.env.ANDROID_HOME) {
       console.log()
