@@ -6,7 +6,7 @@ const path = require('path')
  * @param {String} root directory path
  */
 function checkAndroid(cwd) {
-  return fs.existsSync(path.join(cwd, 'android/playground/gradlew'))
+  return fs.existsSync(path.join(cwd, 'platforms/android/gradlew'))
 }
 
 /**
