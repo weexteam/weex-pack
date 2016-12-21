@@ -1,0 +1,16 @@
+include ':app'
+
+//include ":weex_sdk"
+//project(":weex_sdk").projectDir=new File("../sdk")
+
+//include ":inspector"
+//project(":inspector").projectDir=new File("../inspector")
+
+include ":appframework"
+
+//include ":weex_debug"
+//project(":weex_debug").projectDir=new File("../weex_debug")
+
+//include ":gcanvas_library"
+
+//include ":gcanvas_weex_plugin"

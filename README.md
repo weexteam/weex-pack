@@ -8,8 +8,8 @@ weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简�
 
 ### 前期环境要求
 
- - 目前只支持 Mac 平台。
- - 配置 [Node.js][1] 环境，并且安装 [npm][2] 包管理器。
+ - 目前支持 Mac、windows、linux平台(windows下仅能打包android)。
+ - 配置 [Node.js][1] 环境，并且安装 [npm][2] 包管理器。(`需要node6.0+`)
  - 配置 iOS 开发环境：
      - 安装 [Xcode IDE][3] ，启动一次 Xcode ，使 Xcode 自动安装开发者工具和确认使用协议。
      - 安装 cocoaPods
@@ -17,6 +17,7 @@ weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简�
     - 安装 [Android Studio][4] 并打开，新建项目。上方菜单栏，打开 [AVD Manager][5] ，新建 Android 模拟器并启动 。（如果有安装 [Docker][6] ，请关闭 Docker Server 。）
     - 或者 只下载 [Android SDK][7] ， 命令行运行 [AVD Manager][8] ，新建 Android 模拟器并启动。
     - 保证Android build-tool的版本为23.0.2
+
 ### 使用方法
 
 首先，全局安装 weex-pack 命令：
@@ -68,7 +69,7 @@ weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取�
 
 **注：证书需要预先安装到keychain中，在keychain中点击右键获取证书id（证书名称），provisioning profile文件（*mobileprovision）需要获取UUID，进入[目录](https://github.com/weexteam/weex-pack/tree/master/generator/ios) 可以看到mobileprovision_UUID.sh文件，此文件可以获取到UUID**
 
-mobileprovision_UUID.sh用法如下：  
+mobileprovision_UUID.sh用法如下：
 $  ./mobileprovision_UUID.sh   \*mobileprovision,参数（\*mobileprovision）为provisioning profile文件路径
 
 ## Android平台打包&运行
@@ -92,6 +93,32 @@ android的打包和构建是一体的 ：
 
     $ weexpack run web
 
+## 示例
+[使用Weexpack打包出一个Weex版的 《One App》](https://github.com/weexteam/weex-pack/wiki/Create-Weex-One-App-with-Weexpack)
+
+
+## changelog
+
+0.2.4
+* 修复weexpack run web的bug 并且加了自动打开浏览器的功能
+
+0.2.3
+* suppress adb reverse error(android 5.0- will cause error)
+
+0.2.2
+* 更换copy库 之前用的库还是存在windows的兼容问题，被坑了。
+
+0.2.1
+* 修复windows平台的bug 重新用bat重写了start脚本
+* 修复了错误把build文件夹ignore的问题。
+
+0.2.0
+* 优化操作流程，去掉了以前会重复出现的server窗口
+* 修复个别打包失败的错误 增强稳定性
+* 消除ios-deploy的依赖，只在ios打包时再动态安装ios-deploy
+* 修复了EI Capitan系统下安装失败的问题
+* 支持windows，不再依赖ios相关的环境
+* 以WeexOne作为测试用例
 
 
   [1]: https://nodejs.org/

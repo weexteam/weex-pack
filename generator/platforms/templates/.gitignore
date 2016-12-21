@@ -1,0 +1,30 @@
+# Created by IDE
+.idea/
+*.iml
+
+# Created by Builder
+examples/build
+test/build
+weex_tmp
+coverage
+dist
+
+# Node
+logs
+*.log
+npm-debug.log*
+node_modules
+.npm
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# build framework options by script
+html5/runtime/config.js
+
+# e2e test
+html5/test/e2e/reports
+html5/test/e2e/screenshots
+html5/test/e2e/logs

@@ -21,11 +21,16 @@ module.exports = yeoman.Base.extend({
 
     // compose with Android and iOS generator
     const args = { args: arguments[0], options: this.options }
-    this.composeWith('weex:android', args, {
-      local: require.resolve(path.resolve(__dirname, 'android'))
-    })
-    this.composeWith('weex:ios', args, {
-      local: require.resolve(path.resolve(__dirname, 'ios'))
+    // WEEX_HOOK_START
+    // this.composeWith('weex:android', args, {
+    //   local: require.resolve(path.resolve(__dirname, 'android'))
+    // })
+    // this.composeWith('weex:ios', args, {
+    //   local: require.resolve(path.resolve(__dirname, 'ios'))
+    // })
+    // WEEX_HOOK_END
+    this.composeWith('weex:platforms', args, {
+      local: require.resolve(path.resolve(__dirname, 'platforms'))
     })
   },
 
@@ -42,10 +47,14 @@ module.exports = yeoman.Base.extend({
     copy('README.md')
     copy('webpack.config.js')
     copy('start')
+    copy('start.bat')
     copy('src/index.we')
     copy('web/index.html')
     copy('android.config.json')
     copy('ios.config.json')
+    copy('config.xml')
+    copy('hooks/')
+    copy('plugins/')
 
     utils.copyAndReplace(
       this.templatePath('package.json'),

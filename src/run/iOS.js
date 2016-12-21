@@ -11,19 +11,28 @@ const {Config,iOSConfigResolver} = require('../utils/config')
  * @param {Object} options
  */
 function runIOS(options) {
-  utils.buildJS()
+  utils.checkAndInstallForIosDeploy()
+    .then(utils.buildJS)
+    .then(()=>{
+      return utils.exec('rsync  -r -q ./dist/* platforms/ios/bundlejs/')
+    })
     .then(()=> {
       startJSServer()
       return {options}
     }).then(prepareIOS)
-    // .then(installDep)
+     .then(installDep)
     .then(findIOSDevice)
     .then(chooseDevice)
     .then(buildApp)
     .then(runApp)
     .catch((err) => {
       if (err) {
-        console.log(err)
+        try {
+          console.log(err.stderr)
+          console.log(err.output.join('\n'))
+        }catch(e){
+          console.log(e);
+        }
       }
     })
 }
@@ -44,7 +53,7 @@ function prepareIOS({options}) {
     }
 
     // change working directory to ios
-    process.chdir(path.join(rootPath, 'ios/playground'))
+    process.chdir(path.join(rootPath, 'platforms/ios'))
 
     const xcodeProject = utils.findXcodeProject(process.cwd())
 
@@ -263,7 +272,7 @@ function _runAppOnSimulator({device, xcodeProject, options, resolve, reject}) {
   } catch (e) {
     reject(e)
   }
-
+  console.log('Success!')
   resolve()
 }
 
@@ -304,6 +313,7 @@ function _runAppOnDevice({device, xcodeProject, options, resolve, reject}) {
   } catch (e) {
     reject(e)
   }
+  console.log('Success!')
   // reject('Weex-Pack don\'t support run on real device. see you next version!')
 }
 

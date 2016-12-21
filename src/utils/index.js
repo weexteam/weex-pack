@@ -3,6 +3,7 @@ const path = require('path')
 const output = require('./output')
 const validator = require('./validator')
 const child_process = require('child_process')
+const os =require('os')
 const utils = {
 
   copyAndReplace(src, dest, replacements) {
@@ -86,23 +87,26 @@ const utils = {
     }
     return devices;
   },
-  exec(command){
+  exec(command,quiet){
     return new Promise((resolve, reject)=> {
       try {
         let child = child_process.exec(command, {encoding: 'utf8'}, function () {
           resolve();
         })
-        child.stdout.pipe(process.stdout);
+        if(!quiet){
+          child.stdout.pipe(process.stdout);
+        }
         child.stderr.pipe(process.stderr);
       }catch(e){
+        console.error('execute command failed :',command);
         reject(e);
       }
     })
 
   },
   buildJS(){
-    return this.exec('npm install').then(()=> {
-      return this.exec('npm run build')
+    return utils.exec('npm install',true).then(()=> {
+      return utils.exec('npm run build')
     })
   },
   getIOSProjectInfo(){
@@ -114,6 +118,28 @@ const utils = {
     projectInfo.configurations=splits[2]?splits[2].split('\n').filter((e,i)=>!!e.trim()&&i<3).map(e=>e.trim()):[];
     projectInfo.schemes=splits[3]?splits[3].split('\n').filter(e=>!!e.trim()).map(e=>e.trim()):[];
     return {project:projectInfo}
+  },
+  checkAndInstallForIosDeploy(){
+    let hasIosDeploy=fs.existsSync('./node_modules/.bin/ios-deploy');
+    if(!hasIosDeploy) {
+      let args='';
+      if(process.platform==='win32'){
+        console.log('run ios unsupported on windows');
+        process.exit(1);
+      }
+      if (os.release() >= '15.0.0') {
+        args=' --unsafe-perm=true --allow-root'
+      }
+      return this.exec(__dirname+'/installIosDeploy.sh'+args)
+    }
+    else {
+      return Promise.resolve();
+    }
+  },
+  xcopy(source,dest){
+    if(process.platform==='win32'){
+      cmd
+    }
   }
 }
 

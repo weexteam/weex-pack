@@ -1,0 +1,14 @@
+{
+  "name": "template",
+  "version": "1.0.0",
+  "description": "Apache Cordova Application",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apache/cordova-app-hello-world.git"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "preinstall": "echo \"Yay npm preinstall script\" ",
+    "postinstall": "echo \"Yay npm postinstall script\" "
+  }
+}

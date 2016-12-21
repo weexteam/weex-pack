@@ -2,20 +2,21 @@
 
 const program = require('commander')
 const chalk = require('chalk')
-
+const cli = require('../src/cli')
 program
   .version(require('../package').version)
   .usage('<command> [options]')
   .command('init [name]', 'initialize a standard weex project')
   .command('run [platform]', 'run weex app on the specific platform')
-  .command('build [platform]', 'abc')
-  .parse(process.argv)
-function isValidCommand(command) {
-  return command === 'init' || command === 'run' || command === 'build'
-}
-if (!isValidCommand(program.args[0])) {
-  console.log()
-  console.log(`  ${chalk.red('Unknown command:')} ${chalk.yellow(program.args[0])}`)
-  program.help()
-  process.exit()
-}
+  .command('build [platform]', 'build weex app generator package(apk or ipa)')
+  .command('plugin [command]', 'command for add or create and publish weex plugins')
+program.command('*')
+  .description('')
+  .action(function (cmd) {
+    if(!/init|run|build|plugin/.test(cmd)) {
+      cli(process.argv);
+    }
+  });
+program.parse(process.argv)
+
+

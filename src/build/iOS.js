@@ -11,13 +11,17 @@ const startJSServer = require('../run/server')
  * @param {Object} options
  */
 function buildIOS(options) {
-
-  utils.buildJS()
+  utils.checkAndInstallForIosDeploy()
+    .then(utils.buildJS)
+    .then(()=>{
+      return utils.exec('rsync  -r -q ./dist/* platforms/ios/bundlejs/')
+    })
     .then(()=>{
       startJSServer()
       return {options}
-    }).then(prepareIOS)
-    // .then(installDep)
+    })
+    .then(prepareIOS)
+    .then(installDep)
     .then(resolveConfig)
     .then(doBuild)
     .catch((err) => {
@@ -43,7 +47,8 @@ function prepareIOS({options}) {
     }
 
     // change working directory to ios
-    process.chdir(path.join(rootPath, 'ios/playground'))
+    // process.chdir(path.join(rootPath, 'ios/playground'))
+    process.chdir(path.join(rootPath, 'platforms/ios'))
 
     const xcodeProject = utils.findXcodeProject(process.cwd())
 

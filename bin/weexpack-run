@@ -9,6 +9,7 @@ const runWeb = require('../src/run/web')
 program
   .usage('<platform> [options]')
   .option('-c, --config [path]', 'specify the configuration file')
+  .option('-C, --clean','clean project before build android app')
   .parse(process.argv)
 
 function printExample() {
@@ -19,6 +20,9 @@ function printExample() {
   console.log()
   console.log(chalk.grey('    # run weex iOS project'))
   console.log('    $ ' + chalk.blue('weexpack run ios'))
+  console.log()
+  console.log(chalk.grey('    # run weex web'))
+  console.log('    $ ' + chalk.blue('weexpack run web'))
   console.log()
 }
 
@@ -50,13 +54,12 @@ if (program.args.length < 1) {
 }
 
 if (isValidPlatform(program.args)) {
-
   // TODO: parse config file
-  run(program.args[0], program.config)
+  run(program.args[0], {configPath:program.config,clean:program.clean})
 
 } else {
   console.log()
-  console.log(`  ${chalk.red('Unknown platform:')} ${chalk.yellow(program.args[0])}`)
+  console.log(`${chalk.red('Unknown platform:')} ${chalk.yellow(program.args[0])}`)
   console.log()
   printExample()
   process.exit()
