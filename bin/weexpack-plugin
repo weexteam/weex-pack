@@ -39,7 +39,6 @@ program
         }
       }
     });
-    console.log(args)
     cli(args);
   });
 program.parse(process.argv);
