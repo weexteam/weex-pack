@@ -445,7 +445,7 @@ function cli(inputArgs) {
                             , shrinkwrap: args.shrinkwrap || false
                             , force: args.force || false
                             };
-        if(!/[\.\/]+/.test(targets)) {
+        if(!/[\.\/]+/.test(targets)&&subcommand==='add') {
           targets = prefix + targets;
         }
         return cordova.raw[cmd](subcommand, targets, download_opts);

@@ -10,9 +10,13 @@ program
   .command('run [platform]', 'run weex app on the specific platform')
   .command('build [platform]', 'build weex app generator package(apk or ipa)')
   .command('plugin [command]', 'command for add or create and publish weex plugins')
-  program.command('platform')
+program.command('*')
   .description('')
   .action(function (cmd) {
+    if(!/init|run|build|plugin/.test(cmd)) {
       cli(process.argv);
-  })
+    }
+  });
 program.parse(process.argv)
+
+

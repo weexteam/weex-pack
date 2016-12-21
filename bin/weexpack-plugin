@@ -9,6 +9,7 @@ program
   .command('create [plugin_name]')
   .description('create a empty plugin project')
   .action(function (pluginName) {
+
     if (pluginName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
       create(pluginName, program.config)
     } else {
@@ -19,33 +20,7 @@ program
   });
 program
   .option('--ali', 'publish to alibaba internal market(only for alibaba internal network)')
-  .option('-d,--verbose')
-  .option('-v,--version')
-  .option('--help')
-  .option('--silent')
-  .option('--experimental')
-  .option('--noregistry')
-  .option('--nohooks')
-  .option('--shrinkwrap')
-  .option('-s,--copy-from [copy-from]')
-  .option('--link-to')
-  .option('--searchpath [searchpath]')
-  .option('--variable')
-  .option('--link')
-  .option('--force')
-  .option('--debug')
-  .option('--release')
-  .option('--archs [archs]')
-  .option('--device')
-  .option('--emulator')
-  .option('--target [target]')
-  .option('--browserify')
-  .option('--noprepare')
-  .option('--fetch')
-  .option('--nobuild')
-  .option('--list')
-  .option('--buildConfig [buildConfig]')
-  .option('-t,--template [template]')
+
   .command('publish')
   .description('publish current plugin')
   .action(function () {
@@ -55,14 +30,18 @@ program
   .command('*')
   .description('setup specific plugin into your project')
   .action(function (pluginName) {
-    var arr = process.argv.slice(0, 2);
-    arr.push('plugin');
-    arr = arr.concat(process.argv.slice(2));
-    cli(arr);
+    let args=[];
+    process.argv.forEach(function(arg,i){
+      if(arg!='[object Object]') {//fix commander’s bug
+        args.push(arg);
+        if (i == 1) {
+          args.push('plugin');
+        }
+      }
+    });
+    console.log(args)
+    cli(args);
   });
 program.parse(process.argv);
 
-if (program.args.length < 1) {
-  program.help();
-  process.exit();
-}
+

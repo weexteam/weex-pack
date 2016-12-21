@@ -118,9 +118,13 @@ const replacer = {
     let r = new RegExp('(<key>' + key + '</key>\\s*<string>)[^<>]*?<\/string>', 'g');
     return source.replace(r, '$1' + value + '</string>')
   },
-  xml(source, key, value, type = 'string'){
-    let r = new RegExp(`<${type} name="${key}">[^<]+?</${type}>`, 'g');
-    return source.replace(r, `<${type} name="${key}">${value}</${type}>`);
+  xmlTag(source, key, value, tagName = 'string'){
+    let r = new RegExp(`<${tagName} name="${key}">[^<]+?</${tagName}>`, 'g');
+    return source.replace(r, `<${tagName} name="${key}">${value}</${tagName}>`);
+  },
+  xmlAttr(source, key, value, tagName = 'string'){
+    let r = new RegExp(`<${tagName} name="${key}"\\s* value="[^"]*?"\\s*/>`, 'g');
+    return source.replace(r, `<${tagName} name="${key}" value="${value}"/>`);
   },
   regexp(source, regexp, value){
     return source.replace(regexp, function (m, a, b) {
@@ -132,7 +136,7 @@ const replacer = {
 exports.Config = Config;
 exports.ConfigResolver = ConfigResolver;
 exports.androidConfigResolver = new ConfigResolver({
-  'app/build.gradle': {
+  'build.gradle': {
     AppId: {
       type: 'regexp',
       key: /(applicationId ")[^"]*(")/g
@@ -140,26 +144,27 @@ exports.androidConfigResolver = new ConfigResolver({
   },
   'app/src/main/res/values/strings.xml': {
     AppName: {
-      type: 'xml',
+      type: 'xmlTag',
       key: 'app_name'
     },
     SplashText: {
-      type: 'xml',
+      type: 'xmlTag',
       key: 'dummy_content'
     }
   },
-  'app/src/main/res/xml/app_config.xml': {
+  'app/src/main/res/xml/config.xml': {
     WeexBundle: {
       handler: function (source, value, replacer) {
         if (/https?/.test(value)) {
-          source = replacer.xml(source, 'launch_locally', 'false', 'bool');
-          return replacer.xml(source, 'launch_url', value);
+          source = replacer.xmlAttr(source, 'launch_locally', 'false', 'preference');
+          return replacer.xmlAttr(source, 'launch_url', value,'preference');
         }
         else {
-          source = replacer.xml(source, 'launch_locally', 'true', 'bool');
+          source = replacer.xmlAttr(source, 'launch_locally', 'true', 'preference');
           let name=value.replace(/\.we$/, '.js');
           //Fs.writeFileSync(Path.join(process.cwd(), 'app/src/main/assets/'+name),Fs.readFileSync(Path.join(process.cwd(), '../../dist', name)));
-          return replacer.xml(source, 'local_url', 'file://assets/dist/'+name);
+
+          return replacer.xmlAttr(source, 'local_url', 'file://assets/dist/'+name,'preference');
         }
       }
     }
