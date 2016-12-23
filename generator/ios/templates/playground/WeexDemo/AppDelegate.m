@@ -18,6 +18,7 @@
 #import <WeexSDK/WeexSDK.h>
 #import <AVFoundation/AVFoundation.h>
 #import <ATSDK/ATManager.h>
+#import <TBWXDevTool/WXDevTool.h>
 
 @interface AppDelegate ()
 @end
@@ -32,6 +33,10 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
+#if TARGET_IPHONE_SIMULATOR
+    [WXDevTool launchDevToolDebugWithUrl:WXDEVTOOL_URL];
+#endif
+
     [self initWeexSDK];
     
     self.window.rootViewController = [[WXRootViewController alloc] initWithRootViewController:[self demoController]];
