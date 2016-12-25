@@ -1,24 +1,14 @@
 package com.alibaba.weex.commons.util;
 
 import android.content.Context;
-import android.content.res.XmlResourceParser;
-import android.util.Log;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Created by budao on 2016/10/12.
  */
 public class AppConfig {
   private static final String TAG = "AppConfig";
-  private static final boolean DEBUG = false;
-  private static HashMap<String, PluginEntry> sComponents = new HashMap<>();
-  private static HashMap<String, PluginEntry> sModules = new HashMap<>();
-  private static CordovaPreferences sPreferences = new CordovaPreferences();
+  private static AppPreferences sPreferences = new AppPreferences();
 
   public static void init(Context context) {
     loadAppSetting(context);
@@ -37,26 +27,8 @@ public class AppConfig {
   }
 
   private static void loadAppSetting(Context context) {
-    ConfigXmlParser parser = new ConfigXmlParser();
+    AppConfigXmlParser parser = new AppConfigXmlParser();
     parser.parse(context);
-    sComponents = parser.getPluginComponents();
-    sModules = parser.getPluginModules();
     sPreferences = parser.getPreferences();
-  }
-
-  public static HashMap<String, PluginEntry> getComponents() {
-    return sComponents;
-  }
-
-  public static void setComponents(HashMap<String, PluginEntry> components) {
-    AppConfig.sComponents = components;
-  }
-
-  public static HashMap<String, PluginEntry> getModules() {
-    return sModules;
-  }
-
-  public static void setModules(HashMap<String, PluginEntry> modules) {
-    AppConfig.sModules = modules;
   }
 }

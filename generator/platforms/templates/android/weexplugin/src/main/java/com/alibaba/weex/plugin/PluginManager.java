@@ -1,4 +1,4 @@
-package com.alibaba.weex.commons.util;
+package com.alibaba.weex.plugin;
 
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.common.WXException;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by budao on 2016/10/25.
  */
-public class ExtensionUtils {
+public class PluginManager {
   public static void registerComponent(String name, String className) {
     try {
       Class clazz = Class.forName(className);

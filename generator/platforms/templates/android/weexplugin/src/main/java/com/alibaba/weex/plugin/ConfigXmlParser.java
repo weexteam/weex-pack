@@ -17,19 +17,19 @@
        under the License.
 */
 
-package com.alibaba.weex.commons.util;
+package com.alibaba.weex.plugin;
 
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.alibaba.weex.plugin.PluginEntry;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,13 +37,8 @@ public class ConfigXmlParser {
   private static String TAG = "ConfigXmlParser";
 
   private String launchUrl = "file:///android_asset/www/index.html";
-  private CordovaPreferences prefs = new CordovaPreferences();
   private static HashMap<String, PluginEntry> sComponents = new HashMap<>(20);
   private static HashMap<String, PluginEntry> sModules = new HashMap<>(20);
-
-  public CordovaPreferences getPreferences() {
-    return prefs;
-  }
 
   public HashMap<String, PluginEntry> getPluginModules() {
     return sModules;
@@ -115,10 +110,6 @@ public class ConfigXmlParser {
         category = xml.getAttributeValue(null, "value");
       else if(paramType.equals("api"))
         api = xml.getAttributeValue(null, "value");
-    } else if (strNode.equals("preference")) {
-      String name = xml.getAttributeValue(null, "name").toLowerCase(Locale.ENGLISH);
-      String value = xml.getAttributeValue(null, "value");
-      prefs.set(name, value);
     } else if (strNode.equals("content")) {
       String src = xml.getAttributeValue(null, "src");
       if (src != null) {

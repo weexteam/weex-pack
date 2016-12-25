@@ -16,7 +16,7 @@
        specific language governing permissions and limitations
        under the License.
  */
-package com.alibaba.weex.commons.util;
+package com.alibaba.weex.plugin;
 
 import com.taobao.weex.common.IWXObject;
 import com.taobao.weex.common.WXModule;

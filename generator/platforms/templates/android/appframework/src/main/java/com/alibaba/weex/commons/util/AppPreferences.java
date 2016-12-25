@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class CordovaPreferences {
+public class AppPreferences {
     private HashMap<String, String> prefs = new HashMap<String, String>(20);
     private Bundle preferencesBundleExtras;
 

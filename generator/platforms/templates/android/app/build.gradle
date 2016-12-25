@@ -77,6 +77,7 @@ dependencies {
     // compile project(':weex_sdk')
     compile 'com.taobao.android:weex_sdk:0.8.0'
     compile project(':appframework')
+    compile project(':weexplugin')
 //    compile project(':gcanvas_weex_plugin')
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.squareup.okhttp:okhttp-ws:2.3.0'

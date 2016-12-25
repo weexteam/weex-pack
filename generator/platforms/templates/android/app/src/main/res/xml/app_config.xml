@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.example.myapp" version="1.0.0"
+        xmlns="http://www.w3.org/ns/widgets"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>Hello</name>
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="launch_locally" value="true" />
+    <preference name="launch_url" value="http://127.0.0.1:8080/dist/index.js"/>
+    <preference name="local_url" value="file://assets/index.js" />
 
-<app_config version="1">
-<bool name="launch_locally">true</bool>
-<string name="launch_url">http://127.0.0.1:8080/dist/index.js</string>
-<!--<string name="launch_url">http://30.30.29.7:8088/example/index.js</string>-->
-<string name="local_url">file://assets/index.js</string>
-
-<!--<component name="richtext">com.alibaba.weex.extend.component.RichText</component>-->
-
-<!--<module name="render">com.alibaba.weex.extend.module.RenderModule</module>-->
-<!--<module name="event">com.alibaba.weex.extend.module.WXEventModule</module>-->
-<!--<module name="myModule">com.alibaba.weex.extend.module.MyModule</module>-->
-<!--<module name="device">com.alibaba.weex.extend.module.DeviceModule</module>-->
-</app_config>
+</widget>
