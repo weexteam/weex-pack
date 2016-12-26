@@ -17,7 +17,7 @@ exports.publish = function (name, namespace, ali, version) {
         console.log();
         resolve()
       }
-      else if (res.data.code == 10004) {
+      else if(res.data.code == 10004) {
         console.log(chalk.red(`Market sync rejected! Namespace unmatched!`));
       }
     }).catch(function () {
