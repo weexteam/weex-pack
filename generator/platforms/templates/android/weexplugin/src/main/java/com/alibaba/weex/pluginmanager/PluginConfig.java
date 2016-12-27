@@ -1,4 +1,4 @@
-package com.alibaba.weex.plugin;
+package com.alibaba.weex.pluginmanager;
 
 import android.content.Context;
 

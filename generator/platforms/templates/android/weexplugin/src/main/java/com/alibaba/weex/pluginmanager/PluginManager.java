@@ -1,4 +1,4 @@
-package com.alibaba.weex.plugin;
+package com.alibaba.weex.pluginmanager;
 
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.common.WXException;

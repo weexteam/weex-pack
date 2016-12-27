@@ -27,19 +27,16 @@
     <feature name="richtext">
         <param name="api" value="richtext" />
         <param name="android-package" value="com.alibaba.weex.extend.component.RichText" />
-        <param name="onload" value="true" />
         <param name="category" value="component" />
     </feature>
     <feature name="render">
         <param name="api" value="render" />
         <param name="android-package" value="com.alibaba.weex.extend.module.RenderModule" />
-        <param name="onload" value="true" />
         <param name="category" value="module" />
     </feature>
     <feature name="event">
         <param name="api" value="event" />
         <param name="android-package" value="com.alibaba.weex.extend.module.WXEventModule" />
-        <param name="onload" value="true" />
         <param name="category" value="module" />
     </feature>
     <feature name="myModule">

@@ -17,13 +17,11 @@
        under the License.
 */
 
-package com.alibaba.weex.plugin;
+package com.alibaba.weex.pluginmanager;
 
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.alibaba.weex.plugin.PluginEntry;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

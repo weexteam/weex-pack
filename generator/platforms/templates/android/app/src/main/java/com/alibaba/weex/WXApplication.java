@@ -4,8 +4,8 @@ import android.app.Application;
 
 import com.alibaba.weex.commons.adapter.ImageAdapter;
 import com.alibaba.weex.commons.util.AppConfig;
-import com.alibaba.weex.plugin.PluginConfig;
-import com.alibaba.weex.plugin.PluginManager;
+import com.alibaba.weex.pluginmanager.PluginConfig;
+import com.alibaba.weex.pluginmanager.PluginManager;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
