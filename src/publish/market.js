@@ -2,6 +2,17 @@ const Url = require('url');
 const Http = require('http');
 const chalk = require('chalk');
 const crypto = require('crypto');
+const Fs=require('fs');
+const Path=require('path');
+const os=require('os');
+var _mapper={};
+const TMP_DIR=os.tmpDir();
+const CACHE_FILE_NAME='registry_map.json';
+try {
+  _mapper = JSON.parse(Fs.readFileSync(Path.join(TMP_DIR,CACHE_FILE_NAME )));
+}catch(e){
+
+}
 exports.domain = 'http://weex-market.taobao.net';
 exports.publish = function (name, namespace, ali, version) {
   return new Promise(function (resolve, reject) {
@@ -46,20 +57,34 @@ exports.apply = function (name, p) {
     })
   })
 };
-exports.info = function (name) {
-  return new Promise((resolve, reject)=> {
-    post(exports.domain + '/json/sync/info.json?name=' + name).then(function (res) {
-      if (res.success) {
-        resolve(res.data)
-      }
-      else {
-        reject(res);
-      }
+global.WeexMarket={};
 
-    }, function (e) {
-      reject(e);
+global.WeexMarket.info=exports.info = function (name) {
+  if(_mapper[name]){
+    return Promise.resolve(_mapper[name]);
+  }
+  else {
+    return new Promise((resolve, reject)=> {
+      post(exports.domain + '/json/sync/info.json?name=' + name).then(function (res) {
+        console.log(res);
+        if (res.success) {
+          _mapper[name]=res.data;
+          try {
+            Fs.writeFileSync(Path.join(TMP_DIR, CACHE_FILE_NAME), JSON.stringify(_mapper, null, 4))
+          }catch(e){
+            console.error('registry map save error');
+          }
+          resolve(res.data)
+        }
+        else {
+          reject(res);
+        }
+
+      }, function (e) {
+        reject(e);
+      })
     })
-  })
+  }
 }
 var post = function (url, data) {
   return new Promise(function (resolve, reject) {
