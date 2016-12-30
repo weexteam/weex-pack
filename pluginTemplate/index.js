@@ -28,8 +28,9 @@ module.exports = yeoman.Base.extend({
       this.fs.copy(this.templatePath(file), this.destinationPath(file))
     }
     mkdirp(this.destinationPath('js'));
-    mkdirp(this.destinationPath('native/android'));
-    mkdirp(this.destinationPath('native/ios'));
+    mkdirp(this.destinationPath('android'));
+    mkdirp(this.destinationPath('ios'));
+    mkdirp(this.destinationPath('web'));
     copy('LICENSE');
     copy('RELEASENOTES.md');
     copyAndReplace('README.md','README.md',
