@@ -505,13 +505,13 @@ function cli(inputArgs) {
     }
 }
 
- cordova.raw.create( "weexpackdemo"  // dir to create the project in
-    , "com.taobao.weexpackdemo"  // App id
-    , "weexpackdemo"  // App name
-    , {}
-    , undefined
-);
-//
+//  cordova.raw.create( "weexpackdemo"  // dir to create the project in
+//     , "com.taobao.weexpackdemo"  // App id
+//     , "weexpackdemo"  // App name
+//     , {}
+//     , undefined
+// );
+
 //  cordova.raw.platform("add", "ios"  // dir to create the project in
 //     , undefined  // App id
 //     , undefined  // App name
