@@ -445,6 +445,7 @@ function cli(inputArgs) {
                             , shrinkwrap: args.shrinkwrap || false
                             , force: args.force || false
                             };
+
         if(!/[\.\/]+/.test(targets)&&subcommand==='add'&&cmd == 'plugin') {
           targets = prefix + targets;
         }
