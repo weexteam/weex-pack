@@ -41,6 +41,8 @@ ConfigKeeper.prototype.get = function ConfigKeeper_get(project_dir, platform, fi
     // https://issues.apache.org/jira/browse/CB-6414
     if(file == 'config.xml' && platform == 'android'){
         file = 'res/xml/config.xml';
+    }else if(file.indexOf('.xml') > -1 && platform == 'ios') {
+        file = path.join('Resources', 'WeexpluginConfig.xml');
     }
     var fake_path = path.join(project_dir, platform, file);
 
