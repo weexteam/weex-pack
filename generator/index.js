@@ -49,7 +49,7 @@ module.exports = yeoman.Base.extend({
     copy('start')
     copy('start.bat')
     copy('src/index.we')
-    copy('web/index.html')
+    copy('web/index.html')  // new directory to platforms/web
     copy('android.config.json')
     copy('ios.config.json')
     copy('config.xml')
