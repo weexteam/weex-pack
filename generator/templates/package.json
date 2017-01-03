@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
+    "build_plugin": "webpack --config ./plugins/webpack.config.plugin.js",
     "dev": "webpack --watch",
     "serve": "serve -p 8080"
   },
