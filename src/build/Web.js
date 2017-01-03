@@ -7,17 +7,13 @@ const child_process = require('child_process');
 const inquirer = require('inquirer');
 const fs = require('fs');
 const utils = require('../utils')
-const runWeb = require('../run/web');
 let pluginArr = [];
 
 function buildWeb(options) {
-    if (checkOldTemplate()) {
+    /*if (checkOldTemplate()) {
         // return ;
-    }
-    
-    buildPlugin().then(() => {
-       runWeb(); 
-    });
+    }*/
+    buildPlugin()
 }
 
 function buildPlugin() {
@@ -54,7 +50,9 @@ function checkOldTemplate() {
 // build single plugin use webpack
 function buildSinglePlugin() {
     try {
-        utils.buildJS('build_plugin');
+        utils.buildJS('build_plugin').then(() => {
+            utils.exec('npm run build',true)
+        });
     }
     catch (e) {
         console.error(e);
