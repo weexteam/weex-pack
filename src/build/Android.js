@@ -176,7 +176,8 @@ function buildApp({device, options}) {
   return new Promise((resolve, reject) => {
     console.log(` => ${chalk.blue.bold('Building app ...')}`)
     try {
-      child_process.execSync(`./gradlew clean assemble`, {encoding: 'utf8', stdio: [0, 1, 2]})
+      let clean=' clean';
+      child_process.execSync(process.platform === 'win32' ? `call gradlew.bat${clean} assemble` : `./gradlew${clean} assemble`, {encoding: 'utf8', stdio: [0, 1, 2]})
     } catch (e) {
       reject()
     }

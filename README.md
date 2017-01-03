@@ -99,6 +99,9 @@ android的打包和构建是一体的 ：
 
 ## changelog
 
+0.2.5  
+* 修复weexpack build android在windows下的bug
+
 0.2.4
 * 修复weexpack run web的bug 并且加了自动打开浏览器的功能
 

@@ -445,7 +445,8 @@ function cli(inputArgs) {
                             , shrinkwrap: args.shrinkwrap || false
                             , force: args.force || false
                             };
-        if(!/[\.\/]+/.test(targets)&&subcommand==='add') {
+
+        if(!/[\.\/]+/.test(targets)&&subcommand==='add'&&cmd == 'plugin') {
           targets = prefix + targets;
         }
         return cordova.raw[cmd](subcommand, targets, download_opts);
@@ -494,6 +495,7 @@ function cli(inputArgs) {
             cfg.lib = cfg.lib || {};
             cfg.lib.www = wwwCfg;
         }
+
         return cordova.raw.create( undashed[1]  // dir to create the project in
             , undashed[2]  // App id
             , undashed[3]  // App name
@@ -502,3 +504,38 @@ function cli(inputArgs) {
         );
     }
 }
+
+//  cordova.raw.create( "weexpackdemo"  // dir to create the project in
+//     , "com.taobao.weexpackdemo"  // App id
+//     , "weexpackdemo"  // App name
+//     , {}
+//     , undefined
+// );
+
+//  cordova.raw.platform("add", "ios"  // dir to create the project in
+//     , undefined  // App id
+//     , undefined  // App name
+//     , {}
+//     , undefined
+// );
+
+// cordova.raw.platform("remove", "ios"  // dir to create the project in
+//     , undefined  // App id
+//     , undefined  // App name
+//     , {}
+//     , undefined
+// );
+
+
+// cordova.raw.platform("list"  // dir to create the project in
+//     , undefined  // App id
+//     , undefined  // App name
+//     , {}
+//     , undefined
+// );
+
+
+
+
+
+
