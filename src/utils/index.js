@@ -140,6 +140,9 @@ const utils = {
     if(process.platform==='win32'){
       cmd
     }
+  },
+  dashToCamel(str) {
+    return str.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});  
   }
 }
 

@@ -13,7 +13,9 @@ function buildWeb(options) {
   /*if (checkOldTemplate()) {
       // return ;
   }*/
-  buildPlugin()
+  buildPlugin().then(() => {
+    // buildSinglePlugin();  
+  });
 }
 // if use old weexpack please move some directoies to /platforms 
 function checkOldTemplate() {
@@ -33,18 +35,25 @@ function buildPlugin() {
   // check plugin history
   let plugins = require(path.join(rootPath, 'plugins/fetch.json'));
   for (let k in plugins) {
-    pluginArr.push(k);
+    if (fs.existsSync(path.join(rootPath, 'plugins/' + k + '/web/package.json'))) {
+      pluginArr.push(k);
+    }
   }
-  let result = Promise.resolve();
+  let js_template = [];
   pluginArr.forEach((plugin) => {
-    result = result.then(() => {
-      return fs.writeFile(path.join(rootPath, './plugins/' + plugin + '.js'), 'require("' + plugin + '")', function (err) {})
-    });
+    let pluginEle = utils.dashToCamel(plugin.replace('weex-', ''));
+    js_template.push('import ' + pluginEle + ' from "' + path.join(rootPath, 'plugins', plugin + '/web') + '";');
+    js_template.push(`let isPluginInstalled = window.weex && window.weex.install(${pluginEle});`);
   });
-  return result.then(() => {
-    buildSinglePlugin();
-  }).catch((err) => {
-    console.log(err);
+  return new Promise((resolve, reject) => {
+    return fs.writeFile(path.join(rootPath, './plugins/plugin_bundle.js'), js_template.join('\r\n'), function (err) {
+      if (err) {
+        return reject(err)
+      }
+      else {
+        resolve('done')
+      }
+    })
   })
 }
 // build single plugin use webpack
@@ -52,9 +61,9 @@ function buildSinglePlugin() {
   try {
     utils.buildJS('build_plugin').then(() => {
       utils.exec('npm run build', true);
-      pluginArr.forEach((plugin) => {
-        fs.unlink(path.join(rootPath, './plugins/' + plugin + '.js'));
-      });
+      if (pluginArr.length > 0) {
+        fs.unlink(path.join(rootPath, './plugins/plugin_bundle.js'));
+      }
     });
   }
   catch (e) {
