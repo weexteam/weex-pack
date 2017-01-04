@@ -28,4 +28,6 @@ dependencies {
     provided 'com.android.support:appcompat-v7:23.1.1'
     provided 'com.taobao.android:weex_sdk:0.8.0'
     testCompile 'junit:junit:4.12'
+    // PLUGIN GRADLE EXTENSIONS START
+    // PLUGIN GRADLE EXTENSIONS END
 }

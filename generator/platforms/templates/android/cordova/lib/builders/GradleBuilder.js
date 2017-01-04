@@ -102,11 +102,12 @@ GradleBuilder.prototype.prepBuildFiles = function() {
     fs.writeFileSync(path.join(this.root, 'settings.gradle'),
         '// GENERATED FILE - DO NOT EDIT\n' +
         'include ":app"\n' +
+        'include ":weexplugin"\n' +
         'include ":appframework"\n' + settingsGradlePaths.join(''));
     // Update dependencies within build.gradle.
     // WEEX_HOOK_START
     // var buildGradle = fs.readFileSync(path.join(this.root, 'build.gradle'), 'utf8');
-    var buildGradle = fs.readFileSync(path.join(this.mainAppDirs, 'build.gradle'), 'utf8');
+    var buildGradle = fs.readFileSync(path.join(this.weexpluginDirs, 'build.gradle'), 'utf8');
     // WEEX_HOOK_END
     var depsList = '';
     var root = this.root;
@@ -165,7 +166,7 @@ GradleBuilder.prototype.prepBuildFiles = function() {
     includeList += '    compile \'' + includePath + '\'\n';
   });
   buildGradle = buildGradle.replace(/(PLUGIN GRADLE EXTENSIONS START)[\s\S]*(\/\/ PLUGIN GRADLE EXTENSIONS END)/, '$1\n' + includeList + '$2');
-  fs.writeFileSync(path.join(this.mainAppDirs, 'build.gradle'), buildGradle);
+  fs.writeFileSync(path.join(this.weexpluginDirs, 'build.gradle'), buildGradle);
     // WEEX_HOOK_END
 };
 

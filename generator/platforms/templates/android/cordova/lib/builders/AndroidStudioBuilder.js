@@ -32,6 +32,7 @@ function AndroidStudioBuilder(projectDir) {
   this.root = projectDir || path.resolve(__dirname, '../../..');
   isAndroidStudioProject =  require('../AndroidStudio').isAndroidStudioProject(this.root);
   this.mainAppDirs = isAndroidStudioProject ? path.join(this.root, 'app') : this.root;
+  this.weexpluginDirs = isAndroidStudioProject ? path.join(this.root, 'weexplugin') : this.root;
   this.binDirs = {
     ant: path.join(this.mainAppDirs, hasCustomRules(this.root) ? 'ant-build' : 'bin'),
     gradle: path.join(this.mainAppDirs, 'build', 'outputs', 'apk')

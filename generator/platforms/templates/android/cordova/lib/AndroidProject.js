@@ -66,7 +66,7 @@ function AndroidProject(projectDir) {
     this.platformWww = path.join(this.projectDir, 'platform_www');
     this.www = path.join(this.projectDir, 'assets/www');
     if(AndroidStudio.isAndroidStudioProject(projectDir) === true) {
-      this.www = path.join(this.projectDir, 'app/src/main/assets/www');
+      this.www = path.join(this.projectDir, 'weexplugin/src/main/assets/www');
     }
 }
 

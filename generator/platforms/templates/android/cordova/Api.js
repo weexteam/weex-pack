@@ -83,11 +83,11 @@ function Api(platform, platformRootDir, events) {
     if(AndroidStudio.isAndroidStudioProject(self.root) === true) {
       selfEvents.emit('log', 'Android Studio project detected');
       this.android_studio = true;
-      this.locations.configXml = path.join(self.root, 'app/src/main/res/xml/config.xml');
-      this.locations.strings = path.join(self.root, 'app/src/main/res/xml/strings.xml');
-      this.locations.manifest = path.join(self.root, 'app/src/main/AndroidManifest.xml');
-      this.locations.www = path.join(self.root, 'app/src/main/assets/www');
-      this.locations.res = path.relative(self.root, path.join(self.root, 'app/src/main/res'));
+      this.locations.configXml = path.join(self.root, 'weexplugin/src/main/res/xml/config.xml');
+      this.locations.strings = path.join(self.root, 'weexplugin/src/main/res/xml/strings.xml');
+      this.locations.manifest = path.join(self.root, 'weexplugin/src/main/AndroidManifest.xml');
+      this.locations.www = path.join(self.root, 'weexplugin/src/main/assets/www');
+      this.locations.res = path.relative(self.root, path.join(self.root, 'weexplugin/src/main/res'));
     }
 }
 
