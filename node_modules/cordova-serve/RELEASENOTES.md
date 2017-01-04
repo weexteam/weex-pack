@@ -20,6 +20,9 @@
 -->
 # Cordova-serve Release Notes
 
+### 1.0.1 (Dec 21, 2016)
+* CB-12284 Include project root as additional root for static router
+
 ### 1.0.0 (Oct 05, 2015)
 * Refactor cordova-serve to use Express.
 

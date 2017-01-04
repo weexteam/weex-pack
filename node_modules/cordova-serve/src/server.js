@@ -55,6 +55,13 @@ module.exports = function (opts) {
         app.use(express.static(opts.root));
     }
 
+    // If we have a project root, make that available as a static root also. This can be useful in cases where source
+    // files that have been transpiled (such as TypeScript) are located under the project root on a path that mirrors
+    // the the transpiled file's path under the platform root and is pointed to by a map file.
+    if (this.projectRoot) {
+        app.use(express.static(this.projectRoot));
+    }
+
     var that = this;
     server.listen(port).on('listening', function () {
         that.port = port;

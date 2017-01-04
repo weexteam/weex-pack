@@ -39,7 +39,7 @@ var cordova_lib = require('weexpack-lib'),
     WeexpackError = cordova_lib.CordovaError,
     cordova = cordova_lib.cordova,
     events = cordova_lib.events,
-    logger = require('cordova-common').CordovaLogger.get();
+    logger = require('weexpack-common').CordovaLogger.get();
 
 
 /*
@@ -502,36 +502,6 @@ function cli(inputArgs) {
         );
     }
 }
-
-//  cordova.raw.create( "weexpackdemo"  // dir to create the project in
-//     , "com.taobao.weexpackdemo"  // App id
-//     , "weexpackdemo"  // App name
-//     , {}
-//     , undefined
-// );
-
-//  cordova.raw.platform("add", "ios"  // dir to create the project in
-//     , undefined  // App id
-//     , undefined  // App name
-//     , {}
-//     , undefined
-// );
-
-// cordova.raw.platform("remove", "ios"  // dir to create the project in
-//     , undefined  // App id
-//     , undefined  // App name
-//     , {}
-//     , undefined
-// );
-
-
-// cordova.raw.platform("list"  // dir to create the project in
-//     , undefined  // App id
-//     , undefined  // App name
-//     , {}
-//     , undefined
-// );
-
 
 
 

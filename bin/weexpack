@@ -2,6 +2,7 @@
 
 const program = require('commander')
 const chalk = require('chalk')
+const market = require('../src/publish/market');
 const cli = require('../src/cli')
 program
   .version(require('../package').version)
