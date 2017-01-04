@@ -72,6 +72,8 @@
     "unorm": "1.3.3",
     "update-notifier": "^0.5.0",
     "valid-identifier": "0.0.1",
+    "weexpack-create": "git+https://github.com/weexteam/weexpack-create.git",
+    "weexpack-lib": "git+https://github.com/weexteam/weexpack-lib.git",
     "xcode": "^0.8.5",
     "yeoman-environment": "^1.6.3",
     "yeoman-generator": "^0.24.1"

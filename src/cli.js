@@ -34,7 +34,7 @@ var path = require('path'),
     Q = require('q');
 var { prefix } = require('./utils/npm');
 
-var cordova_lib = require('cordova-lib'),
+var cordova_lib = require('weexpack-lib'),
     CordovaError = cordova_lib.CordovaError,
     WeexpackError = cordova_lib.CordovaError,
     cordova = cordova_lib.cordova,
@@ -258,6 +258,7 @@ function cli(inputArgs) {
     // For CordovaError print only the message without stack trace unless we
     // are in a verbose mode.
     process.on('uncaughtException', function(err) {
+        console.log(err);
         logger.error(err);
         // Don't send exception details, just send that it happened
         if(shouldCollectTelemetry) {
@@ -446,9 +447,7 @@ function cli(inputArgs) {
                             , force: args.force || false
                             };
 
-        if(!/[\.\/]+/.test(targets)&&subcommand==='add'&&cmd == 'plugin') {
-          targets = prefix + targets;
-        }
+
         return cordova.raw[cmd](subcommand, targets, download_opts);
     }
 
