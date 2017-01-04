@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "build_plugin": "webpack --config ./plugins/webpack.config.plugin.js",
+    "build_plugin": "webpack --config ./tools/webpack.config.plugin.js",
     "dev": "webpack --watch",
     "serve": "serve -p 8080"
   },
@@ -17,6 +17,7 @@
   "devDependencies": {
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.18.0",
     "eslint": "^3.5.0",
     "serve": "^1.4.0",
     "webpack": "^1.13.2",

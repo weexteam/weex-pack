@@ -16,12 +16,22 @@ function buildWeb(options) {
     buildPlugin()
 }
 
+// if use old weexpack please move some directoies to /platforms 
+function checkOldTemplate() {
+    if (fs.existsSync(path.join('./', 'web'))) {
+        console.log(chalk.red('please remove "web" directory into "platforms"'));
+        console.log('(new version weexpack not support old directoies)');
+        return true;
+    }
+    return false;
+}
+
 function buildPlugin() {
-    // check plugin history
     let rootPath = process.cwd();
     if (!fs.existsSync(path.join(rootPath, 'plugins/fetch.json'))) {
         return;
     }
+    // check plugin history
     let plugins = require(path.join(rootPath, 'plugins/fetch.json'));
     for (let k in plugins) {
         pluginArr.push(k);
@@ -38,17 +48,10 @@ function buildPlugin() {
         console.log(err);
     })
 }
-// if use old weexpack please move some directoies to /platforms 
-function checkOldTemplate() {
-    if (fs.existsSync(path.join('./', 'web'))) {
-        console.log(chalk.red('please remove "web" directory into "platforms"'));
-        console.log('(new version weexpack not support old directoies)');
-        return true;
-    }
-    return false;
-}
+
 // build single plugin use webpack
 function buildSinglePlugin() {
+    
     try {
         utils.buildJS('build_plugin').then(() => {
             utils.exec('npm run build',true)
