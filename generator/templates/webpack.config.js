@@ -11,9 +11,8 @@ function walk(dir, root) {
     .forEach(function (file) {
       var fullpath = path.join(directory, file)
       var stat = fs.statSync(fullpath)
-
-      if (stat.isFile() &&
-        path.extname(fullpath) === '.we') {
+      // support for vue file
+      if (stat.isFile() && (path.extname(fullpath) === '.we' || path.extname(fullpath) === '.vue') {
         var name = path.join( dir, path.basename(file, '.we'))
         entry[name] = fullpath + '?entry=true'
       } else if (stat.isDirectory()) {
@@ -35,6 +34,10 @@ module.exports = {
       {
         test: /\.we(\?[^?]+)?$/,
         loaders: ['weex-loader']
+      },
+      {
+        test: /\.vue(\?[^?]+)?$/,
+        loaders: ['vue']
       }
     ]
   }
