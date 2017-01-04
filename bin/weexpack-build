@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-const program = require('commander')
-const chalk = require('chalk')
-const buildAndroid = require('../src/build/Android')
-const buildIOS = require('../src/build/iOS')
-//const buildWeb = require('../src/build/web')
+const program = require('commander');
+const chalk = require('chalk');
+const buildAndroid = require('../src/build/Android');
+const buildIOS = require('../src/build/iOS');
+const buildWeb = require('../src/build/web');
 
 program
   .usage('<platform> [options]')
-  .parse(process.argv)
+  .parse(process.argv);
 
 function printExample() {
   console.log('  Examples:')
@@ -18,6 +18,9 @@ function printExample() {
   console.log()
   console.log(chalk.grey('    # build weex iOS project'))
   console.log('    $ ' + chalk.blue('weexpack build ios'))
+  console.log()
+  console.log(chalk.grey('    # build weex web project'))
+  console.log('    $ ' + chalk.blue('weexpack build web'))
   console.log()
 }
 
@@ -38,7 +41,7 @@ function build(platform, options) {
   switch (platform) {
     case 'android' : buildAndroid(options); break;
     case 'ios' : buildIOS(options); break;
-    //case 'web' : buildWeb(options); break;
+    case 'web' : buildWeb(options); break;
   }
 }
 

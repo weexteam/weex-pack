@@ -104,9 +104,9 @@ const utils = {
     })
 
   },
-  buildJS(){
+  buildJS(cmd = 'build'){
     return utils.exec('npm install',true).then(()=> {
-      return utils.exec('npm run build')
+      return utils.exec('npm run ' + cmd)
     })
   },
   getIOSProjectInfo(){
