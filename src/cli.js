@@ -447,7 +447,6 @@ function cli(inputArgs) {
                             , force: args.force || false
                             };
 
-
         return cordova.raw[cmd](subcommand, targets, download_opts);
     }
 
