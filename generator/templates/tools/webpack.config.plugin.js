@@ -7,27 +7,13 @@ var fs=require('fs');
 
 let root = process.cwd();
 
-var entry={};
-function walk(dir) {
-  var directory = path.join(root, dir)
-  fs.readdirSync(directory)
-    .forEach(function (file) {
-      var fullpath = path.join(directory, file)
-      var stat = fs.statSync(fullpath)
-      if (stat.isFile() &&
-        (path.extname(fullpath) === '.js' || path.extname(fullpath) === '.we' || path.extname(fullpath) === '.vue')) {
-        var name = path.join( dir, path.basename(file, '.js'))
-        entry[name] = fullpath + '?entry=true'
-      }
-    })
-}
-walk('plugins');
-
 module.exports = {
-  entry: entry,
+  entry: {
+    plugins: [path.join(root,'plugins/plugin_bundle.js'),path.join(root,'web/js/init.js')],
+  },
   output: {
-    path: path.join(root,'plugin'),
-    filename: '[name].js'
+    path: path.join(root,'web'),
+    filename: 'index.js'
   },
   devtool:'inline-source-map',
   module: {
