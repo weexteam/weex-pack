@@ -11,7 +11,3 @@ include ":appframework"
 
 //include ":weex_debug"
 //project(":weex_debug").projectDir=new File("../weex_debug")
-
-//include ":gcanvas_library"
-
-//include ":gcanvas_weex_plugin"
