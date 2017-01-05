@@ -345,7 +345,7 @@ function copyTemplateFiles(templateDir, projectDir, isSubDir) {
         templateFiles = fs.readdirSync(templateDir);
         // Remove directories, and files that are unwanted
         if (!isSubDir) {
-            var excludes = ['package.json', 'RELEASENOTES.md' , '.git', 'NOTICE', 'LICENSE', 'COPYRIGHT', '.npmignore'];
+            var excludes = ['RELEASENOTES.md' , '.git', 'NOTICE', 'LICENSE', 'COPYRIGHT', '.npmignore'];
             templateFiles = templateFiles.filter( function (value) { 
                 return excludes.indexOf(value) < 0; 
             }); 
