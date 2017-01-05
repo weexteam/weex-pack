@@ -10,7 +10,7 @@ function walk(dir, root) {
       var fullpath = path.join(directory, file)
       var stat = fs.statSync(fullpath)
         // support for vue file
-      if (stat.isFile() && (path.extname(fullpath) === '.we' || path.extname(fullpath) === '.vue') {
+      if (stat.isFile() && (path.extname(fullpath) === '.we' || path.extname(fullpath) === '.vue')) {
           var name = path.join(dir, path.basename(file, '.we'))
           entry[name] = fullpath + '?entry=true'
         }

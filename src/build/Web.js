@@ -14,10 +14,10 @@ function buildWeb(options) {
       // return ;
   }*/
   buildPlugin().then(() => {
-    // buildSinglePlugin();  
+     buildSinglePlugin();  
   });
 }
-// if use old weexpack please move some directoies to /platforms 
+// if using old weexpack please move some directoies to /platforms 
 function checkOldTemplate() {
   if (fs.existsSync(path.join('./', 'web'))) {
     console.log(chalk.red('please remove "web" directory into "platforms"'));
@@ -62,6 +62,7 @@ function buildSinglePlugin() {
     utils.buildJS('build_plugin').then(() => {
       utils.exec('npm run build', true);
       if (pluginArr.length > 0) {
+        let rootPath = process.cwd();
         fs.unlink(path.join(rootPath, './plugins/plugin_bundle.js'));
       }
     });
