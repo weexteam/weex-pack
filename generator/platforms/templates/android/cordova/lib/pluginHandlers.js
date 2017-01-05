@@ -123,7 +123,9 @@ var handlers = {
                     fs.rmdirSync(parDir);
                 }
             } else {
-                obj.type = 'sys';
+                // WEEX_HOOK
+                obj.type = 'gradleReference';
+                //obj.type = 'sys';
                 subDir = src;
             }
 
