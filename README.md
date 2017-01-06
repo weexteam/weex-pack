@@ -26,7 +26,7 @@ weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简�
 
 然后，创建 weex 工程：
 
-    $ weexpack init appName
+    $ weexpack create appName
 
 weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取到该目录。
 
@@ -55,6 +55,26 @@ weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取�
 紧接着，进入目录，并且安装依赖：
 
     $ cd appName && npm install
+
+
+## 添加平台支持
+
+通过 create 命令创建的工程默认不包含ios工程和android工程。 如果您需要在ios平台或者andorid平台运行程序。可以通过 platform 命令添加对各平台的依赖
+
+    $ weexpack platform add ios
+    $ weexpack platform add android
+    
+    
+## 添加插件
+    
+ weexpack可以快速帮您添加weex插件
+ 
+ 添加一个插件： 
+ 
+    $ weexpack plugin add weex-chart
+    
+
+
 
 ## IOS平台打包&运行
 
