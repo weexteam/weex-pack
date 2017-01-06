@@ -26,7 +26,7 @@ var path  = require('path'),
     emulator = require('./emulator'),
     device   = require('./device'),
     Q = require('q'),
-    events = require('cordova-common').events;
+    events = require('weexpack-common').events;
 
 function getInstallTarget(runOptions) {
     var install_target;

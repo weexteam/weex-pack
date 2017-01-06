@@ -21,8 +21,8 @@ var Q = require('q');
 var fs = require('fs');
 var path = require('path');
 var shell = require('shelljs');
-var events = require('cordova-common').events;
-var CordovaError = require('cordova-common').CordovaError;
+var events = require('weexpack-common').events;
+var CordovaError = require('weexpack-common').CordovaError;
 
 function GenericBuilder(projectDir) {
 

@@ -23,7 +23,7 @@
 
 'use strict';
 
-var events = require('cordova-common').events;
+var events = require('weexpack-common').events;
 
 /*
  * Retry a promise-returning function a number of times, propagating its

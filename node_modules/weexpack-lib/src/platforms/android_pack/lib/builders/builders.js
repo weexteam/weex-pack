@@ -17,7 +17,7 @@
        under the License.
 */
 
-var CordovaError = require('cordova-common').CordovaError;
+var CordovaError = require('weexpack-common').CordovaError;
 var AndroidStudio = require('../AndroidStudio');
 
 var knownBuilders = {

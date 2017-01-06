@@ -22,8 +22,8 @@ var fs = require('fs');
 var util = require('util');
 var path = require('path');
 var shell = require('shelljs');
-var spawn = require('cordova-common').superspawn.spawn;
-var CordovaError = require('cordova-common').CordovaError;
+var spawn = require('weexpack-common').superspawn.spawn;
+var CordovaError = require('weexpack-common').CordovaError;
 var check_reqs = require('../check_reqs');
 
 var GenericBuilder = require('./AndroidStudioBuilder');

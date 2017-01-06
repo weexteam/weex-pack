@@ -1,4 +1,4 @@
-var CordovaLogger = require('cordova-common').CordovaLogger;
+var CordovaLogger = require('weexpack-common').CordovaLogger;
 
 module.exports = {
     adjustLoggerLevel: function (opts) {

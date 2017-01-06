@@ -22,8 +22,8 @@ var fs = require('fs');
 var path = require('path');
 var util = require('util');
 var shell = require('shelljs');
-var spawn = require('cordova-common').superspawn.spawn;
-var CordovaError = require('cordova-common').CordovaError;
+var spawn = require('weexpack-common').superspawn.spawn;
+var CordovaError = require('weexpack-common').CordovaError;
 var check_reqs = require('../check_reqs');
 
 var SIGNING_PROPERTIES = '-signing.properties';

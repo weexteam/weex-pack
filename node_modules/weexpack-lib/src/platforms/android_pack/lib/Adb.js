@@ -19,9 +19,9 @@
 
 var Q = require('q');
 var os = require('os');
-var events = require('cordova-common').events;
-var spawn = require('cordova-common').superspawn.spawn;
-var CordovaError = require('cordova-common').CordovaError;
+var events = require('weexpack-common').events;
+var spawn = require('weexpack-common').superspawn.spawn;
+var CordovaError = require('weexpack-common').CordovaError;
 
 var Adb = {};
 

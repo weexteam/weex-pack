@@ -24,9 +24,9 @@ var Q     = require('q'),
 var path = require('path');
 var Adb = require('./Adb');
 var AndroidManifest = require('./AndroidManifest');
-var spawn = require('cordova-common').superspawn.spawn;
-var CordovaError = require('cordova-common').CordovaError;
-var events = require('cordova-common').events;
+var spawn = require('weexpack-common').superspawn.spawn;
+var CordovaError = require('weexpack-common').CordovaError;
+var events = require('weexpack-common').events;
 
 /**
  * Returns a promise for the list of the device ID's found

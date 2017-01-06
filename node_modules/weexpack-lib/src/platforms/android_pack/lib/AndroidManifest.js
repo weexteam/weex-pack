@@ -19,7 +19,7 @@
 
 var fs = require('fs');
 var et = require('elementtree');
-var xml= require('cordova-common').xmlHelpers;
+var xml= require('weexpack-common').xmlHelpers;
 
 var DEFAULT_ORIENTATION = 'default';
 

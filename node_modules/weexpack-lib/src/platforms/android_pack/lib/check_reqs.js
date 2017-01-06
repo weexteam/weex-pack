@@ -27,7 +27,7 @@ var shelljs = require('shelljs'),
     path  = require('path'),
     fs    = require('fs'),
     ROOT  = path.join(__dirname, '..', '..');
-var CordovaError = require('cordova-common').CordovaError;
+var CordovaError = require('weexpack-common').CordovaError;
 
 var isWindows = process.platform == 'win32';
 
