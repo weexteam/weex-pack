@@ -152,7 +152,7 @@ exports.androidConfigResolver = new ConfigResolver({
       key: 'dummy_content'
     }
   },
-  'app/src/main/res/xml/config.xml': {
+  'app/src/main/res/xml/app_config.xml': {
     WeexBundle: {
       handler: function (source, value, replacer) {
         if (/https?/.test(value)) {
