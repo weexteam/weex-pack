@@ -15,6 +15,7 @@ node_modules/*
 !node_modules/cordova-lib/
 !node_modules/cordova-registry-mapper/
 !node_modules/cordova-serve/
+!node_modules/weexpack-lib/
 
 bower_components/
 .svn/
@@ -24,3 +25,6 @@ test/
 coverage/
 dist/
 TODO/
+node_modules/cordova-lib/node_modules/.bin/opener
+node_modules/cordova-lib/node_modules/opener/
+weexpackdemo/
