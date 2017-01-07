@@ -7,17 +7,20 @@ const cli = require('../src/cli')
 program
   .version(require('../package').version)
   .usage('<command> [options]')
-  .command('init [name]', 'initialize a standard weex project')
+  // .command('init [name]', 'initialize a standard weex project')
+  .command('create [name]', 'initialize a standard weex project')
+  .command('platform [command]', 'command for add or remove a  platform project')
   .command('run [platform]', 'run weex app on the specific platform')
   .command('build [platform]', 'build weex app generator package(apk or ipa)')
   .command('plugin [command]', 'command for add or create and publish weex plugins')
-program.command('*')
-  .description('')
-  .action(function (cmd) {
-    if(!/init|run|build|plugin/.test(cmd)) {
-      cli(process.argv);
-    }
-  });
+
+
+
 program.parse(process.argv)
+
+if (program.args.length < 1) {
+  program.help();
+  process.exit();
+}
 
 

@@ -17,7 +17,7 @@
     under the License.
 */
 var fs = require('fs'),
-    cordova_lib = require('cordova-lib'),
+    cordova_lib = require('weexpack-lib'),
     cordova = cordova_lib.cordova,
     Q = require('q'),
     path = require('path');
@@ -28,7 +28,7 @@ module.exports = function help (args) {
         raw,
         docdir;
     args = args || [];
-    command = ((args)[0] || 'cordova');
+    command = ((args)[0] || 'weexpack');
     docdir = path.join(__dirname, '..', 'doc');
     file = [
       command + '.md',
@@ -44,7 +44,10 @@ module.exports = function help (args) {
     }).filter(function (f) {
         return f !== null;
     });
-    raw = fs.readFileSync(file[0]).toString('utf8').replace(/cordova-cli/g, cordova_lib.binname);
-    cordova.emit('results', raw);
+    if(file && file[0] ) {
+      raw = fs.readFileSync(file[0]).toString('utf8').replace(/cordova-cli/g, cordova_lib.binname);
+      cordova.emit('results', raw);
+    }
+
     return Q();
 };
