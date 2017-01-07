@@ -5,7 +5,7 @@
 
 ### weexpack 介绍
 weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简单的命令，创建 weex 工程项目，将项目运行在不同的开发平台上。
-![weexpack](https://img.alicdn.com/tps/TB1KZV_PXXXXXaaXXXXXXXXXXXX-1574-850.png)
+![weexpack](https://img.alicdn.com/tps/TB1vphePXXXXXctapXXXXXXXXXX-465-371.png)
 
 ### 前期环境要求
 
