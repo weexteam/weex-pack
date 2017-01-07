@@ -7,7 +7,11 @@
 weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简单的命令创建 weex 工程项目，并从应用市场、本地、github安装weex插件，将项目运行在不同的开发平台上。
 
 * 打包过程如下图所示，插件操作是打包过程的可选项。
+
 ![weexpack](https://img.alicdn.com/tps/TB1vphePXXXXXctapXXXXXXXXXX-465-371.png)
+
+* 对于插件开发者来说，也有一组用于创建和发布插件的命令。
+
 
 ### 前期环境要求
 
