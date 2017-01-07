@@ -1,0 +1,22 @@
+{
+  "name": "@ali/weex-chart-demo",
+  "version": "0.0.1",
+  "platform": [
+    "ios",
+    "android"
+  ],
+  "description": "",
+  "keywords": [
+    "weex",
+    "plugin"
+  ],
+  "publishConfig": {
+    "registry": "http://registry.npm.alibaba-inc.com"
+  },
+  "license": "Apache 2.0",
+  "dependencies": {
+    "weex-chart": "^0.0.2",
+    "g2-mobile": "^2.1.8",
+    "weex-components": "^0.2.0"
+  }
+}

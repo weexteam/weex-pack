@@ -34,12 +34,12 @@ var path = require('path'),
     Q = require('q');
 var { prefix } = require('./utils/npm');
 
-var cordova_lib = require('cordova-lib'),
+var cordova_lib = require('weexpack-lib'),
     CordovaError = cordova_lib.CordovaError,
     WeexpackError = cordova_lib.CordovaError,
     cordova = cordova_lib.cordova,
     events = cordova_lib.events,
-    logger = require('cordova-common').CordovaLogger.get();
+    logger = require('weexpack-common').CordovaLogger.get();
 
 
 /*
@@ -446,7 +446,7 @@ function cli(inputArgs) {
                             , shrinkwrap: args.shrinkwrap || false
                             , force: args.force || false
                             };
-        
+
         return cordova.raw[cmd](subcommand, targets, download_opts);
     }
 
@@ -502,36 +502,6 @@ function cli(inputArgs) {
         );
     }
 }
-
-//  cordova.raw.create( "weexpackdemo"  // dir to create the project in
-//     , "com.taobao.weexpackdemo"  // App id
-//     , "weexpackdemo"  // App name
-//     , {}
-//     , undefined
-// );
-
-//  cordova.raw.platform("add", "ios"  // dir to create the project in
-//     , undefined  // App id
-//     , undefined  // App name
-//     , {}
-//     , undefined
-// );
-
-// cordova.raw.platform("remove", "ios"  // dir to create the project in
-//     , undefined  // App id
-//     , undefined  // App name
-//     , {}
-//     , undefined
-// );
-
-
-// cordova.raw.platform("list"  // dir to create the project in
-//     , undefined  // App id
-//     , undefined  // App name
-//     , {}
-//     , undefined
-// );
-
 
 
 

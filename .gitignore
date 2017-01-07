@@ -7,14 +7,7 @@
 .project
 
 node_modules/*
-!node_modules/cordova-app-hello-world/
-!node_modules/cordova-common/
-!node_modules/cordova-create
-!node_modules/cordova-fetch/
-!node_modules/cordova-js/
-!node_modules/cordova-lib/
-!node_modules/cordova-registry-mapper/
-!node_modules/cordova-serve/
+
 
 bower_components/
 .svn/
@@ -24,3 +17,6 @@ test/
 coverage/
 dist/
 TODO/
+node_modules/cordova-lib/node_modules/.bin/opener
+node_modules/cordova-lib/node_modules/opener/
+weexpackdemo/

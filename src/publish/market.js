@@ -66,7 +66,7 @@ global.WeexMarket.info=exports.info = function (name) {
   else {
     return new Promise((resolve, reject)=> {
       post(exports.domain + '/json/sync/info.json?name=' + name).then(function (res) {
-        console.log(res);
+        console.log(111,res,name);
         if (res.success) {
           _mapper[name]=res.data;
           try {

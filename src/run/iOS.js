@@ -78,8 +78,8 @@ function prepareIOS({options}) {
  * @param {Object} options
  */
 function installDep({xcodeProject, options,rootPath}) {
-  console.log(` => ${chalk.blue.bold('pod install')}`)
-  return utils.exec('pod install --no-repo-update').then(()=>({xcodeProject, options, rootPath}))
+  console.log(` => ${chalk.blue.bold('pod update')}`)
+  return utils.exec('pod update').then(()=>({xcodeProject, options, rootPath}))
 }
 
 /**

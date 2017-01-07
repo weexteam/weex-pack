@@ -1,0 +1,34 @@
+<template>
+  <list>
+    <cell repeat="{{items}}">
+      <example-list-item title="{{title}}" url="{{url}}"></example-list-item>
+    </cell>
+  </list>
+</template>
+
+<script>
+  require('weex-components');
+  module.exports = {
+    data: {
+      root: '', // examples, examples/syntax, test ...
+      items: [
+        {name: 'hello', title: 'Hello World', url: ''}
+      ]
+    },
+    created: function() {
+      var bundleUrl = this.$getConfig().bundleUrl;
+
+      var base = bundleUrl.substring(0, bundleUrl.lastIndexOf('/') + 1);
+
+      for (var i in this.items) {
+        var item = this.items[i];
+        if (!item.url) {
+          item.url = base + 'demo.js?case='+item.id;
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+</style>

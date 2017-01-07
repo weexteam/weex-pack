@@ -1,7 +1,7 @@
 /**
  * Created by godsong on 16/11/29.
  */
-const PluginInfo = require('cordova-common').PluginInfo;
+const PluginInfo = require('weexpack-common').PluginInfo;
 const Chalk = require('chalk');
 const Npm = require('../utils/npm');
 const Fs = require('fs');

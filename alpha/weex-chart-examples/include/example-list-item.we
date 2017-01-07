@@ -1,0 +1,30 @@
+<template>
+  <wxc-list-item onclick="{{redirect}}" onlongpress="{{press}}">
+    <text class="item-txt">{{ title }}</text>
+  </wxc-list-item>
+</template>
+
+<style>
+  .item-txt {
+    font-size: 48px;
+    color: #555;
+  }
+</style>
+
+<script>
+  require('weex-components');
+  module.exports = {
+    data: {
+      title: '',
+      url: ''
+    },
+    methods: {
+      redirect: function() {
+        this.$openURL(this.url);
+      },
+      press:function(){
+        this.$openURL(this.url.replace('demo','demo2'));
+      }
+    }
+  }
+</script>

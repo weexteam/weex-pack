@@ -14,6 +14,7 @@ program.usage('[options] [project-name]').option('-c, --config [path]', 'specify
     console.log();
   }).parse(process.argv)
   // check if project name exist
+
 if (program.args.length < 1) {
   program.help();
   process.exit();
