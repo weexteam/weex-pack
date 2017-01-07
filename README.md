@@ -12,7 +12,7 @@ weexpack 是 weex 新一代的工程开发套件。它允许开发者通过简�
 
 * 对于插件开发者来说，也有一组用于创建和发布插件的命令。
 
-![weexpack2](https://img.alicdn.com/tps/TB1vphePXXXXXctapXXXXXXXXXX-465-371.png)
+![weexpack2](https://img.alicdn.com/tps/TB18hxjPXXXXXXgapXXXXXXXXXX-248-258.png)
 
 ### 前期环境要求
 
