@@ -3,6 +3,6 @@ rm -rf MyApp
 weexpack create MyApp
 cd MyApp
 weexpack platform add android -d
-cp -ri ~/Desktop/weex-chart-examples/* src
+cp -ri ../weex-chart-examples/* src
 weexpack plugin add weex-chart -d
 weexpack run android

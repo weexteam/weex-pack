@@ -1,0 +1,21 @@
+<template>
+    <div>
+        <text id="canvas_demo1" style="width:750;height:100;backgroundColor:#e0e0e0">canvas_demo 上边界</text>
+        <chart id="xx" width="750" height="400"></chart>
+        <text id="canvas_demo2"  style="width:750;height:100;backgroundColor:#e0e0e0">canvas_demo 下边界</text>
+    </div>
+
+</template>
+<script>
+    var GM=require('weex-chart')('g2');
+    var cases=require('./case');
+    module.exports={
+        ready:function(){
+            var url=this.$getConfig().bundleUrl;
+            var caseId=url.match(/\?case=(\d+)/)[1];
+            cases['case'+caseId](GM);
+        }
+
+
+    }
+</script>
