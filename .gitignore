@@ -5,6 +5,8 @@
 *.iml
 .idea
 .project
+.gradle
+alpha/MyApp/*
 
 node_modules/*
 
