@@ -6,7 +6,7 @@ const create = require('../src/create/create');
 const cli = require('../src/cli');
 const publish = require('../src/publish/publish');
 
-program.usage('[project-name]').on('--help', () => {
+program.usage('[project-name] [options]').on('--help', () => {
   console.log('  Examples:\n');
   console.log(chalk.grey('    # create a standard weex project'));
   console.log('    $ ' + chalk.blue('weexpack create myProject'));
