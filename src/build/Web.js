@@ -43,7 +43,7 @@ function buildPlugin() {
   pluginArr.forEach((plugin) => {
     let pluginEle = utils.dashToCamel(plugin.replace('weex-', ''));
     js_template.push('import ' + pluginEle + ' from "' + path.join(rootPath, 'plugins', plugin + '/web') + '";');
-    js_template.push(`let isPluginInstalled = window.weex && window.weex.install(${pluginEle});`);
+    js_template.push(`window.weex && window.weex.install(${pluginEle});`);
   });
   return new Promise((resolve, reject) => {
     return fs.writeFile(path.join(rootPath, './plugins/plugin_bundle.js'), js_template.join('\r\n'), function (err) {
