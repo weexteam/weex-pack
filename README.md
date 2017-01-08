@@ -223,7 +223,6 @@ weexpack 所提供的命令大致可分为三组，分别是：
 		$ weexpack run android
 
   你可以更改项目目录下的android.config.json
-
     * AppName: 应用名
     * AppId: application_id 包名
     * SplashText: 欢迎页上面的文字
@@ -233,14 +232,13 @@ weexpack 所提供的命令大致可分为三组，分别是：
     如果以本地方式指定bundle  .we文件请放到src目录。
 
 * 打包运行ios应用
+  * 模拟器运行
 
-    * 模拟器运行
+		$ weexpack run ios
 
-    $ weexpack run ios
+  * 构建ipa包
 
-    * 构建ipa包
-
-    $ weexpack build ios
+		$ weexpack build ios
 
   构建包的过程中，将会提示让您输入`CodeSign（证书）`，`Profile(provisioning profile)`,`AppId`，只有输入真实的这些信息才能成功打包。
   其余如AppName,和入口weex bundle文件可以编辑项目目录下的ios.config.json配置。
@@ -253,9 +251,10 @@ weexpack 所提供的命令大致可分为三组，分别是：
   参数（\*mobileprovision）为provisioning profile文件路径
 
 
-* 在 html5 平台上，运行项目：
+* 在 html5 平台运行：
 
-    $ weexpack run web
+     $ weexpack run web
+
 
 ### 插件开发及发布
 
