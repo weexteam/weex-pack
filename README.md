@@ -13,6 +13,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
  * **weexpack platform list** — 查看已安装的平台模版及版本。
  * **weexpack platform run** - 打包应用并安装到设备运行。
 
+
 * 插件使用者命令
  * **weexpack plugin add/remove** — 安装／移除 weex 插件，支持从本地、GitHub 或者  weex 应用市场安装插件。
 
