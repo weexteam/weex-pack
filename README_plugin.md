@@ -194,7 +194,7 @@ weexpack plugin create
 	</config-file>
 	```
 
-* [html5插件创建文档]('./doc/plugin-devloping-web.md')
+* [html5插件开发文档]('./doc/plugin-devloping-web.md')
 
 ## 插件发布
 
