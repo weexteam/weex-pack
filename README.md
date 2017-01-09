@@ -55,9 +55,9 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 ![weexpack1](https://img.alicdn.com/tps/TB1vphePXXXXXctapXXXXXXXXXX-465-371.png)
 
-详细步骤如下。
+### 详细步骤
 
-### 1. 创建 weexpack 工程
+#### 1. 创建 weexpack 工程
 
     $ weexpack create appName
 
@@ -93,7 +93,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
     $ cd appName && npm install
 
-### 2. 安装 weex 应用模版
+#### 2. 安装 weex 应用模版
 
 添加应用模版，官方提供的模版默认支持 weex bundle 调试和插件机制，注意模版名称均为小写，模版被安装到platforms目录下。
 
@@ -147,14 +147,16 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 		$ weexpack platform list
 
-    示例：
+    示例结果：
+
     ```
     Installed platforms:
       android
     Available platforms:
       android ^6.2.1
     ```
-如果想要删除某个不需要的平台可以使用 weexpack platform remove移除，比如window平台用户是不需要ios模版的可用如下命令移除。
+    
+如果想要删除某个不需要的平台可以使用 weexpack platform remove移除，比如window平台用户是不需要ios模版的，可用如下命令移除。
 
 
 * 移除相应平台模版
@@ -169,7 +171,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 		$ weexpack plugin add path/to/plugin
 
-* 从插件市场添加插件，例如 weex-chart
+* 从插件市场添加插件，例如 weex-chart。
 
 		$ weexpack plugin add weex-chart
 
@@ -207,7 +209,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 		$ weexpack plugin list
 
-如果想要删除某个不需要的插件可以使用 weexpack plugin remove 移除，比如weex-chart。
+如果想要删除某个不需要的插件可以使用 weexpack plugin remove 移除，比如weex-chart
 
 * 移除插件，例如weex-chart
 
@@ -215,7 +217,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 
 
-### 4. 打包应用并安装运行
+#### 4. 打包应用并安装运行
 
 完成以上步骤并we代码放在src目录下，就可以打包运行了，打包过程中可能要下载依赖和编译工具，这会是个较为耗时的过程，安装运行需要打开模拟器或者连接设备。
 
@@ -257,7 +259,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
      $ weexpack run web
 
 
-### 插件开发及发布
+## 插件开发及发布
 
 对于插件开发者来说，也有一组用于创建和发布插件的命令。
 
