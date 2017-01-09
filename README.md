@@ -53,7 +53,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 打包主要过程如下图所示，其中插件操作是打包过程的可选项，不是必须的。
 
-![weexpack1](https://img.alicdn.com/tps/TB1vphePXXXXXctapXXXXXXXXXX-465-371.png)
+![weexpack1](https://img.alicdn.com/tps/TB1.bpVPXXXXXarapXXXXXXXXXX-462-310.png)
 
 ### 详细步骤
 
