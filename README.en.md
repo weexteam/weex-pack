@@ -207,6 +207,7 @@ After all above steps, you could modify your application we/vue files under src 
 		$ weexpack run android
     
 You could modify your project information in android.config.json file:
+
     -AppName: the name of the project
     -AppId: application_id the name of the package
     -SplashText: the text in welcome page
