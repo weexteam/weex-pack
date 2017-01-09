@@ -123,15 +123,17 @@ weexpack plugin create
 
 	举例：
 
-	```
-	<!-- ios -->
-	<framework src="Foundation.framework" />
-	<framework src="relative/path/to/my.framework" custom="true" />
-       <framework src="SDWebImage" type="podspec" spec="" />
+    ```
+    <!-- ios -->
+    <framework src="Foundation.framework" />
+    <framework src="relative/path/to/my.framework" custom="true" />
+    <framework src="SDWebImage" type="podspec" spec="" />
 
-       <!-- android -->
-       <framework src="com.taobao.android:gcanvas_library_weex:1.1-SNAPSHOT@aar" />
-	```
+    <!-- android -->
+    <framework src="com.taobao.android:gcanvas_library_weex:1.1-SNAPSHOT@aar" />
+
+    ```
+
 
 	**config-file**
 
@@ -151,11 +153,6 @@ weexpack plugin create
 
 	<!-- android -->
 	<config-file target="config.xml" parent="/*">
-	    <feature name="WXGCanvasModule">
-	        <param name="category" value="module" />
-	        <param name="android-package" value="com.taobao.weex.ui.module.GcanvasModule" />
-	        <param name="api" value="gcanvas" />
-	    </feature>
 	</config-file>
 	```
 
@@ -175,29 +172,27 @@ weexpack plugin create
 		value(string) | name为category时，iOS分为三类（module/component/handle）；name为ios-packag时，值为weexSDK待注册的类名称；name为api时，值为js业务调用的组件名称
 
 
-		举例：
-
-		```
-		<!-- ios -->
-		<config-file target="WeexpluginConfig.xml" parent="/*">
-			<feature name="WXTestModule">
-        		<param name="category" value="module" />
-	        	<param name="ios-package" value="WXTestModule" />
-    	    	<param name="api" value="test" />
-        	</feature>
-		</config-file>
-		<!-- android -->
-    <config-file target="config.xml" parent="/*">
-      <feature name="WXTestModule">
-            <param name="category" value="module" />
-            <param name="android-package" value="com.test.WXTestModule" />
-            <param name="api" value="test" />
-          </feature>
+    举例：
+    ```
+    <!-- ios -->
+    <config-file target="WeexpluginConfig.xml" parent="/*">
+      <feature name="WXTestModule">
+        <param name="category" value="module" />
+        <param name="ios-package" value="WXTestModule" />
+        <param name="api" value="test" />
+      </feature>
     </config-file>
 
-	    <!-- android -->
+    <!-- android -->
+    <config-file target="config.xml" parent="/*">
+      <feature name="WXTestModule">
+        <param name="category" value="module" />
+        <param name="android-package" value="com.taobao.weex.ui.module.WXTestModule" />
+        <param name="api" value="test" />
+      </feature>
+    </config-file>
+    ```
 
-		```
 
 	**preference(iOS only)**
 
