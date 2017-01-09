@@ -99,7 +99,7 @@ demo 预览效果如图。
 你也可以添加一个api模块，你也可以为已经存在的api模块添加新的api.比如你可以创建一个user模块，并给他添加一些诸如`login`,`logout`等接口。开发者引入你的模块只需要
 
 ``` javascript
-require('@weex-module/moduleName)[methodName](arg1, arg2, ...
+require('@weex-module/moduleName)[methodName](arg1, arg2...)
 ```
 
 下面的示例将会详细介绍如何创建一个新的API模块

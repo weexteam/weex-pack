@@ -269,6 +269,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 ![weexpack2](https://img.alicdn.com/tps/TB18hxjPXXXXXXgapXXXXXXXXXX-248-258.png)
 
+## 插件开发文档
 
 + [开发html5的插件教程](./doc/plugin-devloping-web.md)
 
