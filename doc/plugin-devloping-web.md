@@ -189,4 +189,4 @@ Weex.install(user)
 
 [iOS](https://weex-project.io/doc/advanced/extend-to-ios.html)
 
-[weex 文档](https://weex-project.io/doc/advanced/extend-to-html5.html)
+[WEEX English Doc](https://weex-project.io/doc/advanced/extend-to-html5.html)
