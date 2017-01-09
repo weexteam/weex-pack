@@ -193,7 +193,8 @@ weexpack plugin create
     <config-file target="*-Info.plist" parent="NSCameraUsageDescription">		<string>$CAMERA_USAGE_DESCRIPTION</string>
 	</config-file>
 	```
-	
+
+* [html5插件创建文档]('./doc/plugin-devloping-web.md')
 
 ## 插件发布
 
