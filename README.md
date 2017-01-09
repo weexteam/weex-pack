@@ -50,7 +50,7 @@ weexpack 会自动新建以 appName 命名的目录，并将项目模板拉取�
     |—— webpack.config.js
     |—— /src
     |     |—— index.we
-    |—— /html5
+    |—— /web
     |     |—— index.html
     |—— /ios
     |     |—— /playground
@@ -121,6 +121,12 @@ android的打包和构建是一体的 ：
 ## 在 html5 平台上，运行项目：
 
     $ weexpack run web
+    
+如果你需要进行项目的上线，你可以使用
+
+    $weexpack build web
+  
+程序会自动进行打包，你只需要把打包后的资源文件上传到服务器即可。
 
 ## 示例
 [使用Weexpack打包出一个Weex版的 《One App》](https://github.com/weexteam/weex-pack/wiki/Create-Weex-One-App-with-Weexpack)
