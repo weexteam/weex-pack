@@ -5,6 +5,7 @@ const child_process = require('child_process')
 const startJSServer = require('./server')
 const util = require('../utils')
 const opener = require('opener');
+
 /**
  * Start web service
  * @param {Object} options
@@ -25,7 +26,7 @@ function runWeb(options) {
     let exist = startJSServer();
     //没办法无法预知服务器啥时候完成
     setTimeout(function () {
-      preview()
+      preview();
     }, exist ? 0 : 2000)
 
 

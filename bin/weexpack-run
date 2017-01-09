@@ -4,7 +4,8 @@ const program = require('commander')
 const chalk = require('chalk')
 const runAndroid = require('../src/run/Android')
 const runIOS = require('../src/run/iOS')
-const runWeb = require('../src/run/web')
+const runWeb = require('../src/run/web');
+const preview = require('weex-previewer');
 
 program
   .usage('<platform> [options]')
@@ -40,7 +41,7 @@ function run(platform, options) {
   switch (platform) {
     case 'android' : runAndroid(options); break;
     case 'ios' : runIOS(options); break;
-    case 'web' : runWeb(options); break;
+    case 'web' : preview({entry:'src/index.we'}); break;
   }
 }
 
