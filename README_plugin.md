@@ -200,3 +200,6 @@ weexpack plugin create
 weexpack plugin publish
 
 举例：cd到`weex-test`目录下执行`weexpack plugin publish`即可发布。
+
+## 官方Demo
+weex-plugins(https://github.com/weexteam/weex-plugins)是weex官方维护的插件仓库，开发者可以参考实现, 也欢迎大家提交commit。
