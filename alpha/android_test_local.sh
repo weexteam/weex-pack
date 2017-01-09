@@ -9,7 +9,7 @@ do
         plugin_path=$OPTARG
         ;;
         h)
-        echo "Usage: ship [-d plugin_path]"
+        echo "Usage: android_test_local.sh [-d plugin_path]"
         echo "-d plugin dir"
         exit 1
         ;;
