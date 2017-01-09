@@ -259,9 +259,9 @@ weexpack 所提供的命令大致可分为三组，分别是：
      $ weexpack run web
 
 
-## 插件开发及发布
+## 插件发布
 
-对于插件开发者来说，也有一组用于创建和发布插件的命令。
+对于插件开发者来说，也有一组用于创建和发布插件的命令，[前往](https://github.com/weexteam/weex-pack/blob/dev/README_plugin.md) 查看详细文档
 
 ![weexpack2](https://img.alicdn.com/tps/TB18hxjPXXXXXXgapXXXXXXXXXX-248-258.png)
 
