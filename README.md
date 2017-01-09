@@ -163,7 +163,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 		$ weexpack platform remove ios
 
-### 3. 安装 weex 插件（可选项）
+#### 3. 安装 weex 插件（可选项）
 
 添加想要使用的插件，支持从本地或者 weex 应用市场安装插件。
 
@@ -175,7 +175,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 		$ weexpack plugin add weex-chart
 
-    模版的weexplguin是插件安装的目标工程。以安卓为例，其目录如下：
+    模版的weexplugin是插件安装的目标工程。以安卓为例，其目录如下：
 
     ```
       weexplugin
@@ -257,17 +257,15 @@ weexpack 所提供的命令大致可分为三组，分别是：
 * 在 html5 平台运行：
 
      $ weexpack run web
-     
-* 打包html5项目，如果你需要将现有项目打包到服务器，你只需要使用
 
+* 打包html5平台：
      $ weexpack build web
      
   这样你可以把打包后的资源上传到cdn服务器，然后上线你的web项目。
 
+## 插件发布
 
-## 插件开发及发布
-
-对于插件开发者来说，也有一组用于创建和发布插件的命令。
+对于插件开发者来说，也有一组用于创建和发布插件的命令，[前往](https://github.com/weexteam/weex-pack/blob/dev/README_plugin.md) 查看详细文档
 
 ![weexpack2](https://img.alicdn.com/tps/TB18hxjPXXXXXXgapXXXXXXXXXX-248-258.png)
 

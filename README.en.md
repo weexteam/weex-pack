@@ -2,9 +2,27 @@
 
 [中文版文档](./README.md)
 
-### Weexpack introduction
-Weexpack is our next generation of engineering development kits. It allows developers to create weex projects with simple commands and run the project on different development platforms.
+## Weexpack introduction
+Weexpack is our next generation of engineering development kits, it helps to setup weex application from scratch quickly. With simple commands, developers could create a weex project, add different platform template, could install plugins from local, GitHub or weex market, could pack up his application project and run on mobile. For those who would like to share his own plugins, he could publish them to the weex market.
 
+weexpack commands can be grouped to three parts:
+* application package
+ * **weexpack create** — create weex project.
+ * **weexpack platform add/remove** — add／remove weex platform template，it support plugins and weex bundle debugging by default.
+ * **weexpack platform list** — query installed platforms and its version.
+ * **weexpack platform run** - pack/build/run application.
+
+
+* plugin usuage
+ * **weexpack plugin add/remove** — add/remove weex plugin, support to install from local, Github or market.
+ * **weexpack plugin list** — query installed plugins and its version.
+
+* plugin development
+ * **weexpack plugin create** - create plugin template with necessary config file and directory.
+ * **weexpack plugin publish** - publish plugin to market.
+
+
+## Installation
 ### pre-environmental requirements
 
 - supported on Mac linux windows.
@@ -23,44 +41,185 @@ First, install the weex-pack command globally:
 
     $ npm install -g weexpack
 
-Then, create the weex project:
+or run the following command under the root path of your cloned weexpack repo
 
-    $ weexpack init appName
+    $ npm install
 
-Weexpack automatically creates a new directory named appName and pulls the project template to that directory.
+## Pack application (and plugin usuage)
 
-The final resulting directory structure looks like this:
+Following graph shows how to pack a application, plugin related parts werenot a must.
 
-    -> / appName
-    .
-    |—— .gitignore
-    |—— README.md
-    |—— package.json
-    |—— webpack.config.js
-    |—— /src
-    |     |—— index.we
-    |—— /html5
-    |     |—— index.html
-    |—— /ios
-    |     |—— /playground
-    |     |—— /sdk
-    |     |—— /WXDevtool
-    |—— /android
-    |     |—— /playground
-    |     |—— /appframework
+![weexpack1](https://img.alicdn.com/tps/TB1vphePXXXXXctapXXXXXXXXXX-465-371.png)
 
+### Steps in detail
 
-Next, go to the directory, and install the dependencies:
+#### 1. create a weexpack project
+
+    $ weexpack create appName
+
+  will create directory as follows：
+
+    ```
+    WeexProject
+    ├── README.md
+    ├── android.config.json
+    ├── config.xml
+    ├── hooks
+    │   └── README.md
+    ├── ios.config.json
+    ├── package.json
+    ├── platforms     // platform template directory
+    ├── plugins       // plugins download to here
+    │   └── README.md
+    ├── src           // application（we/vue file）directory
+    │   └── index.we
+    ├── start
+    ├── start.bat
+    ├── tools
+    │   └── webpack.config.plugin.js
+    ├── web
+    │   ├── index.html
+    │   ├── index.js
+    │   └── js
+    │       └── init.js
+    └── webpack.config.js
+    ```
+
+Above project template has no ios/android directory by default, you should change to appName path to install necessary dependency.
 
     $ cd appName && npm install
+    
+#### 2. install weex application template
 
-### IOS platform
+Application template by default support weex plugins and weex bundle debugging. Please note template name are in lower-case, template was installed under platforms directory.
 
-For simulator
+* android template
+
+		$ weexpack platform add android
+
+* ios template
+
+		$ weexpack platform add ios
+
+    Take android platform as example，the directory under platforms looks as following:
+
+      ```
+      platforms
+      └── android
+          ├── LICENSE
+          ├── NOTICE
+          ├── README.md
+          ├── app
+          │   ├── build
+          │   ├── build.gradle
+          │   ├── proguard-rules.pro
+          │   └── src
+          ├── appframework
+          │   ├── build
+          │   ├── build.gradle
+          │   ├── proguard-rules.pro
+          │   └── src
+          ├── build
+          │   └── generated
+          ├── build.gradle
+          ├── codeStyleSettings.xml
+          ├── gradle
+          │   └── wrapper
+          ├── gradle.properties
+          ├── gradlew
+          ├── gradlew.bat
+          ├── settings.gradle
+          └── weexplugin
+              ├── build.gradle
+              ├── proguard-rules.pro
+              └── src
+
+      ```
+* query installed platforms
+
+		$ weexpack platform list
+
+    you will get result like：
+
+    ```
+    Installed platforms:
+      android
+    Available platforms:
+      android ^6.2.1
+    ```
+* remove platform template
+Please use remove command to remove unnecessary platform, for example user want to remove ios template in windows platform.
+
+		$ weexpack platform remove ios
+
+#### 3. install weex plugin（optional）
+
+* add plugins from local
+
+		$ weexpack plugin add path/to/plugin
+
+* add plugins from weex market，for example weex-chart
+
+		$ weexpack plugin add weex-chart
+
+    weexplugin directory was the target directory where plugin was installed. Take android as an example：
+
+    ```
+      weexplugin
+      ├── build.gradle  //  plugin build script, maintained by weexpack tool
+      ├── libs
+      ├── proguard-rules.pro
+      ├── src
+      │   └── main
+      │       ├── AndroidManifest.xml // plugin android manifest file
+      │       ├── java
+      │       │   ├── // 插件src安装目录
+      │       │   └── com
+      │       │       └── alibaba
+      │       │           └── weex
+      │       │               └── plugin
+      │       │                   ├── ConfigXmlParser.java // config file parser
+      │       │                   ├── PluginConfig.java    // external interface
+      │       │                   ├── PluginEntry.java     // plugin description
+      │       │                   └── PluginManager.java   // plugin manager
+      │       └── res // plugin resource path
+      │           ├── drawable
+      │           ├── values
+      │           │   └── strings.xml
+      │           └── xml
+      │               └── config.xml // plugin config file, which used by PluginManager when install
+    ```
+
+* query installed plugins
+
+		$ weexpack plugin list
+
+* remove installed plugin，for example weex-chart
+
+		$ weexpack plugin remove weex-chart
+
+#### 4. pack application and run
+
+After all above steps, you could modify your application we/vue files under src directory. And then, use run command to pack and run your application. Run command will download building tools and all dependencies which may take a while, and open monitor or connect to mobile device to execute your application afterwards.
+
+* for android application
+
+		$ weexpack run android
+    
+You could modify your project information in android.config.json file:
+
+    -AppName: the name of the project
+    -AppId: application_id the name of the package
+    -SplashText: the text in welcome page
+    -WeexBundle: the bundle file (could be local file or remote url). For Local file please put your we/vue files under the src directory
+
+* for ios platform
+
+  * simulator
 
     $ weexpack run ios
 
-Build ipa
+  * Build ipa
 
     $ weexpack build ios
 
@@ -74,28 +233,16 @@ Note: For details about various requirements to deploy to a device, refer to the
      $ ./mobileprovision_UUID.sh abcpath
      abcpath is the path of provisioning profile file.
 
-### Android platform
+* for H5 platform
 
-In the android platform, package and running could be done with one command:
+     $ weexpack run web
+     
+## Plugin development and publishment
 
-    $ weexpack run android
+![weexpack2](https://img.alicdn.com/tps/TB18hxjPXXXXXXgapXXXXXXXXXX-248-258.png)
 
-You could configure the following in android.config.json
 
-    -AppName: the name of the project
-    -AppId: application_id the name of the package
-    -SplashText: the text in welcome page
-    -WeexBundle: the bundle file (could be local file or remote url). Local file please put under the src directory
-
-### Html5 platform
-
-On the html5 platform, run the project:
-
-    $ weexpack run web
-
-For developers who have a packaged release, you can make changes directly to the playground project. Follow-up, weexpack will be further added to the packaging, testing and other functions.
-
-### examples
+## Examples
  [Create Weex One App with Weexpack](https://github.com/weexteam/weex-pack/wiki/Create-Weex-One-App-with-Weexpack)
 
   [1]: https://nodejs.org/
