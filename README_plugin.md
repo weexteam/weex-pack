@@ -188,9 +188,9 @@ weexpack plugin create
 		</config-file>
 		<!-- android -->
     <config-file target="config.xml" parent="/*">
-      <feature name="WXTestModule">
-            <param name="category" value="module" />
-            <param name="ios-package" value="WXTestModule" />
+      <feature name="WXTestModule">
+            <param name="category" value="module" />
+            <param name="android-package" value="com.test.WXTestModule" />
             <param name="api" value="test" />
           </feature>
     </config-file>
