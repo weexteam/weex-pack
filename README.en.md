@@ -49,7 +49,7 @@ or run the following command under the root path of your cloned weexpack repo
 
 Following graph shows how to pack a application, plugin related parts werenot a must.
 
-![weexpack1](https://img.alicdn.com/tps/TB1vphePXXXXXctapXXXXXXXXXX-465-371.png)
+![weexpack1](https://img.alicdn.com/tps/TB1.bpVPXXXXXarapXXXXXXXXXX-462-310.png)
 
 ### Steps in detail
 
