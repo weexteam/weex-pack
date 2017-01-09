@@ -1,0 +1,19 @@
+<template>
+  <div>
+    <text class="message">{{ message }}</text>
+  </div>
+</template>
+
+<style>
+  .message {
+    font-size: 70
+  }
+</style>
+
+<script>
+  module.exports = {
+    data: {
+      message: 'Hello, Weex!'
+    }
+  }
+</script>
