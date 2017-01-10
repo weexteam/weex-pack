@@ -254,14 +254,17 @@ weexpack 所提供的命令大致可分为三组，分别是：
   参数（\*mobileprovision）为provisioning profile文件路径
 
 
-* 在 html5 平台运行：
 
-     $ weexpack run web
 
 * 打包html5平台：
+
      $ weexpack build web
      
   这样你可以把打包后的资源上传到cdn服务器，然后上线你的web项目。
+  
+* 在 html5 平台运行：
+
+     $ weexpack run web
 
 ## 插件发布
 
