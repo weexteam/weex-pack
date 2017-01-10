@@ -2,10 +2,13 @@
 
 const program = require('commander')
 const chalk = require('chalk')
+const fs = require('fs');
+const path = require('path');
 const runAndroid = require('../src/run/Android')
 const runIOS = require('../src/run/iOS')
 const runWeb = require('../src/run/web');
 const preview = require('weex-previewer');
+
 
 program
   .usage('<platform> [options]')
@@ -41,7 +44,16 @@ function run(platform, options) {
   switch (platform) {
     case 'android' : runAndroid(options); break;
     case 'ios' : runIOS(options); break;
-    case 'web' : preview({entry:'src/index.we'}); break;
+    case 'web' : previewWeb(); break;
+  }
+}
+
+function previewWeb() {
+  // check if it is new template
+  if(fs.existsSync('src/index.vue')) {
+    preview({entry:'src/index.vue'});  
+  }else {
+    preview({entry:'src/index.we'});
   }
 }
 

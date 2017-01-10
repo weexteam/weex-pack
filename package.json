@@ -31,8 +31,10 @@
     "liujiescut <969343185@qq.com>",
     "shujiewz <rememberwz@gmail.com>",
     "Icemic <bingfeng.web@gmail.com>",
-    "exolution <exolution@163.com>"
+    "exolution <exolution@163.com>",
+    "JackPu <kakashjack@gmail.com>"
   ],
+  
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "^1.1.3",
@@ -41,7 +43,7 @@
     "inquirer": "^1.1.3",
     "opener": "^1.4.2",
     "recursive-copy": "^2.0.5",
-    "weex-previewer": "^0.9.8",
+    "weex-previewer": "^0.9.9",
     "yeoman-environment": "^1.6.3",
     "yeoman-generator": "^0.24.1"
   }
