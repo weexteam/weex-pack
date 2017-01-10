@@ -13,8 +13,10 @@ function buildWeb(options) {
   /*if (checkOldTemplate()) {
       // return ;
   }*/
-  buildPlugin().then(() => {
-     buildSinglePlugin();  
+  buildPlugin().then((code) => {
+     buildSinglePlugin(code);  
+  }).catch((err) => {
+    console.log(err);
   });
 }
 // if using old weexpack please move some directoies to /platforms 
@@ -30,7 +32,9 @@ function checkOldTemplate() {
 function buildPlugin() {
   let rootPath = process.cwd();
   if (!fs.existsSync(path.join(rootPath, 'plugins/fetch.json'))) {
-    return;
+    return new Promise((resolve,reject) => {
+      return resolve('no plugin build');
+    });
   }
   // check plugin history
   let plugins = require(path.join(rootPath, 'plugins/fetch.json'));
@@ -57,7 +61,15 @@ function buildPlugin() {
   })
 }
 // build single plugin use webpack
-function buildSinglePlugin() {
+function buildSinglePlugin(code) {
+  if(code == 'no plugin build') {
+     try { 
+       utils.exec('npm run build');  
+     }catch(e) {
+       console.error(e);
+     }
+    return;
+  }
   try {
     utils.buildJS('build_plugin').then(() => {
       utils.exec('npm run build', true);
