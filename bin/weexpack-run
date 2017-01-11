@@ -53,7 +53,7 @@ function previewWeb() {
   if(fs.existsSync('./src/index.vue')) {
     preview({entry:'./src/index.vue'});  
   }else {
-    preview({entry:'./src/index.we'});
+    preview({entry:'./src/foo.vue'});
   }
 }
 

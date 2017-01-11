@@ -34,7 +34,6 @@
     "exolution <exolution@163.com>",
     "JackPu <kakashjack@gmail.com>"
   ],
-  
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "^1.1.3",

@@ -42,7 +42,7 @@ module.exports = yeoman.Base.extend({
 
     copy('README.md')
     copy('webpack.config.js')
-    copy('src/index.vue');
+    copy('src');
     copy('web/index.html')
     copy('android.config.json')
     copy('ios.config.json')
@@ -58,7 +58,7 @@ module.exports = yeoman.Base.extend({
       }
      
     );
-    console.log('you could run "cd ' + this.options.projectName + ' && npm install"');
+    console.log(chalk.grey('you could run') + ' " cd ' + this.options.projectName + ' && npm install"');
     console.log('then you could run the commands:');
     console.log('npm run build : ' + chalk.grey('build your project'));
     console.log('npm run serve : ' + chalk.grey('start a local server'));
