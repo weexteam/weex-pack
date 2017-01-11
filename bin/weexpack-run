@@ -50,10 +50,10 @@ function run(platform, options) {
 
 function previewWeb() {
   // check if it is new template
-  if(fs.existsSync('src/index.vue')) {
-    preview({entry:'src/index.vue'});  
+  if(fs.existsSync('./src/index.vue')) {
+    preview({entry:'./src/index.vue'});  
   }else {
-    preview({entry:'src/index.we'});
+    preview({entry:'./src/index.we'});
   }
 }
 

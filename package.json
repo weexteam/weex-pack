@@ -43,7 +43,7 @@
     "inquirer": "^1.1.3",
     "opener": "^1.4.2",
     "recursive-copy": "^2.0.5",
-    "weex-previewer": "^0.9.9",
+    "weex-previewer": "^1.1.3",
     "yeoman-environment": "^1.6.3",
     "yeoman-generator": "^0.24.1"
   }
