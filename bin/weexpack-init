@@ -25,6 +25,7 @@ if (!projectName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
   console.log(msg);
   process.exit();
 }
+console.log(projectName);
 if (fs.existsSync(path.join(process.cwd(), projectName))) {
   _prompt.start();
   _prompt.message = '';
