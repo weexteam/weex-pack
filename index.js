@@ -20,7 +20,6 @@ function init(projectName = '', configFile = '') {
   if (projectName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
     initProject(projectName, configFile)
   } else {
-    console.log()
     console.log(`  ${chalk.red('Invalid project name:')} ${chalk.yellow(projectName)}`)
   }
 }
@@ -36,7 +35,6 @@ function run(platform = '', options = {}) {
     case 'web'     : runWeb(options);     break;
 
     default : {
-      console.log()
       console.log(`  ${chalk.red('Unknown platform:')} ${chalk.yellow(platform)}`)
     }
   }

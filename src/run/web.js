@@ -28,7 +28,6 @@ function runWeb(options) {
       preview()
     }, exist ? 0 : 2000)
 
-
   })
 
 }

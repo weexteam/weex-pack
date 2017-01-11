@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+const program = require('commander');
+const chalk = require('chalk');
+const create = require('../src/create/create');
+const cli = require('../src/cli');
+const publish = require('../src/publish/publish');
+program
+  .command('create [plugin_name]')
+  .description('create a empty plugin project')
+  .action(function (pluginName) {
+
+    if (pluginName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
+      create(pluginName, program.config)
+    } else {
+      console.log();
+      console.log(`  ${chalk.red('Invalid plugin name:')} ${chalk.yellow(pluginName)}`);
+      process.exit();
+    }
+  });
+program
+  .option('--ali', 'publish to alibaba internal market(only for alibaba internal network)')
+
+  .command('publish')
+  .description('publish current plugin')
+  .action(function () {
+    publish(program.ali);
+  });
+program
+  .command('*')
+  .description('setup specific plugin into your project')
+  .action(function (pluginName) {
+    let args=[];
+    process.argv.forEach(function(arg,i){
+      if(arg!='[object Object]') {//fix commander’s bug
+        args.push(arg);
+        if (i == 1) {
+          args.push('plugin');
+        }
+      }
+    });
+    cli(args);
+  });
+program.parse(process.argv);
+
+

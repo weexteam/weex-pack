@@ -14,7 +14,7 @@ function buildIOS(options) {
   utils.checkAndInstallForIosDeploy()
     .then(utils.buildJS)
     .then(()=>{
-      return utils.exec('rsync  -r -q ./dist/* ios/playground/bundlejs/')
+      return utils.exec('rsync  -r -q ./dist/* platforms/ios/bundlejs/')
     })
     .then(()=>{
       startJSServer()
@@ -47,7 +47,8 @@ function prepareIOS({options}) {
     }
 
     // change working directory to ios
-    process.chdir(path.join(rootPath, 'ios/playground'))
+    // process.chdir(path.join(rootPath, 'ios/playground'))
+    process.chdir(path.join(rootPath, 'platforms/ios'))
 
     const xcodeProject = utils.findXcodeProject(process.cwd())
 

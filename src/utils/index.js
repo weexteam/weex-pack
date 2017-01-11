@@ -104,9 +104,9 @@ const utils = {
     })
 
   },
-  buildJS(){
+  buildJS(cmd = 'build'){
     return utils.exec('npm install',true).then(()=> {
-      return utils.exec('npm run build')
+      return utils.exec('npm run ' + cmd)
     })
   },
   getIOSProjectInfo(){
@@ -140,6 +140,9 @@ const utils = {
     if(process.platform==='win32'){
       cmd
     }
+  },
+  dashToCamel(str) {
+    return str.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});  
   }
 }
 

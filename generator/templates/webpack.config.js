@@ -87,3 +87,4 @@ weexConfig.output.filename = '[name].weex.js'
 weexConfig.module.loaders[1].loaders.push('weex')
 
 module.exports = [webConfig, weexConfig]
+

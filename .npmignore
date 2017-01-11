@@ -1,6 +1,7 @@
 coverage
 docs
-node_modules
+node_modules/*
+
 test
 demo
 .editorconfig

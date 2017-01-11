@@ -6,7 +6,7 @@ const path = require('path')
  * @param {String} root directory path
  */
 function checkAndroid(cwd) {
-  return fs.existsSync(path.join(cwd, 'android/playground/gradlew'))
+  return fs.existsSync(path.join(cwd, 'platforms/android/gradlew'))
 }
 
 /**
@@ -14,8 +14,10 @@ function checkAndroid(cwd) {
  * @param {String} root directory path
  */
 function checkIOS(cwd) {
-  return fs.existsSync(path.join(cwd, 'ios/playground'))
+  // return fs.existsSync(path.join(cwd, 'ios/playground'))
+  return fs.existsSync(path.join(cwd, 'platforms/ios'))
 }
+
 
 /**
  * Check if current cli is running on Windows platform

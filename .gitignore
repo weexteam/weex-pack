@@ -5,8 +5,12 @@
 *.iml
 .idea
 .project
+.gradle
+alpha/MyApp/*
 
-node_modules/
+node_modules/*
+
+
 bower_components/
 .svn/
 .sass-cache/
@@ -15,3 +19,6 @@ test/
 coverage/
 dist/
 TODO/
+node_modules/cordova-lib/node_modules/.bin/opener
+node_modules/cordova-lib/node_modules/opener/
+weexpackdemo/

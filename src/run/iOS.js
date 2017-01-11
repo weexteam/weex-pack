@@ -14,7 +14,7 @@ function runIOS(options) {
   utils.checkAndInstallForIosDeploy()
     .then(utils.buildJS)
     .then(()=>{
-      return utils.exec('rsync  -r -q ./dist/* ios/playground/bundlejs/')
+      return utils.exec('rsync  -r -q ./dist/* platforms/ios/bundlejs/')
     })
     .then(()=> {
       startJSServer()
@@ -53,7 +53,7 @@ function prepareIOS({options}) {
     }
 
     // change working directory to ios
-    process.chdir(path.join(rootPath, 'ios/playground'))
+    process.chdir(path.join(rootPath, 'platforms/ios'))
 
     const xcodeProject = utils.findXcodeProject(process.cwd())
 
@@ -78,8 +78,8 @@ function prepareIOS({options}) {
  * @param {Object} options
  */
 function installDep({xcodeProject, options,rootPath}) {
-  console.log(` => ${chalk.blue.bold('pod install')}`)
-  return utils.exec('pod install --no-repo-update').then(()=>({xcodeProject, options, rootPath}))
+  console.log(` => ${chalk.blue.bold('pod update')}`)
+  return utils.exec('pod update').then(()=>({xcodeProject, options, rootPath}))
 }
 
 /**
