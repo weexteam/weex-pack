@@ -6,7 +6,7 @@ const Fs=require('fs');
 const Path=require('path');
 const os=require('os');
 var _mapper={};
-const TMP_DIR=os.tmpDir();
+const TMP_DIR=typeof os.tmpdir==='function'?os.tmpdir():os.tmpDir();
 const CACHE_FILE_NAME='registry_map.json';
 try {
   _mapper = JSON.parse(Fs.readFileSync(Path.join(TMP_DIR,CACHE_FILE_NAME )));
