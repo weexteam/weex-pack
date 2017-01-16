@@ -43,7 +43,7 @@ weexpack platform add android -d
 weexpack plugin add "$plugin" -d
 
 if [ -n "$src_path" ]; then
-    cp -ri "$src_path" src
+    cp -rvi "$src_path" src
 fi
 
 adb devices
