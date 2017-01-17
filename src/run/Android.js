@@ -73,17 +73,27 @@ function prepareAndroid({options}) {
       reject()
     }
 
-    try {
-      child_process.execSync(`adb kill-server`, {encoding: 'utf8'})
-    } catch (e) {
-      reject()
-    }
-    try {
-      child_process.execSync(`adb start-server`, {encoding: 'utf8'})
-    } catch (e) {
-      reject()
-    }
+    // try {
+    //   child_process.execSync(`adb kill-server`, {encoding: 'utf8'})
+    // } catch (e) {
+    //   reject()
+    // }
+    // try {
+    //   child_process.execSync(`adb start-server`, {encoding: 'utf8'})
+    // } catch (e) {
+    //   reject()
+    // }
 
+  try {
+    child_process.execSync(`adb start-server`, {encoding: 'utf8'})
+  } catch (e) {
+    reject()
+  }
+  try {
+    child_process.execSync(`adb devices`, {encoding: 'utf8'})
+  } catch (e) {
+    reject()
+  }
     resolve({options, rootPath})
   })
 }

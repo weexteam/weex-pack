@@ -6,14 +6,14 @@ const Fs=require('fs');
 const Path=require('path');
 const os=require('os');
 var _mapper={};
-const TMP_DIR=os.tmpDir();
+const TMP_DIR=typeof os.tmpdir==='function'?os.tmpdir():os.tmpDir();
 const CACHE_FILE_NAME='registry_map.json';
 try {
   _mapper = JSON.parse(Fs.readFileSync(Path.join(TMP_DIR,CACHE_FILE_NAME )));
 }catch(e){
 
 }
-exports.domain = 'http://weex-market.taobao.net';
+exports.domain = 'http://market.dotwe.org';
 exports.publish = function (name, namespace, ali, version) {
   return new Promise(function (resolve, reject) {
     var md5 = crypto.createHash('md5');
@@ -66,7 +66,6 @@ global.WeexMarket.info=exports.info = function (name) {
   else {
     return new Promise((resolve, reject)=> {
       post(exports.domain + '/json/sync/info.json?name=' + name).then(function (res) {
-        console.log(111,res,name);
         if (res.success) {
           _mapper[name]=res.data;
           try {
@@ -77,11 +76,11 @@ global.WeexMarket.info=exports.info = function (name) {
           resolve(res.data)
         }
         else {
-          reject(res);
+          reject('market error:',JSON.stringify(res));
         }
 
       }, function (e) {
-        reject(e);
+        reject(e.toString());
       })
     })
   }
