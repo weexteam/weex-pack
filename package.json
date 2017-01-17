@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Hanks10100/weex-pack.git"
+    "url": "https://github.com/weexteam/weex-pack.git"
   },
   "engines": {
     "node": ">=6"
