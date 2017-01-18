@@ -46,7 +46,7 @@ function showPrompt() {
 
     var deferred = Q.defer();
     
-    var msg = "May Cordova anonymously report usage statistics to improve the tool over time?";
+    var msg = "May weexpack anonymously report usage statistics to improve the tool over time?";
     insight.askPermission(msg, function (unused, optIn) {
         var EOL = require('os').EOL;
         if (optIn) {
