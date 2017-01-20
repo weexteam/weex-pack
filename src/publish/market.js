@@ -2,24 +2,36 @@ const Url = require('url');
 const Http = require('http');
 const chalk = require('chalk');
 const crypto = require('crypto');
-const Fs=require('fs');
-const Path=require('path');
-const os=require('os');
-var _mapper={};
-const TMP_DIR=os.tmpDir();
-const CACHE_FILE_NAME='registry_map.json';
+const Fs = require('fs');
+const Path = require('path');
+const os = require('os');
+var _mapper = {};
+const TMP_DIR = typeof os.tmpdir === 'function' ? os.tmpdir() : os.tmpDir();
+const CACHE_FILE_NAME = 'registry_map.json';
 try {
-  _mapper = JSON.parse(Fs.readFileSync(Path.join(TMP_DIR,CACHE_FILE_NAME )));
-}catch(e){
+  _mapper = JSON.parse(Fs.readFileSync(Path.join(TMP_DIR, CACHE_FILE_NAME)));
+} catch (e) {
 
 }
-exports.domain = 'http://market.dotwe.org';
+let marketEnv = 'online';
+let marketUrlMap = {
+  'online': 'http://market.dotwe.org',
+  'pre': 'http://market-pre.dotwe.org',
+  'daily': 'http://weex-market.taobao.net'
+};
+process.argv.forEach(function (arg) {
+  let match = /--market=(.+)/.exec(arg);
+  if (match) {
+    marketEnv = match[1];
+  }
+});
+exports.domain = marketUrlMap[marketEnv];
 exports.publish = function (name, namespace, ali, version) {
   return new Promise(function (resolve, reject) {
     var md5 = crypto.createHash('md5');
     md5.update(`name=${name}_fullname=${namespace + '-' + name}_p=${!!ali}`);
     let sign = md5.digest('hex');
-    let url = exports.domain + '/json/sync/sync.json?name=' + name + '&namespace=' + namespace + '&fullname=' + namespace + '-' + name + '&p=' + !!ali + '&sign=' +'123';
+    let url = exports.domain + '/json/sync/sync.json?name=' + name + '&namespace=' + namespace + '&fullname=' + namespace + '-' + name + '&p=' + !!ali + '&sign=' + '123';
     post(url).then(function (res) {
       if (res.success) {
         console.log();
@@ -28,7 +40,7 @@ exports.publish = function (name, namespace, ali, version) {
         console.log();
         resolve()
       }
-      else if(res.data.code == 10004) {
+      else if (res.data.code == 10004) {
         console.log(chalk.red(`Market sync rejected! Namespace unmatched!`));
       }
     }).catch(function () {
@@ -57,26 +69,31 @@ exports.apply = function (name, p) {
     })
   })
 };
-global.WeexMarket={};
+global.WeexMarket = {};
 
-global.WeexMarket.info=exports.info = function (name) {
-  if(_mapper[name]){
+global.WeexMarket.info = exports.info = function (name) {
+  if (_mapper[name]) {
     return Promise.resolve(_mapper[name]);
   }
   else {
     return new Promise((resolve, reject)=> {
       post(exports.domain + '/json/sync/info.json?name=' + name).then(function (res) {
         if (res.success) {
-          _mapper[name]=res.data;
+          _mapper[name] = res.data;
           try {
             Fs.writeFileSync(Path.join(TMP_DIR, CACHE_FILE_NAME), JSON.stringify(_mapper, null, 4))
-          }catch(e){
+          } catch (e) {
             console.error('registry map save error');
           }
           resolve(res.data)
         }
         else {
-          reject('market error:',JSON.stringify(res));
+          if (res.data && res.data.code === '10001') {
+            reject('plugin "' + name + '" not found')
+          }
+          else {
+            reject('market error:' + JSON.stringify(res));
+          }
         }
 
       }, function (e) {
