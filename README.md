@@ -1,4 +1,6 @@
 [![GitHub release](https://img.shields.io/github/release/weexteam/weex-pack.svg)](https://github.com/weexteam/weex-pack/releases)  [![GitHub issues](https://img.shields.io/github/issues/weexteam/weex-pack.svg)](https://github.com/weexteam/weex-pack/issues)
+![Node Version](https://img.shields.io/node/v/weex-pack.svg "Node Version")
+[![Build Status](https://travis-ci.org/weexteam/weex-pack.svg?branch=master)](https://travis-ci.org/weexteam/weex-pack)
 # Weex 工程开发套件
 
 [English Version](./README.en.md)
