@@ -79,5 +79,9 @@
     "xcode": "^0.8.5",
     "yeoman-environment": "^1.6.3",
     "yeoman-generator": "^0.24.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
   }
 }
