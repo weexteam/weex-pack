@@ -25,11 +25,11 @@ module.exports = {
       },
       {
         test: /\.we(\?[^?]+)?$/,
-        loaders: 'weex-loader',
+        loader: 'weex-loader',
       },
       {
         test: /\.vue(\?[^?]+)?$/,
-        loaders: 'vue',
+        loader: 'vue',
       }
     ]
   },
