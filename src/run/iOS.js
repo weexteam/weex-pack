@@ -28,8 +28,13 @@ function runIOS(options) {
     .catch((err) => {
       if (err) {
         try {
-          console.log(err.stderr)
-          console.log(err.output.join('\n'))
+          if(err.stderr){
+            console.log(err.stderr)
+          }
+          else{
+            console.log(err);
+          }
+          if(err.output)console.log(err.output.join('\n'))
         }catch(e){
           console.log(e);
         }
