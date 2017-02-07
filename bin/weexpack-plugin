@@ -20,13 +20,14 @@ program
   });
 program
   .option('--ali', 'publish to alibaba internal market(only for alibaba internal network)')
-
+  .option('--market','')
   .command('publish')
   .description('publish current plugin')
   .action(function () {
     publish(program.ali);
   });
 program
+  .option('--market','')
   .command('*')
   .description('setup specific plugin into your project')
   .action(function (pluginName) {
