@@ -78,7 +78,15 @@
     "weexpack-lib": "^0.1.0",
     "xcode": "^0.8.5",
     "yeoman-environment": "^1.6.3",
-    "yeoman-generator": "^0.24.1"
+    "yeoman-generator": "^0.24.1",
+
+
+    "cordova-fetch": "^1.0.1",
+    "cordova-js": "4.2.0",
+    "cordova-registry-mapper": "1.x",
+    "cordova-serve": "^1.0.0",
+
+    "ios-sim": "^5.0.12"
   },
   "devDependencies": {
     "chai": "^3.5.0",
