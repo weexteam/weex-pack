@@ -46,31 +46,42 @@ module.exports = function (ali) {
       Market.apply(plugin.id, ali).then(function (result) {
         Cache.cache.namespace = result.namespace;
         package.name = result.fullname;
-        _doPublish(package,plugin.id,result.namespace,ali)
-      },function(){
+        _doPublish(package, plugin.id, result.namespace, ali)
+      }, function () {
 
       });
     }
     else {
       package.name = namespace + '-' + plugin.id;
-      _doPublish(package, plugin.id,namespace,ali)
+      _doPublish(package, plugin.id, namespace, ali)
     }
 
   }
-  else if(Cache.get('namespace')){
-    Market.publish(plugin.id, Cache.get('namespace'),ali,plugin.version).then(function(){
+  else if (Cache.get('namespace')) {
+    Market.publish(plugin.id, Cache.get('namespace'), ali, plugin.version).then(function () {
 
     });
   }
 
 };
-function _doPublish(package, name,namespace,ali) {
+function _doPublish(package, name, namespace, ali) {
   Fs.writeFileSync('./package.json', JSON.stringify(package, null, 4));
   Npm.publish(ali, true).then(function (success) {
     if (success) {
-      Market.publish(name,namespace,ali,package.version);
+      Market.publish(name, namespace, ali, package.version);
       Cache.cache.latestVersion = package.version;
       Cache.save();
+    }
+    try {
+      Fs.unlink('./package.json', function () {
+      });
+    } catch (e) {
+    }
+  }, function () {
+    try {
+      Fs.unlink('./package.json', function () {
+      });
+    } catch (e) {
     }
   })
 }
