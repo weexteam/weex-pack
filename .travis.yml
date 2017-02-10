@@ -1,0 +1,12 @@
+language: node_js
+
+os:
+  - linux
+  - osx
+
+node_js:
+  - 6
+  - 7
+script: ./node_modules/mocha/bin/mocha tests/*.test.js
+before_install:
+  - if [["$TRAVIS_OS_NAME" == "OSX"]]; then brew install nvm; fi; 

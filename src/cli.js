@@ -231,6 +231,7 @@ function cli(inputArgs) {
         // Flags to be passed to `cordova build/run/emulate`
         , 'debug' : Boolean
         , 'release' : Boolean
+        , 'market':String
         , 'archs' : String
         , 'device' : Boolean
         , 'emulator': Boolean
