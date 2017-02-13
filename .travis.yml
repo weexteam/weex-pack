@@ -1,7 +1,6 @@
 language: node_js
 
 os:
-  - linux
   - osx
 
 node_js:
@@ -11,4 +10,3 @@ script: ./node_modules/mocha/bin/mocha tests/*.test.js
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install nvm; fi;
   - if [[ "$TRAVIS OS_NAME" == "osx" ]]; then brew install android-platform-tools; fi;
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository ppa:nilarimogard/webupd8 -y && sudo apt-get -q update && sudo apt-get install android-tools-adb -y; fi;
