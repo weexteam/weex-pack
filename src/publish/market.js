@@ -19,19 +19,18 @@ let marketUrlMap = {
   'pre': 'http://market-pre.dotwe.org',
   'daily': 'http://weex-market.taobao.net'
 };
-process.argv.forEach(function (arg) {
-  let match = /--market=(.+)/.exec(arg);
-  if (match) {
-    marketEnv = match[1];
-  }
-});
+let argv = process.argv.join(' ');
+let match = /--market(?:\s+|=)(.+)(\s|$)/.exec(argv);
+if (match) {
+  marketEnv = match[1];
+}
+function resolveFullName(name,namespace){
+  return namespace?namespace+'-'+name:name
+}
 exports.domain = marketUrlMap[marketEnv];
 exports.publish = function (name, namespace, ali, version) {
   return new Promise(function (resolve, reject) {
-    var md5 = crypto.createHash('md5');
-    md5.update(`name=${name}_fullname=${namespace + '-' + name}_p=${!!ali}`);
-    let sign = md5.digest('hex');
-    let url = exports.domain + '/json/sync/sync.json?name=' + name + '&namespace=' + namespace + '&fullname=' + namespace + '-' + name + '&p=' + !!ali + '&sign=' + '123';
+    let url = exports.domain + '/json/sync/sync.json?name=' + name + '&namespace=' + namespace + '&fullname=' + resolveFullName(name,namespace) + '&p=' + !!ali;
     post(url).then(function (res) {
       if (res.success) {
         console.log();
@@ -41,11 +40,11 @@ exports.publish = function (name, namespace, ali, version) {
         resolve()
       }
       else if (res.data.code == 10004) {
-        console.log(chalk.red(`Market sync rejected! Namespace unmatched!`));
+        console.error(chalk.red(`Market sync rejected! Namespace unmatched!`));
       }
-    }).catch(function () {
-      console.log(chalk.red(`Market sync failed! Please retry ${chalk.blue('weexpack plugin publish')}`));
-      reject();
+    }).catch(function (e) {
+      console.error(chalk.red(`Market sync failed! Please retry ${chalk.blue('weexpack plugin publish')}`));
+      console.error(chalk.grey('error info:'+e));
     })
   })
 
@@ -62,10 +61,8 @@ exports.apply = function (name, p) {
       }
 
     }).catch(function (e) {
-      console.log();
-      console.log(chalk.red(`Market apply failed! Please retry ${chalk.blue('weexpack plugin publish')}`));
-      console.log();
-      reject();
+      console.error(chalk.red(`\nMarket apply failed! Please retry ${chalk.blue('weexpack plugin publish')}\n`));
+      console.error(chalk.grey('error info:'+e));
     })
   })
 };

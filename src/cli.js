@@ -231,6 +231,7 @@ function cli(inputArgs) {
         // Flags to be passed to `cordova build/run/emulate`
         , 'debug' : Boolean
         , 'release' : Boolean
+        , 'market':String
         , 'archs' : String
         , 'device' : Boolean
         , 'emulator': Boolean
@@ -242,6 +243,8 @@ function cli(inputArgs) {
         , 'list': Boolean
         , 'buildConfig' : String
         , 'template' : String
+        , 'ali' : Boolean
+
         };
 
     var shortHands =
@@ -250,6 +253,7 @@ function cli(inputArgs) {
         , 'h' : '--help'
         , 'src' : '--copy-from'
         , 't' : '--template'
+        , 'a' : '--ali'
         };
 
     checkForUpdates();
@@ -344,7 +348,8 @@ function cli(inputArgs) {
         browserify: args.browserify || false,
         fetch: args.fetch || false,
         nohooks: args.nohooks || [],
-        searchpath : args.searchpath
+        searchpath : args.searchpath,
+        ali:args.ali
     };
 
     var cmdList = [
@@ -444,6 +449,7 @@ function cli(inputArgs) {
                             , save: args.save || false
                             , shrinkwrap: args.shrinkwrap || false
                             , force: args.force || false
+                            , ali: args.ali || false
                             };
 
         return cordova.raw[cmd](subcommand, targets, download_opts);

@@ -46,14 +46,14 @@ function showPrompt() {
 
     var deferred = Q.defer();
     
-    var msg = "May Cordova anonymously report usage statistics to improve the tool over time?";
+    var msg = "May weexpack anonymously report usage statistics to improve the tool over time?";
     insight.askPermission(msg, function (unused, optIn) {
         var EOL = require('os').EOL;
         if (optIn) {
-            console.log(EOL + "Thanks for opting into telemetry to help us improve cordova.");
+            console.log(EOL + "Thanks for opting into telemetry to help us improve weexpack.");
             track('telemetry', 'on', 'via-cli-prompt-choice', 'successful');
         } else {
-            console.log(EOL + "You have been opted out of telemetry. To change this, run: cordova telemetry on.");
+            console.log(EOL + "You have been opted out of telemetry. To change this, run: weexpack telemetry on.");
             // Always track telemetry opt-outs! (whether opted-in or opted-out)
             track('telemetry', 'off', 'via-cli-prompt-choice', 'successful');
         }
