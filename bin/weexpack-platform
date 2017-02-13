@@ -8,8 +8,12 @@ const publish = require('../src/publish/publish');
 program
     .command('add [platform-name]')
     .option('-d, --d', 'debug')
+    .option('-a, --ali', 'add ios platform only used in alibaba group')
     .description('add a new platform project')
-    .action(function (pluginName) {
+    .action(function (pluginName, options) {
+
+
+
       let args=[];
       process.argv.forEach(function(arg,i){
         if(arg!='[object Object]') {//fix commander’s bug

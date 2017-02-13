@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.3.5",
+  "version": "0.3.7",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "tool",
     "toolkit"
   ],
-  "author": "xuxinxin(zhiqian) <873111137@qq.com>",
+  "author": "",
   "contributors": [
     "Hanks <zhanghan.me@gmail.com>",
     "Fkysly <fkysly@gmail.com>",
@@ -78,7 +78,15 @@
     "weexpack-lib": "^0.1.0",
     "xcode": "^0.8.5",
     "yeoman-environment": "^1.6.3",
-    "yeoman-generator": "^0.24.1"
+    "yeoman-generator": "^0.24.1",
+
+
+    "cordova-fetch": "^1.0.1",
+    "cordova-js": "4.2.0",
+    "cordova-registry-mapper": "1.x",
+    "cordova-serve": "^1.0.0",
+
+    "ios-sim": "^5.0.12"
   },
   "devDependencies": {
     "chai": "^3.5.0",
