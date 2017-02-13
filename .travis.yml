@@ -9,4 +9,5 @@ node_js:
   - 7
 script: ./node_modules/mocha/bin/mocha tests/*.test.js
 before_install:
-  - if [["$TRAVIS_OS_NAME" == "OSX"]]; then brew install nvm; fi; 
+  - if [["$TRAVIS_OS_NAME" == "OSX"]]; then brew install nvm; brew install android-platform-tools;fi; 
+  - if [["$TRAVIS_OS_NAME" == "LINUX"]]; then sudo apt-get install android-tools-adb android-tools-fastboot; fi;
