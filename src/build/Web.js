@@ -3,18 +3,13 @@
  **/
 const path = require('path');
 const chalk = require('chalk');
-const child_process = require('child_process');
-const inquirer = require('inquirer');
 const fs = require('fs');
 const utils = require('../utils')
 let pluginArr = [];
 
-function buildWeb(options) {
-  /*if (checkOldTemplate()) {
-      // return ;
-  }*/
+function buildWeb() {
   buildPlugin().then((code) => {
-     buildSinglePlugin(code);  
+    buildSinglePlugin(code);  
   }).catch((err) => {
     console.log(err);
   });
@@ -32,7 +27,7 @@ function checkOldTemplate() {
 function buildPlugin() {
   let rootPath = process.cwd();
   if (!fs.existsSync(path.join(rootPath, 'plugins/fetch.json'))) {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve) => {
       return resolve('no plugin build');
     });
   }
@@ -47,7 +42,6 @@ function buildPlugin() {
   pluginArr.forEach((plugin) => {
     let pluginEle = utils.dashToCamel(plugin.replace('weex-', ''));
     js_template.push('import ' + pluginEle + ' from "' + path.join(rootPath, 'plugins', plugin + '/web') + '";');
-    js_template.push(`window.weex && window.weex.install(${pluginEle});`);
   });
   return new Promise((resolve, reject) => {
     return fs.writeFile(path.join(rootPath, './plugins/plugin_bundle.js'), js_template.join('\r\n'), function (err) {
