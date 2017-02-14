@@ -10,4 +10,4 @@ script: ./node_modules/mocha/bin/mocha tests/*.test.js
 before_install:
   - brew install nvm;
   - brew install android-platform-tools;
-  - sudo gem install -n /usr/local/bin cocoapods
+  - gem install -n /usr/local/bin cocoapods
