@@ -46,7 +46,7 @@ module.exports = yeoman.Base.extend({
     copy('hooks/')
     copy('plugins/')
     copy('app.js');
-
+    copy('.babelrc.js');
     utils.copyAndReplace(
       this.templatePath('package.json'),
       this.destinationPath('package.json'),
