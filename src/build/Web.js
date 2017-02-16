@@ -2,10 +2,16 @@
  * this is a command for weexpack building
  **/
 const path = require('path');
-const chalk = require('chalk');
 const fs = require('fs');
-const utils = require('../utils')
+const utils = require('../utils');
+
 let pluginArr = [];
+const rootPath = process.cwd();
+const isVueProject = !fs.existsSync(path.join(rootPath, 'web/js/init.js'));
+const appTemplate = `
+import app from './src/index.vue';
+app.el = '#root';
+export default new Vue(app);`;
 
 function buildWeb() {
   buildPlugin().then((code) => {
@@ -14,18 +20,8 @@ function buildWeb() {
     console.log(err);
   });
 }
-// if using old weexpack please move some directoies to /platforms 
-function checkOldTemplate() {
-  if (fs.existsSync(path.join('./', 'web'))) {
-    console.log(chalk.red('please remove "web" directory into "platforms"'));
-    console.log('(new version weexpack not support old directoies)');
-    return true;
-  }
-  return false;
-}
 
 function buildPlugin() {
-  let rootPath = process.cwd();
   if (!fs.existsSync(path.join(rootPath, 'plugins/fetch.json'))) {
     return new Promise((resolve) => {
       return resolve('no plugin build');
@@ -39,25 +35,37 @@ function buildPlugin() {
     }
   }
   let js_template = [];
+  
   pluginArr.forEach((plugin) => {
     let pluginEle = utils.dashToCamel(plugin.replace('weex-', ''));
-    console.log(plugin);
     js_template.push('import ' + pluginEle + ' from "' + path.join(rootPath, 'plugins', plugin + '/web') + '";');
+    // old weexpack folder
+    if (!isVueProject) {
+      js_template.push(`window.weex && window.weex.install(${pluginEle});`);   
+    }
+    
   });
+  let jsFileContents = js_template.join('\r\n');
+  
   return new Promise((resolve, reject) => {
-    return fs.writeFile(path.join(rootPath, './plugins/plugin_bundle.js'), js_template.join('\r\n'), function (err) {
+    if(isVueProject) {
+      jsFileContents = jsFileContents + appTemplate;  
+    }  
+    const jsTarget =  isVueProject? './app.js' : './plugins/plugin_bundle.js';
+    return fs.writeFile(path.join(rootPath, jsTarget), jsFileContents, function (err) {
       if (err) {
-        return reject(err)
+        return reject(err);
       }
       else {
-        resolve('done')
+        resolve('done');
       }
-    })
-  })
+    });
+  });
 }
+
 // build single plugin use webpack
 function buildSinglePlugin(code) {
-  if(code == 'no plugin build') {
+  if(code == 'no plugin build' || isVueProject) {
     try { 
       utils.exec('npm run build');  
     }catch(e) {
@@ -69,7 +77,6 @@ function buildSinglePlugin(code) {
     utils.buildJS('build_plugin').then(() => {
       utils.exec('npm run build', true);
       if (pluginArr.length > 0) {
-        let rootPath = process.cwd();
         fs.unlink(path.join(rootPath, './plugins/plugin_bundle.js'));
       }
     });
@@ -78,4 +85,6 @@ function buildSinglePlugin(code) {
     console.error(e);
   }
 }
+
+
 module.exports = buildWeb;

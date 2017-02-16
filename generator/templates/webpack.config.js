@@ -16,10 +16,11 @@ var bannerPlugin = new webpack.BannerPlugin(
   { raw: true }
 )
 
+var appScript = [path.resolve('./app.js')];
 function getBaseConfig () {
   return {
     entry: {
-      app: path.resolve('./app.js')
+      app: [path.resolve('./app.js')]
     },
     output: {
       path: 'dist',

@@ -4,7 +4,7 @@
   "description": "a weex project",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --color",
     "build_plugin": "webpack --config ./tools/webpack.config.plugin.js --color",
     "dev": "webpack --watch",
     "serve": "serve -p 8080"
