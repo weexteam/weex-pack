@@ -41,6 +41,7 @@ function buildPlugin() {
   let js_template = [];
   pluginArr.forEach((plugin) => {
     let pluginEle = utils.dashToCamel(plugin.replace('weex-', ''));
+    console.log(plugin);
     js_template.push('import ' + pluginEle + ' from "' + path.join(rootPath, 'plugins', plugin + '/web') + '";');
   });
   return new Promise((resolve, reject) => {

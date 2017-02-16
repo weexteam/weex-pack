@@ -2,17 +2,6 @@ const path = require('path')
 const yeoman = require('yeoman-generator')
 const utils = require('../src/utils')
 
-const dependencies = [
-  'weex-html5',
-]
-
-const devDependencies = [
-  'eslint',
-  'eslint-config-weex',
-  'serve',
-  'webpack',
-  'weex-loader',
-]
 
 module.exports = yeoman.Base.extend({
 
@@ -40,7 +29,7 @@ module.exports = yeoman.Base.extend({
   writing: function() {
     // this.fs.copy(this.templatePath('**/*'), this.destinationPath())
 
-    const copy = (file, dist) => {
+    const copy = (file) => {
       this.fs.copy(this.templatePath(file), this.destinationPath(file))
     }
 
@@ -56,6 +45,7 @@ module.exports = yeoman.Base.extend({
     copy('config.xml')
     copy('hooks/')
     copy('plugins/')
+    copy('app.js');
 
     utils.copyAndReplace(
       this.templatePath('package.json'),
@@ -65,11 +55,6 @@ module.exports = yeoman.Base.extend({
         '\\"name\\"\\:\\s*\\"\\w+\\"' : `"name": "${this.options.projectName}"`,
       }
     )
-  },
-
-  install: function() {
-    // this.npmInstall(dependencies, { save: true })
-    // this.npmInstall(devDependencies, { saveDev: true })
   },
 
   end: function() {
