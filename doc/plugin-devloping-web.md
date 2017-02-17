@@ -294,7 +294,7 @@ export default { init }
     <tr>
       <th>功能</th>
       <th>vue</th>
-      <th>week</th>
+      <th>we</th>
     </tr>
   </thead>
   <tbody>
