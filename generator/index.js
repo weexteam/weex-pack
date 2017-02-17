@@ -1,6 +1,7 @@
 const path = require('path')
 const yeoman = require('yeoman-generator')
 const utils = require('../src/utils')
+const fs = require('fs');
 
 
 module.exports = yeoman.Base.extend({
@@ -30,7 +31,10 @@ module.exports = yeoman.Base.extend({
     // this.fs.copy(this.templatePath('**/*'), this.destinationPath())
 
     const copy = (file) => {
-      this.fs.copy(this.templatePath(file), this.destinationPath(file))
+      if (fs.existsSync(file)) {
+        this.fs.copy(this.templatePath(file), this.destinationPath(file))  
+      }
+      
     }
 
     copy('README.md')
