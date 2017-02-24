@@ -1,0 +1,14 @@
+{
+    "version": "0.2.6",
+    "platform": [
+        "ios",
+        "android"
+    ],
+    "description": "",
+    "keywords": [
+        "weex",
+        "canvas"
+    ],
+    "license": "Apache 2.0",
+    "name": "weex-plugin--weex-gcanvas"
+}
