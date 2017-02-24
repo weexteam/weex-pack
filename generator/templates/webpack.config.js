@@ -1,54 +1,73 @@
-// You can install more packages below to config more as you like:
-// eslint
-// babel-eslint
-// eslint-config-standard
-// eslint-loader
-// eslint-plugin-html
-// eslint-plugin-promise
-// eslint-plugin-standard
-// postcss-cssnext
+const pathTo = require('path');
+const fs = require('fs-extra');
+const webpack = require('webpack');
 
-var path = require('path')
-var webpack = require('webpack')
+const entry = {};
+const bannerExcludeFiles = [];
+const webSrcDirectory = 'src';
+const vueWebTemp = 'temp';
+const hasPluginInstalled = fs.existsSync('./web/plugin.js');
 
-var bannerPlugin = new webpack.BannerPlugin(
-  '// { "framework": "Vue" }\n',
-  { raw: true }
-)
-
-var appScript = [path.resolve('./app.js')];
-function getBaseConfig () {
-  return {
-    entry: {
-      app: [path.resolve('./app.js')]
-    },
-    output: {
-      path: 'dist',
-    },
-    module: {
-      loaders: [
-        {
-          test: /\.js$/,
-          loader: 'babel',
-          exclude: /node_modules/
-        }, {
-          test: /\.vue(\?[^?]+)?$/,
-          loaders: []
-        }
-      ]
-    },
-    vue: {
-    },
-    plugins: [bannerPlugin]
+function getEntryFileContent (entryPath, vueFilePath) {
+  const relativePath = pathTo.relative(pathTo.join(entryPath, '../'), vueFilePath);
+  let contents = '';
+  if(hasPluginInstalled) {
+    const plugindir = pathTo.resolve("./web/plugin.js");
+    contents = 'require(\'' + plugindir + '\') \n';
   }
+  contents += 'var App = require(\'' + relativePath + '\')\n';
+  contents += 'App.el = \'#root\'\n';
+  contents += 'new Vue(App)\n';
+  return contents;
 }
 
-var webConfig = getBaseConfig()
-webConfig.output.filename = '[name].web.js'
-webConfig.module.loaders[1].loaders.push('vue')
+function walk(dir) {
+  dir = dir || '.';
+  var directory = pathTo.join(__dirname, 'src', dir);
+  var entryDirectory = pathTo.join(dir);
+  fs.readdirSync(directory)
+    .forEach(function(file) {
+      var fullpath = pathTo.join(directory, file);
+      var stat = fs.statSync(fullpath);
+      var extname = pathTo.extname(fullpath);
+      if (stat.isFile() && extname === '.vue') {
+        var entryFile = pathTo.join(vueWebTemp, dir, pathTo.basename(file, extname) + '.js');
+        fs.outputFileSync(pathTo.join(entryFile), getEntryFileContent(entryFile, fullpath));
+        var name = pathTo.join(dir, pathTo.basename(file, extname));
+        entry[name] = pathTo.join(__dirname, entryFile) + '?entry=true';
+      } else if (stat.isDirectory() && file !== 'build' && file !== 'include') {
+        var subdir = pathTo.join(dir, file);
+        walk(subdir);
+      }
+    });
+}
 
-var weexConfig = getBaseConfig()
-weexConfig.output.filename = '[name].weex.js'
-weexConfig.module.loaders[1].loaders.push('weex')
+walk();
 
-module.exports = [webConfig, weexConfig]
+var banner = '// NOTE: for vue2.0 and platform:web only.\n'
+
+var bannerPlugin = new webpack.BannerPlugin(banner, {
+  raw: true,
+  exclude: bannerExcludeFiles
+})
+
+module.exports = {
+  entry: entry,
+  output: {
+    path: 'dist',
+    filename: '[name].js'
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: ['babel-loader'],
+        exclude: /node_modules/
+      }, {
+        test: /\.vue(\?[^?]+)?$/,
+        loaders: ['vue']
+      }
+    ]
+  },
+  plugins: [bannerPlugin]
+}

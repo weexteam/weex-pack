@@ -9,11 +9,11 @@ let root = process.cwd();
 
 module.exports = {
   entry: {
-    plugins: [path.join(root,'plugins/plugin_bundle.js'),path.join(root,'web/js/init.js')],
+    plugins: [path.join(root,'plugins/plugin_bundle.js')],
   },
   output: {
     path: path.join(root,'web'),
-    filename: 'index.js'
+    filename: 'plugin.js'
   },
   devtool:'inline-source-map',
   module: {

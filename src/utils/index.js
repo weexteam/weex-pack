@@ -146,6 +146,20 @@ const utils = {
   },
   dashToCamel(str) {
     return str.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});  
+  },
+  // remove a folder
+  deleteFolderRecursive(path) {
+    if( fs.existsSync(path) ) {
+      fs.readdirSync(path).forEach((file) => {
+        var curPath = path + "/" + file;
+        if(fs.lstatSync(curPath).isDirectory()) { // recurse
+          this.deleteFolderRecursive(curPath);
+        } else { // delete file
+          fs.unlinkSync(curPath);
+        }
+      });
+      fs.rmdirSync(path);
+    }
   }
 }
 

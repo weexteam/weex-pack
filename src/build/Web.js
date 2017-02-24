@@ -8,11 +8,6 @@ const utils = require('../utils');
 let pluginArr = [];
 const rootPath = process.cwd();
 const isVueProject = !fs.existsSync(path.join(rootPath, 'web/js/init.js'));
-const appTemplate = `
-import app from './src/index.vue';
-app.el = '#root';
-export default new Vue(app);`;
-
 function buildWeb() {
   buildPlugin().then((code) => {
     buildSinglePlugin(code);  
@@ -42,6 +37,8 @@ function buildPlugin() {
     // old weexpack folder
     if (!isVueProject) {
       js_template.push(`window.weex && window.weex.install(${pluginEle});`);   
+    } else {
+      js_template.push(`Vue.use(${pluginEle});`);
     }
     
   });
@@ -49,9 +46,10 @@ function buildPlugin() {
   
   return new Promise((resolve, reject) => {
     if(isVueProject) {
-      jsFileContents = jsFileContents + appTemplate;  
+      jsFileContents = jsFileContents;
     }  
-    const jsTarget =  isVueProject? './app.js' : './plugins/plugin_bundle.js';
+    const jsTarget = isVueProject? './web/plugin.js' : './plugins/plugin_bundle.js';
+    console.log(jsTarget);
     return fs.writeFile(path.join(rootPath, jsTarget), jsFileContents, function (err) {
       if (err) {
         return reject(err);
@@ -63,11 +61,13 @@ function buildPlugin() {
   });
 }
 
+
+
 // build single plugin use webpack
 function buildSinglePlugin(code) {
   if(code == 'no plugin build' || isVueProject) {
     try { 
-      utils.exec('npm run build');  
+      buildSource(); 
     }catch(e) {
       console.error(e);
     }
@@ -75,7 +75,7 @@ function buildSinglePlugin(code) {
   }
   try {
     utils.buildJS('build_plugin').then(() => {
-      utils.exec('npm run build', true);
+      buildSource();
       if (pluginArr.length > 0) {
         fs.unlink(path.join(rootPath, './plugins/plugin_bundle.js'));
       }
@@ -84,6 +84,16 @@ function buildSinglePlugin(code) {
   catch (e) {
     console.error(e);
   }
+}
+
+// exec local webppack
+function buildSource() {
+  utils.exec('npm run build').then(() => {
+    const tempBuildPath = path.join(rootPath, 'temp');
+    if (fs.existsSync(tempBuildPath)) {
+      // utils.deleteFolderRecursive(tempBuildPath);  
+    }
+  });
 }
 
 
