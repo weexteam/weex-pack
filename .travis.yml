@@ -1,7 +1,6 @@
 language: node_js
 
 os:
-  - linux
   - osx
 
 node_js:
@@ -9,4 +8,6 @@ node_js:
   - 7
 script: ./node_modules/mocha/bin/mocha tests/*.test.js
 before_install:
-  - if [["$TRAVIS_OS_NAME" == "OSX"]]; then brew install nvm; fi; 
+  - brew install nvm;
+  - brew install android-platform-tools;
+  - sudo gem install -n /usr/local/bin cocoapods

@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.3.5",
+  "version": "0.3.7",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "tool",
     "toolkit"
   ],
-  "author": "xuxinxin(zhiqian) <873111137@qq.com>",
+  "author": "",
   "contributors": [
     "Hanks <zhanghan.me@gmail.com>",
     "Fkysly <fkysly@gmail.com>",

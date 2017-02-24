@@ -26,6 +26,9 @@ const utils = {
    * @return {Object} project info
    */
   findXcodeProject(dir) {
+    if(!fs.existsSync(dir)) {
+      return false;
+    }
     const files = fs.readdirSync(dir)
     const sortedFiles = files.sort()
     for (let i = sortedFiles.length - 1; i >= 0; i--) {

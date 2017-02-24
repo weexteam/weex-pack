@@ -24,10 +24,13 @@ let match = /--market(?:\s+|=)(.+)(\s|$)/.exec(argv);
 if (match) {
   marketEnv = match[1];
 }
+function resolveFullName(name,namespace){
+  return namespace?namespace+'-'+name:name
+}
 exports.domain = marketUrlMap[marketEnv];
 exports.publish = function (name, namespace, ali, version) {
   return new Promise(function (resolve, reject) {
-    let url = exports.domain + '/json/sync/sync.json?name=' + name + '&namespace=' + namespace + '&fullname=' + namespace + '-' + name + '&p=' + !!ali;
+    let url = exports.domain + '/json/sync/sync.json?name=' + name + '&namespace=' + namespace + '&fullname=' + resolveFullName(name,namespace) + '&p=' + !!ali;
     post(url).then(function (res) {
       if (res.success) {
         console.log();

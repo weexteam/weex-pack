@@ -15,6 +15,7 @@
   },
 
   "rules": {
-    "indent": [2, 2]
+    "indent": [2, 2],
+    "no-console": 0
   }
 }
