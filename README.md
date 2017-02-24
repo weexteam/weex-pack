@@ -107,9 +107,10 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 		$ weexpack platform add ios
 
-    以android平台为例，安装后 platforms 目录如下
-
-      ```
+    <span id="weexplugin"></span>    
+	android平台，安装后 platforms 目录如下
+     
+      
       platforms
       └── android
           ├── LICENSE
@@ -138,10 +139,53 @@ weexpack 所提供的命令大致可分为三组，分别是：
           └── weexplugin
               ├── build.gradle
               ├── proguard-rules.pro
-              └── src
+              └── src                            
 
-      ```
-
+	ios平台，安装后 platforms 目录如下
+		
+	```
+  platforms
+   └── ios
+       ├── LICENSE
+       ├── Podfile
+       ├── README.md
+       ├── WeexDemo
+       │   ├── AppDelegate.h
+       │   ├── AppDelegate.m
+       │   ├── Assets.xcassets
+       │   ├── DemoDefine.h
+       │   ├── Images.xcassets
+       │   ├── WeexConfig
+       │   ├── WeexDemo-Info.plist
+       │   ├── WeexScanner
+       │   ├── config.xml
+       │   ├── main.m
+       │   └── weex-icon.png
+       ├── WeexDemo.xcodeproj
+       │   ├── project.pbxproj
+       │   ├── project.xcworkspace
+       │   ├── xcshareddata
+       │   └── xcuserdata
+       ├── WeexDemo.xcworkspace
+       │   ├── contents.xcworkspacedata
+       │   ├── xcshareddata
+       │   └── xcuserdata
+       ├── WeexDemoTests
+       │   ├── Info.plist
+       │   └── WeexDemoTests.m
+       ├── WeexUITestDemo-Info.plist
+       ├── WeexUITestDemoUITests
+       │   ├── Info.plist
+       │   └── WeexUITestDemoUITests.m
+       ├── Weexplugin
+       │   ├── Podfile
+       │   ├── Weexplugin
+       │   ├── Weexplugin.podspec
+       │   ├── Weexplugin.xcodeproj
+       │   └── WeexpluginTests
+       ├── bundlejs
+    
+    ```
 
 对于已安装的模版可以使用weexpack platform list命令查看。
 
@@ -267,6 +311,15 @@ weexpack 所提供的命令大致可分为三组，分别是：
 * 在 html5 平台运行：
 
      $ weexpack run web
+     
+#### 5.组件容器
+
+* 作用  
+	组件容器可以方便生成二进制包，使用者可以通过任何方式集成到客户端（app），比方ios可以通过pod依赖的形式等。在weexpack创建的根目录下，运行weexpack plugin add/remove命令直接安装/删除weex plugin到组件容器
+	
+* 获取
+	* 方式1：通过[第一步](#weexplugin)生成的android/ios目录中包含Weexplugin目录，此目录是组件容器
+	* 方式2：通过repo地址clone代码 [ios地址](https://github.com/weexteam/weexpluginContainer-iOS) [android地址](https://github.com/weexteam/weexplugin-android) 
 
 ## 插件发布
 
