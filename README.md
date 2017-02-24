@@ -317,9 +317,11 @@ weexpack 所提供的命令大致可分为三组，分别是：
      
 #### 5.现有应用集成插件 —— 组件容器
 
-* 组件容器作用  
-  插件可以通过组件容器的方式集成到客户端（app），组件容器可以方便生成二进制包，现有应用可以通过各种形式把二进制包或源码集成进去，比方ios可以通过pod依赖的形式等。在weexpack创建的根目录下，运行weexpack plugin add/remove命令直接安装/删除weex plugin到组件容器中。  	
-* 组件容器获取  
+* 组件容器作用
+
+  插件可以通过组件容器的方式集成到客户端（app），组件容器可以方便生成二进制包，现有应用可以通过各种形式把二进制包或源码集成进去，比方ios可以通过pod依赖   的形式等。在weexpack创建的根目录下，运行weexpack plugin add/remove命令直接安装/删除weex plugin到组件容器中。
+
+* 组件容器获取
 	* 方式1：通过第二步<sup>[[link](#weex-plugin)]</sup>生成的android/ios目录中包含Weexplugin目录，此目录是组件容器
 	* 方式2：通过repo地址clone代码 [ios地址](https://github.com/weexteam/weexpluginContainer-iOS) [android地址](https://github.com/weexteam/weexplugin-android) 
 
