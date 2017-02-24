@@ -5,6 +5,9 @@ const chalk = require('chalk');
 const create = require('../src/create/create');
 const cli = require('../src/cli');
 const publish = require('../src/publish/publish');
+
+var cordova_lib = require('../lib'),
+    cordova = cordova_lib.cordova;
 program
   .command('create [plugin_name]')
   .description('create a empty plugin project')
@@ -18,6 +21,7 @@ program
       process.exit();
     }
   });
+
 program
   .option('--ali', 'publish to alibaba internal market(only for alibaba internal network)')
   .option('--market','')
@@ -26,6 +30,15 @@ program
   .action(function () {
     publish(program.ali);
   });
+
+program
+
+    .command('link [plugin-path]')
+    .description('link a plugin from local into you project')
+    .action(function (pluginPath) {
+      return cordova.raw["plugin"]("add", [pluginPath], {link:true});
+    });
+
 program
   .option('--market','')
   .command('*')
