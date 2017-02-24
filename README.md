@@ -106,8 +106,9 @@ weexpack 所提供的命令大致可分为三组，分别是：
 * ios模版
 
 		$ weexpack platform add ios
-
-    <span id="weexplugin"></span>    
+    
+    <a name="weex-plugin"></a>
+    
 	android平台，安装后 platforms 目录如下
 	
     ```
@@ -320,7 +321,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 	组件容器可以方便生成二进制包，使用者可以通过任何方式集成到客户端（app），比方ios可以通过pod依赖的形式等。在weexpack创建的根目录下，运行weexpack plugin add/remove命令直接安装/删除weex plugin到组件容器
 	
 * 获取
-	* 方式1：通过[第二步](#weexplugin)生成的android/ios目录中包含Weexplugin目录，此目录是组件容器
+	* 方式1：通过第二步<sup>[[link](#weex-plugin)]</sup>生成的android/ios目录中包含Weexplugin目录，此目录是组件容器
 	* 方式2：通过repo地址clone代码 [ios地址](https://github.com/weexteam/weexpluginContainer-iOS) [android地址](https://github.com/weexteam/weexplugin-android) 
 
 ## 插件发布
