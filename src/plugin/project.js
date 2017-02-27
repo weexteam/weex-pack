@@ -46,12 +46,21 @@ project.createProject = function(projectRoot, platform, opts) {
     if (platformAlreadyAdded) {
       throw new CordovaError('plugin project ' + platform + ' already added.');
     }
+
+    var tempDir =""
     if(platform == "ios"){
-      var tempDir = path.join(dir,"bin","templates")
+      tempDir = path.join(dir,"bin","templates")
     }
-    events.emit('log', 'add plugin'  + platform + ' project ...');
+    else {
+      tempDir = dir;
+    }
+
     shell.mkdir('-p', platformPath);
     copyProject(tempDir, platformPath)
+    events.emit('log', ' ');
+    events.emit('log', 'add plugin'  + platform + ' project ...');
+    console.log('create weexplugin project  success...')
+
 
   });
 
@@ -138,7 +147,7 @@ function downloadProject(projectRoot, platform) {
     }
 
     if(platform == "android") {
-      git_url = 'https://github.com/weexteam/weexplugin-android'
+      git_url = 'https://github.com/weexteam/weexplugin-android.git'
     }
 
     return git_clone(git_url, undefined).fail(function(err) {
