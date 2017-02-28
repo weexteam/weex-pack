@@ -9,7 +9,7 @@ const fs = require('fs');
 const utils = require('../utils')
 let pluginArr = [];
 
-function buildWeb(options) {
+function buildWeb() {
   /*if (checkOldTemplate()) {
       // return ;
   }*/
@@ -32,7 +32,7 @@ function checkOldTemplate() {
 function buildPlugin() {
   let rootPath = process.cwd();
   if (!fs.existsSync(path.join(rootPath, 'plugins/fetch.json'))) {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       return resolve('no plugin build');
     });
   }
