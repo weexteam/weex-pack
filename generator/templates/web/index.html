@@ -9,7 +9,6 @@
   <meta name="apple-touch-fullscreen" content="yes">
   <meta name="format-detection" content="telephone=no, email=no">
   <link rel="stylesheet" href="./assets/style.css">
-  <script src="./assets/url.js"></script>
   <script src="./assets/qrcode.js"></script>
   <script src="../node_modules/vue/dist/vue.js"></script>
 </head>
@@ -34,7 +33,19 @@
     </div>
   </template>
   <script>
-    console.log('QR CODE URL: ' + url)
+    var protocol = location.protocol + '//';
+    var hostname = typeof CURRENT_IP === 'string' ? window.CURRENT_IP : location.hostname;
+    var port = location.port ? ':' + location.port : '';
+    function getUrlParam(key, searchStr) {
+      var reg = new RegExp('[?|&]' + key + '=([^&]+)');
+      searchStr = searchStr || location.search;
+      var match = searchStr.match(reg);
+      return match && match[1];
+    }
+    var page = getUrlParam('page') || 'dist/index.js';
+    
+    
+    var url = protocol + hostname + port + '/' + page.replace(/\.js$/,'.weex.js') ;
     new Vue({
       el: '#app',
       template: '#app-template',

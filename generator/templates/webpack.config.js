@@ -3,16 +3,21 @@ const fs = require('fs-extra');
 const webpack = require('webpack');
 
 const entry = {};
-const bannerExcludeFiles = [];
-const webSrcDirectory = 'src';
+const weexEntry = {};
 const vueWebTemp = 'temp';
 const hasPluginInstalled = fs.existsSync('./web/plugin.js');
 
-function getEntryFileContent (entryPath, vueFilePath) {
+const plugins = [
+  new webpack.optimize.UglifyJsPlugin({
+    minimize: true
+  })
+];
+
+function getEntryFileContent(entryPath, vueFilePath) {
   const relativePath = pathTo.relative(pathTo.join(entryPath, '../'), vueFilePath);
   let contents = '';
-  if(hasPluginInstalled) {
-    const plugindir = pathTo.resolve("./web/plugin.js");
+  if (hasPluginInstalled) {
+    const plugindir = pathTo.resolve('./web/plugin.js');
     contents = 'require(\'' + plugindir + '\') \n';
   }
   contents += 'var App = require(\'' + relativePath + '\')\n';
@@ -23,51 +28,78 @@ function getEntryFileContent (entryPath, vueFilePath) {
 
 function walk(dir) {
   dir = dir || '.';
-  var directory = pathTo.join(__dirname, 'src', dir);
-  var entryDirectory = pathTo.join(dir);
+  const directory = pathTo.join(__dirname, 'src', dir);
   fs.readdirSync(directory)
-    .forEach(function(file) {
-      var fullpath = pathTo.join(directory, file);
-      var stat = fs.statSync(fullpath);
-      var extname = pathTo.extname(fullpath);
+    .forEach((file) => {
+      const fullpath = pathTo.join(directory, file);
+      const stat = fs.statSync(fullpath);
+      const extname = pathTo.extname(fullpath);
       if (stat.isFile() && extname === '.vue') {
-        var entryFile = pathTo.join(vueWebTemp, dir, pathTo.basename(file, extname) + '.js');
+        const entryFile = pathTo.join(vueWebTemp, dir, pathTo.basename(file, extname) + '.js');
         fs.outputFileSync(pathTo.join(entryFile), getEntryFileContent(entryFile, fullpath));
-        var name = pathTo.join(dir, pathTo.basename(file, extname));
+        const name = pathTo.join(dir, pathTo.basename(file, extname));
+        weexEntry[name] = fullpath + '?entry=true';
         entry[name] = pathTo.join(__dirname, entryFile) + '?entry=true';
       } else if (stat.isDirectory() && file !== 'build' && file !== 'include') {
-        var subdir = pathTo.join(dir, file);
+        const subdir = pathTo.join(dir, file);
         walk(subdir);
       }
     });
 }
 
 walk();
-
-var banner = '// NOTE: for vue2.0 and platform:web only.\n'
-
-var bannerPlugin = new webpack.BannerPlugin(banner, {
-  raw: true,
-  exclude: bannerExcludeFiles
-})
-
-module.exports = {
+// webpack 2.0
+const webConfig = {
+  context: pathTo.join(__dirname, ''),
   entry: entry,
   output: {
-    path: 'dist',
-    filename: '[name].js'
+    path: pathTo.join(__dirname, 'dist'),
+    filename: '[name].js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        loaders: ['babel-loader'],
+        use: [{
+          loader: 'babel-loader'
+        }],
         exclude: /node_modules/
-      }, {
+      },
+      {
         test: /\.vue(\?[^?]+)?$/,
-        loaders: ['vue']
+        use: [{
+          loader: 'vue-loader'
+        }]
       }
     ]
   },
-  plugins: [bannerPlugin]
-}
+  plugins: plugins
+};
+const weexConfig = {
+  entry: weexEntry,
+  output: {
+    path: 'dist',
+    filename: '[name].weex.js',
+    
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [{
+          loader: 'babel-loader',
+        }],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.vue(\?[^?]+)?$/,
+        use: [{
+          loader: 'weex-loader'
+        }]
+      }
+    ]
+  },
+  plugins: plugins
+};
+
+module.exports = [webConfig, weexConfig];
