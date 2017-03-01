@@ -8,8 +8,11 @@ const vueWebTemp = 'temp';
 const hasPluginInstalled = fs.existsSync('./web/plugin.js');
 
 const plugins = [
-  new webpack.optimize.UglifyJsPlugin({
-    minimize: true
+  new webpack.optimize.UglifyJsPlugin({minimize: true}),
+  new webpack.BannerPlugin({
+    banner: '// { "framework": "Vue" } \n',
+    raw: true,
+    exclude: 'Vue'
   })
 ];
 
@@ -80,7 +83,6 @@ const weexConfig = {
   output: {
     path: 'dist',
     filename: '[name].weex.js',
-    
   },
   module: {
     rules: [
@@ -99,7 +101,7 @@ const weexConfig = {
       }
     ]
   },
-  plugins: plugins
+  plugins: plugins,
 };
 
 module.exports = [webConfig, weexConfig];
