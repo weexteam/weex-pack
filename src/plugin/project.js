@@ -57,12 +57,41 @@ project.createProject = function(projectRoot, platform, opts) {
 
     shell.mkdir('-p', platformPath);
     copyProject(tempDir, platformPath)
+    if(platform == "ios" && opts.ali == true){
+      changeSource(platformPath)
+    }
+
     events.emit('log', ' ');
     events.emit('log', 'add plugin'  + platform + ' project ...');
     console.log('create weexplugin project  success...')
 
 
   });
+
+}
+
+
+function changeSource (destinationDir){
+
+    var weexPluginRootDir = path.join(destinationDir);
+    var xcodeProjDir;
+    var xcodeCordovaProj;
+
+    try {
+      xcodeProjDir = fs.readdirSync(weexPluginRootDir).filter( function(e) { return e.match(/\.xcodeproj$/i); })[0];
+      if (!xcodeProjDir) {
+        throw new CordovaError('The provided path "' + weexPluginRootDir + '" is not a Weex iOS project.');
+      }
+
+      var cordovaProjName = xcodeProjDir.substring(xcodeProjDir.lastIndexOf(path.sep)+1, xcodeProjDir.indexOf('.xcodeproj'));
+      xcodeCordovaProj = path.join(weexPluginRootDir, cordovaProjName);
+    } catch(e) {
+      throw new CordovaError('The provided path "'+weexPluginRootDir+'" is not a weexpack iOS project.');
+    }
+    var Podfile = require('../../lib/src/platforms/ios_pack/lib/Podfile').Podfile;
+    var project_name = xcodeCordovaProj.split('/').pop();
+    var podfileFile = new Podfile(path.join(weexPluginRootDir, Podfile.FILENAME), project_name)
+    podfileFile.writeUseAliSource()
 
 }
 
