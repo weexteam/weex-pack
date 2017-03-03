@@ -45,6 +45,7 @@ project.createProject = function(projectRoot, platform, opts) {
 
     if (platformAlreadyAdded) {
       throw new CordovaError('plugin project ' + platform + ' already added.');
+      console.log('plugin project ' + platform + ' already added.')
     }
 
     var tempDir =""
