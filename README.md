@@ -20,6 +20,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
  * **weexpack plugin add/remove** — 安装／移除 weex 插件，支持从本地、GitHub 或者  weex 应用市场安装插件。
 
  * **weexpack plugin list** — 查看已安装的插件及版本。
+ * **weexpack plugin link** — 通过引用的方式安装本地插件及版本。
 
 
 * 插件开发者命令
@@ -285,6 +286,20 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 
 ## changelog
+
+
+0.3.10
+* 实现weexpack plugin link dir 命令， 可以在demo中安装本地下在开发的插件。用于测试 
+
+
+0.3.9
+* 支持单独创建插件容器命令
+  - weexpack weexplugin create --ios 创建iOS插件容器
+  - weexpack weexplugin create --android 创建android插件容器
+
+
+0.3.3
+* 添加命令选项 weexpack platform add iOS -a , 创建支持内部源的IOS平台
 
 0.2.5
 * 修复weexpack build android在windows下的bug
