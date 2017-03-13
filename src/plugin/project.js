@@ -36,6 +36,7 @@ project.createProject = function(projectRoot, platform, opts) {
   // cordova platform rm <list of all platforms>
   var platformsDir = projectRoot
 
+
   return Q().then(function() {
     return downloadProject(projectRoot, platform,  opts);
   }).then(function(dir) {
@@ -93,6 +94,7 @@ function changeSource (destinationDir){
     var project_name = xcodeCordovaProj.split('/').pop();
     var podfileFile = new Podfile(path.join(weexPluginRootDir, Podfile.FILENAME), project_name)
     podfileFile.writeUseAliSource()
+
 
 }
 
@@ -176,9 +178,11 @@ function downloadProject(projectRoot, platform) {
       git_url = 'https://github.com/weexteam/weexpluginContainer-iOS.git'
     }
 
+
     if(platform == "android") {
       git_url = 'https://github.com/weexteam/weexplugin-android.git'
     }
+
 
     return git_clone(git_url, undefined).fail(function(err) {
       // If it looks like a url, but cannot be cloned, try handling it differently.
