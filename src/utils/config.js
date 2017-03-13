@@ -161,7 +161,7 @@ exports.androidConfigResolver = new ConfigResolver({
         }
         else {
           source = replacer.xmlAttr(source, 'launch_locally', 'true', 'preference');
-          let name=value.replace(/\.we$/, '.js');
+          let name=value.replace(/\.(we|vue)$/, '.js');
           //Fs.writeFileSync(Path.join(process.cwd(), 'app/src/main/assets/'+name),Fs.readFileSync(Path.join(process.cwd(), '../../dist', name)));
 
           return replacer.xmlAttr(source, 'local_url', 'file://assets/dist/'+name,'preference');
