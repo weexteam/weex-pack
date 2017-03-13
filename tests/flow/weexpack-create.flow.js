@@ -15,6 +15,6 @@ module.exports = function () {
       child_process.exec('cd weexpackdemo && node ../bin/weexpack-platform add android');
       child_process.exec('cd weexpackdemo && node ../bin/weexpack-plugin add weex-plugin-amap');
       done();
-    }, 25000);
+    }, 2000);
   });
 }
