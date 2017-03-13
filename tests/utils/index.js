@@ -16,7 +16,7 @@ module.exports = function() {
     });
   });*/
   
-  it('test iOS devices list', function() {
+  /*it('test iOS devices list', function() {
     var deviceInfo = child_process.execSync('xcrun instruments -s devices', {encoding: 'utf8'})
     var devicesList = util.parseIOSDevicesList(deviceInfo);
     expect(devicesList.length>0).to.equal(true);
@@ -33,7 +33,7 @@ module.exports = function() {
     let devicesList = util.parseDevicesResult(devicesInfo)
     expect(Array.isArray(devicesList)).to.equal(true);
     
-  });
+  });*/
   
   
 };

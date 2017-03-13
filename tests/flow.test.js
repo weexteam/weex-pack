@@ -8,8 +8,8 @@ const pluginAdd = require('./flow/weexpack-plugin-add.flow');
 describe('test "weexpack" command', function () {
   this.timeout(40000);
   create();
-  platformAdd();
+ // platformAdd();
   pluginCreate();
   buildWeb();
-  pluginAdd(); 
+ // pluginAdd(); 
 });
