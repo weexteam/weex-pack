@@ -17,6 +17,6 @@ module.exports = function () {
       const fileCheck = (hasPackage && hasConfig && hasWeb && hasAndroid && hasIos);
       expect(fileCheck).to.equal(true);
       done();
-    }, 2500);      
+    }, 10000);      
   });
 }
