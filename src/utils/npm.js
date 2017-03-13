@@ -13,7 +13,7 @@ exports.publish = function publish(tnpm, verbose, dir) {
         if (error) {
           console.log();
           let match=stderr.toString().replace(/npm ERR! /g,'').match(/\n\n([\s\w\W]+?)\n\n/);
-          if(match[1]){
+          if(match&&match[1]){
             console.error(Chalk.red(match[1]))
           }
           else{

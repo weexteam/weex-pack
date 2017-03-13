@@ -34,7 +34,7 @@ var path = require('path'),
     Q = require('q');
 var { prefix } = require('./utils/npm');
 
-var cordova_lib = require('weexpack-lib'),
+var cordova_lib = require('../lib'),
     CordovaError = cordova_lib.CordovaError,
     WeexpackError = cordova_lib.CordovaError,
     cordova = cordova_lib.cordova,
@@ -106,38 +106,7 @@ module.exports = function (inputArgs, cb) {
         cmd = 'help';
     }
 
-    Q().then(function() {
-
-        /**
-         * Skip telemetry prompt if:
-         * - CI environment variable is present
-         * - Command is run with `--no-telemetry` flag
-         * - Command ran is: `cordova telemetry on | off | ...`
-         */
-
-        if(telemetry.isCI(process.env) || telemetry.isNoTelemetryFlag(inputArgs)) {
-            return Q(false);
-        }
-
-        /**
-         * We shouldn't prompt for telemetry if user issues a command of the form: `cordova telemetry on | off | ...x`
-         * Also, if the user has already been prompted and made a decision, use his saved answer
-         */
-        if(isTelemetryCmd) {
-            var isOptedIn = telemetry.isOptedIn();
-            return handleTelemetryCmd(subcommand, isOptedIn);
-        }
-
-        if(telemetry.hasUserOptedInOrOut()) {
-            return Q(telemetry.isOptedIn());
-        }
-
-        /**
-         * Otherwise, prompt user to opt-in or out
-         * Note: the prompt is shown for 30 seconds. If no choice is made by that time, User is considered to have opted out.
-         */
-        return telemetry.showPrompt();
-    }).then(function (collectTelemetry) {
+    Q().then(function (collectTelemetry) {
         shouldCollectTelemetry = collectTelemetry;
         if(isTelemetryCmd) {
             return Q();

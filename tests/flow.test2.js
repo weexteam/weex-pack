@@ -4,6 +4,7 @@ const platformAdd = require('./flow/weexpack-platform.flow');
 const buildWeb = require('./flow/weexpack-build-web.flow');
 const pluginCreate = require('./flow/weexpack-plugin-create.flow');
 const pluginAdd = require('./flow/weexpack-plugin-add.flow');
+const weexPluginCreate = require('./flow/weexpack-weexplugin.flow');
 
 describe('test "weexpack" command', function () {
   this.timeout(40000);
@@ -11,5 +12,8 @@ describe('test "weexpack" command', function () {
   platformAdd();
   pluginCreate();
   buildWeb();
-  pluginAdd(); 
+  pluginAdd();
+  weexPluginCreate.createIOS();
+  weexPluginCreate.createAndroid();
+
 });

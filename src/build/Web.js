@@ -11,10 +11,10 @@ let pluginArr = [];
 
 function buildWeb() {
   /*if (checkOldTemplate()) {
-      // return ;
-  }*/
+   // return ;
+   }*/
   buildPlugin().then((code) => {
-     buildSinglePlugin(code);  
+    buildSinglePlugin(code);
   }).catch((err) => {
     console.log(err);
   });
@@ -63,11 +63,11 @@ function buildPlugin() {
 // build single plugin use webpack
 function buildSinglePlugin(code) {
   if(code == 'no plugin build') {
-     try { 
-       utils.exec('npm run build');  
-     }catch(e) {
-       console.error(e);
-     }
+    try {
+      utils.exec('npm run build');
+    }catch(e) {
+      console.error(e);
+    }
     return;
   }
   try {
