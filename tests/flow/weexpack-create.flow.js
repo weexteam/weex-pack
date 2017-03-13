@@ -9,6 +9,7 @@ module.exports = function () {
   it('test weexpack create command', function (done) {
     child_process.exec('rm -rf weexpackdemo &&  node ./bin/weexpack-create weexpackdemo');
     setTimeout(function () {
+      console.log(path.join(__dirname, '../../weexpackdemo/package.json'));
       const pkg = fs.existsSync(path.join(__dirname, '../../weexpackdemo/package.json'));
       const srcwe = fs.existsSync(path.join(__dirname, '../../weexpackdemo/src/index.we'));
       const plugin = fs.existsSync(path.join(__dirname, '../../weexpackdemo/plugins'));
@@ -18,6 +19,6 @@ module.exports = function () {
       child_process.exec('cd weexpackdemo && node ../bin/weexpack-platform add android');
       child_process.exec('cd weexpackdemo && node ../bin/weexpack-plugin add weex-plugin-amap');
       done();
-    }, 2000);
+    }, 10000);
   });
 }

@@ -13,6 +13,7 @@ module.exports = function () {
       const hasWeb = fs.existsSync(path.join(__dirname, '../../weex-plugin/web'));
       const hasAndroid = fs.existsSync(path.join(__dirname, '../../weex-plugin/android'));
       const hasIos = fs.existsSync(path.join(__dirname, '../../weex-plugin/ios'));
+      console.log(path.join(__dirname, '../../weex-plugin/ios'));
       const fileCheck = (hasPackage && hasConfig && hasWeb && hasAndroid && hasIos);
       expect(fileCheck).to.equal(true);
       done();
