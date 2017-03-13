@@ -9,12 +9,12 @@ const fs = require('fs');
 const utils = require('../utils')
 let pluginArr = [];
 
-function buildWeb(options) {
+function buildWeb() {
   /*if (checkOldTemplate()) {
-      // return ;
-  }*/
+   // return ;
+   }*/
   buildPlugin().then((code) => {
-     buildSinglePlugin(code);  
+    buildSinglePlugin(code);
   }).catch((err) => {
     console.log(err);
   });
@@ -32,7 +32,7 @@ function checkOldTemplate() {
 function buildPlugin() {
   let rootPath = process.cwd();
   if (!fs.existsSync(path.join(rootPath, 'plugins/fetch.json'))) {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       return resolve('no plugin build');
     });
   }
@@ -63,11 +63,11 @@ function buildPlugin() {
 // build single plugin use webpack
 function buildSinglePlugin(code) {
   if(code == 'no plugin build') {
-     try { 
-       utils.exec('npm run build');  
-     }catch(e) {
-       console.error(e);
-     }
+    try {
+      utils.exec('npm run build');
+    }catch(e) {
+      console.error(e);
+    }
     return;
   }
   try {

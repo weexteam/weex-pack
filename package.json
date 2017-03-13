@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.3.12",
+  "version": "0.3.11-beta",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
