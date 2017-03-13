@@ -17,7 +17,7 @@
     under the License.
 */
 var fs = require('fs'),
-    cordova_lib = require('weexpack-lib'),
+    cordova_lib = require('../lib'),
     cordova = cordova_lib.cordova,
     Q = require('q'),
     path = require('path');

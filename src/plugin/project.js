@@ -36,6 +36,7 @@ project.createProject = function(projectRoot, platform, opts) {
   // cordova platform rm <list of all platforms>
   var platformsDir = projectRoot
 
+
   return Q().then(function() {
     return downloadProject(projectRoot, platform,  opts);
   }).then(function(dir) {
@@ -45,15 +46,55 @@ project.createProject = function(projectRoot, platform, opts) {
 
     if (platformAlreadyAdded) {
       throw new CordovaError('plugin project ' + platform + ' already added.');
+      console.log('plugin project ' + platform + ' already added.')
     }
+
+    var tempDir =""
     if(platform == "ios"){
-      var tempDir = path.join(dir,"bin","templates")
+      tempDir = path.join(dir,"bin","templates")
     }
-    events.emit('log', 'add plugin'  + platform + ' project ...');
+    else {
+      tempDir = dir;
+    }
+
     shell.mkdir('-p', platformPath);
     copyProject(tempDir, platformPath)
+    if(platform == "ios" && opts.ali == true){
+      changeSource(platformPath)
+    }
+
+    events.emit('log', ' ');
+    events.emit('log', 'add plugin'  + platform + ' project ...');
+    console.log('create weexplugin project  success...')
+
 
   });
+
+}
+
+
+function changeSource (destinationDir){
+
+    var weexPluginRootDir = path.join(destinationDir);
+    var xcodeProjDir;
+    var xcodeCordovaProj;
+
+    try {
+      xcodeProjDir = fs.readdirSync(weexPluginRootDir).filter( function(e) { return e.match(/\.xcodeproj$/i); })[0];
+      if (!xcodeProjDir) {
+        throw new CordovaError('The provided path "' + weexPluginRootDir + '" is not a Weex iOS project.');
+      }
+
+      var cordovaProjName = xcodeProjDir.substring(xcodeProjDir.lastIndexOf(path.sep)+1, xcodeProjDir.indexOf('.xcodeproj'));
+      xcodeCordovaProj = path.join(weexPluginRootDir, cordovaProjName);
+    } catch(e) {
+      throw new CordovaError('The provided path "'+weexPluginRootDir+'" is not a weexpack iOS project.');
+    }
+    var Podfile = require('../../lib/src/platforms/ios_pack/lib/Podfile').Podfile;
+    var project_name = xcodeCordovaProj.split('/').pop();
+    var podfileFile = new Podfile(path.join(weexPluginRootDir, Podfile.FILENAME), project_name)
+    podfileFile.writeUseAliSource()
+
 
 }
 
@@ -137,9 +178,11 @@ function downloadProject(projectRoot, platform) {
       git_url = 'https://github.com/weexteam/weexpluginContainer-iOS.git'
     }
 
+
     if(platform == "android") {
-      git_url = 'https://github.com/weexteam/weexplugin-android'
+      git_url = 'https://github.com/weexteam/weexplugin-android.git'
     }
+
 
     return git_clone(git_url, undefined).fail(function(err) {
       // If it looks like a url, but cannot be cloned, try handling it differently.

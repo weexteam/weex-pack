@@ -9,10 +9,11 @@ var project = require('../src/plugin/project')
 program
     .command('create [platform-type]')
     .description('create a empty plugin container project')
-    .action(function (platformName) {
+    .option('-a, --ali', 'add ios platform only used in alibaba group')
+    .action(function (platformName, options) {
       var projectRoot =  process.env.PWD || process.cwd()
       if (platformName == "ios" || platformName == "android") {
-        project.createProject(projectRoot, platformName, program.config)
+        project.createProject(projectRoot, platformName, options)
       } else {
         console.log();
         console.log(`  ${chalk.red('Invalid platform type:')} ${chalk.yellow(platformName)}`);
@@ -20,5 +21,3 @@ program
       }
     });
 program.parse(process.argv);
-
-

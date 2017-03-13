@@ -34,7 +34,7 @@ var path = require('path'),
     Q = require('q');
 var { prefix } = require('./utils/npm');
 
-var cordova_lib = require('weexpack-lib'),
+var cordova_lib = require('../lib'),
     CordovaError = cordova_lib.CordovaError,
     WeexpackError = cordova_lib.CordovaError,
     cordova = cordova_lib.cordova,
