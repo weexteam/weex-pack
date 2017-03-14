@@ -14,10 +14,10 @@ module.exports = function () {
       const srcwe = fs.existsSync(path.join(__dirname, '../../weexpackdemo/src/index.we'));
       const plugin = fs.existsSync(path.join(__dirname, '../../weexpackdemo/plugins'));
       expect(pkg && srcwe && plugin).to.equal(true);
-      child_process.exec('cd .jonweexpackdemo && node ../bin/weexpack-build web');
+      child_process.exec('cd weexpackdemo && node ../bin/weexpack-build web');
       // child_process.exec('node ../bin/weexpack-platform add ios');
-      child_process.exec('cd weexpackdemo && node ../bin/weexpack-platform add android');
-      child_process.exec('cd weexpackdemo && node ../bin/weexpack-plugin add weex-plugin-amap');
+      child_process.exec('cd weexpackdemo && node ../bin/weexpack-platform add ios');
+      child_process.exec('cd weexpackdemo && node ../bin/weexpack-plugin add weex-action-sheet');
       done();
     }, 10000);
   });
