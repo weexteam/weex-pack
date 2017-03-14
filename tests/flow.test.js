@@ -6,7 +6,7 @@ const pluginCreate = require('./flow/weexpack-plugin-create.flow');
 const pluginAdd = require('./flow/weexpack-plugin-add.flow');
 
 describe('test "weexpack" command', function () {
-  this.timeout(50000);
+  this.timeout(60000);
   create();
   platformAdd();
   pluginCreate();
