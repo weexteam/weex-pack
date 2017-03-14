@@ -16,7 +16,7 @@ module.exports = function () {
     setTimeout(function () {
       expect(fs.existsSync(path.join(__dirname, '../../weexpackdemo/platforms/ios'))).to.equal(true);
       done();
-    }, 30000);      
+    }, 49000);      
   });
   
 }
