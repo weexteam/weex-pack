@@ -10,6 +10,6 @@ describe('test "weexpack" command', function () {
   create();
  // platformAdd();
   pluginCreate();
- // buildWeb();
- // pluginAdd(); 
+  buildWeb();
+  pluginAdd(); 
 });
