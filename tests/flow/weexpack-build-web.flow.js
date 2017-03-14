@@ -6,10 +6,8 @@ const path = require('path');
 
 module.exports = function () {
   it('test weexpack build web command', function (done) {
-    setTimeout(function () {
-      expect(fs.existsSync(path.join(__dirname, '../../weexpackdemo/dist/index.js'))).to.equal(true);
-      done();
-    }, 80000);      
+    expect(fs.existsSync(path.join(__dirname, '../../weexpackdemo/dist/index.js'))).to.equal(true);
+    done();
   });
 }
 
