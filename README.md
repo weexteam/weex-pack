@@ -345,18 +345,27 @@ weexpack 所提供的命令大致可分为三组，分别是：
 ## changelog
 
 
-0.3.10
-* 实现weexpack plugin link dir 命令， 可以在demo中安装本地下在开发的插件。用于测试 
+0.3.12
+* 修复merge问题
+* 更新发测试用例
+* 修复插件发布的命名空间问题
 
+0.3.11
+* 修复安装插件时，ios平台ali内部出错问题
+* plugin remove 命令增加成功提示
+
+0.3.10
+* 实现weexpack plugin link dir 命令， 可以在demo中安装本地正在开发的插件。用于测试 
+* 支持创建使用ali内部源的ios容器
+  - weexpack weexplugin create ios -a
 
 0.3.9
 * 支持单独创建插件容器命令
-  - weexpack weexplugin create --ios 创建iOS插件容器
-  - weexpack weexplugin create --android 创建android插件容器
+  - weexpack weexplugin create ios 创建iOS插件容器
+  - weexpack weexplugin create android 创建android插件容器
 
-
-0.3.3
-* 添加命令选项 weexpack platform add iOS -a , 创建支持内部源的IOS平台
+0.3.8
+* 添加命令选项 weexpack platform add ios -a , 创建支持内部源的iOS平台
 
 0.2.5
 * 修复weexpack build android在windows下的bug
