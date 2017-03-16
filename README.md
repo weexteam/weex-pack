@@ -8,6 +8,29 @@
 ## weexpack 介绍
 weexpack 是 weex 新一代的工程开发套件，是基于weex快速搭建应用原型的利器。它能够帮助开发者通过命令行创建weex工程，添加相应平台的weex app模版，并基于模版从本地、GitHub 或者  weex 应用市场安装插件，快速打包 weex 应用并安装到手机运行，对于具有分享精神的开发者而言还能够创建weex插件模版并发布插件到weex应用市场。
 
+目前[weex-toolkit](https://github.com/weexteam/weex-toolkit)集成对weexpack的命令调用支持，你可以使用weex-toolkit命令来实现weexpack具备的功能。比如我们要实现添加iOS应用模板：
+``` bash
+# 使用weexpack 命令
+$ weexpack platform add ios
+
+# 使用weex-toolkit
+$ weex platform add  ios
+
+```
+
+又或者添加 weex-chart插件
+
+``` bash
+# 使用weexpack 命令
+$ weexpack plugin add weex-chart
+
+# 使用weex-toolkit
+$ weex plugin add  weex-chart
+
+```
+
+### weexpack 命令介绍
+
 weexpack 所提供的命令大致可分为三组，分别是：
 * 打包命令
  * **weexpack create** — 创建 weex 工程项目。
