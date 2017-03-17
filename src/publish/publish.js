@@ -77,13 +77,7 @@ function _publish(plugin, deps, ali) {
       dependencies[d.fullname] = '*';
       return d.fullname !== d.name;
     });
-    if (deps.length > 0) {
-      package.scripts = {
-        'postinstall': 'node ./weexpack-hook.js'
-      };
-      let source = Fs.readFileSync(Path.join(__dirname, 'weexpack-hook.js')).toString();
-      Fs.writeFileSync('./weexpack-hook.js', 'var deps=' + JSON.stringify(deps) + ';\n' + source)
-    }
+
   }
   if (Object.keys(dependencies).length > 0) {
     package.dependencies = dependencies
@@ -98,21 +92,33 @@ function _publish(plugin, deps, ali) {
     Market.apply(plugin.id, ali).then(function (result) {
       Cache.cache.nameInfo = result;
       package.name = result.fullname;
-      _doPublish(package, plugin.id, result.namespace || '', result.fullname, ali)
+      _doPublish(package, plugin.id, result.namespace || '', result.fullname, ali, deps)
     }, function () {
 
     });
   }
   else {
     package.name = nameInfo.fullname;
-    _doPublish(package, nameInfo.name, nameInfo.namespace || '', nameInfo.fullname, ali)
+    _doPublish(package, nameInfo.name, nameInfo.namespace || '', nameInfo.fullname, ali, deps)
   }
 
 
 }
 
 
-function _doPublish(package, name, namespace, fullname, ali) {
+function _doPublish(package, name, namespace, fullname, ali, deps) {
+
+  if (deps.length > 0) {
+    package.scripts = {
+      'postinstall': 'node ./weexpack-hook.js'
+    };
+    let source = Fs.readFileSync(Path.join(__dirname, 'weexpack-hook.js')).toString();
+    let code = 'var deps=' + JSON.stringify(deps) + ';\n';
+    if (name !== fullname) {
+      code += 'var self=' + JSON.stringify({name, fullname}) + ';\n';
+    }
+    Fs.writeFileSync('./weexpack-hook.js', code + source)
+  }
   Fs.writeFileSync('./package.json', JSON.stringify(package, null, 4));
   Npm.publish(ali, true).then(function (success) {
     if (success) {
