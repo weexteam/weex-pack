@@ -2,7 +2,7 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const create = require('../src/create/create');
+const create = require('../src/plugin/create');
 const cli = require('../src/cli');
 const publish = require('../src/publish/publish');
 
