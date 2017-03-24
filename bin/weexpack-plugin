@@ -32,7 +32,14 @@ program
   });
 
 program
+    .command('add [plugin_name]')
+    .description('add a plugin into you project')
+    .action(function (pluginName) {
+      return cordova.raw["plugin"]("add", [pluginName]);
+    });
 
+
+program
     .command('link [plugin-path]')
     .description('link a plugin from local into you project')
     .action(function (pluginPath) {

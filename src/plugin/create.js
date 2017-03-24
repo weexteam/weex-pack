@@ -20,14 +20,13 @@ class SilentTerminalAdapter extends TerminalAdapter {
  * @param {String} config file path
  */
 function init(projectName, configFile) {
-  console.log(` => ${chalk.blue('Initialize a new Weex plugin project')} (${chalk.cyan(projectName)})`)
 
-  const env = yeoman.createEnv(null, null, new SilentTerminalAdapter())
+  const env = yeoman.createEnv()
 
   env.register(require.resolve('generator-weex-plugin'), 'weex:plugin');
 
   // TODO: get generator configs from configFile
-  const args = []
+  const args = [projectName]
 
   const generator = env.create('weex:plugin', {
     args,

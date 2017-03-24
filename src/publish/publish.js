@@ -8,6 +8,35 @@ const Fs = require('fs');
 const Market = require('./market');
 const Cache = require('../utils/cache');
 module.exports = function (ali) {
+
+  var xmlFilepath = path.join('./', 'plugin.xml');
+  if (!Fs.existsSync(xmlFilepath)) {
+    //新版本
+
+    Cache.init();
+    var pkg = require("./package.json")
+    if (pkg.version > Cache.get('latestVersion', '0.0.0')) {
+
+      pkg.weexpack = "0.2.0"
+      if (ali) {
+        pkg.publishConfig = {
+          registry: 'http://registry.npm.alibaba-inc.com'
+        }
+      }
+
+      Market.apply(pkg.name, ali).then(function (result) {
+        package.name = result.fullname;
+        _doPublish(package, plugin.id, "", ali)
+      }, function () {
+
+      });
+      _doPublish(pkg, pkg.name, "", ali)
+    }
+    return;
+  }
+
+
+
   let plugin;
   try {
     plugin = new PluginInfo('./');
@@ -85,3 +114,4 @@ function _doPublish(package, name, namespace, ali) {
     }
   })
 }
+
