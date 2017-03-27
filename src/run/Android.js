@@ -54,7 +54,7 @@ function prepareAndroid({options}) {
       console.log(rootPath)
       console.log(chalk.red('  Android project not found !'))
       console.log()
-      console.log(`  You should run ${chalk.blue('weexpack init')} first`)
+      console.log(`  You should run ${chalk.blue('weexpack create')} or ${chalk.blue('weexpack platform add android')}  first`)
       reject()
     }
 
