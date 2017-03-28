@@ -5,6 +5,8 @@ const chalk = require('chalk');
 const create = require('../src/plugin/create');
 const cli = require('../src/cli');
 const publish = require('../src/publish/publish');
+const install = require('../src/plugin/install')
+const uninstall = require('../src/plugin/uninstall')
 
 var cordova_lib = require('../lib'),
     cordova = cordova_lib.cordova;
@@ -35,8 +37,17 @@ program
     .command('add [plugin_name]')
     .description('add a plugin into you project')
     .action(function (pluginName) {
-      return cordova.raw["plugin"]("add", [pluginName]);
+      return install(pluginName);
     });
+
+
+program
+    .command('remove [plugin_name]')
+    .description('remove a plugin into you project')
+    .action(function (pluginName) {
+      return uninstall(pluginName);
+    });
+
 
 
 program

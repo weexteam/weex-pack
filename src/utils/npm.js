@@ -4,6 +4,7 @@
 const child_process = require('child_process');
 const ProgressBar = require('./ProgressBar');
 const Chalk = require('chalk');
+const npm = require("npm");
 exports.publish = function publish(tnpm, verbose, dir) {
   let pb = new ProgressBar(3000, 'publish', 'uploading...');
   let cmd = tnpm ? 'tnpm' : 'npm';
@@ -27,4 +28,42 @@ exports.publish = function publish(tnpm, verbose, dir) {
     });
   });
 };
+
+
+
+exports.getLastestVersion =  function (name, callback){
+  var trynum = 0
+  var load = function(npmName){
+    npm.load(function() {
+      npm.commands.info([npmName, "version"], true, function (error, result) {
+        if (error&&trynum==0) {
+          trynum++
+          load(exports.prefix+npmName, callback)
+        }
+        else if(error&&trynum!==0){
+          throw  new Error(error)
+        }
+        else {
+          var version;
+          for (var p in result) {
+            version = p;
+          }
+
+          callback(version)
+        }
+
+
+      })
+    })
+  }
+
+  load(name);
+
+}
+
+
+
+
+
+
 exports.prefix = 'weex-plugin--';

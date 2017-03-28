@@ -35,7 +35,7 @@ function init(projectName, configFile) {
     }
   })
 
-  generator.destinationRoot(projectName)
+  // generator.destinationRoot(projectName)
   generator.run()
 }
 

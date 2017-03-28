@@ -7,14 +7,19 @@ const Npm = require('../utils/npm');
 const Fs = require('fs');
 const Market = require('./market');
 const Cache = require('../utils/cache');
+const path = require('path');
 module.exports = function (ali) {
 
-  var xmlFilepath = path.join('./', 'plugin.xml');
+  var dir = process.cwd();
+  var xmlFilepath = path.join(dir, 'plugin.xml');
   if (!Fs.existsSync(xmlFilepath)) {
     //新版本
 
     Cache.init();
-    var pkg = require("./package.json")
+    console.log(path.join(dir,"./package.json"))
+      var pkg = require(path.join(dir,"./package.json"))
+
+
     if (pkg.version > Cache.get('latestVersion', '0.0.0')) {
 
       pkg.weexpack = "0.2.0"

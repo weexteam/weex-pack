@@ -1,9 +1,10 @@
 const fs = require('fs')
-const path = require('path')
+const path = require('path');
 const output = require('./output')
 const validator = require('./validator')
 const child_process = require('child_process')
 const os =require('os')
+const npm = require("npm");
 const utils = {
 
   copyAndReplace(src, dest, replacements) {
@@ -146,7 +147,59 @@ const utils = {
   },
   dashToCamel(str) {
     return str.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});  
-  }
+  },
+
+  isIOSProject:function (dir){
+    var result = this.findXcodeProject(dir)
+    return result;
+  },
+
+  isAndroidProject:function (dir){
+    if (fs.existsSync(path.join(dir, 'build.gradle'))) {
+      return true
+    }
+  },
+
+  isNewVersionPlugin : function(pluginName, version, callback) {
+    var trynum =0
+    var load = function(npmName){
+      npm.load(function(){
+        npm.commands.info([npmName+"@"+version], true, function(error,result){
+
+          if(error&&trynum==0){
+            trynum++;
+            load("weex-plugin--"+npmName)
+          }
+          else if(error&&trynum!==0){
+            throw  new Error(error)
+          }
+          else {
+            var weexpackVersion = result[version].weexpack ;
+
+            if(weexpackVersion&&weexpackVersion == "0.2.0"){
+              callback({
+                ios: result[version].ios,
+                android: result[version].android,
+                version:result[version].version,
+                name:result[version].name,
+                weexpack:result[version].weexpack
+              })
+            }
+            else{
+              callback(false)
+            }
+          }
+
+        })
+      })
+
+    }
+
+    load(pluginName)
+}
+
+
+
 }
 
 module.exports = Object.assign(utils, output, validator)
