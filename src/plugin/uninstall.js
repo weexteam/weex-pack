@@ -71,7 +71,7 @@ function handleUninstall(dir, pluginName, version, option){
   else if (utils.isAndroidProject(dir)){
 
     var name = option.android&&option.android.name?option.android.name:pluginName
-    const buildPatch = gradle.makeBuildPatch(name, version);
+    const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId);
     gradle.revokePatch(path.join(dir,"build.gradle"), buildPatch);
     console.log(name +" has removed in android")
   }

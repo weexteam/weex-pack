@@ -10,11 +10,11 @@ function applyPatch(file, patch) {
   fs.writeFileSync(file, content)
 };
 
-function makeBuildPatch(name,version) {
+function makeBuildPatch(name,version, groupId) {
   return {
     pattern: /\t*dependencies {\n/,
-    patch: `    compile '${name}:${version}'\n`,
-    findPattern:new RegExp('    compile\\s+\''+name+'.*\'\\n',"g")
+    patch: `    compile '${groupId}:${name}:${version}'\n`,
+    findPattern:new RegExp('    compile\\s+\''+groupId+':'+name+'.*\'\\n',"g")
   };
 };
 
