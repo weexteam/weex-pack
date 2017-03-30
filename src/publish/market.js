@@ -28,10 +28,12 @@ function resolveFullName(name,namespace){
   return namespace?namespace+'-'+name:name
 }
 exports.domain = marketUrlMap[marketEnv];
-exports.publish = function (name, namespace, ali, version) {
+exports.publish = function (name, namespace, ali, version, extend) {
+
+  extend = extend || {}
   return new Promise(function (resolve, reject) {
     let url = exports.domain + '/json/sync/sync.json?name=' + name + '&namespace=' + namespace + '&fullname=' + resolveFullName(name,namespace) + '&p=' + !!ali;
-    post(url).then(function (res) {
+    post(url, extend).then(function (res) {
       if (res.success) {
         console.log();
         console.log(chalk.yellow('plugin [' + name + '@' + version + '] publish success! sync to market maybe need a few minutes.'));

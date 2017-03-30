@@ -31,7 +31,7 @@ module.exports = function (ali) {
 
       Market.apply(pkg.name, ali).then(function (result) {
         package.name = result.fullname;
-        _doPublish(package, plugin.id, "", ali)
+        _doPublish(package, plugin.id, "", ali, pkg)
       }, function () {
 
       });
@@ -98,11 +98,11 @@ module.exports = function (ali) {
   }
 
 };
-function _doPublish(package, name, namespace, ali) {
+function _doPublish(package, name, namespace, ali, extend) {
   Fs.writeFileSync('./package.json', JSON.stringify(package, null, 4));
   Npm.publish(ali, true).then(function (success) {
     if (success) {
-      Market.publish(name, namespace, ali, package.version);
+      Market.publish(name, namespace, ali, package.version, extend);
       Cache.cache.latestVersion = package.version;
       Cache.save();
     }
