@@ -13,7 +13,6 @@ program
     .action(function (pluginName, options) {
 
 
-
       let args=[];
       process.argv.forEach(function(arg,i){
         if(arg!='[object Object]') {//fix commander’s bug

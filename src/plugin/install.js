@@ -62,17 +62,49 @@ function handleInstall(dir, pluginName, version, option){
       console.log("can't find Podfile file");
       return ;
     }
-    var name = option.ios&&option.ios.name?option.ios.name:pluginName
-    const buildPatch = podfile.makeBuildPatch(name, version);
-    podfile.applyPatch(path.join(dir,"Podfile"), buildPatch);
-    console.log(name +" install success in ios project")
+    if(option.ios&&option.ios.type=="pod"){
+      var name = option.ios&&option.ios.name?option.ios.name:pluginName
+      const buildPatch = podfile.makeBuildPatch(name, version);
+      podfile.applyPatch(path.join(dir,"Podfile"), buildPatch);
+      console.log(name +" install success in ios project")
+    }
+    else{
+      npmHelper.fetchCache(pluginName, version, function (packageTGZ, packageDir) {
+        npmHelper.unpackTgz(packageTGZ, path.join(process.cwd(),"weexplugins", function(){
+          var targetPath = path.join(process.cwd(), "weexplugins", pluginName);
+
+          const buildPatch = podfile.makeBuildPatch(targetPath, "");
+          podfile.applyPatch(path.join(dir,"Podfile"), buildPatch);
+          console.log(name +" install success in ios project")
+        }))
+      })
+    }
+
+
   }
   else if (utils.isAndroidProject(dir)){
 
-    var name = option.android&&option.android.name?option.android.name:pluginName
-    const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId);
-    gradle.applyPatch(path.join(dir,"build.gradle"), buildPatch);
-    console.log(name +" install success in android project")
+    if(option.android&&option.android.type == "maven"){
+      var name = option.android&&option.android.name?option.android.name:pluginName
+      const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId);
+      gradle.applyPatch(path.join(dir,"build.gradle"), buildPatch);
+      console.log(name +" install success in android project")
+    }
+    else {
+
+        npmHelper.fetchCache(pluginName, version, function (packageTGZ, packageDir) {
+          npmHelper.unpackTgz(packageTGZ, path.join(process.cwd(),"weexplugins", function(){
+            var targetPath = path.join(process.cwd(), "weexplugins", pluginName);
+
+            const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId);
+            gradle.applyPatch(path.join(dir,"build.gradle"), buildPatch);
+            console.log(name +" install success in android project")
+          }))
+        })
+
+    }
+
+
   }
   //cordova工程
   else if(cordovaUtils.isCordova(dir)){
