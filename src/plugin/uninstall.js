@@ -69,7 +69,6 @@ function handleUninstall(dir, pluginName, version, option){
     console.log(name +" has removed in ios project")
   }
   else if (utils.isAndroidProject(dir)){
-
     var name = option.android&&option.android.name?option.android.name:pluginName
     const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId);
     gradle.revokePatch(path.join(dir,"build.gradle"), buildPatch);
@@ -80,16 +79,31 @@ function handleUninstall(dir, pluginName, version, option){
     //1111
     var platformList = cordovaUtils.listPlatforms(dir);
     for (var i = 0; i < platformList.length; i++) {
+      uninstallInPackage(dir, pluginName, version)
       dir = path.join(dir,"platforms", platformList[i].toLowerCase())
       handleUninstall(dir, pluginName, version, option)
     }
+  }
+  else if(fs.existsSync(path.join(dir,"package.json"))){
+    uninstallInPackage(dir, pluginName, version)
   }
   else {
     console.log("can't recognize type of this project")
   }
 
-
 }
+
+function uninstallInPackage(dir, pluginName, version){
+  var p = path.join(dir,"package.json")
+  if(fs.existsSync(p)){
+    var pkg = require(p);
+    if(pkg.dependencies[pluginName]){
+      delete  pkg.dependencies[pluginName]
+    }
+    fs.writeFileSync(p, JSON.stringify(pkg, null, 4));
+  }
+}
+
 
 module.exports = uninstall
 

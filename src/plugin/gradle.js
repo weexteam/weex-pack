@@ -22,11 +22,7 @@ function makeBuildPatch(name,version, groupId) {
 };
 
 
-function makeSettingsPatch(name, androidConfig, projectConfig) {
-  var projectDir = path.relative(
-      path.dirname(projectConfig.settingsGradlePath),
-      androidConfig.sourceDir
-  );
+function makeSettingsPatch(name, projectDir) {
 
   /*
    * Fix for Windows
@@ -49,7 +45,7 @@ function makeSettingsPatch(name, androidConfig, projectConfig) {
 function revokePatch(file, patch) {
   fs.writeFileSync(file, fs
       .readFileSync(file, 'utf8')
-      .replace(patch.findPattern, '')
+      .replace(patch.findPattern||patch.patch, '')
   );
 };
 

@@ -91,17 +91,18 @@ function handleInstall(dir, pluginName, version, option){
       console.log(name +" install success in android project")
     }
     else {
-
         npmHelper.fetchCache(pluginName, version, function (packageTGZ, packageDir) {
           npmHelper.unpackTgz(packageTGZ, path.join(process.cwd(),"weexplugins", function(){
             var targetPath = path.join(process.cwd(), "weexplugins", pluginName);
+            //
+            const settingPatch = gradle.makeBuildPatch(pluginName, targetPath)
+            gradle.applyPatch(path.join(dir,"settings.gradle"), settingPatch);
 
             const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId);
             gradle.applyPatch(path.join(dir,"build.gradle"), buildPatch);
             console.log(name +" install success in android project")
           }))
         })
-
     }
 
 
