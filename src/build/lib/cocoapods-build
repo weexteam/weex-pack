@@ -1,0 +1,49 @@
+#!/bin/bash
+
+#--------------------------------------------
+# 功能：为使用了CocoaPods的工程打ipa包
+# 使用说明：	cocoapods-build <cococapods project path> [<build configuration>]
+# 作者：ccf
+# E-mail:ccf.developer@gmail.com
+#--------------------------------------------
+
+
+
+#参数判断
+if [ $# != 2 ] && [ $# != 1 ];then
+	echo "Number of params error! Need one or two params!"
+	echo "1.path of project(necessary) 2.Build Configurations(optional,default is Release)"
+	exit	
+elif [ ! -d $1 ];then
+	echo "Params Error!! The first param must be a dictionary."
+	exit	
+fi
+
+
+#获取shell文件所在的绝对路径
+current_path=$(pwd)
+tmp_path=$(dirname $0)
+cd $tmp_path
+shell_path=$(pwd)
+cd $current_path
+
+
+
+#工程绝对路径
+cd $1
+project_path=$(pwd)
+#获取工程默认scheme的名字（默认与工程文件名字相同）
+scheme_name=$(echo $(basename ./*.xcodeproj) | awk -F. '{print $1}')
+
+
+build_cmd=${shell_path}'/ipa-build '${project_path}' -w -s '${scheme_name}
+
+if [ $# = 2 ];then
+	build_cmd=${build_cmd}' -c '$2
+fi
+
+
+#编译工程
+${build_cmd} 
+
+
