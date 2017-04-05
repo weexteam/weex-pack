@@ -111,14 +111,32 @@ function handleInstall(dir, pluginName, version, option){
 
     var platformList = cordovaUtils.listPlatforms(dir);
     for(var i = 0; i < platformList.length;i++){
+      //npm install
+
+      installInPackage(dir, pluginName, version)
       dir = path.join(dir,"platforms", platformList[i].toLowerCase())
       handleInstall(dir, pluginName, version, option)
     }
 
   }
+  else if(fs.existsSync(path.join(dir,"package.json"))){
+    installInPackage(dir, pluginName, version)
+  }
   else {
     console.log("can't recognize type of this project")
   }
+
+}
+
+
+function installInPackage(dir, pluginName, version, option){
+  var p = path.join(dir,"package.json")
+  if(fs.existsSync(p)){
+    var pkg = require(p);
+    pkg.dependencies[pluginName] = version;
+    fs.writeFileSync(p, JSON.stringify(pkg, null, 4));
+  }
+
 
 }
 
