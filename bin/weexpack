@@ -16,7 +16,6 @@ program
   .command('weexplugin [command]', 'create a project that is a manager of plugin')
 
 
-
 program.parse(process.argv)
 
 if (program.args.length < 1) {

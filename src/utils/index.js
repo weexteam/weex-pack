@@ -182,7 +182,8 @@ const utils = {
                 android: result[version].android,
                 version:result[version].version,
                 name:result[version].name,
-                weexpack:result[version].weexpack
+                weexpack:result[version].weexpack,
+                pluginDependencies:result[version].pluginDependencies
               })
             }
             else{

@@ -19,10 +19,19 @@ function applyPatch(file, patch) {
 
 
 function makeBuildPatch(name, version) {
+  var patch = ""
+  if(version){
+    patch = `    pod '${name}', '${version}'\n`
+
+  }
+  else {
+    patch = `    pod '${name}'\n`
+  }
+
   return {
     pattern: /\t*pod\s+\'\w+\'\s*,?.*\n/,
-    patch: `    pod '${name}', '${version}'\n`,
-    findPattern:new RegExp('    pod\\s+\''+name+'\'\\s*,?.*\\n',"g")
+    patch: patch,
+    findPattern:new RegExp('\\t*pod\\s+\''+name+'\'\\s*,?.*\\n',"g")
   };
 };
 

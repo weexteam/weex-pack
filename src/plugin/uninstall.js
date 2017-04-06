@@ -32,6 +32,11 @@ function uninstall(pluginName){
 
         if(result){
           handleUninstall(dir, pluginName, version,  result)
+          if(result.pluginDependencies){
+            for(var pn in result.pluginDependencies){
+              uninstall(pn, result.pluginDependencies[pn])
+            }
+          }
         }
         else{
           cordova.raw["plugin"]("remove", [target]);
@@ -43,6 +48,13 @@ function uninstall(pluginName){
     utils.isNewVersionPlugin(pluginName,version, function(result){
       if(result){
         handleUninstall(dir, pluginName, version, result)
+        if(result.pluginDependencies){
+          if(result.pluginDependencies){
+            for(var pn in result.pluginDependencies){
+              uninstall(pn, result.pluginDependencies[pn])
+            }
+          }
+        }
       }
       else{
         cordova.raw["plugin"]("remove", [target]);
@@ -69,8 +81,7 @@ function handleUninstall(dir, pluginName, version, option){
     console.log(name +" has removed in ios project")
   }
   else if (utils.isAndroidProject(dir)){
-    var name = option.android&&option.android.name?option.android.name:pluginName
-    const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId);
+    const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId ||"");
     gradle.revokePatch(path.join(dir,"build.gradle"), buildPatch);
     console.log(name +" has removed in android")
   }
@@ -80,8 +91,7 @@ function handleUninstall(dir, pluginName, version, option){
     var platformList = cordovaUtils.listPlatforms(dir);
     for (var i = 0; i < platformList.length; i++) {
       uninstallInPackage(dir, pluginName, version)
-      dir = path.join(dir,"platforms", platformList[i].toLowerCase())
-      handleUninstall(dir, pluginName, version, option)
+      handleUninstall(path.join(dir,"platforms", platformList[i].toLowerCase()), pluginName, version, option)
     }
   }
   else if(fs.existsSync(path.join(dir,"package.json"))){

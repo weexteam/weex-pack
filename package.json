@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.4.0-beta.7",
+  "version": "0.4.0-beta.8",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
@@ -59,6 +59,7 @@
     "insight": "~0.8.2",
     "ios-sim": "^5.0.12",
     "is-url": "^1.2.1",
+    "merge": "^1.2.0",
     "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
     "nopt": "^3.0.6",
