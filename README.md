@@ -86,7 +86,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
   生成工程的目录如下：
 
-    ```
+ 
     WeexProject
     ├── README.md
     ├── android.config.json
@@ -110,7 +110,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
     │   └── js
     │       └── init.js
     └── webpack.config.js
-    ```
+    
 
 通过 create 命令创建的工程默认不包含 ios 和 android 工程模版，创建完成之后就可以切换到appName目录下并安装依赖。
 
@@ -132,7 +132,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
     
 	android平台，安装后 platforms 目录如下
 	
-    ```
+    
      platforms
       └── android
           ├── LICENSE
@@ -163,11 +163,11 @@ weexpack 所提供的命令大致可分为三组，分别是：
               ├── proguard-rules.pro
               └── src 
                                  
-	```
+	
 
 	ios平台，安装后 platforms 目录如下
-		
-	```
+	
+	
       platforms
        └── ios
            ├── LICENSE
@@ -209,7 +209,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
            │   └── WeexpluginTests
            ├── bundlejs
         
-    ```
+    
 
 对于已安装的模版可以使用weexpack platform list命令查看。
 
@@ -219,12 +219,12 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
     示例结果：
 
-    ```
+    
     Installed platforms:
       android
     Available platforms:
       android ^6.2.1
-    ```
+    
     
 如果想要删除某个不需要的平台可以使用 weexpack platform remove移除，比如window平台用户是不需要ios模版的，可用如下命令移除。
 
@@ -321,8 +321,8 @@ weexpack 所提供的命令大致可分为三组，分别是：
      $ weexpack plugin create weex-plguin-demo
      
 工程目录如下
- 
-     ```
+
+     
       ├── android(Android插件工程目录)
       │    ├── library(Android插件module目录，已被include到example工程中)
       ├── ios(ios插件工程)
@@ -339,7 +339,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
       ├── start-web(浏览器端weex编译命令)
       ├── package.json(js发布文件)
       ├── README.md
-    ```
+    
      
 生成工程中为你准备好了ios、android、js的插件模块的实现的例子和demo。同时也为你准备好了example，这些example经过编译之后,
    
@@ -368,6 +368,11 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 
 ## changelog
+
+0.4.0
+* 重构插件weex插件开发和安装机制，详细参考 [使用weexpack开发插件](./doc/plugin-devloping-weexpack.md)
+
+
 
 0.3.13
 * 修复创建ali内部源问题
