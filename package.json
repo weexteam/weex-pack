@@ -1,8 +1,6 @@
 {
   "name": "weexpack",
-
-  "version": "0.4.0-beta.9",
-
+  "version": "0.4.0-beta.10",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
@@ -54,7 +52,7 @@
     "eslint": "^3.5.0",
     "express": "^4.13.3",
     "gauge": "^2.7.2",
-    "generator-weex-plugin": "^0.1.4",
+    "generator-weex-plugin": "^0.1.23",
     "glob": "^5.0.3",
     "init-package-json": "^1.2.0",
     "inquirer": "^1.1.3",

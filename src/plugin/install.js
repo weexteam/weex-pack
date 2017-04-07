@@ -145,6 +145,7 @@ function handleInstall(dir, pluginName, version, option){
   }
   else if(fs.existsSync(path.join(dir,"package.json"))){
     installInPackage(dir, pluginName, version)
+    console.log(name +" install success ")
   }
   else {
     console.log("can't recognize type of this project")

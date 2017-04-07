@@ -18,9 +18,29 @@ program
 
 program.parse(process.argv)
 
+
+
 if (program.args.length < 1) {
   program.help();
   process.exit();
 }
+
+
+if(program.args.length >= 1){
+  var isSupport = false;
+  var list = ["create", "platform","run", "build", "plugin", "weexplugin"]
+  for(var i =0;i<list.length;i++){
+    if(program.args[0] == list[i]){
+      isSupport = true;
+      break;
+    }
+  }
+  if(!isSupport){
+    console.log("  error: unknown command '"+ program.args[0]+ "'")
+    process.exit();
+  }
+
+}
+
 
 

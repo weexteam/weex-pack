@@ -30,9 +30,9 @@ function init(projectName, configFile) {
 
   const generator = env.create('weex:plugin', {
     args,
-    options: {
-      projectName,
-    }
+    // options: {
+    //   weexpack:true,
+    // }
   })
 
   // generator.destinationRoot(projectName)
