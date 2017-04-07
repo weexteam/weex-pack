@@ -13,7 +13,9 @@ var cordovaUtils = require('../../lib/src/cordova/util')
 var cordova_lib = require('../../lib'),
     cordova = cordova_lib.cordova;
 
-function uninstall(pluginName){
+var cli = require("../cli")
+
+function uninstall(pluginName, args){
   var version;
   var target = pluginName
   if(/@/ig.test(pluginName)){
@@ -39,7 +41,8 @@ function uninstall(pluginName){
           }
         }
         else{
-          cordova.raw["plugin"]("remove", [target]);
+          cli(args)
+          //cordova.raw["plugin"]("remove", [target]);
         }
       })
     })
@@ -57,7 +60,8 @@ function uninstall(pluginName){
         }
       }
       else{
-        cordova.raw["plugin"]("remove", [target]);
+        cli(args)
+        //cordova.raw["plugin"]("remove", [target]);
       }
     })
   }

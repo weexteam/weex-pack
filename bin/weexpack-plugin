@@ -10,6 +10,21 @@ const uninstall = require('../src/plugin/uninstall')
 
 var cordova_lib = require('../lib'),
     cordova = cordova_lib.cordova;
+
+var parseArgs = function(){
+  let args=[];
+  process.argv.forEach(function(arg,i){
+    if(arg!='[object Object]') {//fix commander’s bug
+      args.push(arg);
+      if (i == 1) {
+        args.push('plugin');
+      }
+    }
+  });
+  return args;
+}
+
+
 program
   .command('create [plugin_name]')
   .description('create a empty plugin project')
@@ -37,7 +52,7 @@ program
     .command('add [plugin_name]')
     .description('add a plugin into you project')
     .action(function (pluginName) {
-      return install(pluginName);
+      return install(pluginName, parseArgs());
     });
 
 
@@ -45,7 +60,7 @@ program
     .command('remove [plugin_name]')
     .description('remove a plugin into you project')
     .action(function (pluginName) {
-      return uninstall(pluginName);
+      return uninstall(pluginName, parseArgs());
     });
 
 
@@ -71,8 +86,10 @@ program
         }
       }
     });
-    cli(args);
+    cli(parseArgs());
   });
 program.parse(process.argv);
+
+
 
 

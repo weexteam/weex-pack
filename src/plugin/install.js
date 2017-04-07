@@ -9,6 +9,7 @@ var plist = require("plist");
 var gradle = require("./gradle")
 var podfile = require("./podfile")
 var merge = require("merge")
+var cli = require("../cli")
 
 
 var cordova_lib = require('../../lib'),
@@ -18,7 +19,7 @@ var cordovaUtils = require('../../lib/src/cordova/util')
 
 const semver = require('semver')
 
-function install(pluginName){
+function install(pluginName, args){
   var version;
   var target = pluginName
   if(/@/ig.test(pluginName)){
@@ -42,7 +43,8 @@ function install(pluginName){
            }
          }
          else{
-           cordova.raw["plugin"]("add", [target]);
+           cli(args)
+           //cordova.raw["plugin"]("add", [target]);
         }
       })
     })
@@ -58,7 +60,8 @@ function install(pluginName){
         }
       }
       else{
-        cordova.raw["plugin"]("add", [target]);
+        cli(args)
+        //cordova.raw["plugin"]("add", [target]);
       }
     })
   }
