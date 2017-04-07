@@ -18,14 +18,14 @@ $ weex platform add  ios
 
 ```
 
-又或者添加 weex-chart插件
+又或者添加 weex-action-sheet插件
 
 ``` bash
 # 使用weexpack 命令
-$ weexpack plugin add weex-chart
+$ weexpack plugin add weex-action-sheet
 
 # 使用weex-toolkit
-$ weex plugin add  weex-chart
+$ weex plugin add  weex-action-sheet
 
 ```
 
@@ -40,7 +40,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 
 * 插件使用者命令
- * **weexpack plugin add/remove** — 安装／移除 weex 插件，支持从本地、GitHub 或者  weex 应用市场安装插件。
+ * **weexpack plugin add/remove** — 安装／移除 weex 插件。
 
 
 * 插件开发者命令
@@ -168,47 +168,47 @@ weexpack 所提供的命令大致可分为三组，分别是：
 	ios平台，安装后 platforms 目录如下
 		
 	```
-  platforms
-   └── ios
-       ├── LICENSE
-       ├── Podfile
-       ├── README.md
-       ├── WeexDemo
-       │   ├── AppDelegate.h
-       │   ├── AppDelegate.m
-       │   ├── Assets.xcassets
-       │   ├── DemoDefine.h
-       │   ├── Images.xcassets
-       │   ├── WeexConfig
-       │   ├── WeexDemo-Info.plist
-       │   ├── WeexScanner
-       │   ├── config.xml
-       │   ├── main.m
-       │   └── weex-icon.png
-       ├── WeexDemo.xcodeproj
-       │   ├── project.pbxproj
-       │   ├── project.xcworkspace
-       │   ├── xcshareddata
-       │   └── xcuserdata
-       ├── WeexDemo.xcworkspace
-       │   ├── contents.xcworkspacedata
-       │   ├── xcshareddata
-       │   └── xcuserdata
-       ├── WeexDemoTests
-       │   ├── Info.plist
-       │   └── WeexDemoTests.m
-       ├── WeexUITestDemo-Info.plist
-       ├── WeexUITestDemoUITests
-       │   ├── Info.plist
-       │   └── WeexUITestDemoUITests.m
-       ├── Weexplugin
-       │   ├── Podfile
-       │   ├── Weexplugin
-       │   ├── Weexplugin.podspec
-       │   ├── Weexplugin.xcodeproj
-       │   └── WeexpluginTests
-       ├── bundlejs
-    
+      platforms
+       └── ios
+           ├── LICENSE
+           ├── Podfile
+           ├── README.md
+           ├── WeexDemo
+           │   ├── AppDelegate.h
+           │   ├── AppDelegate.m
+           │   ├── Assets.xcassets
+           │   ├── DemoDefine.h
+           │   ├── Images.xcassets
+           │   ├── WeexConfig
+           │   ├── WeexDemo-Info.plist
+           │   ├── WeexScanner
+           │   ├── config.xml
+           │   ├── main.m
+           │   └── weex-icon.png
+           ├── WeexDemo.xcodeproj
+           │   ├── project.pbxproj
+           │   ├── project.xcworkspace
+           │   ├── xcshareddata
+           │   └── xcuserdata
+           ├── WeexDemo.xcworkspace
+           │   ├── contents.xcworkspacedata
+           │   ├── xcshareddata
+           │   └── xcuserdata
+           ├── WeexDemoTests
+           │   ├── Info.plist
+           │   └── WeexDemoTests.m
+           ├── WeexUITestDemo-Info.plist
+           ├── WeexUITestDemoUITests
+           │   ├── Info.plist
+           │   └── WeexUITestDemoUITests.m
+           ├── Weexplugin
+           │   ├── Podfile
+           │   ├── Weexplugin
+           │   ├── Weexplugin.podspec
+           │   ├── Weexplugin.xcodeproj
+           │   └── WeexpluginTests
+           ├── bundlejs
+        
     ```
 
 对于已安装的模版可以使用weexpack platform list命令查看。
@@ -233,61 +233,37 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 		$ weexpack platform remove ios
 
-#### 3. 安装 weex 插件（可选项）
+
+#### 3. 安装 weex 插件
 
 添加想要使用的插件，支持从本地或者 weex 应用市场安装插件。
 
 * 从本地添加插件，在开发插件时会经常用到
 
-		$ weexpack plugin add path/to/plugin
+		$ weexpack plugin add plugin-name
 
-* 从插件市场添加插件，例如 weex-chart。
+* 从插件市场添加插件，例如 weex-action-sheet。
 
-		$ weexpack plugin add weex-chart
-
-    模版的weexplugin是插件安装的目标工程。以安卓为例，其目录如下：
-
-    ```
-      weexplugin
-      ├── build.gradle  //  插件编译脚本，工具自动维护
-      ├── libs
-      ├── proguard-rules.pro
-      ├── src
-      │   └── main
-      │       ├── AndroidManifest.xml // 插件android manifest配置文件
-      │       ├── java
-      │       │   ├── // 插件src安装目录
-      │       │   └── com
-      │       │       └── alibaba
-      │       │           └── weex
-      │       │               └── plugin
-      │       │                   ├── ConfigXmlParser.java // 配置文件解析器
-      │       │                   ├── PluginConfig.java    // 外部接口
-      │       │                   ├── PluginEntry.java     // 插件描述
-      │       │                   └── PluginManager.java   // 插件管理器
-      │       └── res // 插件资源安装目录
-      │           ├── drawable
-      │           ├── values
-      │           │   └── strings.xml
-      │           └── xml
-      │               └── config.xml // 插件配置文件，PluginManager解析配置文件加载插件
-    ```
-
-对于已安装的插件可以使用 weexpack plugin list 命令查看。
+		$ weexpack plugin add weex-action-sheet
 
 * 查看已安装插件
+ 
+ - 在weex工程中weexpack将插件作为依赖安装到package.json中。你可以在文件的依赖中看到安装过的插件
+ 
+ - 在iOS工程中weexpack将插件作为依赖安装到Podfile中。你可以在文件的依赖中看到安装过的插件
+ 
+ - 在android工程中weexpack将插件作为依赖安装到build.gradle中。你可以在文件的依赖中看到安装过的插件
+ 
 
-		$ weexpack plugin list
-
-如果想要删除某个不需要的插件可以使用 weexpack plugin remove 移除，比如weex-chart
+如果想要删除某个不需要的插件可以使用 weexpack plugin remove 移除，比如weex-action-sheet
 
 * 移除插件，例如weex-chart
 
-		$ weexpack plugin remove weex-chart
+		$ weexpack plugin remove weex-action-sheet
 
 
 
-#### 4. 打包应用并安装运行
+#### 5. 打包应用并安装运行
 
 完成以上步骤并we代码放在src目录下，就可以打包运行了，打包过程中可能要下载依赖和编译工具，这会是个较为耗时的过程，安装运行需要打开模拟器或者连接设备。
 
@@ -336,25 +312,54 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
      $ weexpack run web
      
-#### 5.现有应用集成插件 —— 组件容器
 
-* 组件容器作用
+## 插件开发文档
 
-  插件可以通过组件容器的方式集成到客户端（app），组件容器可以方便生成二进制包，现有应用可以通过各种形式把二进制包或源码集成进去，比如ios可以通过pod依赖   的形式等。在weexpack创建的根目录下，运行weexpack plugin add/remove命令直接安装/删除weex plugin到组件容器中。
+如果想扩展weex功能，你可以使用weexpack 命令快速创建一个weex工程。 
 
-* 组件容器获取
-	* 方式1：通过第二步<sup>[[link](#weex-plugin)]</sup>生成的android/ios目录中包含Weexplugin目录，此目录是组件容器
-	* 方式2：通过repo地址clone代码 [ios地址](https://github.com/weexteam/weexpluginContainer-iOS) [android地址](https://github.com/weexteam/weexplugin-android) 
+
+     $ weexpack plugin create weex-plguin-demo
+     
+工程目录如下
+ 
+     ```
+      ├── android(Android插件工程目录)
+      │    ├── library(Android插件module目录，已被include到example工程中)
+      ├── ios(ios插件工程)
+      ├── js(h5插件工程)
+      ├── example(例子,开发者用来测试问题)
+      │    └── index.we
+      ├── playground
+      │    ├── android(Android demo工程，集成了playground功能并默认引用了插件module)
+      │    ├── ios(demo)
+      │    ├── browser(demo)
+           ├── start(weex编译命令)
+      ├── ****.podspec(ios发布文件)
+      ├── start(native端weex编译命令)
+      ├── start-web(浏览器端weex编译命令)
+      ├── package.json(js发布文件)
+      ├── README.md
+    ```
+     
+生成工程中为你准备好了ios、android、js的插件模块的实现的例子和demo。同时也为你准备好了example，这些example经过编译之后,
+   
+    $ ./start
+ 
+可以在playground下的各端的个demo工程运行调试。详细的开发过程可以参考下以文档： 
+
+
++ [使用weexpack开发插件](./doc/plugin-devloping-weexpack.md)
+
++ [开发html5的插件教程](./doc/plugin-devloping-web.md)
+
+
+
 
 ## 插件发布
 
 对于插件开发者来说，也有一组用于创建和发布插件的命令，[前往](./README_plugin.md) 查看详细文档
 
 ![weexpack2](https://img.alicdn.com/tps/TB18hxjPXXXXXXgapXXXXXXXXXX-248-258.png)
-
-## 插件开发文档
-
-+ [开发html5的插件教程](./doc/plugin-devloping-web.md)
 
 
 ## 示例

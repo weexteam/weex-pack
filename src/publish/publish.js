@@ -23,7 +23,7 @@ module.exports = function (ali) {
 
     if (pkg.version > Cache.get('latestVersion', '0.0.0')) {
 
-      pkg.weexpack = "0.2.0"
+      pkg.weexpack = "0.4.0"
       if (ali) {
         pkg.publishConfig = {
           registry: 'http://registry.npm.alibaba-inc.com'

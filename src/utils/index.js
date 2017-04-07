@@ -176,7 +176,7 @@ const utils = {
           else {
             var weexpackVersion = result[version].weexpack ;
 
-            if(weexpackVersion&&weexpackVersion == "0.2.0"){
+            if(weexpackVersion&&weexpackVersion == "0.4.0"){
               callback({
                 ios: result[version].ios,
                 android: result[version].android,
