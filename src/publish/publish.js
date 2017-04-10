@@ -14,8 +14,6 @@ module.exports = function (ali) {
   var xmlFilepath = path.join(dir, 'plugin.xml');
   if (!Fs.existsSync(xmlFilepath)) {
     //新版本
-
-
     Cache.init();
     console.log(path.join(dir,"./package.json"))
       var pkg = require(path.join(dir,"./package.json"))
