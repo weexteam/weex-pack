@@ -53,7 +53,7 @@ function prepareIOS({options}) {
       console.log()
       console.log(chalk.red('  iOS project not found !'))
       console.log()
-      console.log(`  You should run ${chalk.blue('weexpack init')} first`)
+      console.log(`  You should run ${chalk.blue('weexpack create')} or ${chalk.blue('weexpack platform add ios')} first`)
       reject()
     }
 
