@@ -170,7 +170,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 	ios平台，安装后 platforms 目录如下
 		
-	```
+```
   platforms
    └── ios
        ├── LICENSE
