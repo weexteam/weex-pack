@@ -89,7 +89,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
   生成工程的目录如下：
 
-    ```
+  ```
     WeexProject
     ├── README.md
     ├── android.config.json
@@ -113,7 +113,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
     │   └── js
     │       └── init.js
     └── webpack.config.js
-    ```
+  ```
 
 通过 create 命令创建的工程默认不包含 ios 和 android 工程模版，创建完成之后就可以切换到appName目录下并安装依赖。
 
