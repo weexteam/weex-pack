@@ -9,6 +9,23 @@ const Market = require('./market');
 const Cache = require('../utils/cache');
 const Path = require('path');
 module.exports = function (ali) {
+
+  var dir = process.cwd();
+  var xmlFilePath = Path.join(dir, 'plugin.xml');
+  Cache.init();
+  if (!Fs.existsSync(xmlFilePath)) {
+    //新版本
+    var pkg = require(Path.join(dir,"./package.json"))
+    pkg.weexpack = "0.4.0"
+    if (ali) {
+      pkg.publishConfig = {
+        registry: 'http://registry.npm.alibaba-inc.com'
+      }
+    }
+    _doPublish(pkg, pkg.name, '', pkg.name, ali, [], pkg)
+    return;
+  }
+  
   let plugin;
   try {
     plugin = new PluginInfo('./');
@@ -27,7 +44,7 @@ module.exports = function (ali) {
       console.log();
     }
   }
-  Cache.init();
+
   if (plugin.version > Cache.get('latestVersion', '0.0.0')) {
     let deps = plugin.getDependencies()
     if (deps.length > 0) {
@@ -106,7 +123,7 @@ function _publish(plugin, deps, ali) {
 }
 
 
-function _doPublish(package, name, namespace, fullname, ali, deps) {
+function _doPublish(package, name, namespace, fullname, ali, deps,extend) {
 
   if (deps.length > 0) {
     package.scripts = {
@@ -122,14 +139,12 @@ function _doPublish(package, name, namespace, fullname, ali, deps) {
   Fs.writeFileSync('./package.json', JSON.stringify(package, null, 4));
   Npm.publish(ali, true).then(function (success) {
     if (success) {
-      Market.publish(name, namespace, fullname, ali, package.version);
+      Market.publish(name, namespace, fullname, ali, package.version, extend);
       Cache.cache.latestVersion = package.version;
       Cache.save();
     }
-    removePackageJson()
 
   }, function () {
-    removePackageJson()
   })
 }
 function removePackageJson() {

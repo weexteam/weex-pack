@@ -2,12 +2,29 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const create = require('../src/create/create');
+const create = require('../src/plugin/create');
 const cli = require('../src/cli');
 const publish = require('../src/publish/publish');
+const install = require('../src/plugin/install')
+const uninstall = require('../src/plugin/uninstall')
 
 var cordova_lib = require('../lib'),
     cordova = cordova_lib.cordova;
+
+var parseArgs = function(){
+  let args=[];
+  process.argv.forEach(function(arg,i){
+    if(arg!='[object Object]') {//fix commander’s bug
+      args.push(arg);
+      if (i == 1) {
+        args.push('plugin');
+      }
+    }
+  });
+  return args;
+}
+
+
 program
   .command('create [plugin_name]')
   .description('create a empty plugin project')
@@ -32,7 +49,23 @@ program
   });
 
 program
+    .command('add [plugin_name]')
+    .description('add a plugin into you project')
+    .action(function (pluginName) {
+      return install(pluginName, parseArgs());
+    });
 
+
+program
+    .command('remove [plugin_name]')
+    .description('remove a plugin into you project')
+    .action(function (pluginName) {
+      return uninstall(pluginName, parseArgs());
+    });
+
+
+
+program
     .command('link [plugin-path]')
     .description('link a plugin from local into you project')
     .action(function (pluginPath) {
@@ -53,8 +86,10 @@ program
         }
       }
     });
-    cli(args);
+    cli(parseArgs());
   });
 program.parse(process.argv);
+
+
 
 

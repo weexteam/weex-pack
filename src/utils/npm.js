@@ -4,6 +4,13 @@
 const child_process = require('child_process');
 const ProgressBar = require('./ProgressBar');
 const Chalk = require('chalk');
+const npm = require("npm");
+const path = require("path");
+const fs = require("fs")
+
+const tar    = require('tar'),
+    zlib   = require('zlib');
+
 exports.publish = function publish(tnpm, verbose, dir) {
   let pb = new ProgressBar(3000, 'publish', 'uploading...');
   let cmd = tnpm ? 'tnpm' : 'npm';
@@ -27,4 +34,87 @@ exports.publish = function publish(tnpm, verbose, dir) {
     });
   });
 };
+
+
+
+exports.getLastestVersion =  function (name, callback){
+  var trynum = 0
+  var load = function(npmName){
+    npm.load(function() {
+      npm.commands.info([npmName, "version"], true, function (error, result) {
+        if (error&&trynum==0) {
+          trynum++
+          load(exports.prefix+npmName, callback)
+        }
+        else if(error&&trynum!==0){
+          throw  new Error(error)
+        }
+        else {
+          var version;
+          for (var p in result) {
+            version = p;
+          }
+
+          callback(version)
+        }
+
+
+      })
+    })
+  }
+
+  load(name);
+
+}
+
+
+exports.fetchCache  = function (npmName, version, callback){
+
+  npm.load(function() {
+    npm.commands.cache(['add', (npmName + '@' + version)],  function (error, result) {
+      if(error){
+        throw  new Error(error)
+      }
+      else {
+
+        var packageDir = path.resolve(npm.cache, result.name, result.version, 'package');
+        var packageTGZ = path.resolve(npm.cache, result.name, result.version, 'package.tgz');
+        callback(packageTGZ, packageDir)
+      }
+
+
+    })
+  })
+
+}
+
+exports.unpackTgz = function(package_tgz, unpackTarget, callback) {
+
+    var extractOpts = { type: 'Directory', path: unpackTarget, strip: 1 };
+
+    fs.createReadStream(package_tgz)
+        .on('error', function (err) {
+          console.warn('Unable to open tarball ' + package_tgz + ': ' + err);
+        })
+        .pipe(zlib.createUnzip())
+        .on('error', function (err) {
+          console.warn('Error during unzip for ' + package_tgz + ': ' + err);
+        })
+        .pipe(tar.Extract(extractOpts))
+        .on('error', function(err) {
+          console.warn('Error during untar for ' + package_tgz + ': ' + err);
+
+        })
+        .on('end', function(result){
+          callback(result)
+        });
+
+}
+
+
+
+
+
+
+
 exports.prefix = 'weex-plugin--';
