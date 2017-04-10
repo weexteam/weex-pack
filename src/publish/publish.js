@@ -11,14 +11,12 @@ const Path = require('path');
 module.exports = function (ali) {
 
   var dir = process.cwd();
-  var xmlFilepath = path.join(dir, 'plugin.xml');
-  if (!Fs.existsSync(xmlFilepath)) {
+  var xmlFilePath = Path.join(dir, 'plugin.xml');
+  if (!Fs.existsSync(xmlFilePath)) {
     //新版本
-
-
     Cache.init();
-    console.log(path.join(dir,"./package.json"))
-      var pkg = require(path.join(dir,"./package.json"))
+    console.log(Path.join(dir,"./package.json"))
+      var pkg = require(Path.join(dir,"./package.json"))
 
 
     if (pkg.version > Cache.get('latestVersion', '0.0.0')) {
@@ -31,12 +29,10 @@ module.exports = function (ali) {
       }
 
       Market.apply(pkg.name, ali).then(function (result) {
-        package.name = result.fullname;
-        _doPublish(package, plugin.id, "", ali, pkg)
+        _doPublish(pkg, pkg.name, result.namespace || '', result.fullname, ali, pkg)
       }, function () {
 
       });
-      _doPublish(pkg, pkg.name, "", ali)
     }
     return;
   }
@@ -140,7 +136,7 @@ function _publish(plugin, deps, ali) {
 }
 
 
-function _doPublish(package, name, namespace, fullname, ali, deps) {
+function _doPublish(package, name, namespace, fullname, ali, deps,extend) {
 
   if (deps.length > 0) {
     package.scripts = {
@@ -156,14 +152,12 @@ function _doPublish(package, name, namespace, fullname, ali, deps) {
   Fs.writeFileSync('./package.json', JSON.stringify(package, null, 4));
   Npm.publish(ali, true).then(function (success) {
     if (success) {
-      Market.publish(name, namespace, fullname, ali, package.version);
+      Market.publish(name, namespace, fullname, ali, package.version,extend);
       Cache.cache.latestVersion = package.version;
       Cache.save();
     }
-    removePackageJson()
 
   }, function () {
-    removePackageJson()
   })
 }
 function removePackageJson() {

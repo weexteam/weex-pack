@@ -28,7 +28,7 @@ function resolveFullName(name,namespace){
   return namespace?namespace+'-'+name:name
 }
 exports.domain = marketUrlMap[marketEnv];
-exports.publish = function (name, namespace, fullname,ali, version) {
+exports.publish = function (name, namespace, fullname,ali, version,extend) {
   extend = extend || {}
   return new Promise(function (resolve, reject) {
     let url = exports.domain + '/json/sync/sync.json?name=' + name +  '&fullname=' + fullname + '&p=' + !!ali+(namespace?'&namespace=' + namespace :'');
