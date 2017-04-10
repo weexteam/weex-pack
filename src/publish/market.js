@@ -28,11 +28,14 @@ function resolveFullName(name,namespace){
   return namespace?namespace+'-'+name:name
 }
 exports.domain = marketUrlMap[marketEnv];
-exports.publish = function (name, namespace, fullname,ali, version,extend) {
+exports.publish = function (name, namespace, fullname,ali, version, extend) {
   extend = extend || {}
   return new Promise(function (resolve, reject) {
     let url = exports.domain + '/json/sync/sync.json?name=' + name +  '&fullname=' + fullname + '&p=' + !!ali+(namespace?'&namespace=' + namespace :'');
-    post(url,extend).then(function (res) {
+    if(extend&&extend.weexpack == "0.4.0"){
+      url += "&wpv=4"
+    }
+    post(url, extend).then(function (res) {
       if (res.success) {
         console.log();
         console.log(chalk.yellow('plugin [' + name + '@' + version + '] publish success! sync to market maybe need a few minutes.'));
