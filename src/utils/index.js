@@ -168,7 +168,13 @@ const utils = {
 
           if(error&&trynum==0){
             trynum++;
-            load("weex-plugin--"+npmName)
+            if(npmName == "weex-gcanvas"){
+             var  prefix = "weex-plugin--"
+            }
+            else {
+             var  prefix = "weex-plugin-"
+            }
+            load(prefix+npmName)
           }
           else if(error&&trynum!==0){
             throw  new Error(error)

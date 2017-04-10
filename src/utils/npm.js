@@ -44,7 +44,14 @@ exports.getLastestVersion =  function (name, callback){
       npm.commands.info([npmName, "version"], true, function (error, result) {
         if (error&&trynum==0) {
           trynum++
-          load(exports.prefix+npmName, callback)
+          if(npmName == "weex-gcanvas"){
+            var  prefix = "weex-plugin--"
+          }
+          else {
+            var  prefix = "weex-plugin-"
+          }
+          load(prefix+npmName)
+          load(prefix+npmName, callback)
         }
         else if(error&&trynum!==0){
           throw  new Error(error)
