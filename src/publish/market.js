@@ -28,9 +28,9 @@ function resolveFullName(name,namespace){
   return namespace?namespace+'-'+name:name
 }
 exports.domain = marketUrlMap[marketEnv];
-exports.publish = function (name, namespace, ali, version) {
+exports.publish = function (name, namespace, fullname,ali, version) {
   return new Promise(function (resolve, reject) {
-    let url = exports.domain + '/json/sync/sync.json?name=' + name + '&namespace=' + namespace + '&fullname=' + resolveFullName(name,namespace) + '&p=' + !!ali;
+    let url = exports.domain + '/json/sync/sync.json?name=' + name +  '&fullname=' + fullname + '&p=' + !!ali+(namespace?'&namespace=' + namespace :'');
     post(url).then(function (res) {
       if (res.success) {
         console.log();
@@ -57,7 +57,7 @@ exports.apply = function (name, p) {
         resolve(res.data);
       }
       else {
-        throw new Error();
+        throw new Error('apply plugin fullname error!');
       }
 
     }).catch(function (e) {
