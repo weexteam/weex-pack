@@ -6,7 +6,7 @@
 [English Version](./README.en.md)
 
 ## weexpack 介绍
-weexpack 是新一代的weex应用工程和插件工程开发套件，是基于weex快速搭建应用原型的利器。它能够帮助开发者通过命令行创建weex应用工程和插件工程，快速打包 weex 应用并安装到手机运行，对于具有分享精神的开发者而言还能够创建weex插件模版并发布插件到weex应用市场。 使用weexpack 能够方便的在在weex工程和native工程中安装插件。 
+weexpack 是新一代的weex应用工程和插件工程开发套件，是基于weex快速搭建应用原型的利器。它能够帮助开发者通过命令行创建weex应用工程和插件工程，快速打包 weex 应用并安装到手机运行，对于具有分享精神的开发者而言还能够创建weex插件模版并发布插件到weex应用市场。 使用weexpack 能够方便的在在weex工程和native工程中安装插件。
 
 目前[weex-toolkit](https://github.com/weexteam/weex-toolkit)集成对weexpack的命令调用支持，你可以使用weex-toolkit命令来实现weexpack具备的功能。比如我们要实现添加iOS应用模板：
 ``` bash
@@ -86,7 +86,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
   生成工程的目录如下：
 
- 
+  ```
     WeexProject
     ├── README.md
     ├── android.config.json
@@ -110,7 +110,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
     │   └── js
     │       └── init.js
     └── webpack.config.js
-    
+  ```
 
 通过 create 命令创建的工程默认不包含 ios 和 android 工程模版，创建完成之后就可以切换到appName目录下并安装依赖。
 
@@ -127,12 +127,12 @@ weexpack 所提供的命令大致可分为三组，分别是：
 * ios模版
 
 		$ weexpack platform add ios
-    
+
     <a name="weex-plugin"></a>
-    
+
 	android平台，安装后 platforms 目录如下
-	
-    
+
+
      platforms
       └── android
           ├── LICENSE
@@ -161,55 +161,55 @@ weexpack 所提供的命令大致可分为三组，分别是：
           └── weexplugin
               ├── build.gradle
               ├── proguard-rules.pro
-              └── src 
-                                 
-	
+              └── src
+
+
 
 	ios平台，安装后 platforms 目录如下
-	
-	
-      platforms
-       └── ios
-           ├── LICENSE
-           ├── Podfile
-           ├── README.md
-           ├── WeexDemo
-           │   ├── AppDelegate.h
-           │   ├── AppDelegate.m
-           │   ├── Assets.xcassets
-           │   ├── DemoDefine.h
-           │   ├── Images.xcassets
-           │   ├── WeexConfig
-           │   ├── WeexDemo-Info.plist
-           │   ├── WeexScanner
-           │   ├── config.xml
-           │   ├── main.m
-           │   └── weex-icon.png
-           ├── WeexDemo.xcodeproj
-           │   ├── project.pbxproj
-           │   ├── project.xcworkspace
-           │   ├── xcshareddata
-           │   └── xcuserdata
-           ├── WeexDemo.xcworkspace
-           │   ├── contents.xcworkspacedata
-           │   ├── xcshareddata
-           │   └── xcuserdata
-           ├── WeexDemoTests
-           │   ├── Info.plist
-           │   └── WeexDemoTests.m
-           ├── WeexUITestDemo-Info.plist
-           ├── WeexUITestDemoUITests
-           │   ├── Info.plist
-           │   └── WeexUITestDemoUITests.m
-           ├── Weexplugin
-           │   ├── Podfile
-           │   ├── Weexplugin
-           │   ├── Weexplugin.podspec
-           │   ├── Weexplugin.xcodeproj
-           │   └── WeexpluginTests
-           ├── bundlejs
-        
-    
+
+```
+  platforms
+   └── ios
+       ├── LICENSE
+       ├── Podfile
+       ├── README.md
+       ├── WeexDemo
+       │   ├── AppDelegate.h
+       │   ├── AppDelegate.m
+       │   ├── Assets.xcassets
+       │   ├── DemoDefine.h
+       │   ├── Images.xcassets
+       │   ├── WeexConfig
+       │   ├── WeexDemo-Info.plist
+       │   ├── WeexScanner
+       │   ├── config.xml
+       │   ├── main.m
+       │   └── weex-icon.png
+       ├── WeexDemo.xcodeproj
+       │   ├── project.pbxproj
+       │   ├── project.xcworkspace
+       │   ├── xcshareddata
+       │   └── xcuserdata
+       ├── WeexDemo.xcworkspace
+       │   ├── contents.xcworkspacedata
+       │   ├── xcshareddata
+       │   └── xcuserdata
+       ├── WeexDemoTests
+       │   ├── Info.plist
+       │   └── WeexDemoTests.m
+       ├── WeexUITestDemo-Info.plist
+       ├── WeexUITestDemoUITests
+       │   ├── Info.plist
+       │   └── WeexUITestDemoUITests.m
+       ├── Weexplugin
+       │   ├── Podfile
+       │   ├── Weexplugin
+       │   ├── Weexplugin.podspec
+       │   ├── Weexplugin.xcodeproj
+       │   └── WeexpluginTests
+       ├── bundlejs
+
+ ```
 
 对于已安装的模版可以使用weexpack platform list命令查看。
 
@@ -219,13 +219,13 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
     示例结果：
 
-    
+
     Installed platforms:
       android
     Available platforms:
       android ^6.2.1
-    
-    
+
+
 如果想要删除某个不需要的平台可以使用 weexpack platform remove移除，比如window平台用户是不需要ios模版的，可用如下命令移除。
 
 
@@ -247,13 +247,13 @@ weexpack 所提供的命令大致可分为三组，分别是：
 		$ weexpack plugin add weex-action-sheet
 
 * 查看已安装插件
- 
+
  - 在weex工程中weexpack将插件作为依赖安装到package.json中。你可以在文件的依赖中看到安装过的插件
- 
+
  - 在iOS工程中weexpack将插件作为依赖安装到Podfile中。你可以在文件的依赖中看到安装过的插件
- 
+
  - 在android工程中weexpack将插件作为依赖安装到build.gradle中。你可以在文件的依赖中看到安装过的插件
- 
+
 
 如果想要删除某个不需要的插件可以使用 weexpack plugin remove 移除，比如weex-action-sheet
 
@@ -305,24 +305,24 @@ weexpack 所提供的命令大致可分为三组，分别是：
 * 打包html5平台：
 
      $ weexpack build web
-     
+
   这样你可以把打包后的资源上传到cdn服务器，然后上线你的web项目。
-  
+
 * 在 html5 平台运行：
 
      $ weexpack run web
-     
+
 
 ## 插件开发文档
 
-如果想扩展weex功能，你可以使用weexpack 命令快速创建一个weex工程。 
+如果想扩展weex功能，你可以使用weexpack 命令快速创建一个weex工程。
 
 
      $ weexpack plugin create weex-plguin-demo
-     
+
 工程目录如下
 
-     
+
       ├── android(Android插件工程目录)
       │    ├── library(Android插件module目录，已被include到example工程中)
       ├── ios(ios插件工程)
@@ -339,13 +339,13 @@ weexpack 所提供的命令大致可分为三组，分别是：
       ├── start-web(浏览器端weex编译命令)
       ├── package.json(js发布文件)
       ├── README.md
-    
-     
+
+
 生成工程中为你准备好了ios、android、js的插件模块的实现的例子和demo。同时也为你准备好了example，这些example经过编译之后,
-   
+
     $ ./start
- 
-可以在playground下的各端的个demo工程运行调试。详细的开发过程可以参考下以文档： 
+
+可以在playground下的各端的个demo工程运行调试。详细的开发过程可以参考下以文档：
 
 
 + [使用weexpack开发插件](./doc/plugin-devloping-weexpack.md)
@@ -388,7 +388,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 * plugin remove 命令增加成功提示
 
 0.3.10
-* 实现weexpack plugin link dir 命令， 可以在demo中安装本地正在开发的插件。用于测试 
+* 实现weexpack plugin link dir 命令， 可以在demo中安装本地正在开发的插件。用于测试
 * 支持创建使用ali内部源的ios容器
   - weexpack weexplugin create ios -a
 
