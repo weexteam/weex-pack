@@ -35,6 +35,7 @@ exports.publish = function (name, namespace, fullname,ali, version, extend) {
     if(extend&&extend.weexpack == "0.4.0"){
       url += "&wpv=4"
     }
+
     post(url, extend).then(function (res) {
       if (res.success) {
         console.log();

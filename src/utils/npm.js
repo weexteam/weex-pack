@@ -39,32 +39,42 @@ exports.publish = function publish(tnpm, verbose, dir) {
 
 exports.getLastestVersion =  function (name, callback){
   var trynum = 0
-  var load = function(npmName){
-    npm.load(function() {
-      npm.commands.info([npmName, "version"], true, function (error, result) {
-        if (error&&trynum==0) {
-          trynum++
-          load(exports.prefix+npmName, callback)
-        }
-        else if(error&&trynum!==0){
-          throw  new Error(error)
-        }
-        else {
-          var version;
-          for (var p in result) {
-            version = p;
+  npm.load(function() {
+
+    var load = function(npmName){
+        npm.commands.info([npmName, "version"], true, function (error, result) {
+          if (error&&trynum==0) {
+            trynum++
+            if(npmName == "weex-gcanvas"){
+              var  prefix = "weex-plugin--"
+            }
+            else {
+              var  prefix = "weex-plugin-"
+            }
+            load(prefix+npmName)
+          }
+          else if(error&&trynum!==0){
+            throw  new Error(error)
+          }
+          else {
+            var version;
+            for (var p in result) {
+              version = p;
+            }
+            callback(version)
           }
 
-          callback(version)
-        }
+        })
 
 
-      })
-    })
-  }
+    }
 
-  load(name);
 
+      load(name);
+
+
+
+  })
 }
 
 
