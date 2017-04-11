@@ -162,47 +162,51 @@ const utils = {
 
   isNewVersionPlugin : function(pluginName, version, callback) {
     var trynum =0
-    var load = function(npmName){
-      npm.load(function(){
-        npm.commands.info([npmName+"@"+version], true, function(error,result){
+    npm.load(function(){
+      var load = function(npmName){
 
-          if(error&&trynum==0){
-            trynum++;
-            if(npmName == "weex-gcanvas"){
-             var  prefix = "weex-plugin--"
+          npm.commands.info([npmName+"@"+version], true, function(error,result){
+
+            if(error&&trynum==0){
+              trynum++;
+              if(npmName == "weex-gcanvas"){
+               var  prefix = "weex-plugin--"
+              }
+              else {
+               var  prefix = "weex-plugin-"
+              }
+              load(prefix+npmName)
+            }
+            else if(error&&trynum!==0){
+              throw  new Error(error)
             }
             else {
-             var  prefix = "weex-plugin-"
+              var weexpackVersion = result[version].weexpack ;
+
+              if(weexpackVersion&&weexpackVersion == "0.4.0"){
+                callback({
+                  ios: result[version].ios,
+                  android: result[version].android,
+                  version:result[version].version,
+                  name:result[version].name,
+                  weexpack:result[version].weexpack,
+                  pluginDependencies:result[version].pluginDependencies
+                })
+              }
+              else{
+                callback(false)
+              }
             }
-            load(prefix+npmName)
-          }
-          else if(error&&trynum!==0){
-            throw  new Error(error)
-          }
-          else {
-            var weexpackVersion = result[version].weexpack ;
 
-            if(weexpackVersion&&weexpackVersion == "0.4.0"){
-              callback({
-                ios: result[version].ios,
-                android: result[version].android,
-                version:result[version].version,
-                name:result[version].name,
-                weexpack:result[version].weexpack,
-                pluginDependencies:result[version].pluginDependencies
-              })
-            }
-            else{
-              callback(false)
-            }
-          }
+          })
 
-        })
-      })
 
-    }
+      }
+      load(pluginName)
 
-    load(pluginName)
+    })
+
+
 }
 
 

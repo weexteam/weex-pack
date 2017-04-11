@@ -43,6 +43,7 @@ function install(pluginName, args){
            }
          }
          else{
+           console.log(132)
            cli(args)
            //cordova.raw["plugin"]("add", [target]);
         }
