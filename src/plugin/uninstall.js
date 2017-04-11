@@ -80,12 +80,15 @@ function handleUninstall(dir, pluginName, version, option){
       return ;
     }
     var name = option.ios&&option.ios.name?option.ios.name:pluginName
-    const buildPatch = podfile.makeBuildPatch(name, version);
+    var iosVersion =  option.ios&&option.ios.version || version
+    const buildPatch = podfile.makeBuildPatch(name, iosVersion);
     podfile.revokePatch(path.join(dir,"Podfile"), buildPatch);
     console.log(name +" has removed in ios project")
   }
   else if (utils.isAndroidProject(dir)){
-    const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId ||"");
+    var name = option.android&&option.android.name?option.android.name:pluginName
+    var androidVersion =  option.android&&option.android.version || version
+    const buildPatch = gradle.makeBuildPatch(name, androidVersion, option.android.groupId ||"");
     gradle.revokePatch(path.join(dir,"build.gradle"), buildPatch);
     console.log(name +" has removed in android")
   }

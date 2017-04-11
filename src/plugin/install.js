@@ -81,6 +81,7 @@ function handleInstall(dir, pluginName, version, option){
     }
     var name = option.ios&&option.ios.name?option.ios.name:pluginName
 
+
     if(option.ios&&option.ios.plist){
       var projectPath;
         if(!project.isWorkspace){
@@ -91,7 +92,8 @@ function handleInstall(dir, pluginName, version, option){
 
     if(option.ios&&option.ios.type=="pod"){
 
-      const buildPatch = podfile.makeBuildPatch(name, version);
+      var iosVersion = option.ios&&option.ios.version || version
+      const buildPatch = podfile.makeBuildPatch(name, iosVersion);
       podfile.applyPatch(path.join(dir,"Podfile"), buildPatch);
       console.log(name +" install success in ios project")
     }
@@ -99,7 +101,6 @@ function handleInstall(dir, pluginName, version, option){
       npmHelper.fetchCache(pluginName, version, function (packageTGZ, packageDir) {
         npmHelper.unpackTgz(packageTGZ, path.join(process.cwd(),"weexplugins",pluginName), function(){
           var targetPath = path.join(process.cwd(), "weexplugins", pluginName);
-
           const buildPatch = podfile.makeBuildPatch(targetPath, "");
           podfile.applyPatch(path.join(dir,"Podfile"), buildPatch);
           console.log(name +" install success in ios project")
@@ -112,7 +113,8 @@ function handleInstall(dir, pluginName, version, option){
   else if (utils.isAndroidProject(dir)){
     var name = option.android&&option.android.name?option.android.name:pluginName
     if(option.android&&option.android.type == "maven"){
-      const buildPatch = gradle.makeBuildPatch(name, version, option.android.groupId||"");
+      var androidVersion =  option.android&&option.android.version || version
+      const buildPatch = gradle.makeBuildPatch(name, androidVersion, option.android.groupId||"");
       gradle.applyPatch(path.join(dir,"build.gradle"), buildPatch);
       console.log(name +" install success in android project")
     }
