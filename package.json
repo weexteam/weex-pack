@@ -74,7 +74,7 @@
     "valid-identifier": "0.0.1",
     "weex-previewer": "^1.1.3",
     "weexpack-common": "^0.1.2",
-    "weexpack-create": "^0.1.0",
+    "weexpack-create": "^0.1.5",
     "weexpack-lib": "^0.1.0",
     "xcode": "^0.8.5",
     "yeoman-environment": "^1.6.3",
