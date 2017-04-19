@@ -79,8 +79,6 @@
     "xcode": "^0.8.5",
     "yeoman-environment": "^1.6.3",
     "yeoman-generator": "^0.24.1",
-
-
     "cordova-fetch": "^1.0.1",
     "cordova-js": "4.2.0",
     "cordova-registry-mapper": "1.x",
