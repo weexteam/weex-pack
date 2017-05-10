@@ -104,15 +104,15 @@ Following graph shows how to pack a application, plugin related parts werenot a 
     │   └── webpack.config.plugin.js
     ├── web
     │   ├── index.html
-    │   ├── index.js
-    │   └── js
-    │       └── init.js
+    │   ├── assets
     └── webpack.config.js
     ```
 
 Above project template has no ios/android directory by default, you should change to appName path to install necessary dependency.
 
     $ cd appName && npm install
+*We create an vue template defaultly and you could use `weexpack create appName --we` to gengerate a weex project which includes `.we` files*
+    
     
 #### 2. install weex application template
 

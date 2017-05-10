@@ -102,22 +102,22 @@ weexpack 所提供的命令大致可分为三组，分别是：
     ├── plugins       // 插件下载目录
     │   └── README.md
     ├── src           // 业务代码（we文件）目录
-    │   └── index.we
+    │   └── index.vue
     ├── start
     ├── start.bat
     ├── tools
     │   └── webpack.config.plugin.js
     ├── web
     │   ├── index.html
-    │   ├── index.js
-    │   └── js
-    │       └── init.js
+    │   ├── assets
     └── webpack.config.js
     ```
 
 通过 create 命令创建的工程默认不包含 ios 和 android 工程模版，创建完成之后就可以切换到appName目录下并安装依赖。
 
     $ cd appName && npm install
+    
+*目前默认创建 vue 的模板，但是你可以使用`weex create appName --we` 来实现创建 `.we` 的项目*
 
 #### 2. 安装 weex 应用模版
 
