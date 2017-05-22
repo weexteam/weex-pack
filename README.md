@@ -132,7 +132,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 	android平台，安装后 platforms 目录如下
 
-
+```
      platforms
       └── android
           ├── LICENSE
@@ -162,7 +162,7 @@ weexpack 所提供的命令大致可分为三组，分别是：
               ├── build.gradle
               ├── proguard-rules.pro
               └── src
-
+```
 
 
 	ios平台，安装后 platforms 目录如下
