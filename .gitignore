@@ -6,6 +6,7 @@
 .idea
 .project
 .gradle
+.weex_tmp
 alpha/MyApp/*
 
 node_modules/*
