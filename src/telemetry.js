@@ -30,7 +30,7 @@
 var Q = require('q');
 
 // Google Analytics tracking code
-var GA_TRACKING_CODE = 'UA-64283057-7';
+var GA_TRACKING_CODE = 'UA-100357734-1';
 
 var pkg = require('../package.json');
 var Insight = require('insight');
