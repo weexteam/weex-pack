@@ -8,8 +8,10 @@ const Fs = require('fs');
 const Market = require('./market');
 const Cache = require('../utils/cache');
 const Path = require('path');
+const login = require('./login');
 module.exports = function (ali) {
 
+  login.getToken();
   var dir = process.cwd();
   var xmlFilePath = Path.join(dir, 'plugin.xml');
   Cache.init();
@@ -139,6 +141,7 @@ function _doPublish(package, name, namespace, fullname, ali, deps,extend) {
   Fs.writeFileSync('./package.json', JSON.stringify(package, null, 4));
   Npm.publish(ali, true).then(function (success) {
     if (success) {
+      console.log(name,namespace,fullname,ali,package.version,extend)
       Market.publish(name, namespace, fullname, ali, package.version, extend);
       Cache.cache.latestVersion = package.version;
       Cache.save();

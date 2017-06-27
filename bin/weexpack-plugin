@@ -7,14 +7,16 @@ const cli = require('../src/cli');
 const publish = require('../src/publish/publish');
 const install = require('../src/plugin/install')
 const uninstall = require('../src/plugin/uninstall')
+const login = require('../src/publish/login');
+const inquirer = require('inquirer');
 
 var cordova_lib = require('../lib'),
-    cordova = cordova_lib.cordova;
-
-var parseArgs = function(){
-  let args=[];
-  process.argv.forEach(function(arg,i){
-    if(arg!='[object Object]') {//fix commander’s bug
+  cordova = cordova_lib.cordova;
+  
+var parseArgs = function () {
+  let args = [];
+  process.argv.forEach(function (arg, i) {
+    if (arg != '[object Object]') { //fix commander’s bug
       args.push(arg);
       if (i == 1) {
         args.push('plugin');
@@ -24,6 +26,44 @@ var parseArgs = function(){
   return args;
 }
 
+
+
+
+var questions = [{
+  name: 'email',
+  type: 'input',
+  message: 'Please enter your Market email account:'
+},
+{
+  name: 'pwd',
+  type: 'password',
+  message: 'Please enter your Market Password:',
+}];
+
+
+program
+  .command('gettoken')
+  .description('get market token')
+  .action(function () {
+    console.log(login.getToken())
+  });
+program
+  .command('login')
+  .description('login market')
+  .action(function () {
+    inquirer.prompt(questions).then(function (answers) {
+      login.login(answers.email,answers.pwd)
+      // console.log(JSON.stringify(answers, null, '  '));
+    });
+  });
+
+program
+  .option('--ali', 'publish to alibaba internal market(only for alibaba internal network)')
+  .command('sync')
+  .description('sync plugin to market')
+  .action(function () {
+    login.sync(program.ali)
+  });
 
 program
   .command('create [plugin_name]')
@@ -41,7 +81,7 @@ program
 
 program
   .option('--ali', 'publish to alibaba internal market(only for alibaba internal network)')
-  .option('--market','')
+  .option('--market', '')
   .command('publish')
   .description('publish current plugin')
   .action(function () {
@@ -49,37 +89,39 @@ program
   });
 
 program
-    .command('add [plugin_name]')
-    .description('add a plugin into you project')
-    .action(function (pluginName) {
-      return install(pluginName, parseArgs());
-    });
+  .command('add [plugin_name]')
+  .description('add a plugin into you project')
+  .action(function (pluginName) {
+    return install(pluginName, parseArgs());
+  });
 
 
 program
-    .command('remove [plugin_name]')
-    .description('remove a plugin into you project')
-    .action(function (pluginName) {
-      return uninstall(pluginName, parseArgs());
-    });
+  .command('remove [plugin_name]')
+  .description('remove a plugin into you project')
+  .action(function (pluginName) {
+    return uninstall(pluginName, parseArgs());
+  });
 
 
 
 program
-    .command('link [plugin-path]')
-    .description('link a plugin from local into you project')
-    .action(function (pluginPath) {
-      return cordova.raw["plugin"]("add", [pluginPath], {link:true});
+  .command('link [plugin-path]')
+  .description('link a plugin from local into you project')
+  .action(function (pluginPath) {
+    return cordova.raw["plugin"]("add", [pluginPath], {
+      link: true
     });
+  });
 
 program
-  .option('--market','')
+  .option('--market', '')
   .command('*')
   .description('setup specific plugin into your project')
   .action(function (pluginName) {
-    let args=[];
-    process.argv.forEach(function(arg,i){
-      if(arg!='[object Object]') {//fix commander’s bug
+    let args = [];
+    process.argv.forEach(function (arg, i) {
+      if (arg != '[object Object]') { //fix commander’s bug
         args.push(arg);
         if (i == 1) {
           args.push('plugin');
@@ -89,7 +131,3 @@ program
     cli(parseArgs());
   });
 program.parse(process.argv);
-
-
-
-

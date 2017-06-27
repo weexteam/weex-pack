@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const Fs = require('fs');
 const Path = require('path');
 const os = require('os');
+const login = require('./login');
 var _mapper = {};
 const TMP_DIR = typeof os.tmpdir === 'function' ? os.tmpdir() : os.tmpDir();
 const CACHE_FILE_NAME = 'registry_map.json';
@@ -15,9 +16,9 @@ try {
 }
 let marketEnv = 'online';
 let marketUrlMap = {
-  'online': 'http://market.dotwe.org',
-  'pre': 'http://market-pre.dotwe.org',
-  'daily': 'http://weex-market.taobao.net'
+  'online': 'https://market.dotwe.org',
+  'pre': 'https://market-pre.dotwe.org',
+  'daily': 'https://weex-market.taobao.net'
 };
 let argv = process.argv.join(' ');
 let match = /--market(?:\s+|=)(.+)(\s|$)/.exec(argv);
@@ -31,12 +32,12 @@ exports.domain = marketUrlMap[marketEnv];
 exports.publish = function (name, namespace, fullname,ali, version, extend) {
   extend = extend || {}
   return new Promise(function (resolve, reject) {
-    let url = exports.domain + '/json/sync/sync.json?name=' + name +  '&fullname=' + fullname + '&p=' + !!ali+(namespace?'&namespace=' + namespace :'');
+    let url = exports.domain + '/json/sync/sync.json?token=' + login.getToken() + '&name=' + name +  '&fullname=' + fullname + '&p=' + !!ali+(namespace?'&namespace=' + namespace :'');
     if(extend&&extend.weexpack == "0.4.0"){
       url += "&wpv=4"
     }
-
     post(url, extend).then(function (res) {
+      console.log(res)
       if (res.success) {
         console.log();
         console.log(chalk.yellow('plugin [' + name + '@' + version + '] publish success! sync to market maybe need a few minutes.'));
@@ -46,6 +47,12 @@ exports.publish = function (name, namespace, fullname,ali, version, extend) {
       }
       else if (res.data.code == 10004) {
         console.error(chalk.red(`Market sync rejected! Namespace unmatched!`));
+      }
+      else if (res.data.code == 10005) {
+        console.error(chalk.red(`Market sync rejected! Token failure!`));
+      }
+      else {
+        console.error(chalk.red(`Market sync rejected!`));
       }
     }).catch(function (e) {
       console.error(chalk.red(`Market sync failed! Please retry ${chalk.blue('weexpack plugin publish')}`));
