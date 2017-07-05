@@ -25,6 +25,13 @@ function saveToken(token, email) {
   });
 }
 
+function delInfo(){
+  fs.remove(WEEX_CONFIG_PATH, function (err) {
+    if (err) return console.error(err)
+    console.log('logout success!')
+  })
+}
+
 module.exports = {
   login:function (email, pwd) {
     request('https://market.dotwe.org/user/json/token/request.json?email=' + email + '&pwd=' + pwd, function (error, response, body) {
@@ -37,6 +44,10 @@ module.exports = {
         }
       }
     })
+  },
+  logout :function(){
+    delInfo();
+    // process.exit(-1)
   },
   getInfo : function(){
     var info = fs.existsSync(WEEX_CONFIG_PATH) ? JSON.parse(fs.readFileSync(WEEX_CONFIG_PATH, {encoding:'utf8'})) : null;

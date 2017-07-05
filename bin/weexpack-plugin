@@ -40,12 +40,34 @@ var questions = [{
   message: 'Please enter your Market Password:',
 }];
 
+var packagetype =[{
+    type: 'list',
+    name: 'size',
+    message: 'Please select your component type?',
+    choices: ['Basic', 'Layout', 'Feedback', 'Navigator', 'DataDisplay', 'Other'],
+    filter: function (val) {
+      return val.toLowerCase();
+    }
+  }]
 
 program
   .command('gettoken')
   .description('get market token')
   .action(function () {
     console.log(login.getToken())
+  });
+program
+  .command('info')
+  .description('get market info')
+  .action(function () {
+    console.log(login.getInfo())
+  });
+
+program
+  .command('logout')
+  .description('logout market')
+  .action(function () {
+    login.logout()
   });
 program
   .command('login')
@@ -62,7 +84,9 @@ program
   .command('sync')
   .description('sync plugin to market')
   .action(function () {
-    login.sync(program.ali)
+    inquirer.prompt(packagetype).then(function (answers) {
+      login.sync(program.ali,answers)
+    });    
   });
 
 program
@@ -85,7 +109,9 @@ program
   .command('publish')
   .description('publish current plugin')
   .action(function () {
-    publish(program.ali);
+    inquirer.prompt(packagetype).then(function (answers) {
+      publish(program.ali,answers)
+    });
   });
 
 program
