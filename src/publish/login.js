@@ -69,7 +69,7 @@ module.exports = {
       return info.token
     }
   },
-  sync : function(ali){
+  sync : function(ali,type,market){
     var dir = process.cwd();
     var xmlFilePath = Path.join(dir, 'plugin.xml');
     if (!Fs.existsSync(xmlFilePath)) {

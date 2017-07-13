@@ -44,7 +44,7 @@ var packagetype =[{
     type: 'list',
     name: 'size',
     message: 'Please select your component type?',
-    choices: ['Basic', 'Layout', 'Feedback', 'Navigator', 'DataDisplay', 'Other'],
+    choices: ['Basic', 'Layout', 'Feedback', 'Navigator', 'DataEntry','DataDisplay', 'Other'],
     filter: function (val) {
       return val.toLowerCase();
     }
@@ -93,7 +93,6 @@ program
   .command('create [plugin_name]')
   .description('create a empty plugin project')
   .action(function (pluginName) {
-
     if (pluginName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
       create(pluginName, program.config)
     } else {

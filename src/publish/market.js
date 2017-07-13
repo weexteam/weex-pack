@@ -38,7 +38,7 @@ exports.publish = function (name, namespace, fullname,ali, version, extend) {
     if(extend&&extend.weexpack == "0.4.0"){
       url += "&wpv=4"
     }
-    console.log(url)
+    //console.log(url)
     post(url, extend).then(function (res) {
       if (res.success) {
         console.log();
@@ -52,6 +52,9 @@ exports.publish = function (name, namespace, fullname,ali, version, extend) {
       }
       else if (res.data.code == 10005) {
         console.error(chalk.red(`Market sync rejected! Token failure!`));
+      }
+      else if (res.data.code == 10007) {
+        console.error(chalk.red(`already synced!`));
       }
       else {
         console.error(chalk.red(`Market sync rejected!`));
