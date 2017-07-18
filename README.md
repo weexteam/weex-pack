@@ -44,9 +44,11 @@ weexpack 所提供的命令大致可分为三组，分别是：
 
 
 * 插件开发者命令
-
+ * **weexpack plugin login  - 市场账号登录
+ * **weexpack plugin logout  - 市场账号登出
  * **weexpack plugin create** - 生成weex插件模版，主要是配置文件和必需的目录。
- * **weexpack plugin publish** - 发布插件到weex插件市场。
+ * **weexpack plugin publish** - 发布插件到weex插件市场（npm发布&插件市场同步）。
+ * **weexpack plugin sync - 同步插件市场（不会做发布npm，针对npm已发布的包）[--ali] 可选参数
 
 
 ## 安装
