@@ -289,10 +289,14 @@ function _runAppOnSimulator({device, xcodeProject, options, resolve, reject}) {
  */
 function simulatorIsAvailable(info, device) {
   info = info.devices
-  simList = info['iOS ' + device.version]
-  for (const sim of simList) {
-    if (sim.udid === device.udid) {
-      return sim.availability === '(available)'
+  for (const key in info) {
+    if (key.indexOf('iOS') > -1) {
+      simList = info[key];
+      for (const sim of simList) {
+        if (sim.udid === device.udid) {
+          return sim.availability === '(available)'
+        }
+      }
     }
   }
 }
