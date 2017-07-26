@@ -6,6 +6,15 @@ const Market = require('./market');
 const Path = require('path');
 const HOME = process.env.HOME || process.env.USERPROFILE || process.env.HOMEPATH
 const WEEX_CONFIG_PATH = HOME + '/.weex-market/config.json'
+const host = 'https://market.dotwe.org/user';
+
+
+let marketEnv = 'online';
+let marketUrlMap = {
+  'online': 'https://market.dotwe.org',
+  'pre': 'https://market-pre.dotwe.org',
+  'daily': 'https://weex-market.taobao.net'
+};
 
 function saveToken(token, email) {
   var _config = {
@@ -16,7 +25,7 @@ function saveToken(token, email) {
     if (err) {
       return console.error(err);
     }
-    fs.outputFile(WEEX_CONFIG_PATH,JSON.stringify(_config),function (err1) {
+    fs.outputFile(WEEX_CONFIG_PATH, JSON.stringify(_config), function (err1) {
       if (err1) {
         return console.error(err1);
       }
@@ -25,16 +34,16 @@ function saveToken(token, email) {
   });
 }
 
-function delInfo(){
+function delInfo() {
   fs.remove(WEEX_CONFIG_PATH, function (err) {
     if (err) return console.error(err)
     console.log('logout success!')
   })
 }
-
+exports.domain = marketUrlMap[marketEnv];
 module.exports = {
-  login:function (email, pwd) {
-    request('https://market.dotwe.org/user/json/token/request.json?email=' + email + '&pwd=' + pwd, function (error, response, body) {
+  login: function (email, pwd) {
+    request(host + '/json/token/request.json?email=' + email + '&pwd=' + pwd, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var d = JSON.parse(body)
         if (d.success) {
@@ -45,12 +54,14 @@ module.exports = {
       }
     })
   },
-  logout :function(){
+  logout: function () {
     delInfo();
     // process.exit(-1)
   },
-  getInfo : function(){
-    var info = fs.existsSync(WEEX_CONFIG_PATH) ? JSON.parse(fs.readFileSync(WEEX_CONFIG_PATH, {encoding:'utf8'})) : null;
+  getInfo: function () {
+    var info = fs.existsSync(WEEX_CONFIG_PATH) ? JSON.parse(fs.readFileSync(WEEX_CONFIG_PATH, {
+      encoding: 'utf8'
+    })) : null;
     if (info === null) {
       console.log(chalk.red('Login failed, please login again！'))
       console.log(chalk.red('You need to authorize this machine using `weexpack plugin login`'))
@@ -59,8 +70,10 @@ module.exports = {
       return info
     }
   },
-  getToken : function(){
-    var info = fs.existsSync(WEEX_CONFIG_PATH) ? JSON.parse(fs.readFileSync(WEEX_CONFIG_PATH, {encoding:'utf8'})) : null;
+  getToken: function () {
+    var info = fs.existsSync(WEEX_CONFIG_PATH) ? JSON.parse(fs.readFileSync(WEEX_CONFIG_PATH, {
+      encoding: 'utf8'
+    })) : null;
     if (info === null) {
       console.log(chalk.red('Login failed, please login again！'))
       console.log(chalk.red('You need to authorize this machine using `weexpack plugin login`'))
@@ -69,12 +82,12 @@ module.exports = {
       return info.token
     }
   },
-  sync : function(ali,type,market){
+  sync: function (ali, type, market) {
     var dir = process.cwd();
     var xmlFilePath = Path.join(dir, 'plugin.xml');
     if (!Fs.existsSync(xmlFilePath)) {
       //新版本
-      var pkg = require(Path.join(dir,"./package.json"))
+      var pkg = require(Path.join(dir, "./package.json"))
       pkg.weexpack = "0.4.0"
       if (ali) {
         pkg.publishConfig = {
@@ -84,5 +97,72 @@ module.exports = {
       Market.publish(pkg.name, '', pkg.name, ali, pkg.version, pkg);
       return;
     }
+  },
+  addGroupMember: function (email,id) {
+    ///json/packageGroup/AddGroupMember.json
+    //console.log(exports.domain + '/json/packageGroup/AddGroupMember.json?memberEmail=' + email + '&packageId=' + id + '&token=' + this.getToken())
+    request(exports.domain + '/json/packageGroup/AddGroupMember.json?memberEmail=' + email + '&packageId=' + id + '&token=' + this.getToken(), function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var d = JSON.parse(body)
+        if (d.success) {
+          console.log('add member '+ email + ' success !');
+        } else {
+          console.log(chalk.red('Add group member failed, please try again！'))
+        }
+      }else{
+        console.log(chalk.red('Add group member failed, please try again！'))
+      }
+    })
+
+  },
+  delGroupMember: function (email,id) {
+    ///json/packageGroup/DelGroupMember.json
+    request(exports.domain + '/json/packageGroup/DelGroupMember.json?memberEmail=' + email + '&packageId=' + id + '&token=' + this.getToken(), function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var d = JSON.parse(body)
+        if (d.success) {
+          console.log('delete member '+ email + ' success !');
+        } else {
+          console.log(chalk.red('Delete group member failed, please try again！'))
+        }
+      }else {
+        console.log(chalk.red('Delete group member failed, please try again！'))
+      }
+    })
+  },
+  listGroupMember: function (id) {
+    ///json/packageGroup/ListGroupMember.json
+    //console.log(exports.domain + '/json/packageGroup/ListGroupMember.json?packageId=' + id + '&token=' + this.getToken());
+    request(exports.domain + '/json/packageGroup/ListGroupMember.json?packageId=' + id +'&token=' + this.getToken(), function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var d = JSON.parse(body)
+        if (d.success) {
+          if(d.data.length>0){
+            d.data.forEach(function(el) {
+              console.log(chalk.blue('useremail:') + el.useremail);
+            }, this);
+          }else{
+             console.log(chalk.red('No Member!'));
+          }
+        } else {
+          console.log(chalk.red('Login failed, please try again！'))
+        }
+      }
+    })
+  },
+  mySync: function () {
+    request(exports.domain + '/json/sync/mySync.json?token=' + this.getToken(), function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log(body)
+        var d = JSON.parse(body)
+        if (d.success) {
+          d.data.forEach(function(el) {
+            console.log(chalk.blue('id:') + el.id + chalk.blue('  name:') + el.fullname + chalk.blue('  owner:') + el.owner);
+          }, this);
+        } else {
+          console.log(chalk.red('Get my sync list failed, please try again！'))
+        }
+      }
+    })
   }
 }

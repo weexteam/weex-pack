@@ -249,6 +249,7 @@ function _runAppOnSimulator({device, xcodeProject, options, resolve, reject}) {
   } catch (e) {
     reject(e)
   }
+  console.log(simctlInfo)
   simctlInfo = JSON.parse(simctlInfo)
 
   if (!simulatorIsAvailable(simctlInfo, device)) {
@@ -289,10 +290,15 @@ function _runAppOnSimulator({device, xcodeProject, options, resolve, reject}) {
  */
 function simulatorIsAvailable(info, device) {
   info = info.devices
-  simList = info['iOS ' + device.version]
-  for (const sim of simList) {
-    if (sim.udid === device.udid) {
-      return sim.availability === '(available)'
+  // simList = info['iOS ' + device.version]
+  for (const key in info) {
+    if (key.indexOf('iOS') > -1) {
+      simList = info[key];
+      for (const sim of simList) {
+        if (sim.udid === device.udid) {
+          return sim.availability === '(available)'
+        }
+      }
     }
   }
 }

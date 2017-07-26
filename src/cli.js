@@ -429,6 +429,7 @@ function cli(inputArgs) {
         var customWww;      // Template path
         var wwwCfg;         // Template config
 
+
         // If we got a fourth parameter, consider it to be JSON to init the config.
         if (undashed[4])
             cfg = JSON.parse(undashed[4]);

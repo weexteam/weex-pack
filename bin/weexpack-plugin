@@ -80,6 +80,34 @@ program
   });
 
 program
+  .command('mysync')
+  .description('show my sync list')
+  .action(function () {
+    login.mySync();
+  });  
+
+  
+program
+  .command('addmember')
+  .description('show this plugin group member')
+  .action(function (email,id) {
+    login.addGroupMember(email,id);
+  });
+program
+  .command('members')
+  .description('show this plugin group member')
+  .action(function (id) {
+    login.listGroupMember(id);
+  });
+
+program
+  .command('delmember')
+  .description('show this plugin delete member')
+  .action(function (email,id) {
+    login.delGroupMember(email,id);
+  });
+
+program
   .option('--ali', 'publish to alibaba internal market(only for alibaba internal network)')
   .command('sync')
   .description('sync plugin to market')
