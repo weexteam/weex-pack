@@ -9,7 +9,7 @@ const Market = require('./market');
 const Cache = require('../utils/cache');
 const Path = require('path');
 const login = require('./login');
-module.exports = function (ali) {
+module.exports = function (ali,typeid) {
 
   login.getToken();
   var dir = process.cwd();

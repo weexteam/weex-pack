@@ -12,7 +12,7 @@ const inquirer = require('inquirer');
 
 var cordova_lib = require('../lib'),
   cordova = cordova_lib.cordova;
-  
+
 var parseArgs = function () {
   let args = [];
   process.argv.forEach(function (arg, i) {
@@ -30,25 +30,50 @@ var parseArgs = function () {
 
 
 var questions = [{
-  name: 'email',
-  type: 'input',
-  message: 'Please enter your Market email account:'
-},
-{
-  name: 'pwd',
-  type: 'password',
-  message: 'Please enter your Market Password:',
-}];
+    name: 'email',
+    type: 'input',
+    message: 'Please enter your Market email account:'
+  },
+  {
+    name: 'pwd',
+    type: 'password',
+    message: 'Please enter your Market Password:',
+  }
+];
 
-var packagetype =[{
-    type: 'list',
-    name: 'size',
-    message: 'Please select your component type?',
-    choices: ['Basic', 'Layout', 'Feedback', 'Navigator', 'DataEntry','DataDisplay', 'Other'],
-    filter: function (val) {
-      return val.toLowerCase();
+var packagetype = [{
+  type: 'list',
+  name: 'id',
+  message: 'Please select your component type?',
+  choices: ['Basic', 'Layout', 'Feedback', 'Navigator', 'DataEntry', 'DataDisplay', 'Other'],
+  filter: function (val) {
+    var id = 0;
+    switch (val) {
+      case 'Basic' :
+        id = 11;
+        break;
+      case 'Layout':
+        id = 12;
+        break; 
+      case 'Feedback':
+        id = 13;
+        break;
+      case 'Navigator':
+        id = 14;
+        break;
+      case 'DataEntry':
+        id = 15;
+        break;
+      case 'DataDisplay':
+        id = 16;
+        break;
+      case 'Other':
+        id = 17;
+        break;
     }
-  }]
+    return id;
+  }
+}]
 
 program
   .command('gettoken')
@@ -74,7 +99,7 @@ program
   .description('login market')
   .action(function () {
     inquirer.prompt(questions).then(function (answers) {
-      login.login(answers.email,answers.pwd)
+      login.login(answers.email, answers.pwd)
       // console.log(JSON.stringify(answers, null, '  '));
     });
   });
@@ -84,14 +109,14 @@ program
   .description('show my sync list')
   .action(function () {
     login.mySync();
-  });  
+  });
 
-  
+
 program
   .command('addmember')
   .description('show this plugin group member')
-  .action(function (email,id) {
-    login.addGroupMember(email,id);
+  .action(function (email, id) {
+    login.addGroupMember(email, id);
   });
 program
   .command('members')
@@ -103,8 +128,8 @@ program
 program
   .command('delmember')
   .description('show this plugin delete member')
-  .action(function (email,id) {
-    login.delGroupMember(email,id);
+  .action(function (email, id) {
+    login.delGroupMember(email, id);
   });
 
 program
@@ -113,8 +138,8 @@ program
   .description('sync plugin to market')
   .action(function () {
     inquirer.prompt(packagetype).then(function (answers) {
-      login.sync(program.ali,answers)
-    });    
+      login.sync(program.ali, answers.id)
+    });
   });
 
 program
@@ -137,7 +162,7 @@ program
   .description('publish current plugin')
   .action(function () {
     inquirer.prompt(packagetype).then(function (answers) {
-      publish(program.ali,answers)
+      publish(program.ali, answers)
     });
   });
 

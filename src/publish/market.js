@@ -31,10 +31,11 @@ function resolveFullName(name,namespace){
   return namespace?namespace+'-'+name:name
 }
 exports.domain = marketUrlMap[marketEnv];
-exports.publish = function (name, namespace, fullname,ali, version, extend) {
+exports.publish = function (name, namespace, fullname,ali, version, extend,typeid) {
   extend = extend || {}
   return new Promise(function (resolve, reject) {
-    let url = exports.domain + '/json/sync/sync.json?token=' + login.getToken() + '&name=' + name +  '&fullname=' + fullname + '&p=' + !!ali+(namespace?'&namespace=' + namespace :'');
+    console.log(exports.domain + '/json/sync/sync.json?token=' + login.getToken() + '&name=' + name +  '&fullname=' + fullname + '&p=' + !!ali+(namespace?'&namespace=' + namespace :''+ '&tagId=' + typeid))
+    let url = exports.domain + '/json/sync/sync.json?token=' + login.getToken() + '&name=' + name +  '&fullname=' + fullname + '&p=' + !!ali+(namespace?'&namespace=' + namespace :''+ '&tagId=' + typeid);
     if(extend&&extend.weexpack == "0.4.0"){
       url += "&wpv=4"
     }

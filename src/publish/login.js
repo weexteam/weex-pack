@@ -40,7 +40,23 @@ function delInfo() {
     console.log('logout success!')
   })
 }
+
+function getPackageName(name){
+  var dir = process.cwd();
+  var xmlFilePath = Path.join(dir, 'plugin.xml');
+  var _packageName = name;
+  if (typeof name != 'string' ){
+    if (!Fs.existsSync(xmlFilePath)) {
+      var pkg = require(Path.join(dir, "./package.json"))
+      _packageName = pkg.name
+    }
+  }
+  return _packageName;
+}
+
+
 exports.domain = marketUrlMap[marketEnv];
+
 module.exports = {
   login: function (email, pwd) {
     request(host + '/json/token/request.json?email=' + email + '&pwd=' + pwd, function (error, response, body) {
@@ -82,7 +98,7 @@ module.exports = {
       return info.token
     }
   },
-  sync: function (ali, type, market) {
+  sync: function (ali, typeid, market) {
     var dir = process.cwd();
     var xmlFilePath = Path.join(dir, 'plugin.xml');
     if (!Fs.existsSync(xmlFilePath)) {
@@ -94,14 +110,13 @@ module.exports = {
           registry: 'http://registry.npm.alibaba-inc.com'
         }
       }
-      Market.publish(pkg.name, '', pkg.name, ali, pkg.version, pkg);
+      Market.publish(pkg.name, '', pkg.name, ali, pkg.version, pkg, typeid);
       return;
     }
   },
-  addGroupMember: function (email,id) {
-    ///json/packageGroup/AddGroupMember.json
-    //console.log(exports.domain + '/json/packageGroup/AddGroupMember.json?memberEmail=' + email + '&packageId=' + id + '&token=' + this.getToken())
-    request(exports.domain + '/json/packageGroup/AddGroupMember.json?memberEmail=' + email + '&packageId=' + id + '&token=' + this.getToken(), function (error, response, body) {
+  addGroupMember: function (email,name){
+    //console.log(exports.domain + '/json/packageGroup/AddGroupMember.json?memberEmail=' + email + '&packageName=' + getPackageName(name) + '&token=' + this.getToken())
+    request(exports.domain + '/json/packageGroup/AddGroupMember.json?memberEmail=' + email + '&packageName=' + getPackageName(name) + '&token=' + this.getToken(), function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var d = JSON.parse(body)
         if (d.success) {
@@ -115,9 +130,8 @@ module.exports = {
     })
 
   },
-  delGroupMember: function (email,id) {
-    ///json/packageGroup/DelGroupMember.json
-    request(exports.domain + '/json/packageGroup/DelGroupMember.json?memberEmail=' + email + '&packageId=' + id + '&token=' + this.getToken(), function (error, response, body) {
+  delGroupMember: function (email,name) {
+    request(exports.domain + '/json/packageGroup/DelGroupMember.json?memberEmail=' + email + '&packageName=' + getPackageName(name) + '&token=' + this.getToken(), function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var d = JSON.parse(body)
         if (d.success) {
@@ -130,10 +144,9 @@ module.exports = {
       }
     })
   },
-  listGroupMember: function (id) {
-    ///json/packageGroup/ListGroupMember.json
-    //console.log(exports.domain + '/json/packageGroup/ListGroupMember.json?packageId=' + id + '&token=' + this.getToken());
-    request(exports.domain + '/json/packageGroup/ListGroupMember.json?packageId=' + id +'&token=' + this.getToken(), function (error, response, body) {
+  listGroupMember: function (name) {
+    //console.log(exports.domain + '/json/packageGroup/ListGroupMember.json?packageName=' + _packageName + '&token=' + this.getToken());
+    request(exports.domain + '/json/packageGroup/ListGroupMember.json?packageName=' + getPackageName(name) +'&token=' + this.getToken(), function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var d = JSON.parse(body)
         if (d.success) {
@@ -142,7 +155,7 @@ module.exports = {
               console.log(chalk.blue('useremail:') + el.useremail);
             }, this);
           }else{
-             console.log(chalk.red('No Member!'));
+            console.log(chalk.red('No Member!'));
           }
         } else {
           console.log(chalk.red('Login failed, please try again！'))
