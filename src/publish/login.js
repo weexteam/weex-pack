@@ -59,7 +59,15 @@ exports.domain = marketUrlMap[marketEnv];
 
 module.exports = {
   login: function (email, pwd) {
-    request(host + '/json/token/request.json?email=' + email + '&pwd=' + pwd, function (error, response, body) {
+    const loginReqUrl = [
+      host,
+      '/json/token/request.json?email=',
+      encodeURIComponent(email),
+      '&pwd=',
+      encodeURIComponent(pwd)
+    ].join('');
+    
+    request(loginReqUrl, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         var d = JSON.parse(body)
         if (d.success) {
