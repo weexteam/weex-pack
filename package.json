@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.4.5",
+  "version": "0.4.7-beta.5",
   "description": "Weex pack tool",
   "main": "index.js",
   "scripts": {
@@ -36,7 +36,6 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "fs-extra": "^3.0.1",
     "aliasify": "^1.7.2",
     "ansi": "^0.3.1",
     "bplist-parser": "^0.1.0",
@@ -53,6 +52,7 @@
     "elementtree": "0.1.6",
     "eslint": "^3.5.0",
     "express": "^4.13.3",
+    "fs-extra": "^3.0.1",
     "gauge": "^2.7.2",
     "generator-weex-plugin": "^0.1.23",
     "glob": "^5.0.3",
@@ -82,7 +82,7 @@
     "update-notifier": "^0.5.0",
     "valid-identifier": "0.0.1",
     "weexpack-common": "^0.1.2",
-    "weexpack-create": "^0.1.0",
+    "weexpack-create": "^0.1.11",
     "weexpack-lib": "^0.1.0",
     "xcode": "^0.8.5",
     "yeoman-environment": "^1.6.3",
