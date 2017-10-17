@@ -22,65 +22,63 @@
           laxcomma:true
 */
 
-
-
 // For further details on telemetry, see:
 // https://github.com/cordova/cordova-discuss/pull/43
 
-var Q = require('q');
+const Q = require('q');
 
 // Google Analytics tracking code
-var GA_TRACKING_CODE = 'UA-100357734-1';
+const GA_TRACKING_CODE = 'UA-100357734-1';
 
-var pkg = require('../package.json');
-var Insight = require('insight');
-var insight = new Insight({
-    trackingCode: GA_TRACKING_CODE,
-    pkg: pkg
+const pkg = require('../package.json');
+const Insight = require('insight');
+const insight = new Insight({
+  trackingCode: GA_TRACKING_CODE,
+  pkg: pkg
 });
 
 /**
  * Returns true if the user opted in, and false otherwise
  */
-function showPrompt() {
+function showPrompt () {
+  const deferred = Q.defer();
 
-    var deferred = Q.defer();
-    
-    var msg = "May weexpack anonymously report usage statistics to improve the tool over time?";
-    insight.askPermission(msg, function (unused, optIn) {
-        var EOL = require('os').EOL;
-        if (optIn) {
-            console.log(EOL + "Thanks for opting into telemetry to help us improve weexpack.");
-            track('telemetry', 'on', 'via-cli-prompt-choice', 'successful');
-        } else {
-            console.log(EOL + "You have been opted out of telemetry. To change this, run: weexpack telemetry on.");
-            // Always track telemetry opt-outs! (whether opted-in or opted-out)
-            track('telemetry', 'off', 'via-cli-prompt-choice', 'successful');
-        }
-        
-        deferred.resolve(optIn); 
-    });
-    
-    return deferred.promise;
-}
-
-function track() {
-    // Remove empty, null or undefined strings from arguments
-    for (var property in arguments) {
-        var val = arguments[property]; 
-        if (!val || val.length === 0) {
-            delete arguments.property;
-        }
+  const msg = 'May weexpack anonymously report usage statistics to improve the tool over time?';
+  insight.askPermission(msg, function (unused, optIn) {
+    const EOL = require('os').EOL;
+    if (optIn) {
+      console.log(EOL + 'Thanks for opting into telemetry to help us improve weexpack.');
+      track('telemetry', 'on', 'via-cli-prompt-choice', 'successful');
     }
-    insight.track.apply(insight, arguments);
+    else {
+      console.log(EOL + 'You have been opted out of telemetry. To change this, run: weexpack telemetry on.');
+            // Always track telemetry opt-outs! (whether opted-in or opted-out)
+      track('telemetry', 'off', 'via-cli-prompt-choice', 'successful');
+    }
+
+    deferred.resolve(optIn);
+  });
+
+  return deferred.promise;
 }
 
-function turnOn() {
-    insight.optOut = false;
+function track () {
+    // Remove empty, null or undefined strings from arguments
+  for (const property in arguments) {
+    const val = arguments[property];
+    if (!val || val.length === 0) {
+      delete arguments.property;
+    }
+  }
+  insight.track.apply(insight, arguments);
 }
 
-function turnOff() {
-    insight.optOut = true;
+function turnOn () {
+  insight.optOut = false;
+}
+
+function turnOff () {
+  insight.optOut = true;
 }
 
 /**
@@ -88,43 +86,43 @@ function turnOff() {
  * Has the same effect as if user never answered the telemetry prompt
  * Useful for testing purposes
  */
-function clear() {
-    insight.optOut = undefined;
+function clear () {
+  insight.optOut = undefined;
 }
 
-function isOptedIn() {
-    return !insight.optOut;
+function isOptedIn () {
+  return !insight.optOut;
 }
 
 /**
  * Has the user already answered the telemetry prompt? (thereby opting in or out?)
  */
-function hasUserOptedInOrOut() {
-    return !(insight.optOut === undefined);
+function hasUserOptedInOrOut () {
+  return !(insight.optOut === undefined);
 }
 
 /**
  * Is the environment variable 'CI' specified ?
  */
-function isCI(env) {
-    return !!env.CI;
+function isCI (env) {
+  return !!env.CI;
 }
 
 /**
  * Has the user ran a command of the form: `cordova run --no-telemetry` ?
  */
-function isNoTelemetryFlag(args) {
-    return args.indexOf('--no-telemetry') > -1;
+function isNoTelemetryFlag (args) {
+  return args.indexOf('--no-telemetry') > -1;
 }
 
 module.exports = {
-    track: track,
-    turnOn: turnOn,
-    turnOff: turnOff,
-    clear: clear,
-    isOptedIn: isOptedIn,
-    hasUserOptedInOrOut: hasUserOptedInOrOut,
-    isCI: isCI,
-    showPrompt: showPrompt,
-    isNoTelemetryFlag: isNoTelemetryFlag
+  track: track,
+  turnOn: turnOn,
+  turnOff: turnOff,
+  clear: clear,
+  isOptedIn: isOptedIn,
+  hasUserOptedInOrOut: hasUserOptedInOrOut,
+  isCI: isCI,
+  showPrompt: showPrompt,
+  isNoTelemetryFlag: isNoTelemetryFlag
 };

@@ -1,141 +1,120 @@
-var config            = require('../../lib/src/cordova/config'),
-    cordova           = require('../../lib/src/cordova/cordova'),
-    prepare           = require('../../lib/src/cordova//prepare'),
-    cordova_util      = require('../../lib/src/cordova/util'),
-    ConfigParser      = require('weexpack-common').ConfigParser,
-    fs                = require('fs'),
-    os                = require('os'),
-    path              = require('path'),
-    events            = require('weexpack-common').events,
-    lazy_load         = require('../../lib/src/cordova/lazy_load'),
-    CordovaError      = require('weexpack-common').CordovaError,
-    Q                 = require('q'),
-    promiseutil       = require('../../lib/src/util/promise-util'),
-    HooksRunner       = require('../../lib/src/hooks/HooksRunner'),
-    superspawn        = require('weexpack-common').superspawn,
-    semver            = require('semver'),
-    shell             = require('shelljs'),
-    _                 = require('underscore'),
-    PlatformJson      = require('weexpack-common').PlatformJson,
-    fetch             = require('cordova-fetch'),
-    gitclone      = require('../../lib/src/gitclone'),
-    npmUninstall         = require('cordova-fetch').uninstall;
+let config = require('../../lib/src/cordova/config'),
+  cordova = require('../../lib/src/cordova/cordova'),
+  prepare = require('../../lib/src/cordova//prepare'),
+  cordova_util = require('../../lib/src/cordova/util'),
+  ConfigParser = require('weexpack-common').ConfigParser,
+  fs = require('fs'),
+  os = require('os'),
+  path = require('path'),
+  events = require('weexpack-common').events,
+  lazy_load = require('../../lib/src/cordova/lazy_load'),
+  CordovaError = require('weexpack-common').CordovaError,
+  Q = require('q'),
+  promiseutil = require('../../lib/src/util/promise-util'),
+  HooksRunner = require('../../lib/src/hooks/HooksRunner'),
+  superspawn = require('weexpack-common').superspawn,
+  semver = require('semver'),
+  shell = require('shelljs'),
+  _ = require('underscore'),
+  PlatformJson = require('weexpack-common').PlatformJson,
+  fetch = require('cordova-fetch'),
+  gitclone = require('../../lib/src/gitclone'),
+  npmUninstall = require('cordova-fetch').uninstall;
 
+const project = {};
 
-var project = {}
-
-project.createProject = function(projectRoot, platform, opts) {
-  var msg;
-
-
+project.createProject = function (projectRoot, platform, opts) {
+  let msg;
 
   opts = opts || {};
 
-
   // The "platforms" dir is safe to delete, it's almost equivalent to
   // cordova platform rm <list of all platforms>
-  var platformsDir = projectRoot
+  const platformsDir = projectRoot;
 
-
-  return Q().then(function() {
-    return downloadProject(projectRoot, platform,  opts);
-  }).then(function(dir) {
-
-    var platformPath = path.join(projectRoot, 'Weexplugin');
-    var platformAlreadyAdded = fs.existsSync(platformPath);
+  return Q().then(function () {
+    return downloadProject(projectRoot, platform, opts);
+  }).then(function (dir) {
+    const platformPath = path.join(projectRoot, 'Weexplugin');
+    const platformAlreadyAdded = fs.existsSync(platformPath);
 
     if (platformAlreadyAdded) {
       throw new CordovaError('plugin project ' + platform + ' already added.');
-      console.log('plugin project ' + platform + ' already added.')
+      console.log('plugin project ' + platform + ' already added.');
     }
 
-    var tempDir =""
-    if(platform == "ios"){
-      tempDir = path.join(dir,"bin","templates")
+    let tempDir = '';
+    if (platform == 'ios') {
+      tempDir = path.join(dir, 'bin', 'templates');
     }
     else {
       tempDir = dir;
     }
 
     shell.mkdir('-p', platformPath);
-    copyProject(tempDir, platformPath)
-    if(platform == "ios" && opts.ali == true){
-      changeSource(platformPath)
+    copyProject(tempDir, platformPath);
+    if (platform == 'ios' && opts.ali == true) {
+      changeSource(platformPath);
     }
 
     events.emit('log', ' ');
-    events.emit('log', 'add plugin'  + platform + ' project ...');
-    console.log('create weexplugin project  success...')
-
-
+    events.emit('log', 'add plugin' + platform + ' project ...');
+    console.log('create weexplugin project  success...');
   });
+};
 
-}
+function changeSource (destinationDir) {
+  const weexPluginRootDir = path.join(destinationDir);
+  let xcodeProjDir;
+  let xcodeCordovaProj;
 
-
-function changeSource (destinationDir){
-
-    var weexPluginRootDir = path.join(destinationDir);
-    var xcodeProjDir;
-    var xcodeCordovaProj;
-
-    try {
-      xcodeProjDir = fs.readdirSync(weexPluginRootDir).filter( function(e) { return e.match(/\.xcodeproj$/i); })[0];
-      if (!xcodeProjDir) {
-        throw new CordovaError('The provided path "' + weexPluginRootDir + '" is not a Weex iOS project.');
-      }
-
-      var cordovaProjName = xcodeProjDir.substring(xcodeProjDir.lastIndexOf(path.sep)+1, xcodeProjDir.indexOf('.xcodeproj'));
-      xcodeCordovaProj = path.join(weexPluginRootDir, cordovaProjName);
-    } catch(e) {
-      throw new CordovaError('The provided path "'+weexPluginRootDir+'" is not a weexpack iOS project.');
+  try {
+    xcodeProjDir = fs.readdirSync(weexPluginRootDir).filter(function (e) { return e.match(/\.xcodeproj$/i); })[0];
+    if (!xcodeProjDir) {
+      throw new CordovaError('The provided path "' + weexPluginRootDir + '" is not a Weex iOS project.');
     }
-    var Podfile = require('../../lib/src/platforms/ios_pack/lib/Podfile').Podfile;
-    var project_name = xcodeCordovaProj.split('/').pop();
-    var podfileFile = new Podfile(path.join(weexPluginRootDir, Podfile.FILENAME), project_name)
-    podfileFile.writeUseAliSource()
 
+    const cordovaProjName = xcodeProjDir.substring(xcodeProjDir.lastIndexOf(path.sep) + 1, xcodeProjDir.indexOf('.xcodeproj'));
+    xcodeCordovaProj = path.join(weexPluginRootDir, cordovaProjName);
+  }
+  catch (e) {
+    throw new CordovaError('The provided path "' + weexPluginRootDir + '" is not a weexpack iOS project.');
+  }
+  const Podfile = require('../../lib/src/platforms/ios_pack/lib/Podfile').Podfile;
+  const project_name = xcodeCordovaProj.split('/').pop();
+  const podfileFile = new Podfile(path.join(weexPluginRootDir, Podfile.FILENAME), project_name);
+  podfileFile.writeUseAliSource();
+}
+
+function removeProject () {
 
 }
 
-
-
-
-function  removeProject() {
-
+function createProjectInWeexpack () {
 
 }
 
-
-function createProjectInWeexpack() {
-
-}
-
-
-function listPlatforms(project_dir) {
-  var core_platforms = require('../../lib/src/platforms/platforms');
-  var platforms_dir = path.join(project_dir, 'platforms');
-  if ( !exports.existsSync(platforms_dir)) {
+function listPlatforms (project_dir) {
+  const core_platforms = require('../../lib/src/platforms/platforms');
+  const platforms_dir = path.join(project_dir, 'platforms');
+  if (!exports.existsSync(platforms_dir)) {
     return [];
   }
-  var subdirs = fs.readdirSync(platforms_dir);
-  return subdirs.filter(function(p) {
+  const subdirs = fs.readdirSync(platforms_dir);
+  return subdirs.filter(function (p) {
     return Object.keys(core_platforms).indexOf(p) > -1;
   });
 }
 
-var  pluginProjectApi = {}
+const pluginProjectApi = {};
 
 pluginProjectApi.create = function (destinationDir, projectConfig, options) {
-
-
-  var templatePath = destinationDir
-  return Q().then(function(){
-    copyProject(templatePath, destinationDir)
+  const templatePath = destinationDir;
+  return Q().then(function () {
+    copyProject(templatePath, destinationDir);
 
     return pluginProjectApi;
-  })
-
+  });
 };
 
 /**
@@ -153,38 +132,34 @@ pluginProjectApi.create = function (destinationDir, projectConfig, options) {
  *   instance or rejected with CordovaError.
  */
 pluginProjectApi.update = function (destinationDir, options) {
-  if (!options || !options.platformDetails)
+  if (!options || !options.platformDetails) {
     return Q.reject(new CordovaError('Failed to find platform\'s \'create\' script. ' +
         'Either \'options\' parameter or \'platformDetails\' option is missing'));
+  }
 
-  var command = path.join(options.platformDetails.libDir, 'bin', 'update');
+  const command = path.join(options.platformDetails.libDir, 'bin', 'update');
   return superspawn.spawn(command, [destinationDir],
       { printCommand: true, stdio: 'inherit', chmod: true })
       .then(function () {
-        var platformApi = knownPlatforms
+        const platformApi = knownPlatforms
             .getPlatformApi(options.platformDetails.platform, destinationDir);
         copyCordovaSrc(options.platformDetails.libDir, platformApi.getPlatformInfo());
         return platformApi;
       });
 };
 
-
-
-
-function downloadProject(projectRoot, platform) {
-  return Q().then(function() {
-    var git_url = 'https://github.com/weexteam/weexpluginContainer-iOS.git'
-    if (platform == "ios") {
-      git_url = 'https://github.com/weexteam/weexpluginContainer-iOS.git'
+function downloadProject (projectRoot, platform) {
+  return Q().then(function () {
+    let git_url = 'https://github.com/weexteam/weexpluginContainer-iOS.git';
+    if (platform == 'ios') {
+      git_url = 'https://github.com/weexteam/weexpluginContainer-iOS.git';
     }
 
-
-    if(platform == "android") {
-      git_url = 'https://github.com/weexteam/weexplugin-android.git'
+    if (platform == 'android') {
+      git_url = 'https://github.com/weexteam/weexplugin-android.git';
     }
 
-
-    return git_clone(git_url, undefined).fail(function(err) {
+    return git_clone(git_url, undefined).fail(function (err) {
       // If it looks like a url, but cannot be cloned, try handling it differently.
       // it's because it's a tarball of the form:
       //     - wp8@https://git-wip-us.apache.org/repos/asf?p=cordova-wp8.git;a=snapshot;h=3.7.0;sf=tgz
@@ -193,10 +168,9 @@ function downloadProject(projectRoot, platform) {
       events.emit('verbose', 'Cloning failed. Let\'s try handling it as a tarball');
     });
 
-
     return cordova_npm(projectRoot, target, opts);
   }).fail(function (error) {
-    var message = 'Failed to fetch plugin container for platform ' + platform +
+    const message = 'Failed to fetch plugin container for platform ' + platform +
         '\nProbably this is either a connection problem, or platform spec is incorrect.' +
         '\nCheck your connection and platform name/version/URL.' +
         '\n' + error;
@@ -205,19 +179,18 @@ function downloadProject(projectRoot, platform) {
 }
 
 // Returns a promise
-function git_clone(git_url, branch) {
+function git_clone (git_url, branch) {
   // Create a tmp dir. Using /tmp is a problem because it's often on a different partition and sehll.mv()
   // fails in this case with "EXDEV, cross-device link not permitted".
-  var tmp_subidr = 'tmp_cordova_git_' + process.pid + '_' + (new Date()).valueOf();
-  var tmp_dir = path.join(cordova_util.libDirectory, 'tmp', tmp_subidr);
+  const tmp_subidr = 'tmp_cordova_git_' + process.pid + '_' + (new Date()).valueOf();
+  const tmp_dir = path.join(cordova_util.libDirectory, 'tmp', tmp_subidr);
   shell.rm('-rf', tmp_dir);
   shell.mkdir('-p', tmp_dir);
 
   return Q().then(function () {
-    var branchToCheckout = branch || 'master';
+    const branchToCheckout = branch || 'master';
     return gitclone.clone(git_url, branchToCheckout, tmp_dir);
   }).then(function () {
-
     return tmp_dir;
   }).fail(function (err) {
     shell.rm('-rf', tmp_dir);
@@ -225,11 +198,9 @@ function git_clone(git_url, branch) {
   });
 }
 
-
-
-function cordova_git(platform) {
-  var mixed_platforms = _.extend({}, platforms),
-      plat;
+function cordova_git (platform) {
+  let mixed_platforms = _.extend({}, platforms),
+    plat;
   if (!(platform.name in platforms)) {
     return Q.reject(new Error('weexpack library "' + platform.name + '" not recognized.'));
   }
@@ -246,19 +217,19 @@ function cordova_git(platform) {
   });
 }
 
-function cordova_npm(platform) {
+function cordova_npm (platform) {
   if (!(platform.name in platforms)) {
     return Q.reject(new Error('weexpack library "' + platform.name + '" not recognized.'));
   }
   // Check if this version was already downloaded from git, if yes, use that copy.
   // TODO: remove this once we fully switch to npm workflow.
-  var platdir = platforms[platform.name].altplatform || platform.name;
+  const platdir = platforms[platform.name].altplatform || platform.name;
   // If platform.version specifies a *range*, we need to determine what version we'll actually get from npm (the
   // latest version that matches the range) to know what local directory to look for.
   return util.getLatestMatchingNpmVersion(platform.packageName, platform.version).then(function (version) {
-    var git_dload_dir = path.join(util.libDirectory, platdir, 'cordova', version);
+    let git_dload_dir = path.join(util.libDirectory, platdir, 'cordova', version);
     if (fs.existsSync(git_dload_dir)) {
-      var subdir = platforms[platform.name].subdirectory;
+      const subdir = platforms[platform.name].subdirectory;
       if (subdir) {
         git_dload_dir = path.join(git_dload_dir, subdir);
       }
@@ -272,20 +243,16 @@ function cordova_npm(platform) {
   });
 }
 
-
-
-
-function copyProject(templateDir, projectDir){
-  var templateFiles;      // Current file
+function copyProject (templateDir, projectDir) {
+  let templateFiles;      // Current file
   templateFiles = fs.readdirSync(templateDir);
   // Remove directories, and files that are unwanted
 
   // Copy each template file after filter
-  for (var i = 0; i < templateFiles.length; i++) {
-    var p = path.resolve(templateDir, templateFiles[i]);
+  for (let i = 0; i < templateFiles.length; i++) {
+    const p = path.resolve(templateDir, templateFiles[i]);
     shell.cp('-R', p, projectDir);
   }
 }
 
-
-module.exports = project
+module.exports = project;

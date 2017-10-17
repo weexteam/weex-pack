@@ -2,9 +2,9 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const buildAndroid = require('../src/build/Android');
-const buildIOS = require('../src/build/iOS');
-const buildWeb = require('../src/build/Web');
+const buildAndroid = require('../build/build/Android');
+const buildIOS = require('../build/build/iOS');
+const buildWeb = require('../build/build/Web');
 
 program
   .usage('<platform> [options]')

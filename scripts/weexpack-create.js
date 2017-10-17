@@ -2,14 +2,14 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const create = require('../src/create/create');
-const cli = require('../src/cli');
-const publish = require('../src/publish/publish');
+const create = require('../build/create/create');
+const cli = require('../build/cli');
+const publish = require('../build/publish/publish');
 
 program.usage('[project-name] [options]').on('--help', () => {
   console.log('  Examples:\n');
   console.log(chalk.grey('    # create a standard weex project'));
-  console.log('    $ ' + chalk.blue('weexpack create myProject'));
+  console.log('    $ ' + chalk.blue('weex create myProject'));
   console.log();
 }).parse(process.argv)
 

@@ -5,13 +5,13 @@ const Fs = require('fs');
 const Path = require('path');
 const Inquirer = require('inquirer');
 class Config {
-  constructor(properties, path) {
+  constructor (properties, path) {
     this.path = path;
     if (properties instanceof ConfigResolver) {
-      let map = {};
+      const map = {};
       this.properties = [];
-      for (let key in properties.def) {
-        for (let propName in properties.def[key]) {
+      for (const key in properties.def) {
+        for (const propName in properties.def[key]) {
           if (!map[propName]) {
             this.properties.push({
               name: propName,
@@ -23,26 +23,26 @@ class Config {
       }
     }
     else {
-      this.properties = properties.split(',').map(prop=> {
-        var splits = prop.split('|');
+      this.properties = properties.split(',').map(prop => {
+        const splits = prop.split('|');
         return {
           name: splits[0],
           desc: splits[1] || 'enter your ' + splits[0] + ':'
-        }
+        };
       });
     }
   }
 
-  getConfig() {
-    return new Promise((resolve, reject)=> {
+  getConfig () {
+    return new Promise((resolve, reject) => {
       let config = {};
       try {
         config = require(this.path);
       }
       catch (e) {
       }
-      var questions = [], answers = {};
-      console.log('============build config============')
+      let questions = [], answers = {};
+      console.log('============build config============');
       this.properties.forEach(function (prop) {
         if (config[prop.name] !== undefined && config[prop.name] != '') {
           answers[prop.name] = config[prop.name];
@@ -53,43 +53,42 @@ class Config {
             type: 'input',
             message: prop.desc,
             name: prop.name
-          })
+          });
         }
       });
       if (questions.length > 0) {
         Inquirer.prompt(questions)
           .then((answers) => {
             Object.assign(config, answers);
-            Fs.writeFileSync(this.path, JSON.stringify(config, null, 4))
+            Fs.writeFileSync(this.path, JSON.stringify(config, null, 4));
             resolve(config);
-          })
+          });
       }
       else {
         console.log('if you want to change build config.please modify ' + Path.basename(this.path));
-        resolve(config)
+        resolve(config);
       }
-    })
-
+    });
   }
 }
 class ConfigResolver {
-  constructor(def) {
+  constructor (def) {
     this.def = def;
   }
 
-  resolve(config, basePath) {
+  resolve (config, basePath) {
     basePath = basePath || process.cwd();
-    for (let path in this.def) {
+    for (const path in this.def) {
       if (this.def.hasOwnProperty(path)) {
-        let targetPath = Path.join(basePath, path);
+        const targetPath = Path.join(basePath, path);
         let source = Fs.readFileSync(targetPath).toString();
-        for (let key in this.def[path]) {
+        for (const key in this.def[path]) {
           if (this.def[path].hasOwnProperty(key)) {
-            let configDef = this.def[path][key];
+            const configDef = this.def[path][key];
             if (Array.isArray(configDef)) {
-              configDef.forEach((def)=> {
-                source = _resolveConfigDef(source, def, config, key)
-              })
+              configDef.forEach((def) => {
+                source = _resolveConfigDef(source, def, config, key);
+              });
             }
             else {
               source = _resolveConfigDef(source, configDef, config, key);
@@ -98,11 +97,10 @@ class ConfigResolver {
         }
         Fs.writeFileSync(targetPath, source);
       }
-
     }
   }
 }
-function _resolveConfigDef(source, configDef, config, key) {
+function _resolveConfigDef (source, configDef, config, key) {
   if (configDef.type) {
     if (config[key] === undefined) {
       throw new Error('Config:[' + key + '] must have a value!');
@@ -114,22 +112,22 @@ function _resolveConfigDef(source, configDef, config, key) {
   }
 }
 const replacer = {
-  plist(source, key, value){
-    let r = new RegExp('(<key>' + key + '</key>\\s*<string>)[^<>]*?<\/string>', 'g');
-    return source.replace(r, '$1' + value + '</string>')
+  plist (source, key, value) {
+    const r = new RegExp('(<key>' + key + '</key>\\s*<string>)[^<>]*?<\/string>', 'g');
+    return source.replace(r, '$1' + value + '</string>');
   },
-  xmlTag(source, key, value, tagName = 'string'){
-    let r = new RegExp(`<${tagName} name="${key}">[^<]+?</${tagName}>`, 'g');
+  xmlTag (source, key, value, tagName = 'string') {
+    const r = new RegExp(`<${tagName} name="${key}">[^<]+?</${tagName}>`, 'g');
     return source.replace(r, `<${tagName} name="${key}">${value}</${tagName}>`);
   },
-  xmlAttr(source, key, value, tagName = 'string'){
-    let r = new RegExp(`<${tagName} name="${key}"\\s* value="[^"]*?"\\s*/>`, 'g');
+  xmlAttr (source, key, value, tagName = 'string') {
+    const r = new RegExp(`<${tagName} name="${key}"\\s* value="[^"]*?"\\s*/>`, 'g');
     return source.replace(r, `<${tagName} name="${key}" value="${value}"/>`);
   },
-  regexp(source, regexp, value){
+  regexp (source, regexp, value) {
     return source.replace(regexp, function (m, a, b) {
       return a + value + (b || '');
-    })
+    });
   }
 };
 
@@ -157,14 +155,14 @@ exports.androidConfigResolver = new ConfigResolver({
       handler: function (source, value, replacer) {
         if (/https?/.test(value)) {
           source = replacer.xmlAttr(source, 'launch_locally', 'false', 'preference');
-          return replacer.xmlAttr(source, 'launch_url', value,'preference');
+          return replacer.xmlAttr(source, 'launch_url', value, 'preference');
         }
         else {
           source = replacer.xmlAttr(source, 'launch_locally', 'true', 'preference');
-          let name=value.replace(/\.(we|vue)$/, '.js');
-          //Fs.writeFileSync(Path.join(process.cwd(), 'app/src/main/assets/'+name),Fs.readFileSync(Path.join(process.cwd(), '../../dist', name)));
+          const name = value.replace(/\.(we|vue)$/, '.js');
+          // Fs.writeFileSync(Path.join(process.cwd(), 'app/src/main/assets/'+name),Fs.readFileSync(Path.join(process.cwd(), '../../dist', name)));
 
-          return replacer.xmlAttr(source, 'local_url', 'file://assets/dist/'+name,'preference');
+          return replacer.xmlAttr(source, 'local_url', 'file://assets/dist/' + name, 'preference');
         }
       }
     }
@@ -212,4 +210,4 @@ exports.iOSConfigResolver = new ConfigResolver({
     ]
   }
 
-})
+});

@@ -2,18 +2,20 @@
 
 const program = require('commander')
 const chalk = require('chalk')
-const runAndroid = require('../src/run/Android')
-const runIOS = require('../src/run/iOS')
-const runWeb = require('../src/run/Web')
+const runAndroid = require('../build/run/Android')
+const runIOS = require('../build/run/iOS')
+const runWeb = require('../build/run/web')
+
 
 program
   .usage('<platform> [options]')
   .option('-c, --config [path]', 'specify the configuration file')
   .option('-C, --clean','clean project before build android app')
+  .on('--help', printExample)
   .parse(process.argv)
 
 function printExample() {
-  console.log('  Examples:')
+  console.log('\n  Examples:')
   console.log()
   console.log(chalk.grey('    # run weex Android project'))
   console.log('    $ ' + chalk.blue('weexpack run android'))
@@ -26,7 +28,6 @@ function printExample() {
   console.log()
 }
 
-program.on('--help', printExample)
 
 function isValidPlatform(args) {
   if (args && args.length) {

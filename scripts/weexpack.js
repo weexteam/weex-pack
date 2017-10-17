@@ -2,8 +2,8 @@
 
 const program = require('commander')
 const chalk = require('chalk')
-const market = require('../src/publish/market');
-const cli = require('../src/cli')
+const market = require('../build/publish/market');
+const cli = require('../build/cli')
 program
   .version(require('../package').version)
   .usage('<command> [options]')
@@ -29,6 +29,7 @@ if (program.args.length < 1) {
 if(program.args.length >= 1){
   var isSupport = false;
   var list = ["create", "platform","run", "build", "plugin", "weexplugin","market"]
+  // var list = ["create", "platform","run", "build"]
   for(var i =0;i<list.length;i++){
     if(program.args[0] == list[i]){
       isSupport = true;

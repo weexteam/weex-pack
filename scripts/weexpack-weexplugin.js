@@ -2,10 +2,10 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const create = require('../src/create/create');
-const cli = require('../src/cli');
-const publish = require('../src/publish/publish');
-var project = require('../src/plugin/project')
+const create = require('../build/create/create');
+const cli = require('../build/cli');
+const publish = require('../build/publish/publish');
+var project = require('../build/plugin/project')
 program
     .command('create [platform-type]')
     .description('create a empty plugin container project')

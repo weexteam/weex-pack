@@ -2,12 +2,12 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const create = require('../src/plugin/create');
-const cli = require('../src/cli');
-const publish = require('../src/publish/publish');
-const install = require('../src/plugin/install')
-const uninstall = require('../src/plugin/uninstall')
-const login = require('../src/publish/login');
+const create = require('../build/plugin/create');
+const cli = require('../build/cli');
+const publish = require('../build/publish/publish');
+const install = require('../build/plugin/install')
+const uninstall = require('../build/plugin/uninstall')
+const login = require('../build/publish/login');
 const inquirer = require('inquirer');
 
 var cordova_lib = require('../lib'),

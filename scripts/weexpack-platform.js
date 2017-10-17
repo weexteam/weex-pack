@@ -2,9 +2,9 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const create = require('../src/create/create');
-const cli = require('../src/cli');
-const publish = require('../src/publish/publish');
+const create = require('../build/create/create');
+const cli = require('../build/cli');
+const publish = require('../build/publish/publish');
 program
     .command('add [platform-name]')
     .option('-d, --d', 'debug')
@@ -62,5 +62,3 @@ program
 
 
 program.parse(process.argv);
-
-

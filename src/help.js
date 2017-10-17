@@ -16,38 +16,38 @@
     specific language governing permissions and limitations
     under the License.
 */
-var fs = require('fs'),
-    cordova_lib = require('../lib'),
-    cordova = cordova_lib.cordova,
-    Q = require('q'),
-    path = require('path');
+let fs = require('fs'),
+  cordova_lib = require('../lib'),
+  cordova = cordova_lib.cordova,
+  Q = require('q'),
+  path = require('path');
 
 module.exports = function help (args) {
-    var command,
-        file,
-        raw,
-        docdir;
-    args = args || [];
-    command = ((args)[0] || 'weexpack');
-    docdir = path.join(__dirname, '..', 'doc');
-    file = [
-      command + '.md',
-      command + '.txt',
-      'cordova.md',
-      'cordova.txt',
-    ].map(function (file) {
-        var f = path.join(docdir, file);
-        if (fs.existsSync(f)) {
-           return f;
-        }
-        return null;
-    }).filter(function (f) {
-        return f !== null;
-    });
-    if(file && file[0] ) {
-      raw = fs.readFileSync(file[0]).toString('utf8').replace(/cordova-cli/g, cordova_lib.binname);
-      cordova.emit('results', raw);
+  let command,
+    file,
+    raw,
+    docdir;
+  args = args || [];
+  command = ((args)[0] || 'weexpack');
+  docdir = path.join(__dirname, '..', 'doc');
+  file = [
+    command + '.md',
+    command + '.txt',
+    'cordova.md',
+    'cordova.txt'
+  ].map(function (file) {
+    const f = path.join(docdir, file);
+    if (fs.existsSync(f)) {
+      return f;
     }
+    return null;
+  }).filter(function (f) {
+    return f !== null;
+  });
+  if (file && file[0]) {
+    raw = fs.readFileSync(file[0]).toString('utf8').replace(/cordova-cli/g, cordova_lib.binname);
+    cordova.emit('results', raw);
+  }
 
-    return Q();
+  return Q();
 };
