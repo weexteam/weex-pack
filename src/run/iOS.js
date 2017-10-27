@@ -300,6 +300,7 @@ function _runAppOnSimulator ({ device, xcodeProject, options, resolve, reject })
  */
 function simulatorIsAvailable (info, device) {
   info = info.devices;
+  let simList;
   // simList = info['iOS ' + device.version]
   for (const key in info) {
     if (key.indexOf('iOS') > -1) {
