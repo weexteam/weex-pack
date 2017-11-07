@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.4.7-beta.18",
+  "version": "0.4.7-beta.20",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -4317,9 +4317,9 @@
       }
     },
     "generator-weex-plugin": {
-      "version": "0.1.28",
-      "resolved": "https://registry.npmjs.org/generator-weex-plugin/-/generator-weex-plugin-0.1.28.tgz",
-      "integrity": "sha512-TcEEnWbDSjVvHx1FmhD9YYFEeCLLJZlhSWL259XAdeA8rRJmAMaPFXdO6jHqCF7ACFzwFXAf8p/i7SY4CCwWMA==",
+      "version": "0.1.32",
+      "resolved": "https://registry.npmjs.org/generator-weex-plugin/-/generator-weex-plugin-0.1.32.tgz",
+      "integrity": "sha512-u1wljCUV09CgaTYyvZLwWkBgeOt6awLFreUp5Lfny1ziVtbg78w6Eapdya91B8NEhNYMY6IpSRcGih1ifEALmQ==",
       "requires": {
         "chalk": "1.1.3",
         "glob": "7.1.2",
