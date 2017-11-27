@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "0.4.7-beta.24",
+  "version": "0.4.7-beta.25",
   "lockfileVersion": 1,
   "dependencies": {
     "abbrev": {
@@ -6727,9 +6727,9 @@
       }
     },
     "weexpack-create": {
-      "version": "0.1.11-beta.3",
-      "resolved": "https://registry.npmjs.org/weexpack-create/-/weexpack-create-0.1.11-beta.3.tgz",
-      "integrity": "sha512-1UQyTGsemJrbu4K5maa4jx3bkROqUp6f6dqo7Hy6Rm9eRpGaoJAttUVgY7NtuT5ewZrrgXDn5PWaKKbpbgLKBg==",
+      "version": "0.1.11-beta.5",
+      "resolved": "https://registry.npmjs.org/weexpack-create/-/weexpack-create-0.1.11-beta.5.tgz",
+      "integrity": "sha512-lhn/GRCSx0Cnj9K7QPBhidNg0L73GVaADaRfUoECuuwQcoAlUSw9t++tKnx3hbB9pvKWmpPoFs4ABcGLpH3+4Q==",
       "dependencies": {
         "acorn": {
           "version": "5.1.2",
