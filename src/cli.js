@@ -62,27 +62,27 @@ function init () {
   }
 }
 
-function checkForUpdates () {
-  try {
-        // Checks for available update and returns an instance
-    const notifier = updateNotifier({
-      pkg: pkg
-    });
+// function checkForUpdates () {
+//   try {
+//         // Checks for available update and returns an instance
+//     const notifier = updateNotifier({
+//       pkg: pkg
+//     });
 
-        // Notify using the built-in convenience method
-    notifier.notify();
-  }
-  catch (e) {
-        // https://issues.apache.org/jira/browse/CB-10062
-    if (e && e.message && /EACCES/.test(e.message)) {
-      console.log('Update notifier was not able to access the config file.\n' +
-                'You may grant permissions to the file: \'sudo chmod 744 ~/.config/configstore/update-notifier-cordova.json\'');
-    }
-    else {
-      throw e;
-    }
-  }
-}
+//         // Notify using the built-in convenience method
+//     notifier.notify();
+//   }
+//   catch (e) {
+//         // https://issues.apache.org/jira/browse/CB-10062
+//     if (e && e.message && /EACCES/.test(e.message)) {
+//       console.log('Update notifier was not able to access the config file.\n' +
+//                 'You may grant permissions to the file: \'sudo chmod 744 ~/.config/configstore/update-notifier-cordova.json\'');
+//     }
+//     else {
+//       throw e;
+//     }
+//   }
+// }
 
 let shouldCollectTelemetry = false;
 module.exports = function (inputArgs, cb) {
@@ -227,7 +227,7 @@ function cli (inputArgs) {
       'a': '--ali'
     };
 
-  checkForUpdates();
+  // checkForUpdates();
 
   const args = nopt(knownOpts, shortHands, inputArgs);
     // For CordovaError print only the message without stack trace unless we
