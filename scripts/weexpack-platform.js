@@ -44,7 +44,7 @@ program
 
 program
     .command('list [options]')
-    .description('all installed  platform project')
+    .description('all installed platform project')
     .action(function (pluginName) {
       let args=[];
       process.argv.forEach(function(arg,i){

@@ -35,7 +35,7 @@ program.command('remove [platform-name]').description('remove a platform project
   cli(args);
 });
 
-program.command('list [options]').description('all installed  platform project').action(function (pluginName) {
+program.command('list [options]').description('all installed platform project').action(function (pluginName) {
   var args = [];
   process.argv.forEach(function (arg, i) {
     if (arg != '[object Object]') {

@@ -17,7 +17,5 @@
         "version": "^6.2.1",
         "apiCompatibleSince": "5.0.0",
         "deprecated": false
-    },
-    "browser": {
     }
 }
