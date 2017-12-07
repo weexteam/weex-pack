@@ -17,7 +17,7 @@ function runIOS (options) {
       return utils.exec('rsync  -r -q ./dist/* platforms/ios/bundlejs/');
     })
     .then(() => {
-      startJSServer();
+      // startJSServer();
       return { options };
     }).then(prepareIOS)
      .then(installDep)
@@ -54,7 +54,7 @@ function prepareIOS ({ options }) {
       console.log();
       console.log(chalk.red('  iOS project not found !'));
       console.log();
-      console.log(`  You should run ${chalk.blue('weexpack create')} or ${chalk.blue('weexpack platform add ios')} first`);
+      console.log(`  You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add ios')} first`);
       reject();
     }
 
@@ -187,7 +187,6 @@ function _buildOnSimulator ({ scheme, device, rootPath, xcodeProject, options, r
   try {
     const config = require(path.join(rootPath, 'ios.config.json'));
     fs.writeFileSync(path.join(process.cwd(), 'bundlejs/index.js'), fs.readFileSync(path.join(process.cwd(), '../../dist', config.WeexBundle.replace(/\.(we|vue)$/, '.js'))));
-
     buildInfo = child_process.execSync(`xcodebuild -${xcodeProject.isWorkspace ? 'workspace' : 'project'} ${xcodeProject.name} -scheme ${scheme} -configuration Debug -destination id=${device.udid} -sdk iphonesimulator -derivedDataPath build clean build`, { encoding: 'utf8' });
   }
   catch (e) {
@@ -256,7 +255,6 @@ function _runAppOnSimulator ({ device, xcodeProject, options, resolve, reject })
   catch (e) {
     reject(e);
   }
-  console.log(simctlInfo);
   simctlInfo = JSON.parse(simctlInfo);
 
   if (!simulatorIsAvailable(simctlInfo, device)) {

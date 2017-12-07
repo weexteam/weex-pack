@@ -15,9 +15,7 @@ module.exports = function (ali, typeid) {
   const xmlFilePath = Path.join(dir, 'plugin.xml');
   Cache.init();
   if (!Fs.existsSync(xmlFilePath)) {
-    // 新版本
     const pkg = require(Path.join(dir, './package.json'));
-    pkg.weexpack = '0.4.0';
     if (ali) {
       pkg.publishConfig = {
         registry: 'http://registry.npm.alibaba-inc.com'
@@ -36,7 +34,7 @@ module.exports = function (ali, typeid) {
       console.log();
       console.log(Chalk.red('  weex plugin project not found !'));
       console.log();
-      console.log(`  You should run ${Chalk.blue('weexpack plugin create')} first`);
+      console.log(`  You should run ${Chalk.blue('weex plugin create')} first`);
       console.log();
       process.exit();
     }
@@ -138,7 +136,8 @@ function _doPublish (publishPackage, name, namespace, fullname, ali, deps, exten
       Cache.cache.latestVersion = publishPackage.version;
       Cache.save();
     }
-  }, function () {
+  }, function (err) {
+    console.error(err)
   });
 }
 function removePackageJson () {

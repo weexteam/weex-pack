@@ -112,7 +112,6 @@ pluginProjectApi.create = function (destinationDir, projectConfig, options) {
   const templatePath = destinationDir;
   return Q().then(function () {
     copyProject(templatePath, destinationDir);
-
     return pluginProjectApi;
   });
 };

@@ -4,15 +4,24 @@ const npmHelper = require('../utils/npm');
 const path = require('path');
 const shell = require('shelljs');
 const fs = require('fs');
-
+const chalk = require('chalk');
 const gradle = require('./gradle');
 const podfile = require('./podfile');
 const cordovaUtils = require('../../lib/src/cordova/util');
 
-let cordova_lib = require('../../lib'),
-  cordova = cordova_lib.cordova;
+const cordova_lib = require('../../lib');
+const cordova = cordova_lib.cordova;
 
+const CONFIGS = require('./config');
 const cli = require('../cli');
+
+let pluginConfigs = CONFIGS.defaultConfig;
+
+// Get plugin config in project.
+const pluginConfigPath = path.join(CONFIGS.rootPath, CONFIGS.filename);
+if (fs.existsSync(pluginConfigPath)) {
+  pluginConfigs = require(pluginConfigPath);
+}
 
 function uninstall (pluginName, args) {
   let version;
@@ -38,7 +47,8 @@ function uninstall (pluginName, args) {
           }
         }
         else {
-          cli(args);
+          console.log(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
+          // cli(args);
           // cordova.raw["plugin"]("remove", [target]);
         }
       });
@@ -57,7 +67,8 @@ function uninstall (pluginName, args) {
         }
       }
       else {
-        cli(args);
+        console.log(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
+        // cli(args);
         // cordova.raw["plugin"]("remove", [target]);
       }
     });
@@ -74,22 +85,29 @@ function handleUninstall (dir, pluginName, version, option) {
       console.log("can't find Podfile file");
       return;
     }
-    var name = option.ios && option.ios.name ? option.ios.name : pluginName;
+    const iosPackageName = option.ios && option.ios.name ? option.ios.name : pluginName;
     const iosVersion = option.ios && option.ios.version || version;
-    const buildPatch = podfile.makeBuildPatch(name, iosVersion);
+    const buildPatch = podfile.makeBuildPatch(iosPackageName, iosVersion);
+    // Remove Podfile config.
     podfile.revokePatch(path.join(dir, 'Podfile'), buildPatch);
-    console.log(name + ' has removed in ios project');
+    console.log(`=> ${pluginName} has removed in iOS project`);
+    // Update plugin.json in the project.
+    pluginConfigs = utils.updatePluginConfigs(pluginConfigs, iosPackageName, '', 'ios');
+    utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
   }
   else if (utils.isAndroidProject(dir)) {
-    var name = option.android && option.android.name ? option.android.name : pluginName;
+    const androidPackageName = option.android && option.android.name ? option.android.name : pluginName;
     const androidVersion = option.android && option.android.version || version;
-    const buildPatch = gradle.makeBuildPatch(name, androidVersion, option.android.groupId || '');
+    const buildPatch = gradle.makeBuildPatch(androidPackageName, androidVersion, option.android.groupId || '');
+    // Remove gradle config.
     gradle.revokePatch(path.join(dir, 'build.gradle'), buildPatch);
-    console.log(name + ' has removed in android');
+    console.log(`=> ${pluginName} has removed in Android project`);
+    // Update plugin.json in the project.
+    pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, '', 'android');
+    utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
   }
   // cordova工程
   else if (cordovaUtils.isCordova(dir)) {
-    // 1111
     const platformList = cordovaUtils.listPlatforms(dir);
     for (let i = 0; i < platformList.length; i++) {
       uninstallInPackage(dir, pluginName, version);

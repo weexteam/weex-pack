@@ -3,16 +3,17 @@
 
 var program = require('commander');
 var chalk = require('chalk');
-var create = require('../build/plugin/create');
-var cli = require('../build/cli');
-var publish = require('../build/publish/publish');
-var install = require('../build/plugin/install');
-var uninstall = require('../build/plugin/uninstall');
-var login = require('../build/publish/login');
+var create = require('../src/plugin/create');
+var cli = require('../src/cli');
+var publish = require('../src/publish/publish');
+var install = require('../src/plugin/install');
+var uninstall = require('../src/plugin/uninstall');
+var login = require('../src/publish/login');
 var inquirer = require('inquirer');
+var logger = require('weexpack-common').CordovaLogger.get();
 
-var cordova_lib = require('../lib'),
-    cordova = cordova_lib.cordova;
+var cordova_lib = require('../lib');
+var cordova = cordova_lib.cordova;
 
 var parseArgs = function parseArgs() {
   var args = [];
@@ -71,6 +72,10 @@ var packagetype = [{
     return id;
   }
 }];
+
+process.on('uncaughtException', function (err) {
+  logger.error(err.stack);
+});
 
 program.command('gettoken').description('get market token').action(function () {
   console.log(login.getToken());

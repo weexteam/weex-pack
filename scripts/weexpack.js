@@ -4,6 +4,8 @@ const program = require('commander')
 const chalk = require('chalk')
 const market = require('../build/publish/market');
 const cli = require('../build/cli')
+const d = domain.create();
+
 program
   .version(require('../package').version)
   .usage('<command> [options]')
@@ -40,7 +42,6 @@ if(program.args.length >= 1){
     console.log("  error: unknown command '"+ program.args[0]+ "'")
     process.exit();
   }
-
 }
 
 

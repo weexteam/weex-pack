@@ -1,8 +1,7 @@
 
 var npm = require('npm'),
   path = require('path'),
-  Q = require('q'),
-  unpack = require('./unpack');
+  Q = require('q');
 
 var events = require('weexpack-common').events,
   fs = require('fs'),
@@ -30,10 +29,10 @@ function cachePackage (packageName, packageVersion, callback) {
   utils.fetchCache(packageName, packageVersion, callback);
 }
 
-// Returns a promise for the path to the unpacked tarball (unzip + untar).
-function unpackTgz (package_tgz, unpackTarget) {
+// Returns a promise for the path to the ed tarball (unzip + untar).
+function unpackTgz (package_tgz, Target) {
   return Q.promise(function (resolve, reject) {
-    const extractOpts = { type: 'Directory', path: unpackTarget, strip: 1 };
+    const extractOpts = { type: 'Directory', path: Target, strip: 1 };
 
     fs.createReadStream(package_tgz)
         .on('error', function (err) {
@@ -55,4 +54,10 @@ function unpackTgz (package_tgz, unpackTarget) {
       .then(function () {
         return unpackTarget;
       });
+}
+
+module.exports = {
+  fetchPackage,
+  unpackTgz,
+  cachePackage
 }

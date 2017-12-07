@@ -8,21 +8,16 @@ function applyPatch (file, patch) {
   }
 
   content = content.replace(patch.pattern, match => `${patch.patch}${match}`);
-
   fs.writeFileSync(file, content);
 }
-// aim is to match (space insignificant around the comma, comma optional):
-//     pod 'Foobar', '1.2'
-//     pod 'Foobar', 'abc 123 1.2'
-//     pod 'PonyDebugger', :configurations => ['Debug', 'Beta']
 
 function makeBuildPatch (name, version) {
   let patch = '';
   if (version) {
-    patch = `    pod '${name}', '${version}'\n`;
+    patch = `\tpod '${name}', '${version}'\n`;
   }
   else {
-    patch = `    pod '${name}'\n`;
+    patch = `\tpod '${name}'\n`;
   }
 
   return {

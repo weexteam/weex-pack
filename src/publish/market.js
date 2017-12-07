@@ -45,7 +45,7 @@ exports.publish = function (name, namespace, fullname, ali, version, extend, typ
       if (res.success) {
         console.log();
         console.log(chalk.yellow('plugin [' + name + '@' + version + '] publish success! sync to market maybe need a few minutes.'));
-        console.log(chalk.yellow(`you can visit ${exports.domain} see your plugin. if not exist you can retry ${chalk.blue('weexpack plugin publish')}`));
+        console.log(chalk.yellow(`you can visit ${exports.domain} see your plugin. if not exist you can retry ${chalk.blue('weex plugin publish')}`));
         console.log();
         resolve();
       }
@@ -62,7 +62,7 @@ exports.publish = function (name, namespace, fullname, ali, version, extend, typ
         console.error(chalk.red(`Market sync rejected!`));
       }
     }).catch(function (e) {
-      console.error(chalk.red(`Market sync failed! Please retry ${chalk.blue('weexpack plugin publish')}`));
+      console.error(chalk.red(`Market sync failed! Please retry ${chalk.blue('weex plugin publish')}`));
       console.error(chalk.grey('error info:' + e));
     });
   });
@@ -78,7 +78,7 @@ exports.apply = function (name, p) {
         throw new Error('apply plugin fullname error!');
       }
     }).catch(function (e) {
-      console.error(chalk.red(`\nMarket apply failed! Please retry ${chalk.blue('weexpack plugin publish')}\n`));
+      console.error(chalk.red(`\nMarket apply failed! Please retry ${chalk.blue('weex plugin publish')}\n`));
       console.error(chalk.grey('error info:' + e));
     });
   });

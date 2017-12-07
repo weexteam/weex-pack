@@ -5,6 +5,8 @@ var program = require('commander');
 var chalk = require('chalk');
 var market = require('../build/publish/market');
 var cli = require('../build/cli');
+var d = domain.create();
+
 program.version(require('../package').version).usage('<command> [options]')
 // .command('init [name]', 'initialize a standard weex project')
 .command('create [name]', 'initialize a standard weex project').command('platform [command]', 'command for add or remove a  platform project').command('run [platform]', 'run weex app on the specific platform').command('build [platform]', 'build weex app generator package(apk or ipa)').command('plugin [command]', 'command for add,create,login,publish weex plugins').command('weexplugin [command]', 'create a project that is a manager of plugin');

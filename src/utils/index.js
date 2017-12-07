@@ -100,8 +100,8 @@ const utils = {
         });
         if (!quiet) {
           child.stdout.pipe(process.stdout);
+          child.stderr.pipe(process.stderr);
         }
-        child.stderr.pipe(process.stderr);
       }
       catch (e) {
         console.error('execute command failed :', command);
@@ -164,7 +164,7 @@ const utils = {
   isNewVersionPlugin: function (pluginName, version, callback) {
     let trynum = 0;
     npm.load(function () {
-      var load = function (npmName) {
+      const load = function (npmName) {
         npm.commands.info([npmName + '@' + version], true, function (error, result) {
           if (error && trynum == 0) {
             trynum++;
@@ -186,6 +186,7 @@ const utils = {
               callback({
                 ios: result[version].ios,
                 android: result[version].android,
+                browser: result[version].browser,
                 version: result[version].version,
                 name: result[version].name,
                 weexpack: result[version].weexpack,
@@ -200,6 +201,48 @@ const utils = {
       };
       load(pluginName);
     });
+  },
+
+  writePluginFile: function (root, path, config) {
+    if (!fs.existsSync(root)){
+      mkdirp(root, function (err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+    if (!fs.existsSync(path)) {
+      fs.open(path,'w+',0666, (err, fd) => {
+        fs.writeFileSync(path, JSON.stringify(config, null, 2));
+      });
+    }
+    else {
+      fs.writeFileSync(path, JSON.stringify(config, null, 2));
+    }
+  },
+
+  updatePluginConfigs: function (configs, name, option, platform) {
+    let plugins = Object.assign({}, configs);
+    const len = plugins[platform].length;
+    for (let i =  len - 1; i >= 0; i --) {
+      if (name && plugins[platform][i].name === name) {
+        if (option) {
+          plugins[platform].splice(i,1,option[platform])
+        }
+        else {
+          plugins[platform].splice(i,1)
+        }
+        return plugins;
+      }
+    }
+    if (option[platform]) {
+      plugins[platform].push(option[platform]);
+    }
+    return plugins;
+  },
+
+  installNpmPackage () {
+    return utils.exec('npm install', true)
   }
 
 };

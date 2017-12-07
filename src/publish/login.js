@@ -87,7 +87,7 @@ module.exports = {
     })) : null;
     if (info === null) {
       console.log(chalk.red('Login failed, please login again！'));
-      console.log(chalk.red('You need to authorize this machine using `weexpack plugin login`'));
+      console.log(chalk.red('You need to authorize this machine using `weex plugin login`'));
       process.exit(-1);
     }
     else {
@@ -100,7 +100,7 @@ module.exports = {
     })) : null;
     if (info === null) {
       console.log(chalk.red('Login failed, please login again！'));
-      console.log(chalk.red('You need to authorize this machine using `weexpack plugin login`'));
+      console.log(chalk.red('You need to authorize this machine using `weex plugin login`'));
       process.exit(-1);
     }
     else {

@@ -2,18 +2,19 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const create = require('../build/plugin/create');
-const cli = require('../build/cli');
-const publish = require('../build/publish/publish');
-const install = require('../build/plugin/install')
-const uninstall = require('../build/plugin/uninstall')
-const login = require('../build/publish/login');
+const create = require('../src/plugin/create');
+const cli = require('../src/cli');
+const publish = require('../src/publish/publish');
+const install = require('../src/plugin/install')
+const uninstall = require('../src/plugin/uninstall')
+const login = require('../src/publish/login');
 const inquirer = require('inquirer');
+const logger = require('weexpack-common').CordovaLogger.get();
 
-var cordova_lib = require('../lib'),
-  cordova = cordova_lib.cordova;
+const cordova_lib = require('../lib')
+const cordova = cordova_lib.cordova;
 
-var parseArgs = function () {
+const parseArgs = function () {
   let args = [];
   process.argv.forEach(function (arg, i) {
     if (arg != '[object Object]') { //fix commander’s bug
@@ -26,10 +27,7 @@ var parseArgs = function () {
   return args;
 }
 
-
-
-
-var questions = [{
+const questions = [{
     name: 'email',
     type: 'input',
     message: 'Please enter your Market email account:'
@@ -41,13 +39,13 @@ var questions = [{
   }
 ];
 
-var packagetype = [{
+const packagetype = [{
   type: 'list',
   name: 'id',
   message: 'Please select your component type?',
   choices: ['Basic', 'Layout', 'Feedback', 'Navigator', 'DataEntry', 'DataDisplay', 'Other'],
   filter: function (val) {
-    var id = 0;
+    let id = 0;
     switch (val) {
       case 'Basic' :
         id = 11;
@@ -74,6 +72,11 @@ var packagetype = [{
     return id;
   }
 }]
+
+
+process.on('uncaughtException', (err) => {
+  logger.error(err.stack)
+});
 
 program
   .command('gettoken')
