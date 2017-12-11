@@ -72,7 +72,7 @@ function buildSinglePlugin (code) {
     return;
   }
   try {
-    utils.buildJS('build_plugin').then(() => {
+    utils.buildJS('build:plugin').then(() => {
       utils.exec('npm run build', true);
       if (pluginArr.length > 0) {
         const rootPath = process.cwd();

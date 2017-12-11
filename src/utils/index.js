@@ -5,6 +5,8 @@ const validator = require('./validator');
 const child_process = require('child_process');
 const os = require('os');
 const npm = require('npm');
+const mkdirp = require('mkdirp');
+
 const utils = {
 
   copyAndReplace (src, dest, replacements) {
@@ -212,7 +214,7 @@ const utils = {
       });
     }
     if (!fs.existsSync(path)) {
-      fs.open(path,'w+',0666, (err, fd) => {
+      fs.open(path,'w+','0666', (err, fd) => {
         fs.writeFileSync(path, JSON.stringify(config, null, 2));
       });
     }
@@ -223,7 +225,7 @@ const utils = {
 
   updatePluginConfigs: function (configs, name, option, platform) {
     let plugins = Object.assign({}, configs);
-    const len = plugins[platform].length;
+    const len = plugins[platform] && plugins[platform].length;
     for (let i =  len - 1; i >= 0; i --) {
       if (name && plugins[platform][i].name === name) {
         if (option) {
@@ -241,9 +243,50 @@ const utils = {
     return plugins;
   },
 
+
+
+  writeAndroidPluginFile: function (root, path, config) {
+    if (!fs.existsSync(root)){
+      mkdirp(root, function (err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+    if (!fs.existsSync(path)) {
+      fs.open(path,'w+','0666', (err, fd) => {
+        fs.writeFileSync(path, JSON.stringify(config, null, 2));
+      });
+    }
+    else {
+      fs.writeFileSync(path, JSON.stringify(config, null, 2));
+    }
+  },
+
+  updateAndroidPluginConfigs: function (configs, name, option) {
+    let plugins = configs.slice(0);
+    const len = plugins && plugins.length;
+    for (let i =  len - 1; i >= 0; i --) {
+      if (name && plugins[i].name === name) {
+        if (option) {
+          plugins.splice(i,1,option)
+        }
+        else {
+          plugins.splice(i,1)
+        }
+        return plugins;
+      }
+    }
+    if (option) {
+      plugins.push(option);
+    }
+    return plugins;
+  },
+
   installNpmPackage () {
     return utils.exec('npm install', true)
-  }
+  },
+  
 
 };
 

@@ -14,12 +14,12 @@
         "parser_file": "../cordova/metadata/android_parser",
         "handler_file": "../plugman/platforms/android",
         "url": "https://github.com/weexteam/weexpack-android",
-        "version": "^6.3.3",
+        "version": "^6.3.7",
         "apiCompatibleSince": "5.0.0",
         "deprecated": false
     },
 
-    "browser": {
+    "web": {
         "url": "https://github.com/weexteam/weexpack-create/tree/master/templates",
         "version": "^0.1.12"
     }

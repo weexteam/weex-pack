@@ -76,6 +76,9 @@ var packagetype = [{
 process.on('uncaughtException', function (err) {
   logger.error(err.stack);
 });
+process.on('unhandledRejection', function (err) {
+  logger.error(err.stack);
+});
 
 program.command('gettoken').description('get market token').action(function () {
   console.log(login.getToken());

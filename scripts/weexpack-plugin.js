@@ -77,6 +77,9 @@ const packagetype = [{
 process.on('uncaughtException', (err) => {
   logger.error(err.stack)
 });
+process.on('unhandledRejection', (err) => {
+  logger.error(err.stack);
+});
 
 program
   .command('gettoken')

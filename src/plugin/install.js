@@ -10,7 +10,6 @@ const gradle = require('./gradle');
 const podfile = require('./podfile');
 const merge = require('merge');
 const chalk = require('chalk');
-const mkdirp = require('mkdirp');
 const cli = require('../cli');
 const cordova_lib = require('../../lib');
 const cordova = cordova_lib.cordova;
@@ -28,6 +27,17 @@ const pluginConfigPath = path.join(CONFIGS.rootPath, CONFIGS.filename);
 if (fs.existsSync(pluginConfigPath)) {
   pluginConfigs = require(pluginConfigPath);
 }
+
+
+let androidPluginConfigs = [];
+
+// Get plugin config in android project.
+const androidPluginConfigPath = path.join(CONFIGS.androidPath, CONFIGS.androidConfigFilename);
+if (fs.existsSync(androidPluginConfigPath)) {
+  androidPluginConfigs = require(androidPluginConfigPath);
+}
+
+
 
 const install = (pluginName, args) => {
   let version;
@@ -114,6 +124,12 @@ const handleInstall = (dir, pluginName, version, option) => {
       const buildPatch = gradle.makeBuildPatch(androidPackageName, androidVersion, option.android.groupId || '');
       gradle.applyPatch(path.join(dir, 'build.gradle'), buildPatch);
       console.log(`=> ${pluginName} has installed success in Android project`);
+      
+      
+      androidPluginConfigs = utils.updateAndroidPluginConfigs(androidPluginConfigs, androidPackageName, option.android);
+      utils.writeAndroidPluginFile(CONFIGS.androidPath, androidPluginConfigPath, androidPluginConfigs);
+      
+      
       // Update plugin.json in the project.
       pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, option, 'android');
       utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
@@ -170,11 +186,12 @@ const installInPackage = (dir, pluginName, version, option) => {
     fs.writeFileSync(p, JSON.stringify(pkg, null, 2));
   }
   utils.installNpmPackage().then(() => {
-    const browserPluginName = option.browser && option.browser.name ? option.browser.name : pluginName;
-    console.log(`=> ${pluginName} has installed success in node_modules`);
-    // Update plugin.json in the project.
-    pluginConfigs = utils.updatePluginConfigs(pluginConfigs, browserPluginName, option, 'browser');
-    utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
+    const browserPluginName = option.web && option.web.name ? option.web.name : pluginName;
+    if (option.web) {
+      // Update plugin.json in the project.
+      pluginConfigs = utils.updatePluginConfigs(pluginConfigs, browserPluginName, option, 'web');
+      utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
+    }
   })
 }
 
