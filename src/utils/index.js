@@ -6,7 +6,7 @@ const child_process = require('child_process');
 const os = require('os');
 const npm = require('npm');
 const mkdirp = require('mkdirp');
-
+const chalk = require('chalk');
 const utils = {
 
   copyAndReplace (src, dest, replacements) {
@@ -97,13 +97,13 @@ const utils = {
   exec (command, quiet) {
     return new Promise((resolve, reject) => {
       try {
-        const child = child_process.exec(command, { encoding: 'utf8' }, function () {
+        const child = child_process.exec(command, { encoding: 'utf8', wraning: false}, function () {
           resolve();
         });
         if (!quiet) {
           child.stdout.pipe(process.stdout);
-          child.stderr.pipe(process.stderr);
         }
+        child.stderr.pipe(process.stderr);
       }
       catch (e) {
         console.error('execute command failed :', command);
@@ -182,17 +182,27 @@ const utils = {
             throw new Error(error);
           }
           else {
-            const weexpackVersion = result[version].weexpack;
-
-            if (weexpackVersion && weexpackVersion == '0.4.0') {
+            const package = result[version];
+            if (package.android || package.ios || package.web) {
+              let supports = [];
+              if (package.android) {
+                supports.push('Android')
+              }
+              if (package.ios) {
+                supports.push('iOS')
+              }
+              if (package.web) {
+                supports.push('Web')
+              }
+              console.log(chalk.green(`This plugin support for ${supports.join(',')} platforms.`))
               callback({
-                ios: result[version].ios,
-                android: result[version].android,
-                browser: result[version].browser,
-                version: result[version].version,
-                name: result[version].name,
-                weexpack: result[version].weexpack,
-                pluginDependencies: result[version].pluginDependencies
+                ios: package.ios,
+                android: package.android,
+                web: package.web,
+                version: package.version,
+                name: package.name,
+                weexpack: package.weexpack,
+                pluginDependencies: package.pluginDependencies
               });
             }
             else {
@@ -284,10 +294,8 @@ const utils = {
   },
 
   installNpmPackage () {
-    return utils.exec('npm install', true)
-  },
-  
-
+    return utils.exec('npm install', false)
+  }
 };
 
 module.exports = Object.assign(utils, output, validator);

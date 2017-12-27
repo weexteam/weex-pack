@@ -38,6 +38,9 @@ class Config {
       let config = {};
       try {
         config = require(this.path);
+        if (config['android']) {
+          config = config['android']
+        }
       }
       catch (e) {
       }

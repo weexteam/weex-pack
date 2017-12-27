@@ -11,10 +11,12 @@ const podfile = require('./podfile');
 const merge = require('merge');
 const chalk = require('chalk');
 const cli = require('../cli');
+const ora = require('ora');
 const cordova_lib = require('../../lib');
 const cordova = cordova_lib.cordova;
 
 const cordovaUtils = require('../../lib/src/cordova/util');
+
 
 const semver = require('semver');
 
@@ -121,9 +123,8 @@ const handleInstall = (dir, pluginName, version, option) => {
     if (option.android) {
       const androidVersion = option.android && option.android.version || version;
       // Build gradle config.
-      const buildPatch = gradle.makeBuildPatch(androidPackageName, androidVersion, option.android.groupId || '');
-      gradle.applyPatch(path.join(dir, 'build.gradle'), buildPatch);
-      console.log(`=> ${pluginName} has installed success in Android project`);
+      // const buildPatch = gradle.makeBuildPatch(androidPackageName, androidVersion, option.android.groupId || '');
+      // gradle.applyPatch(path.join(dir, 'build.gradle'), buildPatch);
       
       
       androidPluginConfigs = utils.updateAndroidPluginConfigs(androidPluginConfigs, androidPackageName, option.android);
@@ -133,13 +134,16 @@ const handleInstall = (dir, pluginName, version, option) => {
       // Update plugin.json in the project.
       pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, option, 'android');
       utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
+
+      console.log(`=> ${pluginName} has installed success in Android project`);
     }
   }
   else if (cordovaUtils.isCordova(dir)) {
     const platformList = cordovaUtils.listPlatforms(dir);
-    // npm install
-    installInPackage(dir, pluginName, version, option);
-
+    if (option.web) {
+      // npm install
+      installInPackage(dir, pluginName, version, option);
+    }
     for (let i = 0; i < platformList.length; i++) {
       const platformDir = path.join(dir, 'platforms', platformList[i].toLowerCase());
       handleInstall(platformDir, pluginName, version, option);
@@ -180,12 +184,15 @@ const installPList = (projectRoot, projectPath, config) => {
 
 const installInPackage = (dir, pluginName, version, option) => {
   const p = path.join(dir, 'package.json');
+  const spinner = ora('downloading plugin')
   if (fs.existsSync(p)) {
     const pkg = require(p);
     pkg.dependencies[pluginName] = version;
     fs.writeFileSync(p, JSON.stringify(pkg, null, 2));
   }
+  spinner.start();
   utils.installNpmPackage().then(() => {
+    spinner.stop();
     const browserPluginName = option.web && option.web.name ? option.web.name : pluginName;
     if (option.web) {
       // Update plugin.json in the project.

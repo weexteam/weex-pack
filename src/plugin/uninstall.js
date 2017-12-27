@@ -48,8 +48,6 @@ function uninstall (pluginName, args) {
         }
         else {
           console.log(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
-          // cli(args);
-          // cordova.raw["plugin"]("remove", [target]);
         }
       });
     });
@@ -73,8 +71,6 @@ function uninstall (pluginName, args) {
       }
     });
   }
-
-  // 判断是否是新版本
 }
 
 function handleUninstall (dir, pluginName, version, option) {
@@ -106,11 +102,13 @@ function handleUninstall (dir, pluginName, version, option) {
     pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, '', 'android');
     utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
   }
-  // cordova工程
   else if (cordovaUtils.isCordova(dir)) {
     const platformList = cordovaUtils.listPlatforms(dir);
-    for (let i = 0; i < platformList.length; i++) {
+    if (option.web) {
+      // npm uninstall
       uninstallInPackage(dir, pluginName, version);
+    }
+    for (let i = 0; i < platformList.length; i++) {
       handleUninstall(path.join(dir, 'platforms', platformList[i].toLowerCase()), pluginName, version, option);
     }
   }

@@ -24,7 +24,8 @@ function runAndroid(options) {
         else resolve();
       });
     });
-  }).then(() => {
+  })
+  .then(() => {
     return {
       options
     };
@@ -99,7 +100,12 @@ function resolveConfig({
   options,
   rootPath
 }) {
-  const androidConfig = new Config(androidConfigResolver, path.join(rootPath, 'android.config.json'));
+  let config_path = path.join(rootPath, 'android.config.json');
+  if (!fs.existsSync(config_path)) {
+    config_path = path.join(rootPath, '.wx', 'config.json');
+  }
+
+  const androidConfig = new Config(androidConfigResolver, config_path);
   return androidConfig.getConfig().then((config) => {
     androidConfigResolver.resolve(config);
     return {

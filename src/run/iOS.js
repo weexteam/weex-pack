@@ -19,8 +19,9 @@ function runIOS (options) {
     .then(() => {
       // startJSServer();
       return { options };
-    }).then(prepareIOS)
-     .then(installDep)
+    })
+    .then(prepareIOS)
+    .then(installDep)
     .then(findIOSDevice)
     .then(chooseDevice)
     .then(buildApp)
@@ -185,7 +186,21 @@ function _buildOnSimulator ({ scheme, device, rootPath, xcodeProject, options, r
   console.log('project is building ...');
   let buildInfo = '';
   try {
-    const config = require(path.join(rootPath, 'ios.config.json'));
+    let config_path = path.join(rootPath, 'ios.config.json');
+    let config;
+    if (fs.existsSync(config_path)) {
+      config = require(config_path)
+    }
+    else {
+      config_path = path.join(rootPath, '.wx', 'config.json');
+      if (fs.existsSync(config_path)) {
+        let wx_config = require(config_path);
+        config = wx_config && wx_config.ios
+      }
+    }
+    if (!config) {
+      reject(new Error('iOS config dir not detected.'));
+    }
     fs.writeFileSync(path.join(process.cwd(), 'bundlejs/index.js'), fs.readFileSync(path.join(process.cwd(), '../../dist', config.WeexBundle.replace(/\.(we|vue)$/, '.js'))));
     buildInfo = child_process.execSync(`xcodebuild -${xcodeProject.isWorkspace ? 'workspace' : 'project'} ${xcodeProject.name} -scheme ${scheme} -configuration Debug -destination id=${device.udid} -sdk iphonesimulator -derivedDataPath build clean build`, { encoding: 'utf8' });
   }

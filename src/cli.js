@@ -31,12 +31,13 @@ let path = require('path'),
 const {
   prefix
 } = require('./utils/npm');
-let cordova_lib = require('../lib'),
-  CordovaError = cordova_lib.CordovaError,
-  WeexpackError = cordova_lib.CordovaError,
-  cordova = cordova_lib.cordova,
-  events = cordova_lib.events,
-  logger = require('weexpack-common').CordovaLogger.get();
+const weexPackCommon = require('weexpack-common');
+const WeexpackError = weexPackCommon.CordovaError;
+const events = weexPackCommon.events;
+const logger = weexPackCommon.CordovaLogger.get();
+
+const cordova_lib = require('./lib');
+const cordova = cordova_lib.cordova;
 /*
  * init
  *
@@ -54,7 +55,6 @@ function init() {
     process.exit(2);
   }
 }
-
 let shouldCollectTelemetry = false;
 module.exports = function (inputArgs, cb) {
   /**
@@ -64,7 +64,7 @@ module.exports = function (inputArgs, cb) {
   init();
   // If no inputArgs given, use process.argv.
   inputArgs = inputArgs || process.argv;
-  let cmd = inputArgs[2]; // e.g: inputArgs= 'node cordova run ios'
+  let cmd = inputArgs[2]; // e.g: inputArgs= 'node weexpack-create create test'
   const subcommand = getSubCommand(inputArgs, cmd);
   const isTelemetryCmd = (false && cmd === 'telemetry');
   // ToDO: Move nopt-based parsing of args up here
@@ -96,7 +96,7 @@ module.exports = function (inputArgs, cb) {
   }).done();
 };
 
-function getSubCommand(args, cmd) {
+const getSubCommand = (args, cmd) => {
   const subCommands = ['platform', 'platforms', 'plugin', 'plugins'
     // 'telemetry'
   ];
@@ -106,7 +106,7 @@ function getSubCommand(args, cmd) {
   return null;
 }
 
-function handleTelemetryCmd(subcommand, isOptedIn) {
+const handleTelemetryCmd = (subcommand, isOptedIn) => {
   if (subcommand !== 'on' && subcommand !== 'off') {
     logger.subscribe(events);
     return help(['telemetry']);
@@ -138,8 +138,13 @@ function handleTelemetryCmd(subcommand, isOptedIn) {
   }
   return Q();
 }
-
-function cli(inputArgs) {
+const createWeexProject = (dir, appid, appname,cfg, events) => {
+  return cordova.raw.create(dir // dir to create the project in
+    , appid // App id
+    , appname // App name
+    , cfg || {}, events || undefined);
+}
+const cli = (inputArgs) => {
   // When changing command line arguments, update doc/help.txt accordingly.
   const knownOpts = {
     'verbose': Boolean,
@@ -183,8 +188,17 @@ function cli(inputArgs) {
   };
   // checkForUpdates();
   const args = nopt(knownOpts, shortHands, inputArgs);
-  // For CordovaError print only the message without stack trace unless we
+  // For WeexpackError print only the message without stack trace unless we
   // are in a verbose mode.
+
+  logger.subscribe(events);
+  if (args.silent) {
+    logger.setLevel('error');
+  }
+  if (args.verbose) {
+    logger.setLevel('verbose');
+  }
+
   process.on('uncaughtException', function (err) {
     logger.error(err);
     // Don't send exception details, just send that it happened
@@ -193,33 +207,27 @@ function cli(inputArgs) {
     }
     process.exit(1);
   });
-  logger.subscribe(events);
-  if (args.silent) {
-    logger.setLevel('error');
-  }
-  if (args.verbose) {
-    logger.setLevel('verbose');
-  }
-  const cliVersion = require('../package').version;
-  // TODO: Use semver.prerelease when it gets released
-  const usingPrerelease = /-nightly|-dev$/.exec(cliVersion);
-  if (args.version || usingPrerelease) {
-    const libVersion = require('cordova-lib/package').version;
-    let toPrint = cliVersion;
-    if (cliVersion !== libVersion || usingPrerelease) {
-      toPrint += ' (cordova-lib@' + libVersion + ')';
-    }
-    if (args.version) {
-      logger.results(toPrint);
-      return Q();
-    }
-    else {
-      // Show a warning and continue
-      logger.warn('Warning: using prerelease version ' + toPrint);
-    }
-  }
+
+  // const cliVersion = require('../package').version;
+  // // TODO: Use semver.prerelease when it gets released
+  // const usingPrerelease = /-nightly|-dev$/.exec(cliVersion);
+  // if (args.version || usingPrerelease) {
+  //   const libVersion = require('cordova-lib/package').version;
+  //   let toPrint = cliVersion;
+  //   if (cliVersion !== libVersion || usingPrerelease) {
+  //     toPrint += ' (cordova-lib@' + libVersion + ')';
+  //   }
+  //   if (args.version) {
+  //     logger.results(toPrint);
+  //     return Q();
+  //   }
+  //   else {
+  //     // Show a warning and continue
+  //     logger.warn('Warning: using prerelease version ' + toPrint);
+  //   }
+  // }
   if (/^v0.\d+[.\d+]*/.exec(process.version)) { // matches v0.*
-    var msg = 'Warning: using node version ' + process.version + ' which has been deprecated. Please upgrade to the latest node version available (v6.x is recommended).';
+    msg = 'Warning: using node version ' + process.version + ' which has been deprecated. Please upgrade to the latest node version available (v6.x is recommended).';
     logger.warn(msg);
   }
   // If there were arguments protected from nopt with a double dash, keep
@@ -240,8 +248,8 @@ function cli(inputArgs) {
   const undashed = remain.slice(0, remain.length - unparsedArgs.length);
   const cmd = undashed[0];
   let subcommand;
-  var msg;
-  const known_platforms = Object.keys(cordova_lib.cordova_platforms);
+  const known_platforms = ['ios', 'android', 'web'];
+  let msg;
   if (!cmd || cmd === 'help' || args.help) {
     if (!args.help && remain[0] === 'help') {
       remain.shift();
@@ -259,69 +267,71 @@ function cli(inputArgs) {
     silent: args.silent || false,
     browserify: args.browserify || false,
     fetch: args.fetch || false,
+    // fetch: true,
     nohooks: args.nohooks || [],
     searchpath: args.searchpath,
     ali: args.ali
   };
-  const cmdList = ['emulate',
-    // 'build',
-    //  'run'
-    'prepare', 'compile', 'clean'
-  ];
-  if (cmdList.indexOf(cmd) >= 0) {
-    // All options without dashes are assumed to be platform names
-    opts.platforms = undashed.slice(1);
-    var badPlatforms = _.difference(opts.platforms, known_platforms);
-    if (!_.isEmpty(badPlatforms)) {
-      msg = 'Unknown platforms: ' + badPlatforms.join(', ');
-      throw new WeexpackError(msg);
-    }
-    // Pass nopt-parsed args to PlatformApi through opts.options
-    opts.options = args;
-    opts.options.argv = unparsedArgs;
-    if (cmd === 'run' && args.list && cordova.raw.targets) {
-      return cordova.raw.targets.call(null, opts);
-    }
-    return cordova.raw[cmd].call(null, opts);
-  }
-  else if (cmd === 'requirements') {
-    // All options without dashes are assumed to be platform names
-    opts.platforms = undashed.slice(1);
-    var badPlatforms = _.difference(opts.platforms, known_platforms);
-    if (!_.isEmpty(badPlatforms)) {
-      msg = 'Unknown platforms: ' + badPlatforms.join(', ');
-      throw new CordovaError(msg);
-    }
-    return cordova.raw[cmd].call(null, opts.platforms).then(function (platformChecks) {
-      const someChecksFailed = Object.keys(platformChecks).map(function (platformName) {
-        events.emit('log', '\nRequirements check results for ' + platformName + ':');
-        const platformCheck = platformChecks[platformName];
-        if (platformCheck instanceof CordovaError) {
-          events.emit('warn', 'Check failed for ' + platformName + ' due to ' + platformCheck);
-          return true;
-        }
-        let someChecksFailed = false;
-        platformCheck.forEach(function (checkItem) {
-          const checkSummary = checkItem.name + ': ' + (checkItem.installed ? 'installed ' : 'not installed ') + (checkItem.metadata.version || '');
-          events.emit('log', checkSummary);
-          if (!checkItem.installed) {
-            someChecksFailed = true;
-            events.emit('warn', checkItem.metadata.reason);
-          }
-        });
-        return someChecksFailed;
-      }).some(function (isCheckFailedForPlatform) {
-        return isCheckFailedForPlatform;
-      });
-      if (someChecksFailed) throw new CordovaError('Some of requirements check failed');
-    });
-  }
-  else if (cmd === 'serve') {
-    const port = undashed[1];
-    return cordova.raw.serve(port);
-  }
-  else if (cmd === 'create') {
-    return create();
+  // const cmdList = ['emulate',
+  //   // 'build',
+  //   // 'run'
+  //   'prepare', 'compile', 'clean'
+  // ];
+  // if (cmdList.indexOf(cmd) >= 0) {
+  //   // All options without dashes are assumed to be platform names
+  //   opts.platforms = undashed.slice(1);
+  //   const badPlatforms = _.difference(opts.platforms, known_platforms);
+  //   if (!_.isEmpty(badPlatforms)) {
+  //     msg = 'Unknown platforms: ' + badPlatforms.join(', ');
+  //     throw new WeexpackError(msg);
+  //   }
+  //   // Pass nopt-parsed args to PlatformApi through opts.options
+  //   opts.options = args;
+  //   opts.options.argv = unparsedArgs;
+  //   if (cmd === 'run' && args.list && cordova.raw.targets) {
+  //     return cordova.raw.targets.call(null, opts);
+  //   }
+  //   return cordova.raw[cmd].call(null, opts);
+  // }
+  // else if (cmd === 'requirements') {
+  //   // All options without dashes are assumed to be platform names
+  //   opts.platforms = undashed.slice(1);
+  //   var badPlatforms = _.difference(opts.platforms, known_platforms);
+  //   if (!_.isEmpty(badPlatforms)) {
+  //     msg = 'Unknown platforms: ' + badPlatforms.join(', ');
+  //     throw new WeexpackError(msg);
+  //   }
+  //   return cordova.raw[cmd].call(null, opts.platforms).then(function (platformChecks) {
+  //     const someChecksFailed = Object.keys(platformChecks).map(function (platformName) {
+  //       events.emit('log', '\nRequirements check results for ' + platformName + ':');
+  //       const platformCheck = platformChecks[platformName];
+  //       if (platformCheck instanceof WeexpackError) {
+  //         events.emit('warn', 'Check failed for ' + platformName + ' due to ' + platformCheck);
+  //         return true;
+  //       }
+  //       let someChecksFailed = false;
+  //       platformCheck.forEach(function (checkItem) {
+  //         const checkSummary = checkItem.name + ': ' + (checkItem.installed ? 'installed ' : 'not installed ') + (checkItem.metadata.version || '');
+  //         events.emit('log', checkSummary);
+  //         if (!checkItem.installed) {
+  //           someChecksFailed = true;
+  //           events.emit('warn', checkItem.metadata.reason);
+  //         }
+  //       });
+  //       return someChecksFailed;
+  //     }).some(function (isCheckFailedForPlatform) {
+  //       return isCheckFailedForPlatform;
+  //     });
+  //     if (someChecksFailed) throw new WeexpackError('Some of requirements check failed');
+  //   });
+  // }
+  // else if (cmd === 'serve') {
+  //   const port = undashed[1];
+  //   return cordova.raw.serve(port);
+  // }
+  // else if (cmd === 'create') {
+  if (cmd === 'create') {
+    return createWeexProject(undashed[1], undashed[2], undashed[3]);
   }
   else {
     // platform/plugins add/rm [target(s)]
@@ -354,49 +364,5 @@ function cli(inputArgs) {
       ali: args.ali || false
     };
     return cordova.raw[cmd](subcommand, targets, downloadOpts);
-  }
-
-  function create() {
-    let cfg; // Create config
-    let customWww; // Template path
-    let wwwCfg; // Template config
-    // If we got a fourth parameter, consider it to be JSON to init the config.
-    if (undashed[4]) {
-      cfg = JSON.parse(undashed[4]);
-    }
-    else {
-      cfg = {};
-    }
-    customWww = args['copy-from'] || args['link-to'] || args.template;
-    if (customWww) {
-      if (!args.template && !args['copy-from'] && customWww.indexOf('http') === 0) {
-        throw new CordovaError('Only local paths for custom www assets are supported for linking' + customWww);
-      }
-      // Resolve tilda
-      if (customWww.substr(0, 1) === '~') {
-        customWww = path.join(process.env.HOME, customWww.substr(1));
-      }
-      wwwCfg = {
-        url: customWww,
-        template: false,
-        link: false
-      };
-      if (args['link-to']) {
-        wwwCfg.link = true;
-      }
-      if (args.template) {
-        wwwCfg.template = true;
-      }
-      else if (args['copy-from']) {
-        logger.warn('Warning: --copy-from option is being deprecated. Consider using --template instead.');
-        wwwCfg.template = true;
-      }
-      cfg.lib = cfg.lib || {};
-      cfg.lib.www = wwwCfg;
-    }
-    return cordova.raw.create(undashed[1] // dir to create the project in
-      , undashed[2] // App id
-      , undashed[3] // App name
-      , cfg, events || undefined);
   }
 }
