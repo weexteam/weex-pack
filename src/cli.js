@@ -272,68 +272,10 @@ const cli = (inputArgs) => {
     searchpath: args.searchpath,
     ali: args.ali
   };
-  // const cmdList = ['emulate',
-  //   // 'build',
-  //   // 'run'
-  //   'prepare', 'compile', 'clean'
-  // ];
-  // if (cmdList.indexOf(cmd) >= 0) {
-  //   // All options without dashes are assumed to be platform names
-  //   opts.platforms = undashed.slice(1);
-  //   const badPlatforms = _.difference(opts.platforms, known_platforms);
-  //   if (!_.isEmpty(badPlatforms)) {
-  //     msg = 'Unknown platforms: ' + badPlatforms.join(', ');
-  //     throw new WeexpackError(msg);
-  //   }
-  //   // Pass nopt-parsed args to PlatformApi through opts.options
-  //   opts.options = args;
-  //   opts.options.argv = unparsedArgs;
-  //   if (cmd === 'run' && args.list && cordova.raw.targets) {
-  //     return cordova.raw.targets.call(null, opts);
-  //   }
-  //   return cordova.raw[cmd].call(null, opts);
-  // }
-  // else if (cmd === 'requirements') {
-  //   // All options without dashes are assumed to be platform names
-  //   opts.platforms = undashed.slice(1);
-  //   var badPlatforms = _.difference(opts.platforms, known_platforms);
-  //   if (!_.isEmpty(badPlatforms)) {
-  //     msg = 'Unknown platforms: ' + badPlatforms.join(', ');
-  //     throw new WeexpackError(msg);
-  //   }
-  //   return cordova.raw[cmd].call(null, opts.platforms).then(function (platformChecks) {
-  //     const someChecksFailed = Object.keys(platformChecks).map(function (platformName) {
-  //       events.emit('log', '\nRequirements check results for ' + platformName + ':');
-  //       const platformCheck = platformChecks[platformName];
-  //       if (platformCheck instanceof WeexpackError) {
-  //         events.emit('warn', 'Check failed for ' + platformName + ' due to ' + platformCheck);
-  //         return true;
-  //       }
-  //       let someChecksFailed = false;
-  //       platformCheck.forEach(function (checkItem) {
-  //         const checkSummary = checkItem.name + ': ' + (checkItem.installed ? 'installed ' : 'not installed ') + (checkItem.metadata.version || '');
-  //         events.emit('log', checkSummary);
-  //         if (!checkItem.installed) {
-  //           someChecksFailed = true;
-  //           events.emit('warn', checkItem.metadata.reason);
-  //         }
-  //       });
-  //       return someChecksFailed;
-  //     }).some(function (isCheckFailedForPlatform) {
-  //       return isCheckFailedForPlatform;
-  //     });
-  //     if (someChecksFailed) throw new WeexpackError('Some of requirements check failed');
-  //   });
-  // }
-  // else if (cmd === 'serve') {
-  //   const port = undashed[1];
-  //   return cordova.raw.serve(port);
-  // }
-  // else if (cmd === 'create') {
   if (cmd === 'create') {
     return createWeexProject(undashed[1], undashed[2], undashed[3]);
   }
-  else {
+  else if (cmd === 'platform' || cmd === 'plugin'){
     // platform/plugins add/rm [target(s)]
     subcommand = undashed[1]; // sub-command like "add", "ls", "rm" etc.
     const targets = undashed.slice(2); // array of targets, either platforms or plugins

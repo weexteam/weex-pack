@@ -23,7 +23,6 @@ var path = require('path');
 var shell = require('shelljs');
 var semver = require('semver');
 
-var common = require('../plugman/platforms/common');
 
 var superspawn = require('weexpack-common').superspawn;
 var xmlHelpers = require('weexpack-common').xmlHelpers;
@@ -687,7 +686,7 @@ PlatformApiPoly.prototype._writePluginModules = function (targetDir) {
 PlatformApiPoly.prototype._getInstaller = function(type) {
     var self = this;
     return function (item, plugin_dir, plugin_id, options, project) {
-        var installer = self._handler[type] || common[type];
+        var installer = self._handler[type];
 
         var wwwDest = options.usePlatformWww ?
             self.getPlatformInfo().locations.platformWww :
@@ -704,7 +703,7 @@ PlatformApiPoly.prototype._getInstaller = function(type) {
 PlatformApiPoly.prototype._getUninstaller = function(type) {
     var self = this;
     return function (item, plugin_dir, plugin_id, options, project) {
-        var uninstaller = self._handler[type] || common[type];
+        var uninstaller = self._handler[type];
 
         var wwwDest = options.usePlatformWww ?
             self.getPlatformInfo().locations.platformWww :
