@@ -28,14 +28,12 @@ let path = require('path'),
   pkg = require('../package.json'),
   telemetry = require('./telemetry'),
   Q = require('q');
-const {
-  prefix
-} = require('./utils/npm');
 const weexPackCommon = require('weexpack-common');
 const WeexpackError = weexPackCommon.CordovaError;
 const events = weexPackCommon.events;
 const logger = weexPackCommon.CordovaLogger.get();
 
+const weexpackCreate = require('./create')
 const cordova_lib = require('./lib');
 const cordova = cordova_lib.cordova;
 /*
@@ -55,7 +53,7 @@ function init() {
     process.exit(2);
   }
 }
-let shouldCollectTelemetry = false;
+// let shouldCollectTelemetry = false;
 module.exports = function (inputArgs, cb) {
   /**
    * mainly used for testing.
@@ -66,7 +64,7 @@ module.exports = function (inputArgs, cb) {
   inputArgs = inputArgs || process.argv;
   let cmd = inputArgs[2]; // e.g: inputArgs= 'node weexpack-create create test'
   const subcommand = getSubCommand(inputArgs, cmd);
-  const isTelemetryCmd = (false && cmd === 'telemetry');
+  // const isTelemetryCmd = (false && cmd === 'telemetry');
   // ToDO: Move nopt-based parsing of args up here
   if (cmd === '--version' || cmd === '-v') {
     cmd = 'version';
@@ -76,20 +74,20 @@ module.exports = function (inputArgs, cb) {
   }
   Q().then(function (collectTelemetry) {
     shouldCollectTelemetry = collectTelemetry;
-    if (isTelemetryCmd) {
-      return Q();
-    }
+    // if (isTelemetryCmd) {
+    //   return Q();
+    // }
     return cli(inputArgs);
   }).then(function () {
-    if (shouldCollectTelemetry && !isTelemetryCmd) {
-      telemetry.track(cmd, subcommand, 'successful');
-    }
+    // if (shouldCollectTelemetry && !isTelemetryCmd) {
+    //   telemetry.track(cmd, subcommand, 'successful');
+    // }
     // call cb with error as arg if something failed
     cb(null);
   }).fail(function (err) {
-    if (shouldCollectTelemetry && !isTelemetryCmd) {
-      telemetry.track(cmd, subcommand, 'unsuccessful');
-    }
+    // if (shouldCollectTelemetry && !isTelemetryCmd) {
+    //   telemetry.track(cmd, subcommand, 'unsuccessful');
+    // }
     // call cb with error as arg if something failed
     cb(err);
     throw err;
@@ -116,11 +114,11 @@ const handleTelemetryCmd = (subcommand, isOptedIn) => {
   // turn telemetry on or off
   try {
     if (turnOn) {
-      telemetry.turnOn();
+      // telemetry.turnOn();
       console.log('Thanks for opting into telemetry to help us improve weexpack.');
     }
     else {
-      telemetry.turnOff();
+      // telemetry.turnOff();
       console.log('You have been opted out of telemetry. To change this, run: weexpack telemetry on.');
     }
   }
@@ -130,20 +128,21 @@ const handleTelemetryCmd = (subcommand, isOptedIn) => {
   // track or not track ?, that is the question
   if (!turnOn) {
     // Always track telemetry opt-outs (whether user opted out or not!)
-    telemetry.track('telemetry', 'off', 'via-cordova-telemetry-cmd', cmdSuccess ? 'successful' : 'unsuccessful');
+    // telemetry.track('telemetry', 'off', 'via-cordova-telemetry-cmd', cmdSuccess ? 'successful' : 'unsuccessful');
     return Q();
   }
   if (isOptedIn) {
-    telemetry.track('telemetry', 'on', 'via-cordova-telemetry-cmd', cmdSuccess ? 'successful' : 'unsuccessful');
+    // telemetry.track('telemetry', 'on', 'via-cordova-telemetry-cmd', cmdSuccess ? 'successful' : 'unsuccessful');
   }
   return Q();
 }
 const createWeexProject = (dir, appid, appname,cfg, events) => {
-  return cordova.raw.create(dir // dir to create the project in
+  return weexpackCreate(dir // dir to create the project in
     , appid // App id
     , appname // App name
     , cfg || {}, events || undefined);
 }
+
 const cli = (inputArgs) => {
   // When changing command line arguments, update doc/help.txt accordingly.
   const knownOpts = {
@@ -202,9 +201,9 @@ const cli = (inputArgs) => {
   process.on('uncaughtException', function (err) {
     logger.error(err);
     // Don't send exception details, just send that it happened
-    if (shouldCollectTelemetry) {
-      telemetry.track('uncaughtException');
-    }
+    // if (shouldCollectTelemetry) {
+    //   telemetry.track('uncaughtException');
+    // }
     process.exit(1);
   });
 

@@ -24,7 +24,7 @@ Outputs to a file
  */
 var cordova_util = require('./util'),
     superspawn   = require('weexpack-common').superspawn,
-    package      = require('../../package'),
+    packages      = require('../../package'),
     path         = require('path'),
     fs           = require('fs'),
     Q            = require('q');
@@ -62,7 +62,7 @@ module.exports = function info() {
             //Get Node version
             Q('Node version: ' + process.version),
             //Get Cordova version
-            Q('Cordova version: ' + package.version),
+            Q('Cordova version: ' + packages.version),
             //Get project config.xml file using ano
             getProjectConfig(projectRoot),
             //Get list of plugins

@@ -4,9 +4,9 @@
     "description": "Weex pack tool",
     "main": "index.js",
     "scripts": {
-        "test": "mocha ./tests/*.test.js",
-        "lint": "eslint src --fix && eslint scripts --fix",
-        "build": "babel src --out-dir build && babel scripts --out-dir bin",
+        "test": "mocha ./test/*.test.js",
+        "lint": "eslint src --fix",
+        "build": "babel src --out-dir build",
         "dev": "babel src --out-dir build --watch & babel scripts --out-dir bin --watch",
         "prepublish": "npm run build"
     },
@@ -46,6 +46,7 @@
     "dependencies": {
         "aliasify": "^1.7.2",
         "ansi": "^0.3.1",
+        "async": "^2.6.0",
         "bplist-parser": "^0.1.0",
         "browserify": "13.1.0",
         "chalk": "^1.1.3",
@@ -57,6 +58,7 @@
         "cordova-serve": "^1.0.0",
         "dep-graph": "1.1.0",
         "dependency-ls": "^1.0.0",
+        "detect-port": "^1.2.2",
         "elementtree": "0.1.6",
         "eslint": "^3.5.0",
         "express": "^4.13.3",
@@ -65,12 +67,15 @@
         "generator-weex-plugin": "^0.1.32",
         "glob": "^5.0.3",
         "init-package-json": "^1.2.0",
-        "inquirer": "^3.1.1",
+        "inquirer": "^3.3.0",
         "insight": "~0.8.2",
         "ios-sim": "^5.0.12",
+        "ip": "^1.1.5",
         "is-url": "^1.2.1",
         "merge": "^1.2.0",
+        "metalsmith": "^2.3.0",
         "minimatch": "^3.0.0",
+        "mkdirp": "^0.5.1",
         "nopt": "^4.0.1",
         "npm": "^2.10.x",
         "opener": "^1.4.2",
@@ -82,6 +87,7 @@
         "q": "1.0.1",
         "recursive-copy": "^2.0.5",
         "request": "2.47.0",
+        "rimraf": "^2.6.2",
         "semver": "^4.3.x",
         "shelljs": "^0.3.0",
         "tar": "^1.0.2",
@@ -90,8 +96,9 @@
         "update-notifier": "^2.3.0",
         "valid-identifier": "0.0.1",
         "weexpack-common": "^0.1.2",
-        "weexpack-create": "^0.2.8",
+        "weexpack-create": "^0.2.9",
         "weexpack-lib": "^0.1.0",
+        "ws": "^4.0.0",
         "xcode": "^0.8.5",
         "yeoman-environment": "^1.6.3",
         "yeoman-generator": "^0.24.1"
@@ -101,8 +108,6 @@
         "babel-eslint": "^8.0.1",
         "babel-preset-es2015": "^6.24.1",
         "chai": "^3.5.0",
-        "mkdirp": "^0.5.1",
         "mocha": "^3.2.0"
-    },
-    "weexpack": "0.2.0"
+    }
 }

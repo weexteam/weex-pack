@@ -4,10 +4,54 @@
 const Fs = require('fs');
 const Path = require('path');
 const Inquirer = require('inquirer');
-class Config {
-  constructor (properties, path) {
-    this.path = path;
-    if (properties instanceof ConfigResolver) {
+const path =require('path');
+const fs = require('fs');
+const _ = require('underscore');
+const logger = require('weexpack-common').CordovaLogger.get();
+
+const _resolveConfigDef = (source, configDef, config, key) => {
+  if (configDef.type) {
+    if (config[key] === undefined) {
+      throw new Error('Config:[' + key + '] must have a value!');
+    }
+    return replacer[configDef.type](source, configDef.key, config[key]);
+  }
+  else {
+    return configDef.handler(source, config[key], replacer);
+  }
+}
+
+const Platforms = {
+  ios:'ios',
+  android:'android'
+}
+
+const replacer = {
+  plist (source, key, value) {
+    const r = new RegExp('(<key>' + key + '</key>\\s*<string>)[^<>]*?<\/string>', 'g');
+    return source.replace(r, '$1' + value + '</string>');
+  },
+  xmlTag (source, key, value, tagName = 'string') {
+    const r = new RegExp(`<${tagName} name="${key}" .*>[^<]+?</${tagName}>`, 'g');
+    return source.replace(r, `<${tagName} name="${key}">${value}</${tagName}>`);
+  },
+  xmlAttr (source, key, value, tagName = 'string') {
+    const r = new RegExp(`<${tagName} name="${key}"\\s* value="[^"]*?"\\s*/>`, 'g');
+    return source.replace(r, `<${tagName} name="${key}" value="${value}"/>`);
+  },
+  regexp (source, regexp, value) {
+    return source.replace(regexp, function (m, a, b) {
+      return a + value + (b || '');
+    });
+  }
+};
+
+class PlatformConfig {
+  constructor (properties, rootPath, platform, configs) {
+    this.rootPath = rootPath;
+    this.platform = platform;
+    this.configs = configs;
+    if (properties instanceof PlatformConfigResolver) {
       const map = {};
       this.properties = [];
       for (const key in properties.def) {
@@ -35,21 +79,23 @@ class Config {
 
   getConfig () {
     return new Promise((resolve, reject) => {
-      let config = {};
-      try {
-        config = require(this.path);
-        if (config['android']) {
-          config = config['android']
-        }
-      }
-      catch (e) {
-      }
+      let config = {}, defaultConfig = {};
       let questions = [], answers = {};
-      console.log('============build config============');
+      let config_path = path.join(this.rootPath, `${this.platform}.config.json`);
+      let default_config_path = path.join(this.rootPath, '.wx', `config.json`);
+      if (fs.existsSync(default_config_path)) {
+        let wx_config = require(default_config_path);
+        defaultConfig = wx_config && wx_config[this.platform] || {}
+      }
+      if (fs.existsSync(config_path)) {
+        config = require(config_path)
+      }
+      config = _.extend(this.configs || {}, defaultConfig, config)
+      logger.info('\n============Build Config============');
       this.properties.forEach(function (prop) {
-        if (config[prop.name] !== undefined && config[prop.name] != '') {
+        if (config[prop.name] !== undefined) {
           answers[prop.name] = config[prop.name];
-          console.log(prop.name + '=>' + answers[prop.name]);
+          logger.info(prop.name + ' => ' + answers[prop.name]);
         }
         else {
           questions.push({
@@ -63,22 +109,22 @@ class Config {
         Inquirer.prompt(questions)
           .then((answers) => {
             Object.assign(config, answers);
-            Fs.writeFileSync(this.path, JSON.stringify(config, null, 4));
+            Fs.writeFileSync(path.join(this.rootPath, `${this.platform}.config.json`), JSON.stringify(config, null, 4));
             resolve(config);
           });
       }
       else {
-        console.log('if you want to change build config.please modify ' + Path.basename(this.path));
+        logger.info('\nIf you want to change build config.please modify ' + `${this.platform}.config.json`);
         resolve(config);
       }
     });
   }
 }
-class ConfigResolver {
+
+class PlatformConfigResolver {
   constructor (def) {
     this.def = def;
   }
-
   resolve (config, basePath) {
     basePath = basePath || process.cwd();
     for (const path in this.def) {
@@ -88,7 +134,7 @@ class ConfigResolver {
         for (const key in this.def[path]) {
           if (this.def[path].hasOwnProperty(key)) {
             const configDef = this.def[path][key];
-            if (Array.isArray(configDef)) {
+            if (_.isArray(configDef)) {
               configDef.forEach((def) => {
                 source = _resolveConfigDef(source, def, config, key);
               });
@@ -103,40 +149,8 @@ class ConfigResolver {
     }
   }
 }
-function _resolveConfigDef (source, configDef, config, key) {
-  if (configDef.type) {
-    if (config[key] === undefined) {
-      throw new Error('Config:[' + key + '] must have a value!');
-    }
-    return replacer[configDef.type](source, configDef.key, config[key]);
-  }
-  else {
-    return configDef.handler(source, config[key], replacer);
-  }
-}
-const replacer = {
-  plist (source, key, value) {
-    const r = new RegExp('(<key>' + key + '</key>\\s*<string>)[^<>]*?<\/string>', 'g');
-    return source.replace(r, '$1' + value + '</string>');
-  },
-  xmlTag (source, key, value, tagName = 'string') {
-    const r = new RegExp(`<${tagName} name="${key}">[^<]+?</${tagName}>`, 'g');
-    return source.replace(r, `<${tagName} name="${key}">${value}</${tagName}>`);
-  },
-  xmlAttr (source, key, value, tagName = 'string') {
-    const r = new RegExp(`<${tagName} name="${key}"\\s* value="[^"]*?"\\s*/>`, 'g');
-    return source.replace(r, `<${tagName} name="${key}" value="${value}"/>`);
-  },
-  regexp (source, regexp, value) {
-    return source.replace(regexp, function (m, a, b) {
-      return a + value + (b || '');
-    });
-  }
-};
 
-exports.Config = Config;
-exports.ConfigResolver = ConfigResolver;
-exports.androidConfigResolver = new ConfigResolver({
+const AndroidConfigResolver = new PlatformConfigResolver({
   'build.gradle': {
     AppId: {
       type: 'regexp',
@@ -163,16 +177,14 @@ exports.androidConfigResolver = new ConfigResolver({
         else {
           source = replacer.xmlAttr(source, 'launch_locally', 'true', 'preference');
           const name = value.replace(/\.(we|vue)$/, '.js');
-          // Fs.writeFileSync(Path.join(process.cwd(), 'app/src/main/assets/'+name),Fs.readFileSync(Path.join(process.cwd(), '../../dist', name)));
-
           return replacer.xmlAttr(source, 'local_url', 'file://assets/dist/' + name, 'preference');
         }
       }
     }
   }
-
 });
-exports.iOSConfigResolver = new ConfigResolver({
+
+const iOSConfigResolver = new PlatformConfigResolver({
   'WeexDemo/WeexDemo-Info.plist': {
     AppName: {
       type: 'plist',
@@ -189,8 +201,15 @@ exports.iOSConfigResolver = new ConfigResolver({
     AppId: {
       type: 'plist',
       key: 'CFBundleIdentifier'
+    },
+    WeexBundle: {
+      type: 'plist',
+      key: 'WXEntryBundleURL'
+    },
+    Ws: {
+      type: 'plist',
+      key: 'WXSocketConnectionURL'
     }
-
   },
   'WeexDemo.xcodeproj/project.pbxproj': {
     CodeSign: [{
@@ -214,3 +233,11 @@ exports.iOSConfigResolver = new ConfigResolver({
   }
 
 });
+
+module.exports = {
+  Platforms,
+  PlatformConfig,
+  PlatformConfigResolver,
+  AndroidConfigResolver,
+  iOSConfigResolver
+}

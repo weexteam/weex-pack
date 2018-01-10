@@ -17,7 +17,7 @@
     under the License.
 */
 let fs = require('fs'),
-  cordova_lib = require('../lib'),
+  cordova_lib = require('./lib'),
   cordova = cordova_lib.cordova,
   Q = require('q'),
   path = require('path');

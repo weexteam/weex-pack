@@ -80,7 +80,7 @@ function addHelper(cmd, hooksRunner, projectRoot, targets, opts) {
       // For each platform, download it and call its helper script.
       const parts = target.split('@');
       let platform = parts[0];
-      const spec = parts[1];
+      let spec = parts[1];
       return Q.when().then(function () {
         if (!(platform in platforms)) {
           spec = platform;

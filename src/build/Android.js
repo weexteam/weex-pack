@@ -23,7 +23,6 @@ function buildAndroid (options) {
       });
     })
     .then(() => {
-      startJSServer();
       return { options };
     })
     .then(prepareAndroid)

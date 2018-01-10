@@ -112,9 +112,7 @@ const utils = {
     });
   },
   buildJS (cmd = 'build') {
-    return utils.exec('npm install', true).then(() => {
-      return utils.exec('npm run ' + cmd);
-    });
+    return utils.exec('npm run ' + cmd);
   },
   getIOSProjectInfo () {
     const projectInfoText = child_process.execSync('xcodebuild  -list', { encoding: 'utf8' });
@@ -182,27 +180,27 @@ const utils = {
             throw new Error(error);
           }
           else {
-            const package = result[version];
-            if (package.android || package.ios || package.web) {
+            const packages = result[version];
+            if (packages.android || packages.ios || packages.web) {
               let supports = [];
-              if (package.android) {
+              if (packages.android) {
                 supports.push('Android')
               }
-              if (package.ios) {
+              if (packages.ios) {
                 supports.push('iOS')
               }
-              if (package.web) {
+              if (packages.web) {
                 supports.push('Web')
               }
               console.log(chalk.green(`This plugin support for ${supports.join(',')} platforms.`))
               callback({
-                ios: package.ios,
-                android: package.android,
-                web: package.web,
-                version: package.version,
-                name: package.name,
-                weexpack: package.weexpack,
-                pluginDependencies: package.pluginDependencies
+                ios: packages.ios,
+                android: packages.android,
+                web: packages.web,
+                version: packages.version,
+                name: packages.name,
+                weexpack: packages.weexpack,
+                pluginDependencies: packages.pluginDependencies
               });
             }
             else {
