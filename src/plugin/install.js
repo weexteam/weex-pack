@@ -10,13 +10,7 @@ const gradle = require('./gradle');
 const podfile = require('./podfile');
 const merge = require('merge');
 const chalk = require('chalk');
-const cli = require('../cli');
 const ora = require('ora');
-const cordova_lib = require('../../lib');
-const cordova = cordova_lib.cordova;
-
-const cordovaUtils = require('../../lib/src/cordova/util');
-
 
 const semver = require('semver');
 
@@ -138,8 +132,8 @@ const handleInstall = (dir, pluginName, version, option) => {
       console.log(`=> ${pluginName} has installed success in Android project`);
     }
   }
-  else if (cordovaUtils.isCordova(dir)) {
-    const platformList = cordovaUtils.listPlatforms(dir);
+  else if (utils.isCordova(dir)) {
+    const platformList = utils.listPlatforms(dir);
     if (option.web) {
       // npm install
       installInPackage(dir, pluginName, version, option);
@@ -177,7 +171,6 @@ const installPList = (projectRoot, projectPath, config) => {
   else {
     let obj = plist.parse(fs.readFileSync(plist_file, 'utf8'));
     obj = merge.recursive(true, obj, config);
-    console.log(plist.build(obj), 'Plist build')
     fs.writeFileSync(plist_file, plist.build(obj));
   }
 }

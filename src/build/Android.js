@@ -3,169 +3,156 @@ const chalk = require('chalk');
 const child_process = require('child_process');
 const fs = require('fs');
 const inquirer = require('inquirer');
-const { Config, androidConfigResolver } = require('../utils/config');
 const utils = require('../utils');
 const Path = require('path');
 const copy = require('recursive-copy');
-const startJSServer = require('../run/server');
+const logger = require('weexpack-common').CordovaLogger.get();
+const server = require('../run/server');
+const { 
+  Platforms,
+  PlatformConfig,
+  AndroidConfigResolver
+} = require('../utils/config');
+
 /**
- * Build and run Android app on a connected emulator or device
+ * compile jsbundle.
+ */
+const copyJsbundleAssets = () => {
+  logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
+  const options = {
+    filter: [
+      '*.js',
+      '!*.web.js'
+    ],
+    overwrite: true
+  };
+  return copy(path.resolve('dist'), path.resolve('platforms/android/app/src/main/assets/dist'), options)
+  .on(copy.events.COPY_FILE_START, function(copyOperation) {
+    logger.info('Copying file ' + copyOperation.src + '...');
+  })
+  .on(copy.events.COPY_FILE_COMPLETE, function(copyOperation) {
+    logger.info('Copied to ' + copyOperation.dest);
+  })
+  .on(copy.events.ERROR, function(error, copyOperation) {
+    logger.error('Unable to copy ' + copyOperation.dest);
+  })
+  .then(result => {
+    logger.info(`Move ${result.length} files.`);
+  })
+}
+
+/**
+ * pass options.
  * @param {Object} options
  */
-function buildAndroid (options) {
-  utils.buildJS()
-    .then(() => {
-      return new Promise((resolve, reject) => {
-        copy('./dist/', 'platforms/android/app/src/main/assets/dist', { overwrite: true }, function (err) {
-          if (err) return reject(err);
-          else resolve();
-        });
-      });
+const passOptions = (options) => {
+  return new Promise((resolve, reject) => {
+    resolve({
+      options
     })
-    .then(() => {
-      return { options };
-    })
-    .then(prepareAndroid)
-    .then(resolveConfig)
-    .then(buildApp)
-    .catch((err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+  })
 }
 
 /**
  * Prepare
  * @param {Object} options
  */
-function prepareAndroid ({ options }) {
+const prepareAndroid = ({
+  options
+}) => {
   return new Promise((resolve, reject) => {
     const rootPath = process.cwd();
-
     if (!utils.checkAndroid(rootPath)) {
-      console.log();
-      console.log(chalk.red('  Android project not found !'));
-      console.log();
-      console.log(`  You should run ${chalk.blue('weex create-')} first`);
+      logger.info(rootPath);
+      logger.info(chalk.red('  Android project not found !'));
+      logger.info();
+      logger.info(`  You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add android')}  first`);
       reject();
     }
-
-    console.log();
-    console.log(` => ${chalk.blue.bold('Will start Android app')}`);
-
+    logger.info(`\n=> ${chalk.blue.bold('Will start Android app')} \n`);
+  
     // change working directory to android
     process.chdir(path.join(rootPath, 'platforms/android'));
-
     if (!process.env.ANDROID_HOME) {
-      console.log();
-      console.log(chalk.red('  Environment variable $ANDROID_HOME not found !'));
-      console.log();
-      console.log(`  You should set $ANDROID_HOME first.`);
-      console.log(`  See ${chalk.cyan('http://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x')}`);
+      logger.info();
+      logger.info(chalk.red('  Environment variable $ANDROID_HOME not found !'));
+      logger.info();
+      logger.info(`  You should set $ANDROID_HOME first.`);
+      logger.info(`  See ${chalk.cyan('http://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x')}`);
       reject();
     }
-
     try {
-      child_process.execSync(`adb start-server`, { encoding: 'utf8' });
+      child_process.execSync(`adb start-server`, {
+        encoding: 'utf8'
+      });
     }
     catch (e) {
       reject();
     }
+  
     try {
-      child_process.execSync(`adb devices`, { encoding: 'utf8' });
+      child_process.execSync(`adb devices`, {
+        encoding: 'utf8'
+      });
     }
     catch (e) {
       reject();
     }
-    resolve({ options, rootPath });
-  });
-}
-
-function resolveConfig ({ options, rootPath }) {
-  const androidConfig = new Config(androidConfigResolver, Path.join(rootPath, 'android.config.json'));
-  return androidConfig.getConfig().then((config) => {
-    androidConfigResolver.resolve(config);
-    return {};
-  });
-}
-
-/**
- * find android devices
- * @param {Object} options
- */
-function findAndroidDevice ({ options }) {
-  return new Promise((resolve, reject) => {
-    let devicesInfo = '';
-    try {
-      devicesInfo = child_process.execSync(`adb devices`, { encoding: 'utf8' });
-    }
-    catch (e) {
-      console.log(chalk.red(`adb devices failed, please make sure you have adb in your PATH.`));
-      console.log(`See ${chalk.cyan('http://stackoverflow.com/questions/27301960/errorunable-to-locate-adb-within-sdk-in-android-studio')}`);
-      reject();
-    }
-
-    const devicesList = utils.parseDevicesResult(devicesInfo);
-
-    resolve({ devicesList, options });
+    resolve({
+      options,
+      rootPath
+    });
   });
 }
 
 /**
- * Choose one device to run
- * @param {Array} devicesList: name, version, id, isSimulator
+ * @desc resolve config in the android project
  * @param {Object} options
+ * @param {String} rootPath
  */
-function chooseDevice ({ devicesList, options }) {
-  return new Promise((resolve, reject) => {
-    if (devicesList) {
-      const listNames = [new inquirer.Separator(' = devices = ')];
-      for (const device of devicesList) {
-        listNames.push(
-          {
-            name: `${device}`,
-            value: device
-          }
-        );
-      }
-
-      inquirer.prompt([
-        {
-          type: 'list',
-          message: 'Choose one of the following devices',
-          name: 'chooseDevice',
-          choices: listNames
-        }
-      ])
-        .then((answers) => {
-          const device = answers.chooseDevice;
-          resolve({ device, options });
-        });
-    }
-    else {
-      reject('No android devices found.');
-    }
+const resolveConfig = ({
+  options,
+  rootPath
+}) => {
+  const androidConfig = new PlatformConfig(AndroidConfigResolver, rootPath, Platforms.android);
+  return androidConfig.getConfig().then((configs) => {
+    AndroidConfigResolver.resolve(configs);
+    return {
+      options,
+      rootPath,
+      configs
+    };
   });
 }
 
 /**
- * Adb reverse device, allow device connect host network
- * @param {String} device
- * @param {Object} options
+ * move assets.
  */
-function reverseDevice ({ device, options }) {
-  return new Promise((resolve, reject) => {
-    try {
-      child_process.execSync(`adb -s ${device} reverse tcp:8080 tcp:8080`, { encoding: 'utf8' });
-    }
-    catch (e) {
-      console.error('reverse error[ignored]');
-      reject('reverse error[ignored]');
-    }
-
-    resolve({ device, options });
-  });
+const copyApkAssets = ({
+  options,
+  rootPath,
+  configs
+}) => {
+  logger.info(`\n=> ${chalk.blue.bold('Move APK to `release/android`')} \n`);
+  const copyOptions = {
+    filter: [
+      '*.apk'
+    ],
+    overwrite: true
+  };
+  return copy(path.resolve('app/build/outputs/apk/'), path.resolve(path.join('../../release/android', configs.BuildVersion)), copyOptions)
+  .on(copy.events.COPY_FILE_START, function(copyOperation) {
+    logger.info('Copying file ' + copyOperation.src + '...');
+  })
+  .on(copy.events.COPY_FILE_COMPLETE, function(copyOperation) {
+    logger.info('Copied to ' + copyOperation.dest);
+  })
+  .on(copy.events.ERROR, function(error, copyOperation) {
+    logger.error('Unable to copy ' + copyOperation.dest);
+  })
+  .then(result => {
+    logger.info(`Move ${result.length} files. SUCCESSFUL`);
+  })
 }
 
 /**
@@ -173,65 +160,49 @@ function reverseDevice ({ device, options }) {
  * @param {String} device
  * @param {Object} options
  */
-function buildApp ({ device, options }) {
+const buildApp = ({
+  device,
+  options,
+  configs
+}) => {
   return new Promise((resolve, reject) => {
-    console.log(` => ${chalk.blue.bold('Building app ...')}`);
+    logger.info(`\n=> ${chalk.blue.bold('Building app ...')}\n`);
+    const clean = options.clean ? ' clean' : '';
     try {
-      const clean = ' clean';
-      child_process.execSync(process.platform === 'win32' ? `call gradlew.bat${clean} assemble` : `./gradlew${clean} assemble`, { encoding: 'utf8', stdio: [0, 1, 2] });
-    }
-    catch (e) {
-      reject();
-    }
-
-    resolve({ device, options });
-  });
-}
-
-/**
- * Install the Android app
- * @param {String} device
- * @param {Object} options
- */
-function installApp ({ device, options }) {
-  return new Promise((resolve, reject) => {
-    console.log(` => ${chalk.blue.bold('Install app ...')}`);
-
-    const apkName = 'app/build/outputs/apk/playground.apk';
-    try {
-      child_process.execSync(`adb -s ${device} install -r  ${apkName}`, { encoding: 'utf8' });
-    }
-    catch (e) {
-      reject();
-    }
-
-    resolve({ device, options });
-  });
-}
-
-/**
- * Run the Android app on emulator or device
- * @param {String} device
- * @param {Object} options
- */
-function runApp ({ device, options }) {
-  return new Promise((resolve, reject) => {
-    console.log(` => ${chalk.blue.bold('Running app ...')}`);
-
-    const packageName = fs.readFileSync(
-      'app/src/main/AndroidManifest.xml',
-      'utf8'
-    ).match(/package="(.+?)"/)[1];
-
-    try {
-      child_process.execSync(`adb -s ${device} shell am start -n ${packageName}/.SplashActivity`, { encoding: 'utf8' });
+      child_process.execSync(process.platform === 'win32' ? `call gradlew.bat ${clean} assembleRelease` : `./gradlew ${clean} assembleRelease`, {
+        encoding: 'utf8',
+        stdio: [0, 1]
+      });
     }
     catch (e) {
       reject(e);
     }
-
-    resolve();
+    resolve({
+      device,
+      options,
+      configs
+    });
   });
+}
+
+/**
+ * Build and run Android app on a connected emulator or device
+ * @param {Object} options
+ */
+const buildAndroid = (options) => {
+  utils.buildJS('build:prod')
+    .then(copyJsbundleAssets)
+    .then(() => passOptions(options))
+    .then(prepareAndroid)
+    .then(resolveConfig)
+    .then(buildApp)
+    .then(copyApkAssets)
+    .catch((err) => {
+      console.log(err.stack)
+      if (err) {
+        logger.log(chalk.red('Error:', err));
+      }
+    });
 }
 
 module.exports = buildAndroid;

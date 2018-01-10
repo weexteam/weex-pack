@@ -7,13 +7,8 @@ const fs = require('fs');
 const chalk = require('chalk');
 const gradle = require('./gradle');
 const podfile = require('./podfile');
-const cordovaUtils = require('../../lib/src/cordova/util');
-
-const cordova_lib = require('../../lib');
-const cordova = cordova_lib.cordova;
 
 const CONFIGS = require('./config');
-const cli = require('../cli');
 
 let pluginConfigs = CONFIGS.defaultConfig;
 
@@ -66,7 +61,7 @@ function uninstall (pluginName, args) {
       }
       else {
         console.log(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
-        // cli(args);
+        // (args);
         // cordova.raw["plugin"]("remove", [target]);
       }
     });
@@ -102,8 +97,8 @@ function handleUninstall (dir, pluginName, version, option) {
     pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, '', 'android');
     utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
   }
-  else if (cordovaUtils.isCordova(dir)) {
-    const platformList = cordovaUtils.listPlatforms(dir);
+  else if (utils.isCordova(dir)) {
+    const platformList = utils.listPlatforms(dir);
     if (option.web) {
       // npm uninstall
       uninstallInPackage(dir, pluginName, version);

@@ -293,6 +293,63 @@ const utils = {
 
   installNpmPackage () {
     return utils.exec('npm install', false)
+  },
+  isRootDir(dir) {
+    if (fs.existsSync(path.join(dir, 'platforms'))) {
+      if (fs.existsSync(path.join(dir, 'web'))) {
+        // For sure is.
+        if (fs.existsSync(path.join(dir, 'config.xml'))) {
+          return 2;
+        } else {
+          return 1;
+        }
+      }
+    }
+      return 0;
+  },
+  listPlatforms(project_dir) {
+    const core_platforms = require('../platform/platforms');
+    const platforms_dir = path.join(project_dir, 'platforms');
+    if ( !fs.existsSync(platforms_dir)) {
+        return [];
+    }
+    const subdirs = fs.readdirSync(platforms_dir);
+    return subdirs.filter(function(p) {
+        return Object.keys(core_platforms).indexOf(p) > -1;
+    });
+  },
+
+  // Runs up the directory chain looking for a .cordova directory.
+  // IF it is found we are in a Cordova project.
+  // Omit argument to use CWD.
+  isCordova(dir) {
+    if (!dir) {
+        // Prefer PWD over cwd so that symlinked dirs within your PWD work correctly (CB-5687).
+        var pwd = process.env.PWD;
+        var cwd = process.cwd();
+        if (pwd && pwd != cwd && pwd != 'undefined') {
+            return this.isCordova(pwd) || this.isCordova(cwd);
+        }
+        return this.isCordova(cwd);
+    }
+    var bestReturnValueSoFar = false;
+    for (var i = 0; i < 1000; ++i) {
+        var result = this.isRootDir(dir);
+        if (result === 2) {
+            return dir;
+        }
+        if (result === 1) {
+            bestReturnValueSoFar = dir;
+        }
+        var parentDir = path.normalize(path.join(dir, '..'));
+        // Detect fs root.
+        if (parentDir == dir) {
+            return bestReturnValueSoFar;
+        }
+        dir = parentDir;
+    }
+    console.error('Hit an unhandled case in util.isCordova');
+    return false;
   }
 };
 

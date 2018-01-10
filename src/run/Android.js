@@ -58,9 +58,9 @@ const passOptions = (options) => {
  * Prepare
  * @param {Object} options
  */
-function prepareAndroid({
+const prepareAndroid = ({
   options
-}) {
+}) => {
   return new Promise((resolve, reject) => {
     const rootPath = process.cwd();
     if (!utils.checkAndroid(rootPath)) {
@@ -82,16 +82,6 @@ function prepareAndroid({
       logger.info(`  See ${chalk.cyan('http://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x')}`);
       reject();
     }
-    // try {
-    //   child_process.execSync(`adb kill-server`, {encoding: 'utf8'})
-    // } catch (e) {
-    //   reject()
-    // }
-    // try {
-    //   child_process.execSync(`adb start-server`, {encoding: 'utf8'})
-    // } catch (e) {
-    //   reject()
-    // }
     try {
       child_process.execSync(`adb start-server`, {
         encoding: 'utf8'
@@ -280,7 +270,7 @@ const buildApp = ({
     logger.info(`\n=> ${chalk.blue.bold('Building app ...')}\n`);
     const clean = options.clean ? ' clean' : '';
     try {
-      child_process.execSync(process.platform === 'win32' ? `call gradlew.bat${clean} assemble` : `./gradlew${clean} assemble`, {
+      child_process.execSync(process.platform === 'win32' ? `call gradlew.bat ${clean} assembleDebug` : `./gradlew ${clean} assembleDebug`, {
         encoding: 'utf8',
         stdio: [0, 1]
       });

@@ -96,7 +96,7 @@
         "update-notifier": "^2.3.0",
         "valid-identifier": "0.0.1",
         "weexpack-common": "^0.1.2",
-        "weexpack-create": "^0.2.9",
+        "weexpack-create": "^0.2.10",
         "weexpack-lib": "^0.1.0",
         "ws": "^4.0.0",
         "xcode": "^0.8.5",

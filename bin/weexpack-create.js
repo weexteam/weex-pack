@@ -2,12 +2,18 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const cli = require('../src/cli');
 const inquirer = require('inquirer');
 const rm = require('rimraf').sync;
 const fs = require('fs');
 const path = require('path');
-const logger = require('weexpack-common').CordovaLogger.get();
+const create = require('../src/create');
+const weexpackCommon = require('weexpack-common');
+const events = weexpackCommon.events;
+const logger = weexpackCommon.CordovaLogger.get();
+
+// For WeexpackError print only the message without stack trace unless we
+// are in a verbose mode.
+logger.subscribe(events);
 
 program.usage('[project-name] [options]').on('--help', () => {
   console.log('  Examples:\n');
@@ -16,22 +22,7 @@ program.usage('[project-name] [options]').on('--help', () => {
   console.log();
 }).parse(process.argv)
 
-
-
-// Setting
-
-let args=[];
-
-process.argv.forEach(function(arg,i){
-  if(arg!='[object Object]') {//fix commander’s bug
-    args.push(arg);
-    if (i == 1) {
-      args.push('create');
-    }
-  }
-});
-
-const rawName = args[3]
+const rawName = program.args[0]
 const to = path.resolve(rawName);
 
 if (!rawName || !rawName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
@@ -52,11 +43,11 @@ if (fs.existsSync(to)) {
     name: 'ok'
   }]).then(answers => {
     if (answers.ok) {
-      cli(args);
+      create(rawName,'',rawName, {}, events);
     }
   }).catch(logger.error)
 } else {
-  cli(args);
+  create(rawName,'',rawName, {}, events);
 }
 
 process.on('uncaughtException', (err) => {

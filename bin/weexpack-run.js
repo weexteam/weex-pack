@@ -2,10 +2,11 @@
 
 const program = require('commander')
 const chalk = require('chalk')
-const runAndroid = require('../src/run/android')
-const runIOS = require('../src/run/ios')
-const runWeb = require('../src/run/web')
-
+const {
+  runAndroid,
+  runIOS,
+  runWeb
+} = require('../src/run');
 
 program
   .usage('<platform> [options]')

@@ -42,6 +42,9 @@ const defaultConfigs = {
 
 module.exports = function(dir, optionalId, optionalName, cfg, extEvents){
     const tmp = path.resolve(dir);
+    if (_.isEmpty(cfg)) {
+      cfg = {}
+    }
     if (fs.existsSync(tmp)) rm(tmp);
     // Create a middleware for asking questions.
     const questions = {
@@ -82,8 +85,3 @@ module.exports = function(dir, optionalId, optionalName, cfg, extEvents){
     })
 };
 
-/* If we do not pass in extEvents, then CordovaLogger will set up the listeners
-inside of cordova-create. That means we'll log everything always.  By passing in
-a dummy cordova-common.events EventEmitter with no listeners, then cordova-lib
-won't log in the create tests. When cordova-cli uses cordova-lib, it will setup
-the listeners for events using CordovaLogger.  */

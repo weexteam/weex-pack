@@ -2,9 +2,11 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const buildAndroid = require('../src/build/android');
-const buildIOS = require('../src/build/ios');
-const buildWeb = require('../src/build/web');
+const {
+  buildAndroid,
+  buildIOS,
+  buildWeb
+} = require('../src/build');
 
 program
   .usage('<platform> [options]')
@@ -26,7 +28,7 @@ function printExample() {
 
 program.on('--help', printExample)
 
-function isValidPlatform(args) {
+const isValidPlatform = (args) => {
   if (args && args.length) {
     return args[0] === 'android' || args[0] === 'ios' || args[0] === 'web'
   }
@@ -37,7 +39,7 @@ function isValidPlatform(args) {
  * Run weex app on the specific platform
  * @param {String} platform
  */
-function build(platform, options) {
+const build(platform, options) => {
   switch (platform) {
     case 'android' : buildAndroid(options); break;
     case 'ios' : buildIOS(options); break;
@@ -53,7 +55,7 @@ if (program.args.length < 1) {
 
 if (isValidPlatform(program.args)) {
   // TODO: parse config file
-  build(program.args[0], program.config)
+  build(program.args[0], {configPath:program.config,clean:program.clean})
 
 } else {
   console.log()

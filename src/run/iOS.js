@@ -54,8 +54,7 @@ const passOptions = (options) => {
  * Prepare
  * @param {Object} options
  */
-function prepareIOS ({ options }) {
-  logger.info(`\n=> ${chalk.blue.bold('Pod updating...')} \n`);
+const prepareIOS = ({ options }) => {
   return new Promise((resolve, reject) => {
     const rootPath = process.cwd();
     if (!utils.checkIOS(rootPath)) {
@@ -69,7 +68,7 @@ function prepareIOS ({ options }) {
     const xcodeProject = utils.findXcodeProject(process.cwd());
 
     if (xcodeProject) {
-      logger.info(`\n=> ${chalk.blue.bold('Will start iOS app')}\n`);
+      logger.info(`\n=> ${chalk.blue.bold('start iOS app')}\n`);
       resolve({ xcodeProject, options, rootPath });
     }
     else {
@@ -235,15 +234,10 @@ const _buildOnSimulator = ({ scheme, device, rootPath, xcodeProject, options, co
   logger.info(`\n=> ${chalk.blue.bold('Buiding project...')}\n`);
   let buildInfo = '';
   try {
-    try {
-      if (_.isEmpty(configs)) {
-        reject(new Error('iOS config dir not detected.'));
-      }
-      buildInfo = child_process.execSync(`xcodebuild -${xcodeProject.isWorkspace ? 'workspace' : 'project'} ${xcodeProject.name} -scheme ${scheme} -configuration Debug -destination id=${device.udid} -sdk iphonesimulator -derivedDataPath build clean build`, { encoding: 'utf8' });
+    if (_.isEmpty(configs)) {
+      reject(new Error('iOS config dir not detected.'));
     }
-    catch (e) {
-      reject(e);
-    }
+    buildInfo = child_process.execSync(`xcodebuild -${xcodeProject.isWorkspace ? 'workspace' : 'project'} ${xcodeProject.name} -scheme ${scheme} -configuration Debug -destination id=${device.udid} -sdk iphonesimulator -derivedDataPath build clean build`, { encoding: 'utf8' });
   }
   catch (e) {
     reject(e);
