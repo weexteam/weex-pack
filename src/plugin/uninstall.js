@@ -9,6 +9,8 @@ const gradle = require('./gradle');
 const podfile = require('./podfile');
 
 const CONFIGS = require('./config');
+const weexpackCommon = require('weexpack-common');
+const logger = weexpackCommon.CordovaLogger.get();
 
 let pluginConfigs = CONFIGS.defaultConfig;
 
@@ -42,7 +44,7 @@ function uninstall (pluginName, args) {
           }
         }
         else {
-          console.log(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
+          logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
         }
       });
     });
@@ -60,7 +62,7 @@ function uninstall (pluginName, args) {
         }
       }
       else {
-        console.log(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
+        logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
         // (args);
         // cordova.raw["plugin"]("remove", [target]);
       }
@@ -73,7 +75,7 @@ function handleUninstall (dir, pluginName, version, option) {
   let project;
   if (project = utils.isIOSProject(dir)) {
     if (!fs.existsSync(path.join(dir, 'Podfile'))) {
-      console.log("can't find Podfile file");
+      logger.info("can't find Podfile file");
       return;
     }
     const iosPackageName = option.ios && option.ios.name ? option.ios.name : pluginName;
@@ -81,7 +83,7 @@ function handleUninstall (dir, pluginName, version, option) {
     const buildPatch = podfile.makeBuildPatch(iosPackageName, iosVersion);
     // Remove Podfile config.
     podfile.revokePatch(path.join(dir, 'Podfile'), buildPatch);
-    console.log(`=> ${pluginName} has removed in iOS project`);
+    logger.info(`=> ${pluginName} has removed in iOS project`);
     // Update plugin.json in the project.
     pluginConfigs = utils.updatePluginConfigs(pluginConfigs, iosPackageName, '', 'ios');
     utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
@@ -92,7 +94,7 @@ function handleUninstall (dir, pluginName, version, option) {
     const buildPatch = gradle.makeBuildPatch(androidPackageName, androidVersion, option.android.groupId || '');
     // Remove gradle config.
     gradle.revokePatch(path.join(dir, 'build.gradle'), buildPatch);
-    console.log(`=> ${pluginName} has removed in Android project`);
+    logger.info(`=> ${pluginName} has removed in Android project`);
     // Update plugin.json in the project.
     pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, '', 'android');
     utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
@@ -111,7 +113,7 @@ function handleUninstall (dir, pluginName, version, option) {
     uninstallInPackage(dir, pluginName, version);
   }
   else {
-    console.log("can't recognize type of this project");
+    logger.info("can't recognize type of this project");
   }
 }
 

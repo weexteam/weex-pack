@@ -11,17 +11,21 @@ const podfile = require('./podfile');
 const merge = require('merge');
 const chalk = require('chalk');
 const ora = require('ora');
+const _ = require('underscore');
 
 const semver = require('semver');
 
 const CONFIGS = require('./config');
+
+const weexpackCommon = require('weexpack-common');
+const logger = weexpackCommon.CordovaLogger.get();
 
 let pluginConfigs = CONFIGS.defaultConfig;
 
 // Get plugin config in project.
 const pluginConfigPath = path.join(CONFIGS.rootPath, CONFIGS.filename);
 if (fs.existsSync(pluginConfigPath)) {
-  pluginConfigs = require(pluginConfigPath);
+  pluginConfigs = JSON.parse(fs.readFileSync(pluginConfigPath));
 }
 
 
@@ -30,7 +34,77 @@ let androidPluginConfigs = [];
 // Get plugin config in android project.
 const androidPluginConfigPath = path.join(CONFIGS.androidPath, CONFIGS.androidConfigFilename);
 if (fs.existsSync(androidPluginConfigPath)) {
-  androidPluginConfigs = require(androidPluginConfigPath);
+  androidPluginConfigs = JSON.parse(fs.readFileSync(androidPluginConfigPath));
+}
+
+const installForWeb = (plugins) => {
+  if (_.isEmpty(plugins) && !_.isArray(plugins)) {
+    return;
+  }
+  const packageJsonFile = path.join(CONFIGS.root,'package.json');
+  let packageJson = JSON.parse(fs.readFileSync(packageJsonFile));
+  
+  plugins.forEach(plugin => {
+    packageJson['dependencies'][plugin.name] = plugin.version;
+  })
+
+  packageJson = utils.sortDependencies(packageJson);
+
+  fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson, null, 2) + '\n')
+  
+  logger.info(`${chalk.blue.bold('\n=> Downloading plugins...\n')}`)
+
+  utils.installNpmPackage().then(() => {
+    logger.info(`${chalk.blue.bold('\n=> Building plugins...\n')}`)
+    return utils.buildJS('build:plugin').then(() => {
+      logger.info(`${chalk.blue.bold('\n=> Building plugins successful.\n')}`)
+    })
+  })
+}
+
+const installForIOS = (plugins) => {
+  if (_.isEmpty(plugins) && !_.isArray(plugins)) {
+    return;
+  }
+  plugins.forEach(plugin => {
+    let buildPatch = podfile.makeBuildPatch(plugin.name, plugin.version);
+    // Build Podfile config.
+    podfile.applyPatch(path.join(CONFIGS.iosPath, 'Podfile'), buildPatch);
+    logger.info(`\n=> ${plugin.name} has installed success in iOS project`);
+  })
+}
+const installForAndroid = (plugins) => {
+  if (_.isEmpty(plugins) && !_.isArray(plugins)) {
+    return;
+  }
+  plugins.forEach(plugin => {
+    // write .wx_config.json on `platform/android`
+    androidPluginConfigs = utils.updateAndroidPluginConfigs(androidPluginConfigs, plugin.name, plugin);
+    logger.info(`\n=> ${plugin.name} has installed success in Android project`);
+  })
+  utils.writeAndroidPluginFile(CONFIGS.androidPath, androidPluginConfigPath, androidPluginConfigs);
+}
+
+const installForNewPlatform = (platforms) => {
+  const pluginsList = JSON.parse(fs.readFileSync(path.join(CONFIGS.rootPath, CONFIGS.filename)));
+  if (platforms && !_.isArray(platforms)) {
+    platforms = [platforms];
+  }
+  platforms.forEach(platform => {
+    switch(platform) {
+      case 'web':
+      installForWeb(pluginsList[platform]);
+      break;
+      case 'ios':
+      installForIOS(pluginsList[platform]);
+      break;
+      case 'android':
+      installForAndroid(pluginsList[platform]);
+      break;
+      default:
+      break;
+    }
+  })
 }
 
 
@@ -49,17 +123,10 @@ const install = (pluginName, args) => {
     npmHelper.getLastestVersion(pluginName, function (version) {
       utils.isNewVersionPlugin(pluginName, version, function (result) {
         if (result) {
-          // if (result.pluginDependencies) {
-          //   for (const pn in result.pluginDependencies) {
-          //     install(pn, result.pluginDependencies[pn]);
-          //   }
-          // }
           handleInstall(dir, pluginName, version, result);
         }
         else {
-          console.log(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
-          // cli(args);
-           // cordova.raw["plugin"]("add", [target]);
+          logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
         }
       });
     });
@@ -75,9 +142,7 @@ const install = (pluginName, args) => {
         }
       }
       else {
-        console.log(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
-        // cli(args);
-        // cordova.raw["plugin"]("add", [target]);
+        logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
       }
     });
   }
@@ -88,7 +153,7 @@ const handleInstall = (dir, pluginName, version, option) => {
   let project;
   if (project = utils.isIOSProject(dir)) {
     if (!fs.existsSync(path.join(dir, 'Podfile'))) {
-      console.log("can't find Podfile file");
+      logger.info("can't find Podfile file");
       return;
     }
     const iosPackageName = option.ios && option.ios.name ? option.ios.name : pluginName;
@@ -106,7 +171,7 @@ const handleInstall = (dir, pluginName, version, option) => {
       const buildPatch = podfile.makeBuildPatch(iosPackageName, iosVersion);
       // Build Podfile config.
       podfile.applyPatch(path.join(dir, 'Podfile'), buildPatch);
-      console.log(`=> ${pluginName} has installed success in iOS project`);
+      logger.info(`=> ${pluginName} has installed success in iOS project`);
       // Update plugin.json in the project.
       pluginConfigs = utils.updatePluginConfigs(pluginConfigs, iosPackageName, option, 'ios');
       utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
@@ -116,20 +181,14 @@ const handleInstall = (dir, pluginName, version, option) => {
     const androidPackageName = option.android && option.android.name ? option.android.name : pluginName;
     if (option.android) {
       const androidVersion = option.android && option.android.version || version;
-      // Build gradle config.
-      // const buildPatch = gradle.makeBuildPatch(androidPackageName, androidVersion, option.android.groupId || '');
-      // gradle.applyPatch(path.join(dir, 'build.gradle'), buildPatch);
-      
-      
       androidPluginConfigs = utils.updateAndroidPluginConfigs(androidPluginConfigs, androidPackageName, option.android);
       utils.writeAndroidPluginFile(CONFIGS.androidPath, androidPluginConfigPath, androidPluginConfigs);
-      
       
       // Update plugin.json in the project.
       pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, option, 'android');
       utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
 
-      console.log(`=> ${pluginName} has installed success in Android project`);
+      logger.info(`=> ${pluginName} has installed success in Android project`);
     }
   }
   else if (utils.isCordova(dir)) {
@@ -144,7 +203,7 @@ const handleInstall = (dir, pluginName, version, option) => {
     }
   }
   else {
-    console.log("can't recognize type of this project");
+    logger.info("can't recognize type of this project");
   }
 }
 
@@ -177,7 +236,7 @@ const installPList = (projectRoot, projectPath, config) => {
 
 const installInPackage = (dir, pluginName, version, option) => {
   const p = path.join(dir, 'package.json');
-  const spinner = ora('downloading plugin')
+  const spinner = ora('\n=> Downloading plugin...')
   if (fs.existsSync(p)) {
     const pkg = require(p);
     pkg.dependencies[pluginName] = version;
@@ -195,5 +254,8 @@ const installInPackage = (dir, pluginName, version, option) => {
   })
 }
 
-module.exports = install;
+module.exports = {
+  install,
+  installForNewPlatform
+};
 

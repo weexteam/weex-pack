@@ -2,7 +2,6 @@
  * Created by godsong on 16/12/7.
  */
 const child_process = require('child_process');
-const ProgressBar = require('./ProgressBar');
 const Chalk = require('chalk');
 const npm = require('npm');
 const path = require('path');
@@ -11,29 +10,7 @@ const fs = require('fs');
 const tar = require('tar'),
   zlib = require('zlib');
 
-exports.publish = function publish (tnpm, verbose, dir) {
-  const pb = new ProgressBar(3000, 'publish', 'uploading...');
-  const cmd = tnpm ? 'tnpm' : 'npm';
-  return new Promise(function (resolve, reject) {
-    const npm = child_process.exec(cmd + ' publish', { cwd: dir || process.cwd() }, function (error, stdout, stderr) {
-      pb.complete(function () {
-        if (error) {
-          console.log();
-          const match = stderr.toString().replace(/npm ERR! /g, '').match(/\n\n([\s\w\W]+?)\n\n/);
-          if (match && match[1]) {
-            console.error(Chalk.red(match[1]));
-          }
-          else {
-            console.error(Chalk.red(stderr.toString()));
-          }
-          console.log();
-          return resolve(false);
-        }
-        resolve(true);
-      });
-    });
-  });
-};
+
 
 exports.getLastestVersion = function (name, callback) {
   let trynum = 0;

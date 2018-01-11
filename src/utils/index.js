@@ -1,14 +1,14 @@
 const fs = require('fs');
 const path = require('path');
-const output = require('./output');
-const validator = require('./validator');
 const child_process = require('child_process');
 const os = require('os');
 const npm = require('npm');
 const mkdirp = require('mkdirp');
 const chalk = require('chalk');
-const utils = {
+const output = require('./output');
+const validator = require('./validator');
 
+const utils = {
   copyAndReplace (src, dest, replacements) {
     if (fs.lstatSync(src).isDirectory()) {
       if (!fs.existsSync(dest)) {
@@ -251,8 +251,6 @@ const utils = {
     return plugins;
   },
 
-
-
   writeAndroidPluginFile: function (root, path, config) {
     if (!fs.existsSync(root)){
       mkdirp(root, function (err) {
@@ -275,7 +273,11 @@ const utils = {
     let plugins = configs.slice(0);
     const len = plugins && plugins.length;
     for (let i =  len - 1; i >= 0; i --) {
-      if (name && plugins[i].name === name) {
+      let plugin = plugins[i];
+      if (!plugin['dependency']) {
+        plugin['dependency'] = `${plugin.groupId}:${plugin.name}:${plugin.version}`
+      }
+      if (name && plugin.name === name) {
         if (option) {
           plugins.splice(i,1,option)
         }
@@ -294,6 +296,7 @@ const utils = {
   installNpmPackage () {
     return utils.exec('npm install', false)
   },
+
   isRootDir(dir) {
     if (fs.existsSync(path.join(dir, 'platforms'))) {
       if (fs.existsSync(path.join(dir, 'web'))) {
@@ -307,6 +310,7 @@ const utils = {
     }
       return 0;
   },
+
   listPlatforms(project_dir) {
     const core_platforms = require('../platform/platforms');
     const platforms_dir = path.join(project_dir, 'platforms');
@@ -351,6 +355,7 @@ const utils = {
     console.error('Hit an unhandled case in util.isCordova');
     return false;
   }
+
 };
 
 module.exports = Object.assign(utils, output, validator);

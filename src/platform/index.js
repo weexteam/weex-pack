@@ -22,6 +22,7 @@ const config = require('./config');
 const utils = require('./util');
 const fs = require('fs');
 const os = require('os');
+const inquirer = require('inquirer');
 const path = require('path');
 // const HooksRunner = require('../hooks/HooksRunner');
 const lazy_load = require('./lazy_load');
@@ -43,6 +44,10 @@ const PlatformJson = weexpackCommon.PlatformJson;
 const CordovaError = weexpackCommon.CordovaError;
 const logger = weexpackCommon.CordovaLogger.get();
 
+
+const {
+  installForNewPlatform
+} = require('../plugin')
 // Expose the platform parsers on top of this command
 // for (var p in platforms) {
 //   module.exports[p] = platforms[p];
@@ -166,20 +171,8 @@ function addHelper(cmd, projectRoot, targets, opts) {
         return downloadPlatform(projectRoot, platform, spec, opts);
       })
       .then((platDetails) => {
-        platform = platDetails.platform;
         const platformPath = path.join(projectRoot, 'platforms', platform);
         const platformAlreadyAdded = fs.existsSync(platformPath);
-        if (cmd == 'add') {
-          if (platformAlreadyAdded) {
-            throw new CordovaError('Platform ' + platform + ' already added.');
-          }
-        }
-        else if (cmd == 'update') {
-          if (!platformAlreadyAdded) {
-            throw new CordovaError('Platform "' + platform + '" is not yet added. See `' + utils.binname + ' platform list`.');
-          }
-        }
-
         const options = {
           // We need to pass a platformDetails into update/create
           // since PlatformApiPoly needs to know something about
@@ -187,16 +180,48 @@ function addHelper(cmd, projectRoot, targets, opts) {
           platformDetails: platDetails
         };
         let promise;
-        if (cmd === 'add') {
-          promise = PlatformApi.createPlatform(platformPath, cfg, options, events);
+        platform = platDetails.platform;
+
+        if (cmd == 'add') {
+          if (platformAlreadyAdded) {
+            return inquirer.prompt([{
+              type: 'confirm',
+              message: `Platform ${platform} already added. Continue?`,
+              name: 'ok'
+            }]).then(answers => {
+              if (answers.ok) {
+                shell.rm('-rf', platformPath);
+                promise = PlatformApi.createPlatform(platformPath, cfg, options, events);
+                return promise.then(() => {
+                  logger.info( (cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
+                  return platDetails;
+                })
+              }
+              else {
+                throw new CordovaError(`Platform ${platform} already added.`);
+              }
+            }).catch(logger.error)
+          }
+          else {
+            promise = PlatformApi.createPlatform(platformPath, cfg, options, events);
+            return promise.then(() => {
+              logger.info( (cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
+              return platDetails;
+            })
+          }
         }
-        else {
-          promise = PlatformApi.updatePlatform(platformPath, options, events);
+        else if (cmd == 'update') {
+          if (!platformAlreadyAdded) {
+            throw new CordovaError('Platform "' + platform + '" is not yet added. See `' + utils.binname + ' platform list`.');
+          }
+          else {
+            promise = PlatformApi.updatePlatform(platformPath, options, events);
+          }
+          return promise.then(() => {
+            logger.info( (cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
+            return platDetails;
+          })
         }
-        return promise.then(() => {
-          logger.info( (cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
-          return platDetails;
-        })
       })
       .then((platDetails) => {
         const saveVersion = !spec || semver.validRange(spec, true);
@@ -206,9 +231,13 @@ function addHelper(cmd, projectRoot, targets, opts) {
         const versionToSave = saveVersion ? platDetails.version : spec;
         logger.verbose( 'Saving ' + platform + '@' + versionToSave + ' into platforms.json');
         platformMetadata.save(projectRoot, platform, versionToSave);
+        return platDetails;
+      })
+      .then((platDetails) => {
+        installForNewPlatform(platDetails.platform)
       })
       .fail(error => {
-        logger.error(error)
+        logger.error(error.stack)
       })
     })
   }
