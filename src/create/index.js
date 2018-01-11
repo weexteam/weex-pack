@@ -22,21 +22,26 @@ const events = require('weexpack-common').events;
 const fs = require('fs');
 const rm = require('rimraf').sync;
 const path = require('path');
+const ora = require('ora');
 const ask = require('../utils/ask');
 const gituser = require('../utils/gitUser');
 const _ = require('underscore');
 
 const defaultConfigs = {
   android: {
-    "AppName":"WeexApp",
-    "AppId":"com.alibaba.weex",
-    "SplashText":"Hello\nWeex",
-    "WeexBundle":"index.js"
+    AppName:"WeexApp",
+    AppId:"com.alibaba.weex",
+    SplashText:"Hello\nWeex",
+    WeexBundle:"index.js"
   },
   ios: {
-    "AppName":"WeexApp",
-    "BuildVersion":"1.0.0",
-    "WeexBundle":"index.js"
+    AppId:"com.alibaba.weex",
+    AppName:"WeexApp",
+    Version: "1.0.0",
+    BuildVersion:"1.0.0",
+    WeexBundle:"index.js",
+    CodeSign: "",
+    Profile: ""
   }
 }
 
@@ -45,7 +50,11 @@ module.exports = function(dir, optionalId, optionalName, cfg, extEvents){
     if (_.isEmpty(cfg)) {
       cfg = {}
     }
-    if (fs.existsSync(tmp)) rm(tmp);
+    if (fs.existsSync(tmp)) {
+      const spinner = ora(`Remove ${tmp} ...`).start()
+      rm(tmp);
+      spinner.stop();
+    }
     // Create a middleware for asking questions.
     const questions = {
       name:
@@ -72,8 +81,19 @@ module.exports = function(dir, optionalId, optionalName, cfg, extEvents){
         { type: 'string',
           message: 'Project author',
           default: gituser() },
-      unit: { type: 'confirm', message: 'Set up unit tests?' },
-      autoInstall: { type: 'confirm', message: 'Should we run `npm install` for you after the project has been created?' },
+      unit: { 
+        type: 'confirm', 
+        message: 'Set up unit tests?' 
+      },
+      autoInstall: { 
+        type: 'list', 
+        message: 'Should we run `npm install` for you after the project has been created?',
+        choices: [
+          { name: 'Yes, use NPM', value: 'npm', short: 'npm' },
+          { name: 'Yes, use Yarn', value: 'yarn', short: 'yarn' },
+          { name: 'No, I will handle that myself',value: false, short: 'no'}
+        ]
+      },
     }
     ask(questions, cfg, () => {
       cfg = _.extend(defaultConfigs, cfg);
