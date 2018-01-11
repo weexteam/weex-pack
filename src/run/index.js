@@ -6,4 +6,4 @@ module.exports = {
   runAndroid,
   runIOS,
   runWeb
-}
+};

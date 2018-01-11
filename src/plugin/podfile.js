@@ -21,7 +21,7 @@ function makeBuildPatch (name, version) {
   }
 
   return {
-    pattern: /\t*pod\s+\'\w+\'\s*,?.*\n/,
+    pattern: /\t*pod\s+'\w+'\s*,?.*\n/,
     patch: patch,
     findPattern: new RegExp('\\t*pod\\s+\'' + name + '\'\\s*,?.*\\n', 'g')
   };

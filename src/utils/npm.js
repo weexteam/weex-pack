@@ -1,29 +1,26 @@
 /**
  * Created by godsong on 16/12/7.
  */
-const child_process = require('child_process');
-const Chalk = require('chalk');
 const npm = require('npm');
 const path = require('path');
 const fs = require('fs');
 
-const tar = require('tar'),
-  zlib = require('zlib');
-
-
+const tar = require('tar');
+const zlib = require('zlib');
 
 exports.getLastestVersion = function (name, callback) {
   let trynum = 0;
   npm.load(function () {
-    var load = function (npmName) {
+    const load = function (npmName) {
       npm.commands.info([npmName, 'version'], true, function (error, result) {
-        if (error && trynum == 0) {
+        let prefix;
+        if (error && trynum === 0) {
           trynum++;
-          if (npmName == 'weex-gcanvas') {
-            var prefix = 'weex-plugin--';
+          if (npmName === 'weex-gcanvas') {
+            prefix = 'weex-plugin--';
           }
           else {
-            var prefix = 'weex-plugin-';
+            prefix = 'weex-plugin-';
           }
           load(prefix + npmName);
         }
@@ -59,20 +56,20 @@ exports.fetchCache = function (npmName, version, callback) {
   });
 };
 
-exports.unpackTgz = function (package_tgz, unpackTarget, callback) {
+exports.unpackTgz = function (packageTgz, unpackTarget, callback) {
   const extractOpts = { type: 'Directory', path: unpackTarget, strip: 1 };
 
-  fs.createReadStream(package_tgz)
+  fs.createReadStream(packageTgz)
         .on('error', function (err) {
-          console.warn('Unable to open tarball ' + package_tgz + ': ' + err);
+          console.warn('Unable to open tarball ' + packageTgz + ': ' + err);
         })
         .pipe(zlib.createUnzip())
         .on('error', function (err) {
-          console.warn('Error during unzip for ' + package_tgz + ': ' + err);
+          console.warn('Error during unzip for ' + packageTgz + ': ' + err);
         })
         .pipe(tar.Extract(extractOpts))
         .on('error', function (err) {
-          console.warn('Error during untar for ' + package_tgz + ': ' + err);
+          console.warn('Error during untar for ' + packageTgz + ': ' + err);
         })
         .on('end', function (result) {
           callback(result);

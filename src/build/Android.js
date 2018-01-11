@@ -1,14 +1,10 @@
 const path = require('path');
 const chalk = require('chalk');
-const child_process = require('child_process');
-const fs = require('fs');
-const inquirer = require('inquirer');
+const childprocess = require('child_process');
 const utils = require('../utils');
-const Path = require('path');
 const copy = require('recursive-copy');
 const logger = require('weexpack-common').CordovaLogger.get();
-const server = require('../run/server');
-const { 
+const {
   Platforms,
   PlatformConfig,
   AndroidConfigResolver
@@ -27,19 +23,20 @@ const copyJsbundleAssets = () => {
     overwrite: true
   };
   return copy(path.resolve('dist'), path.resolve('platforms/android/app/src/main/assets/dist'), options)
-  .on(copy.events.COPY_FILE_START, function(copyOperation) {
+  .on(copy.events.COPY_FILE_START, function (copyOperation) {
     logger.info('Copying file ' + copyOperation.src + '...');
   })
-  .on(copy.events.COPY_FILE_COMPLETE, function(copyOperation) {
+  .on(copy.events.COPY_FILE_COMPLETE, function (copyOperation) {
     logger.info('Copied to ' + copyOperation.dest);
   })
-  .on(copy.events.ERROR, function(error, copyOperation) {
+  .on(copy.events.ERROR, function (error, copyOperation) {
+    logger.error('Error:' + error.stack);
     logger.error('Unable to copy ' + copyOperation.dest);
   })
   .then(result => {
     logger.info(`Move ${result.length} files.`);
-  })
-}
+  });
+};
 
 /**
  * pass options.
@@ -49,9 +46,9 @@ const passOptions = (options) => {
   return new Promise((resolve, reject) => {
     resolve({
       options
-    })
-  })
-}
+    });
+  });
+};
 
 /**
  * Prepare
@@ -70,7 +67,7 @@ const prepareAndroid = ({
       reject();
     }
     logger.info(`\n=> ${chalk.blue.bold('Will start Android app')} \n`);
-  
+
     // change working directory to android
     process.chdir(path.join(rootPath, 'platforms/android'));
     if (!process.env.ANDROID_HOME) {
@@ -82,16 +79,16 @@ const prepareAndroid = ({
       reject();
     }
     try {
-      child_process.execSync(`adb start-server`, {
+      childprocess.execSync(`adb start-server`, {
         encoding: 'utf8'
       });
     }
     catch (e) {
       reject();
     }
-  
+
     try {
-      child_process.execSync(`adb devices`, {
+      childprocess.execSync(`adb devices`, {
         encoding: 'utf8'
       });
     }
@@ -103,7 +100,7 @@ const prepareAndroid = ({
       rootPath
     });
   });
-}
+};
 
 /**
  * @desc resolve config in the android project
@@ -123,7 +120,7 @@ const resolveConfig = ({
       configs
     };
   });
-}
+};
 
 /**
  * move assets.
@@ -141,19 +138,20 @@ const copyApkAssets = ({
     overwrite: true
   };
   return copy(path.resolve('app/build/outputs/apk/'), path.resolve(path.join('../../release/android', configs.BuildVersion)), copyOptions)
-  .on(copy.events.COPY_FILE_START, function(copyOperation) {
+  .on(copy.events.COPY_FILE_START, function (copyOperation) {
     logger.info('Copying file ' + copyOperation.src + '...');
   })
-  .on(copy.events.COPY_FILE_COMPLETE, function(copyOperation) {
+  .on(copy.events.COPY_FILE_COMPLETE, function (copyOperation) {
     logger.info('Copied to ' + copyOperation.dest);
   })
-  .on(copy.events.ERROR, function(error, copyOperation) {
+  .on(copy.events.ERROR, function (error, copyOperation) {
+    logger.error('Error:' + error.stack);
     logger.error('Unable to copy ' + copyOperation.dest);
   })
   .then(result => {
     logger.info(`Move ${result.length} files. SUCCESSFUL`);
-  })
-}
+  });
+};
 
 /**
  * Build the Android app
@@ -169,7 +167,7 @@ const buildApp = ({
     logger.info(`\n=> ${chalk.blue.bold('Building app ...')}\n`);
     const clean = options.clean ? ' clean' : '';
     try {
-      child_process.execSync(process.platform === 'win32' ? `call gradlew.bat ${clean} assembleRelease` : `./gradlew ${clean} assembleRelease`, {
+      childprocess.execSync(process.platform === 'win32' ? `call gradlew.bat ${clean} assembleRelease` : `./gradlew ${clean} assembleRelease`, {
         encoding: 'utf8',
         stdio: [0, 1]
       });
@@ -183,7 +181,7 @@ const buildApp = ({
       configs
     });
   });
-}
+};
 
 /**
  * Build and run Android app on a connected emulator or device
@@ -198,11 +196,11 @@ const buildAndroid = (options) => {
     .then(buildApp)
     .then(copyApkAssets)
     .catch((err) => {
-      console.log(err.stack)
+      console.log(err.stack);
       if (err) {
         logger.log(chalk.red('Error:', err));
       }
     });
-}
+};
 
 module.exports = buildAndroid;

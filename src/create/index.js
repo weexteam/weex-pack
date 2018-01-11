@@ -29,79 +29,80 @@ const _ = require('underscore');
 
 const defaultConfigs = {
   android: {
-    AppName:"WeexApp",
-    AppId:"com.alibaba.weex",
-    SplashText:"Hello\nWeex",
-    WeexBundle:"index.js"
+    AppName: 'WeexApp',
+    AppId: 'com.alibaba.weex',
+    SplashText: 'Hello\nWeex',
+    WeexBundle: 'index.js'
   },
   ios: {
-    AppId:"com.alibaba.weex",
-    AppName:"WeexApp",
-    Version: "1.0.0",
-    BuildVersion:"1.0.0",
-    WeexBundle:"index.js",
-    CodeSign: "",
-    Profile: ""
+    AppId: 'com.alibaba.weex',
+    AppName: 'WeexApp',
+    Version: '1.0.0',
+    BuildVersion: '1.0.0',
+    WeexBundle: 'index.js',
+    CodeSign: '',
+    Profile: ''
   }
-}
+};
 
-module.exports = function(dir, optionalId, optionalName, cfg, extEvents){
-    const tmp = path.resolve(dir);
-    if (_.isEmpty(cfg)) {
-      cfg = {}
-    }
-    if (fs.existsSync(tmp)) {
-      const spinner = ora(`Remove ${tmp} ...`).start()
-      rm(tmp);
-      spinner.stop();
-    }
+module.exports = function (dir, optionalId, optionalName, cfg, extEvents) {
+  const tmp = path.resolve(dir);
+  if (_.isEmpty(cfg)) {
+    cfg = {};
+  }
+  if (fs.existsSync(tmp)) {
+    const spinner = ora(`Remove ${tmp} ...`).start();
+    rm(tmp);
+    spinner.stop();
+  }
     // Create a middleware for asking questions.
-    const questions = {
-      name:
-        { type: 'string',
-          required: true,
-          message: 'Project name',
-          default:  dir,
-          validate: function(name){
-            if (!name || !name.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
-              return false;
-            }
-            return true
-          } },
-      description:
-        { type: 'string',
-          required: false,
-          message: 'Project description',
-          default: 'A weex project' },
-      version:
-        { type: 'string',
-          message: 'Project version',
-          default: '1.0.0' },
-      author:
-        { type: 'string',
-          message: 'Project author',
-          default: gituser() },
-      unit: { 
-        type: 'confirm', 
-        message: 'Set up unit tests?' 
-      },
-      autoInstall: { 
-        type: 'list', 
-        message: 'Should we run `npm install` for you after the project has been created?',
-        choices: [
+  const questions = {
+    name:
+    { type: 'string',
+      required: true,
+      message: 'Project name',
+      default: dir,
+      validate: function (name) {
+        if (!name || !name.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
+          return false;
+        }
+        return true;
+      } },
+    description:
+    { type: 'string',
+      required: false,
+      message: 'Project description',
+      default: 'A weex project' },
+    version:
+    { type: 'string',
+      message: 'Project version',
+      default: '1.0.0' },
+    author:
+    { type: 'string',
+      message: 'Project author',
+      default: gituser() },
+    unit: {
+      type: 'confirm',
+      message: 'Set up unit tests?'
+    },
+    autoInstall: {
+      type: 'list',
+      message: 'Should we run `npm install` for you after the project has been created?',
+      choices: [
           { name: 'Yes, use NPM', value: 'npm', short: 'npm' },
           { name: 'Yes, use Yarn', value: 'yarn', short: 'yarn' },
-          { name: 'No, I will handle that myself',value: false, short: 'no'}
-        ]
-      },
+          { name: 'No, I will handle that myself', value: false, short: 'no' }
+      ]
     }
-    ask(questions, cfg, () => {
-      cfg = _.extend(defaultConfigs, cfg);
-      if (extEvents) {
-        return create(dir, optionalId, optionalName, cfg, extEvents, cfg.autoInstall);
-      } else {
-        return create(dir, optionalId, optionalName, cfg, events, cfg.autoInstall);
-      }
-    })
+  };
+  ask(questions, cfg, () => {
+    cfg = _.extend(defaultConfigs, cfg);
+    if (extEvents) {
+      return create(dir, optionalId, optionalName, cfg, extEvents, cfg.autoInstall);
+    }
+    else {
+      return create(dir, optionalId, optionalName, cfg, events, cfg.autoInstall);
+    }
+  });
 };
 

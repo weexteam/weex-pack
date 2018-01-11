@@ -60,4 +60,4 @@ module.exports = {
   fetchPackage,
   unpackTgz,
   cachePackage
-}
+};

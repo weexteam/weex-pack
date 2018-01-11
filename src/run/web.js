@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
-const child_process = require('child_process');
 const server = require('./server');
-const util = require('../utils');
 
 const logger = require('weexpack-common').CordovaLogger.get();
 
@@ -11,7 +9,7 @@ const logger = require('weexpack-common').CordovaLogger.get();
  * Start web service
  * @param {Object} options
  */
-function runWeb(options) {
+function runWeb (options) {
   if (!checkWebEnv(process.cwd())) {
     logger.info(chalk.red('\n  Not available web environment !'));
     logger.info(`\n  You should run ${chalk.blue('weex create')} first`);
@@ -24,7 +22,7 @@ function runWeb(options) {
  * Check web environment
  * @param {Strng} cwd
  */
-function checkWebEnv(cwd) {
+function checkWebEnv (cwd) {
   return fs.existsSync(path.join(cwd, 'package.json')) && fs.existsSync(path.join(cwd, 'web'));
 }
 module.exports = runWeb;

@@ -1,15 +1,9 @@
 /** build the web apps
  * this is a command for weexpack building
  **/
-const path = require('path');
-const chalk = require('chalk');
-const child_process = require('child_process');
-const inquirer = require('inquirer');
-const fs = require('fs');
 const utils = require('../utils');
-const pluginArr = [];
 
-const buildWeb = () => buildSinglePlugin()
+const buildWeb = () => buildSinglePlugin();
 
 // build single plugin use webpack
 const buildSinglePlugin = () => {
@@ -21,5 +15,5 @@ const buildSinglePlugin = () => {
   catch (e) {
     console.error(e);
   }
-}
+};
 module.exports = buildWeb;

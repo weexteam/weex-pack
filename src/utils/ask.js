@@ -1,12 +1,12 @@
-const async = require('async')
-const inquirer = require('inquirer')
-const evaluate = require('./eval')
+const async = require('async');
+const inquirer = require('inquirer');
+const evaluate = require('./eval');
 
 // Support types from prompt-for which was used before
 const promptMapping = {
   string: 'input',
   boolean: 'confirm'
-}
+};
 
 /**
  * Ask questions, return results.
@@ -18,9 +18,9 @@ const promptMapping = {
 
 module.exports = function ask (prompts, data, done) {
   async.eachSeries(Object.keys(prompts), (key, next) => {
-    prompt(data, key, prompts[key], next)
-  }, done)
-}
+    prompt(data, key, prompts[key], next);
+  }, done);
+};
 
 /**
  * Inquirer prompt wrapper.
@@ -34,14 +34,14 @@ module.exports = function ask (prompts, data, done) {
 function prompt (data, key, prompt, done) {
   // skip prompts whose when condition is not met
   if (prompt.when && !evaluate(prompt.when, data)) {
-    return done()
+    return done();
   }
 
-  let promptDefault = prompt.default
+  let promptDefault = prompt.default;
   if (typeof prompt.default === 'function') {
     promptDefault = function () {
-      return prompt.default.bind(this)(data)
-    }
+      return prompt.default.bind(this)(data);
+    };
   }
 
   inquirer.prompt([{
@@ -53,15 +53,17 @@ function prompt (data, key, prompt, done) {
     validate: prompt.validate || (() => true)
   }]).then(answers => {
     if (Array.isArray(answers[key])) {
-      data[key] = {}
+      data[key] = {};
       answers[key].forEach(multiChoiceAnswer => {
-        data[key][multiChoiceAnswer] = true
-      })
-    } else if (typeof answers[key] === 'string') {
-      data[key] = answers[key].replace(/"/g, '\\"')
-    } else {
-      data[key] = answers[key]
+        data[key][multiChoiceAnswer] = true;
+      });
     }
-    done()
-  }).catch(done)
+    else if (typeof answers[key] === 'string') {
+      data[key] = answers[key].replace(/"/g, '\\"');
+    }
+    else {
+      data[key] = answers[key];
+    }
+    done();
+  }).catch(done);
 }

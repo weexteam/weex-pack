@@ -20,37 +20,37 @@
 // commands for packing and unpacking tarballs
 // this file is used by lib/cache.js
 
-var events = require('weexpack-common').events,
-    fs     = require('fs'),
-    Q      = require('q'),
-    tar    = require('tar'),
-    zlib   = require('zlib');
+const events = require('weexpack-common').events;
+const fs = require('fs');
+const Q = require('q');
+const tar = require('tar');
+const zlib = require('zlib');
 
 exports.unpackTgz = unpackTgz;
 
 // Returns a promise for the path to the unpacked tarball (unzip + untar).
-function unpackTgz(package_tgz, unpackTarget) {
-    return Q.promise(function(resolve, reject) {
-        var extractOpts = { type: 'Directory', path: unpackTarget, strip: 1 };
+function unpackTgz (packageTgz, unpackTarget) {
+  return Q.promise(function (resolve, reject) {
+    const extractOpts = { type: 'Directory', path: unpackTarget, strip: 1 };
 
-        fs.createReadStream(package_tgz)
+    fs.createReadStream(packageTgz)
         .on('error', function (err) {
-            events.emit('warn', 'Unable to open tarball ' + package_tgz + ': ' + err);
-            reject(err);
+          events.emit('warn', 'Unable to open tarball ' + packageTgz + ': ' + err);
+          reject(err);
         })
         .pipe(zlib.createUnzip())
         .on('error', function (err) {
-            events.emit('warn', 'Error during unzip for ' + package_tgz + ': ' + err);
-            reject(err);
+          events.emit('warn', 'Error during unzip for ' + packageTgz + ': ' + err);
+          reject(err);
         })
         .pipe(tar.Extract(extractOpts))
-        .on('error', function(err) {
-            events.emit('warn', 'Error during untar for ' + package_tgz + ': ' + err);
-            reject(err);
+        .on('error', function (err) {
+          events.emit('warn', 'Error during untar for ' + packageTgz + ': ' + err);
+          reject(err);
         })
         .on('end', resolve);
-    })
-    .then(function() {
-        return unpackTarget;
+  })
+    .then(function () {
+      return unpackTarget;
     });
 }

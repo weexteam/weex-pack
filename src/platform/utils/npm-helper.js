@@ -31,11 +31,11 @@ let cachedSettingsValues = null;
  * @param {Object} settings
  * @param {Function} promiseChain
  */
-function loadWithSettingsThenRestore(settings, promiseChain) {
+function loadWithSettingsThenRestore (settings, promiseChain) {
   return loadWithSettings(settings).then(promiseChain).finally(restoreSettings);
 }
 
-function loadWithSettings(settings) {
+function loadWithSettings (settings) {
   if (cachedSettings) {
     throw new Error('Trying to initialize npm when settings have not been restored from a previous initialization.');
   }
@@ -56,7 +56,7 @@ function loadWithSettings(settings) {
   });
 }
 
-function restoreSettings() {
+function restoreSettings () {
   if (cachedSettings) {
     cachedSettings.forEach(function (prop) {
       if (prop in cachedSettingsValues) {
@@ -70,29 +70,15 @@ function restoreSettings() {
     cachedSettingsValues = null;
   }
 }
-/**
- * Fetches the latest version of a package from NPM that matches the specified version. Returns a promise that
- * resolves to the directory the NPM package is located in.
- * @param packageName - name of an npm package
- * @param packageVersion - requested version or version range
- */
-function fetchPackage(packageName, packageVersion) {
-  // Get the latest matching version from NPM if a version range is specified
-  return WeexMarket.info(packageName).then(function (data) {
-    //todo Market-Injection
-    return util.getLatestMatchingNpmVersion(data.fullname, packageVersion).then(function (latestVersion) {
-      return cachePackage(packageName, latestVersion);
-    });
-  })
-}
+
 /**
  * Invokes "npm cache add," and then returns a promise that resolves to a directory containing the downloaded,
  * or cached package.
  * @param packageName - name of an npm package
  * @param packageVersion - requested version (not a version range)
  */
-function cachePackage(packageName, packageVersion) {
-  //todo Market-Injection
+function cachePackage (packageName, packageVersion) {
+  // todo Market-Injection
   // WEEK_HOOK
   // if(packageName !== "weexpack-android" && packageName !== "weexpack-ios") {
   //     packageName = WeexMarket.info(packageName)
@@ -110,7 +96,7 @@ function cachePackage(packageName, packageVersion) {
     }
     const npmConfig = {
       'cache': cacheDir
-    }
+    };
     // Load with NPM configuration
     return loadWithSettingsThenRestore(npmConfig, function () {
       // Invoke NPM Cache Add
@@ -124,8 +110,7 @@ function cachePackage(packageName, packageVersion) {
 }
 
 module.exports = {
-    invokeNpm: () => {},
-    loadWithSettingsThenRestore: loadWithSettingsThenRestore,
-    fetchPackage: fetchPackage,
-    cachePackage: cachePackage
-}
+  invokeNpm: () => {},
+  loadWithSettingsThenRestore: loadWithSettingsThenRestore,
+  cachePackage: cachePackage
+};

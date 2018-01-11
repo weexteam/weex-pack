@@ -16,50 +16,40 @@
  specific language governing permissions and limitations
  under the License.
  */
-const config = require('./config');
-// const cordova = require('./cordova');
-// const prepare = require('./prepare');
+
 const utils = require('./util');
 const fs = require('fs');
-const os = require('os');
 const inquirer = require('inquirer');
 const path = require('path');
-// const HooksRunner = require('../hooks/HooksRunner');
-const lazy_load = require('./lazy_load');
+const lazyload = require('./lazyload');
 const Q = require('q');
 const platforms = require('./platforms');
-// const promiseutil = require('../util/promise-util');
-// // const superspawn = weexpackCommon.superspawn;
 const semver = require('semver');
 const shell = require('shelljs');
 const _ = require('underscore');
-const fetch = require('cordova-fetch');
 const npmUninstall = require('cordova-fetch').uninstall;
 const platformMetadata = require('./platform_metadata');
 const PlatformApi = require('./PlatformApiPoly');
 const weexpackCommon = require('weexpack-common');
-const ConfigParser = weexpackCommon.ConfigParser;
 const events = weexpackCommon.events;
-const PlatformJson = weexpackCommon.PlatformJson;
 const CordovaError = weexpackCommon.CordovaError;
 const logger = weexpackCommon.CordovaLogger.get();
 
-
 const {
   installForNewPlatform
-} = require('../plugin')
+} = require('../plugin');
 // Expose the platform parsers on top of this command
 // for (var p in platforms) {
 //   module.exports[p] = platforms[p];
 // }
 
-function remove(projectRoot, targets, opts) {
+function remove (projectRoot, targets, opts) {
   if (!targets || !targets.length) {
     return Q.reject(new CordovaError('No platform(s) specified. Please specify platform(s) to remove. See `' + utils.binname + ' platform list`.'));
   }
   return Q.when()
   .then(() => {
-    if (_.isArray(targets)){
+    if (_.isArray(targets)) {
       targets.forEach((target) => {
         shell.rm('-rf', path.join(projectRoot, 'platforms', target));
         removePlatformPluginsJson(projectRoot, target);
@@ -69,12 +59,12 @@ function remove(projectRoot, targets, opts) {
   .then(function () {
     // Remove targets from platforms.json
     targets.forEach(function (target) {
-      logger.verbose( 'Removing platform ' + target + ' from platforms.json file...');
+      logger.verbose('Removing platform ' + target + ' from platforms.json file...');
       platformMetadata.remove(projectRoot, target);
     });
   })
   .then(function () {
-    //Remove from node_modules if it exists and --fetch was used
+    // Remove from node_modules if it exists and --fetch was used
     if (opts.fetch) {
       targets.forEach(function (target) {
         if (target in platforms) {
@@ -85,28 +75,28 @@ function remove(projectRoot, targets, opts) {
     }
   })
   .then(function () {
-    logger.info( 'Remove platform ' + targets + ' success');
+    logger.info('Remove platform ' + targets + ' success');
   })
   .fail(error => {
-    logger.error(error)
+    logger.error(error);
   });
 }
 
-function list(projectRoot, opts) {
+function list (projectRoot, opts) {
   return Q.when()
   .then(function () {
     return utils.getInstalledPlatformsWithVersions(projectRoot);
   })
   .then(function (platformMap) {
-    var platformsText = [];
-    for (var plat in platformMap) {
+    let platformsText = [];
+    for (const plat in platformMap) {
       platformsText.push(platformMap[plat] ? plat + ' ' + platformMap[plat] : plat);
     }
     platformsText = addDeprecatedInformationToPlatforms(platformsText);
     // Default to support browser.
     platformsText.push('web');
-    var results = 'Installed platforms:\n  ' + platformsText.sort().join('\n  ') + '\n';
-    var available = Object.keys(platforms).filter(hostSupports);
+    let results = 'Installed platforms:\n  ' + platformsText.sort().join('\n  ') + '\n';
+    let available = Object.keys(platforms).filter(hostSupports);
     available = available.filter(function (p) {
       return !platformMap[p]; // Only those not already installed.
     });
@@ -118,22 +108,21 @@ function list(projectRoot, opts) {
     logger.info(results);
   })
   .fail(error => {
-    logger.error(error)
+    logger.error(error);
   });
 }
 
-function update(projectRoot, targets, opts) {
+function update (projectRoot, targets, opts) {
   return addHelper('update', projectRoot, targets, opts);
 }
 
-function add(projectRoot, targets, opts) {
+function add (projectRoot, targets, opts) {
   return addHelper('add', projectRoot, targets, opts);
 }
 
-function addHelper(cmd, projectRoot, targets, opts) {
+function addHelper (cmd, projectRoot, targets, opts) {
   let msg;
   const cfg = {};
-  const config_json = config.read(projectRoot);
   if (!targets || !targets.length) {
     msg = 'No platform specified. Please specify a platform to ' + cmd + '. ' + 'See `' + utils.binname + ' platform list`.';
     return Q.reject(new CordovaError(msg));
@@ -141,7 +130,7 @@ function addHelper(cmd, projectRoot, targets, opts) {
   for (let i = 0; i < targets.length; i++) {
     if (!hostSupports(targets[i])) {
       msg = 'WARNING: Applications for platform ' + targets[i] + ' can not be built on this OS - ' + process.platform + '.';
-      logger.info( msg);
+      logger.info(msg);
     }
   }
   opts = opts || {};
@@ -182,7 +171,7 @@ function addHelper(cmd, projectRoot, targets, opts) {
         let promise;
         platform = platDetails.platform;
 
-        if (cmd == 'add') {
+        if (cmd === 'add') {
           if (platformAlreadyAdded) {
             return inquirer.prompt([{
               type: 'confirm',
@@ -193,24 +182,24 @@ function addHelper(cmd, projectRoot, targets, opts) {
                 shell.rm('-rf', platformPath);
                 promise = PlatformApi.createPlatform(platformPath, cfg, options, events);
                 return promise.then(() => {
-                  logger.info( (cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
+                  logger.info((cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
                   return platDetails;
-                })
+                });
               }
               else {
                 throw new CordovaError(`Platform ${platform} already added.`);
               }
-            }).catch(logger.error)
+            }).catch(logger.error);
           }
           else {
             promise = PlatformApi.createPlatform(platformPath, cfg, options, events);
             return promise.then(() => {
-              logger.info( (cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
+              logger.info((cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
               return platDetails;
-            })
+            });
           }
         }
-        else if (cmd == 'update') {
+        else if (cmd === 'update') {
           if (!platformAlreadyAdded) {
             throw new CordovaError('Platform "' + platform + '" is not yet added. See `' + utils.binname + ' platform list`.');
           }
@@ -218,9 +207,9 @@ function addHelper(cmd, projectRoot, targets, opts) {
             promise = PlatformApi.updatePlatform(platformPath, options, events);
           }
           return promise.then(() => {
-            logger.info( (cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
+            logger.info((cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
             return platDetails;
-          })
+          });
         }
       })
       .then((platDetails) => {
@@ -229,45 +218,41 @@ function addHelper(cmd, projectRoot, targets, opts) {
         // source location was specified, we always save that. Otherwise we save the version that was
         // actually installed.
         const versionToSave = saveVersion ? platDetails.version : spec;
-        logger.verbose( 'Saving ' + platform + '@' + versionToSave + ' into platforms.json');
+        logger.verbose('Saving ' + platform + '@' + versionToSave + ' into platforms.json');
         platformMetadata.save(projectRoot, platform, versionToSave);
         return platDetails;
       })
       .then((platDetails) => {
-        installForNewPlatform(platDetails.platform)
+        installForNewPlatform(platDetails.platform);
       })
       .fail(error => {
-        logger.error(error.stack)
-      })
-    })
+        logger.error(error.stack);
+      });
+    });
   }
 }
 
-function getSpecString(spec) {
-  var validVersion = semver.valid(spec, true);
-  return validVersion ? '~' + validVersion : spec;
-}
 // Downloads via npm or via git clone (tries both)
 // Returns a Promise
-function downloadPlatform(projectRoot, platform, version, opts) {
-  let target = version ? (platform + '@' + version) : platform;
+function downloadPlatform (projectRoot, platform, version, opts) {
+  const target = version ? (platform + '@' + version) : platform;
   return Q().then(function () {
     if (utils.isUrl(version)) {
-      logger.info( 'git cloning: ' + version);
+      logger.info('git cloning: ' + version);
       const parts = version.split('#');
-      const git_url = parts[0];
+      const gitUrl = parts[0];
       const branchToCheckout = parts[1];
-      return lazy_load.git_clone(git_url, branchToCheckout).fail(function (err) {
+      return lazyload.git_clone(gitUrl, branchToCheckout).fail(function (err) {
         // If it looks like a url, but cannot be cloned, try handling it differently.
         // it's because it's a tarball of the form:
         //     - wp8@https://git-wip-us.apache.org/repos/asf?p=cordova-wp8.git;a=snapshot;h=3.7.0;sf=tgz
         //     - https://api.github.com/repos/msopenTech/cordova-browser/tarball/my-branch
-        logger.verbose( err.message);
-        logger.verbose( 'Cloning failed. Let\'s try handling it as a tarball');
-        return lazy_load.based_on_config(projectRoot, target, opts);
+        logger.verbose(err.message);
+        logger.verbose('Cloning failed. Let\'s try handling it as a tarball');
+        return lazyload.basedOnConfig(projectRoot, target, opts);
       });
     }
-    return lazy_load.based_on_config(projectRoot, target, opts);
+    return lazyload.basedOnConfig(projectRoot, target, opts);
   }).fail(function (error) {
     const message = 'Failed to fetch platform ' + target + '\nProbably this is either a connection problem, or platform spec is incorrect.' + '\nCheck your connection and platform name/version/URL.' + '\n' + error;
     return Q.reject(new CordovaError(message));
@@ -276,25 +261,25 @@ function downloadPlatform(projectRoot, platform, version, opts) {
   });
 }
 
-function platformFromName(name) {
-  var platMatch = /^weexpack-([a-z0-9-]+)$/.exec(name);
+function platformFromName (name) {
+  const platMatch = /^weexpack-([a-z0-9-]+)$/.exec(name);
   return platMatch && platMatch[1];
 }
 // Returns a Promise
 // Gets platform details from a directory
-function getPlatformDetailsFromDir(dir, platformIfKnown) {
-  var libDir = path.resolve(dir);
-  var platform;
-  var version;
+function getPlatformDetailsFromDir (dir, platformIfKnown) {
+  const libDir = path.resolve(dir);
+  let platform;
+  let version;
   try {
-    var pkg = require(path.join(libDir, 'package'));
+    const pkg = require(path.join(libDir, 'package'));
     platform = platformFromName(pkg.name);
     version = pkg.version;
   }
   catch (e) {
     // Older platforms didn't have package.json.
     platform = platformIfKnown || platformFromName(path.basename(dir));
-    var verFile = fs.existsSync(path.join(libDir, 'VERSION')) ? path.join(libDir, 'VERSION') : fs.existsSync(path.join(libDir, 'CordovaLib', 'VERSION')) ? path.join(libDir, 'CordovaLib', 'VERSION') : null;
+    const verFile = fs.existsSync(path.join(libDir, 'VERSION')) ? path.join(libDir, 'VERSION') : fs.existsSync(path.join(libDir, 'CordovaLib', 'VERSION')) ? path.join(libDir, 'CordovaLib', 'VERSION') : null;
     if (verFile) {
       version = fs.readFileSync(verFile, 'UTF-8').trim();
     }
@@ -321,11 +306,9 @@ function getPlatformDetailsFromDir(dir, platformIfKnown) {
 //   return engine && engine.spec;
 // }
 
-
-
-function addDeprecatedInformationToPlatforms(platformsList) {
+function addDeprecatedInformationToPlatforms (platformsList) {
   platformsList = platformsList.map(function (p) {
-    var platformKey = p.split(' ')[0]; //Remove Version Information
+    const platformKey = p.split(' ')[0]; // Remove Version Information
     if (platforms[platformKey].deprecated) {
       p = p.concat(' ', '(deprecated)');
     }
@@ -336,7 +319,7 @@ function addDeprecatedInformationToPlatforms(platformsList) {
 
 // Used to prevent attempts of installing platforms that are not supported on
 // the host OS. E.g. ios on linux.
-function hostSupports(platform) {
+function hostSupports (platform) {
   const p = platforms[platform] || {};
   const hostos = p.hostos || null;
   if (!hostos) return true;
@@ -346,9 +329,9 @@ function hostSupports(platform) {
 }
 
 // Remove <platform>.json file from plugins directory.
-function removePlatformPluginsJson(projectRoot, target) {
-  var plugins_json = path.join(projectRoot, 'plugins', target + '.json');
-  shell.rm('-f', plugins_json);
+function removePlatformPluginsJson (projectRoot, target) {
+  const pluginsJson = path.join(projectRoot, 'plugins', target + '.json');
+  shell.rm('-f', pluginsJson);
 }
 
 const platform = (command, targets, opts) => {
@@ -360,11 +343,11 @@ const platform = (command, targets, opts) => {
     if (!(targets instanceof Array)) targets = [targets];
     targets.forEach(function (t) {
       // Trim the @version part if it's there.
-      let p = t.split('@')[0];
+      const p = t.split('@')[0];
       // OK if it's one of known platform names.
       if (p in platforms) return;
       // Not a known platform name, check if its a real path.
-      let pPath = path.resolve(t);
+      const pPath = path.resolve(t);
       if (fs.existsSync(pPath)) return;
       let msg;
       // If target looks like a url, we will try cloning it with git
@@ -396,7 +379,7 @@ const platform = (command, targets, opts) => {
     default:
       return list(projectRoot, opts);
   }
-}
+};
 
 // Returns a promise.
 module.exports = platform;

@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const child_process = require('child_process');
+const childProcess = require('child_process');
 const os = require('os');
 const npm = require('npm');
 const mkdirp = require('mkdirp');
 const chalk = require('chalk');
-const _ = require('underscore')
+const _ = require('underscore');
 const output = require('./output');
 const validator = require('./validator');
 
@@ -98,7 +98,7 @@ const utils = {
   exec (command, quiet) {
     return new Promise((resolve, reject) => {
       try {
-        const child = child_process.exec(command, { encoding: 'utf8', wraning: false}, function () {
+        const child = childProcess.exec(command, { encoding: 'utf8', wraning: false }, function () {
           resolve();
         });
         if (!quiet) {
@@ -116,7 +116,7 @@ const utils = {
     return utils.exec('npm run ' + cmd, quiet);
   },
   getIOSProjectInfo () {
-    const projectInfoText = child_process.execSync('xcodebuild  -list', { encoding: 'utf8' });
+    const projectInfoText = childProcess.execSync('xcodebuild  -list', { encoding: 'utf8' });
     const splits = projectInfoText.split(/Targets:|Build Configurations:|Schemes:/);
     const projectInfo = {};
     projectInfo.name = splits[0].match(/Information about project "([^"]+?)"/)[1];
@@ -136,19 +136,14 @@ const utils = {
       if (os.release() >= '15.0.0') {
         args = ' --unsafe-perm=true --allow-root';
       }
-      return this.exec(__dirname + '/installIosDeploy.sh' + args);
+      return this.exec(path.join(__dirname, '/installIosDeploy.sh', args));
     }
     else {
       return Promise.resolve();
     }
   },
-  xcopy (source, dest) {
-    if (process.platform === 'win32') {
-      cmd;
-    }
-  },
   dashToCamel (str) {
-    return str.replace(/(\-[a-z])/g, function ($1) { return $1.toUpperCase().replace('-', ''); });
+    return str.replace(/(-[a-z])/g, function ($1) { return $1.toUpperCase().replace('-', ''); });
   },
 
   isIOSProject: function (dir) {
@@ -167,13 +162,14 @@ const utils = {
     npm.load(function () {
       const load = function (npmName) {
         npm.commands.info([npmName + '@' + version], true, function (error, result) {
-          if (error && trynum == 0) {
+          let prefix;
+          if (error && trynum === 0) {
             trynum++;
-            if (npmName == 'weex-gcanvas') {
-              var prefix = 'weex-plugin--';
+            if (npmName === 'weex-gcanvas') {
+              prefix = 'weex-plugin--';
             }
             else {
-              var prefix = 'weex-plugin-';
+              prefix = 'weex-plugin-';
             }
             load(prefix + npmName);
           }
@@ -183,17 +179,17 @@ const utils = {
           else {
             const packages = result[version];
             if (packages.android || packages.ios || packages.web) {
-              let supports = [];
+              const supports = [];
               if (packages.android) {
-                supports.push('Android')
+                supports.push('Android');
               }
               if (packages.ios) {
-                supports.push('iOS')
+                supports.push('iOS');
               }
               if (packages.web) {
-                supports.push('Web')
+                supports.push('Web');
               }
-              console.log(chalk.green(`This plugin support for ${supports.join(',')} platforms.`))
+              console.log(chalk.green(`This plugin support for ${supports.join(',')} platforms.`));
               callback({
                 ios: packages.ios,
                 android: packages.android,
@@ -215,7 +211,7 @@ const utils = {
   },
 
   writePluginFile: function (root, path, config) {
-    if (!fs.existsSync(root)){
+    if (!fs.existsSync(root)) {
       mkdirp(root, function (err) {
         if (err) {
           console.log(err);
@@ -223,7 +219,10 @@ const utils = {
       });
     }
     if (!fs.existsSync(path)) {
-      fs.open(path,'w+','0666', (err, fd) => {
+      fs.open(path, 'w+', '0666', (err, fd) => {
+        if (err) {
+          console.error(err);
+        }
         fs.writeFileSync(path, JSON.stringify(config, null, 2));
       });
     }
@@ -233,15 +232,15 @@ const utils = {
   },
 
   updatePluginConfigs: function (configs, name, option, platform) {
-    let plugins = Object.assign({}, configs);
+    const plugins = Object.assign({}, configs);
     const len = plugins[platform] && plugins[platform].length;
-    for (let i =  len - 1; i >= 0; i --) {
+    for (let i = len - 1; i >= 0; i--) {
       if (name && plugins[platform][i].name === name) {
         if (!_.isEmpty(option)) {
-          plugins[platform].splice(i,1,option[platform])
+          plugins[platform].splice(i, 1, option[platform]);
         }
         else {
-          plugins[platform].splice(i,1);
+          plugins[platform].splice(i, 1);
         }
         return plugins;
       }
@@ -253,15 +252,18 @@ const utils = {
   },
 
   writeAndroidPluginFile: function (root, path, config) {
-    if (!fs.existsSync(root)){
+    if (!fs.existsSync(root)) {
       mkdirp(root, function (err) {
         if (err) {
-          console.log(err);
+          console.error(err);
         }
       });
     }
     if (!fs.existsSync(path)) {
-      fs.open(path,'w+','0666', (err, fd) => {
+      fs.open(path, 'w+', '0666', (err, fd) => {
+        if (err) {
+          console.error(err);
+        }
         fs.writeFileSync(path, JSON.stringify(config, null, 2));
       });
     }
@@ -271,19 +273,19 @@ const utils = {
   },
 
   updateAndroidPluginConfigs: function (configs, name, option) {
-    let plugins = configs.slice(0);
+    const plugins = configs.slice(0);
     const len = plugins && plugins.length;
-    for (let i =  len - 1; i >= 0; i --) {
-      let plugin = plugins[i];
+    for (let i = len - 1; i >= 0; i--) {
+      const plugin = plugins[i];
       if (!plugin['dependency']) {
-        plugin['dependency'] = `${plugin.groupId}:${plugin.name}:${plugin.version}`
+        plugin['dependency'] = `${plugin.groupId}:${plugin.name}:${plugin.version}`;
       }
       if (name && plugin.name === name) {
         if (option) {
-          plugins.splice(i,1,option)
+          plugins.splice(i, 1, option);
         }
         else {
-          plugins.splice(i,1)
+          plugins.splice(i, 1);
         }
         return plugins;
       }
@@ -295,63 +297,64 @@ const utils = {
   },
 
   installNpmPackage () {
-    return utils.exec('npm install', false)
+    return utils.exec('npm install', false);
   },
 
-  isRootDir(dir) {
+  isRootDir (dir) {
     if (fs.existsSync(path.join(dir, 'platforms'))) {
       if (fs.existsSync(path.join(dir, 'web'))) {
         // For sure is.
         if (fs.existsSync(path.join(dir, 'config.xml'))) {
           return 2;
-        } else {
+        }
+        else {
           return 1;
         }
       }
     }
-      return 0;
+    return 0;
   },
 
-  listPlatforms(project_dir) {
-    const core_platforms = require('../platform/platforms');
-    const platforms_dir = path.join(project_dir, 'platforms');
-    if ( !fs.existsSync(platforms_dir)) {
-        return [];
+  listPlatforms (projectDir) {
+    const platforms = require('../platform/platforms');
+    const platformsDir = path.join(projectDir, 'platforms');
+    if (!fs.existsSync(platformsDir)) {
+      return [];
     }
-    const subdirs = fs.readdirSync(platforms_dir);
-    return subdirs.filter(function(p) {
-        return Object.keys(core_platforms).indexOf(p) > -1;
+    const subdirs = fs.readdirSync(platformsDir);
+    return subdirs.filter(function (p) {
+      return Object.keys(platforms).indexOf(p) > -1;
     });
   },
 
   // Runs up the directory chain looking for a .cordova directory.
   // IF it is found we are in a Cordova project.
   // Omit argument to use CWD.
-  isCordova(dir) {
+  isCordova (dir) {
     if (!dir) {
         // Prefer PWD over cwd so that symlinked dirs within your PWD work correctly (CB-5687).
-        var pwd = process.env.PWD;
-        var cwd = process.cwd();
-        if (pwd && pwd != cwd && pwd != 'undefined') {
-            return this.isCordova(pwd) || this.isCordova(cwd);
-        }
-        return this.isCordova(cwd);
+      const pwd = process.env.PWD;
+      const cwd = process.cwd();
+      if (pwd && pwd !== cwd && typeof pwd !== 'undefined') {
+        return this.isCordova(pwd) || this.isCordova(cwd);
+      }
+      return this.isCordova(cwd);
     }
-    var bestReturnValueSoFar = false;
-    for (var i = 0; i < 1000; ++i) {
-        var result = this.isRootDir(dir);
-        if (result === 2) {
-            return dir;
-        }
-        if (result === 1) {
-            bestReturnValueSoFar = dir;
-        }
-        var parentDir = path.normalize(path.join(dir, '..'));
+    let bestReturnValueSoFar = false;
+    for (let i = 0; i < 1000; ++i) {
+      const result = this.isRootDir(dir);
+      if (result === 2) {
+        return dir;
+      }
+      if (result === 1) {
+        bestReturnValueSoFar = dir;
+      }
+      const parentDir = path.normalize(path.join(dir, '..'));
         // Detect fs root.
-        if (parentDir == dir) {
-            return bestReturnValueSoFar;
-        }
-        dir = parentDir;
+      if (parentDir === dir) {
+        return bestReturnValueSoFar;
+      }
+      dir = parentDir;
     }
     console.error('Hit an unhandled case in util.isCordova');
     return false;

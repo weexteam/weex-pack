@@ -7,8 +7,8 @@ const {
 } = require('./install');
 
 module.exports = {
-    install,
-    installForNewPlatform,
-    uninstall,
-    create
-}
+  install,
+  installForNewPlatform,
+  uninstall,
+  create
+};

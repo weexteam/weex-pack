@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const isWin = process.platform === 'win32';
 
 function applyPatch (file, patch, isProject) {
@@ -55,8 +54,6 @@ function makeSettingsPatch (name, projectDir) {
 
 function revokePatch (file, patch) {
   let content = fs.readFileSync(file, 'utf8');
-  const p = content.match(patch.findProjectPattern);
-
   content = content.replace(patch.findPattern || patch.patch, '').replace(patch.findProjectPattern, '');
   fs.writeFileSync(file, content);
 }

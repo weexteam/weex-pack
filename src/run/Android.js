@@ -1,6 +1,6 @@
 const path = require('path');
 const chalk = require('chalk');
-const child_process = require('child_process');
+const childprocess = require('child_process');
 const fs = require('fs');
 const inquirer = require('inquirer');
 const copy = require('recursive-copy');
@@ -30,22 +30,22 @@ const copyJsbundleAssets = (dir, src, dist, quiet) => {
   if (!quiet) {
     logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
     return copy(path.join(dir, src), path.join(dir, dist), options)
-    .on(copy.events.COPY_FILE_START, function(copyOperation) {
+    .on(copy.events.COPY_FILE_START, function (copyOperation) {
       quiet && logger.info('\nCopying file ' + copyOperation.src + '...');
     })
-    .on(copy.events.COPY_FILE_COMPLETE, function(copyOperation) {
+    .on(copy.events.COPY_FILE_COMPLETE, function (copyOperation) {
       logger.info('Copied to ' + copyOperation.dest);
     })
-    .on(copy.events.ERROR, function(error, copyOperation) {
+    .on(copy.events.ERROR, function (error, copyOperation) {
+      logger.error('Error:' + error.stack);
       logger.error('Unable to copy ' + copyOperation.dest);
     })
     .then(result => {
       logger.info(`Move ${result.length} files.`);
-    })
+    });
   }
-  return copy(path.join(dir, src), path.join(dir, dist), options)
-}
-
+  return copy(path.join(dir, src), path.join(dir, dist), options);
+};
 
 /**
  * pass options.
@@ -55,9 +55,9 @@ const passOptions = (options) => {
   return new Promise((resolve, reject) => {
     resolve({
       options
-    })
-  })
-}
+    });
+  });
+};
 
 /**
  * Prepare
@@ -70,13 +70,13 @@ const prepareAndroid = ({
     const rootPath = process.cwd();
     if (!utils.checkAndroid(rootPath)) {
       logger.info(rootPath);
-      logger.info(chalk.red('  Android project not found !'));
+      logger.info(chalk.red('Android project not found !'));
       logger.info();
       logger.info(`  You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add android')}  first`);
       reject();
     }
     logger.info(`\n=> ${chalk.blue.bold('start Android app')} \n`);
-  
+
     // change working directory to android
     process.chdir(path.join(rootPath, 'platforms/android'));
     if (!process.env.ANDROID_HOME) {
@@ -88,16 +88,16 @@ const prepareAndroid = ({
       reject();
     }
     try {
-      child_process.execSync(`adb start-server`, {
+      childprocess.execSync(`adb start-server`, {
         encoding: 'utf8'
       });
     }
     catch (e) {
       reject();
     }
-  
+
     try {
-      child_process.execSync(`adb devices`, {
+      childprocess.execSync(`adb devices`, {
         encoding: 'utf8'
       });
     }
@@ -109,7 +109,7 @@ const prepareAndroid = ({
       rootPath
     });
   });
-}
+};
 
 /**
  * @desc resolve config in the android project
@@ -129,7 +129,7 @@ const resolveConfig = ({
       configs
     };
   });
-}
+};
 
 /**
  * @desc start websocker server for hotreload
@@ -144,15 +144,15 @@ const startHotReloadServer = (
     configs
   }
 ) => {
-  return server.startWsServer(rootPath).then(({host, ip, port}) => {
-    configs = _.extend({Ws:host, ip, port}, configs);
+  return server.startWsServer(rootPath).then(({ host, ip, port }) => {
+    configs = _.extend({ Ws: host, ip, port }, configs);
     return {
       options,
       rootPath,
       configs
-    }
-  })
-}
+    };
+  });
+};
 
 /**
  * @desc when the source file changed, tell native to reload the page.
@@ -169,23 +169,23 @@ const registeFileWatcher = (
 ) => {
   const ws = new WebSocket(configs.Ws);
   // build js on watch mode.
-  utils.buildJS('dev', true)
+  utils.buildJS('dev', true);
   // file watch task
-  chokidar.watch(path.join(rootPath, 'dist'), {ignored: /\w*\.web\.js$/})
+  chokidar.watch(path.join(rootPath, 'dist'), { ignored: /\w*\.web\.js$/ })
   .on('change', (event) => {
     copyJsbundleAssets(rootPath, 'dist', 'platforms/android/app/src/main/assets/dist', true).then(() => {
       if (path.basename(event) === configs.WeexBundle) {
         logger.info(`\n=> ${chalk.blue.bold('Reloading page...')} \n`);
-        ws.send(JSON.stringify({method: 'WXReloadBundle', params: `http://${configs.ip}:${configs.port}/${configs.WeexBundle}`}))
+        ws.send(JSON.stringify({ method: 'WXReloadBundle', params: `http://${configs.ip}:${configs.port}/${configs.WeexBundle}` }));
       }
-    })
+    });
   });
   return {
     options,
     rootPath,
     configs
-  }
-}
+  };
+};
 
 /**
  * find android devices
@@ -199,7 +199,7 @@ const findAndroidDevice = ({
   return new Promise((resolve, reject) => {
     let devicesInfo = '';
     try {
-      devicesInfo = child_process.execSync(`adb devices`, {
+      devicesInfo = childprocess.execSync(`adb devices`, {
         encoding: 'utf8'
       });
     }
@@ -215,7 +215,7 @@ const findAndroidDevice = ({
       configs
     });
   });
-}
+};
 
 /**
  * Choose one device to run
@@ -249,7 +249,7 @@ const chooseDevice = ({
         });
       });
     }
-    else if (devicesList.length == 1) {
+    else if (devicesList.length === 1) {
       resolve({
         device: devicesList[0],
         options,
@@ -260,7 +260,7 @@ const chooseDevice = ({
       reject('No android devices found.');
     }
   });
-}
+};
 
 /**
  * Adb reverse device, allow device connect host network
@@ -274,7 +274,7 @@ const reverseDevice = ({
 }) => {
   return new Promise((resolve, reject) => {
     try {
-      const s = child_process.execSync(`adb -s ${device} reverse tcp:${configs.localhost || 8080} tcp:${configs.localhost || 8080}`, {
+      childprocess.execSync(`adb -s ${device} reverse tcp:${configs.localhost || 8080} tcp:${configs.localhost || 8080}`, {
         encoding: 'utf8'
       });
     }
@@ -292,7 +292,7 @@ const reverseDevice = ({
       configs
     });
   });
-}
+};
 
 /**
  * Build the Android app
@@ -308,7 +308,7 @@ const buildApp = ({
     logger.info(`\n=> ${chalk.blue.bold('Building app ...')}\n`);
     const clean = options.clean ? ' clean' : '';
     try {
-      child_process.execSync(process.platform === 'win32' ? `call gradlew.bat ${clean} assembleDebug` : `./gradlew ${clean} assembleDebug`, {
+      childprocess.execSync(process.platform === 'win32' ? `call gradlew.bat ${clean} assembleDebug` : `./gradlew ${clean} assembleDebug`, {
         encoding: 'utf8',
         stdio: [0, 1]
       });
@@ -322,7 +322,7 @@ const buildApp = ({
       configs
     });
   });
-}
+};
 
 /**
  * Install the Android app
@@ -339,7 +339,7 @@ const installApp = ({
     logger.info(`\n=> ${chalk.blue.bold('Install app ...')}\n`);
     const apkName = 'app/build/outputs/apk/weex-app.apk';
     try {
-      child_process.execSync(`adb -s ${device} install -r  ${apkName}`, {
+      childprocess.execSync(`adb -s ${device} install -r  ${apkName}`, {
         encoding: 'utf8'
       });
     }
@@ -352,7 +352,7 @@ const installApp = ({
       configs
     });
   });
-}
+};
 
 /**
  * Stringify Object to string for cli called.
@@ -360,20 +360,20 @@ const installApp = ({
  */
 const stringifyConfigs = (configs) => {
   let str = '\'{';
-  for(let key in configs) {
+  for (const key in configs) {
     if (configs.hasOwnProperty(key)) {
-      str +='\\"'
-      str +=key;
-      str +='\\":'
-      str +='\\"'
-      str +=configs[key];
-      str +='\\",'
+      str += '\\"';
+      str += key;
+      str += '\\":';
+      str += '\\"';
+      str += configs[key];
+      str += '\\",';
     }
   }
   str = str.slice(0, -1);
   str += '}\'';
   return str;
-}
+};
 
 /**
  * Run the Android app on emulator or device
@@ -389,7 +389,7 @@ const runApp = ({
     logger.info(`\n=> ${chalk.blue.bold('Running app ...')}`);
     const packageName = fs.readFileSync('app/src/main/AndroidManifest.xml', 'utf8').match(/package="(.+?)"/)[1];
     try {
-      child_process.execSync(`adb -s ${device} shell am start -n ${packageName}/.SplashActivity -d ${stringifyConfigs({Ws: configs.Ws})}`, {
+      childprocess.execSync(`adb -s ${device} shell am start -n ${packageName}/.SplashActivity -d ${stringifyConfigs({ Ws: configs.Ws })}`, {
         encoding: 'utf8'
       });
     }
@@ -398,8 +398,7 @@ const runApp = ({
     }
     resolve();
   });
-}
-
+};
 
 /**
  * Build and run Android app on a connected emulator or device
@@ -425,6 +424,6 @@ const runAndroid = (options) => {
       logger.log(chalk.red('Error:', err.stack));
     }
   });
-}
+};
 
 module.exports = runAndroid;

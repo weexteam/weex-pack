@@ -1,9 +1,8 @@
-coverage
+.vscode/
 docs
 node_modules/*
-
-test
-demo
 .editorconfig
 .esdocrc
 .eslintrc
+
+src

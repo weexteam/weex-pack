@@ -4,7 +4,7 @@
 const Fs = require('fs');
 const Path = require('path');
 const Inquirer = require('inquirer');
-const path =require('path');
+const path = require('path');
 const fs = require('fs');
 const _ = require('underscore');
 const logger = require('weexpack-common').CordovaLogger.get();
@@ -19,18 +19,20 @@ const _resolveConfigDef = (source, configDef, config, key) => {
   else {
     return configDef.handler(source, config[key], replacer);
   }
-}
+};
 
 const Platforms = {
-  ios:'ios',
-  android:'android'
-}
+  ios: 'ios',
+  android: 'android'
+};
 
 const replacer = {
   plist (source, key, value) {
-    const r = new RegExp('(<key>' + key + '</key>\\s*<string>)[^<>]*?<\/string>', 'g');
-    console.log(key,888)
+    const r = new RegExp('(<key>' + key + '</key>\\s*<string>)[^<>]*?</string>', 'g');
     if ((key === 'WXEntryBundleURL' || key === 'WXSocketConnectionURL')) {
+      if (key === 'WXEntryBundleURL') {
+        value = path.join('bundlejs', value)
+      }
       return source.replace(/<\/dict>\n?\W*?<\/plist>\W*?\n?\W*?\n?$/i, match => `  <key>${key}</key>\n  <string>${value}</string>\n${match}`);
     }
     return source.replace(r, '$1' + value + '</string>');
@@ -83,18 +85,20 @@ class PlatformConfig {
 
   getConfig () {
     return new Promise((resolve, reject) => {
-      let config = {}, defaultConfig = {};
-      let questions = [], answers = {};
-      let config_path = path.join(this.rootPath, `${this.platform}.config.json`);
-      let default_config_path = path.join(this.rootPath, '.wx', `config.json`);
-      if (fs.existsSync(default_config_path)) {
-        let wx_config = require(default_config_path);
-        defaultConfig = wx_config && wx_config[this.platform] || {}
+      let config = {};
+      let defaultConfig = {};
+      const questions = [];
+      const answers = {};
+      const configPath = path.join(this.rootPath, `${this.platform}.config.json`);
+      const defaultConfigPath = path.join(this.rootPath, '.wx', `config.json`);
+      if (fs.existsSync(defaultConfigPath)) {
+        const wxConfig = require(defaultConfigPath);
+        defaultConfig = wxConfig && wxConfig[this.platform] || {};
       }
-      if (fs.existsSync(config_path)) {
-        config = require(config_path)
+      if (fs.existsSync(configPath)) {
+        config = require(configPath);
       }
-      config = _.extend(this.configs || {}, defaultConfig, config)
+      config = _.extend(this.configs || {}, defaultConfig, config);
       logger.info('\n============Build Config============');
       this.properties.forEach(function (prop) {
         if (config[prop.name] !== undefined) {
@@ -244,4 +248,4 @@ module.exports = {
   PlatformConfigResolver,
   AndroidConfigResolver,
   iOSConfigResolver
-}
+};

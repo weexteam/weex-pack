@@ -9,9 +9,9 @@ const configs = {
   androidConfigFilename: '.weex_plugin.json',
   defaultConfig: {
     ios: [],
-    web: [],    
+    web: [],
     android: []
   }
-}
+};
 
 module.exports = Object.assign({}, configs);

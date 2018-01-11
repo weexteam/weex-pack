@@ -1,8 +1,6 @@
-const npm = require('npm');
 const utils = require('../utils');
 const npmHelper = require('../utils/npm');
 const path = require('path');
-const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const gradle = require('./gradle');
@@ -22,7 +20,6 @@ if (fs.existsSync(pluginConfigPath)) {
 
 function uninstall (pluginName, args) {
   let version;
-  const target = pluginName;
   if (/@/ig.test(pluginName)) {
     const temp = pluginName.split('@');
     pluginName = temp[0];
@@ -44,7 +41,7 @@ function uninstall (pluginName, args) {
           }
         }
         else {
-          logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
+          logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`);
         }
       });
     });
@@ -62,7 +59,7 @@ function uninstall (pluginName, args) {
         }
       }
       else {
-        logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`)
+        logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`);
         // (args);
         // cordova.raw["plugin"]("remove", [target]);
       }
@@ -72,8 +69,7 @@ function uninstall (pluginName, args) {
 
 function handleUninstall (dir, pluginName, version, option) {
   // check out the type of current project
-  let project;
-  if (project = utils.isIOSProject(dir)) {
+  if (utils.isIOSProject(dir)) {
     if (!fs.existsSync(path.join(dir, 'Podfile'))) {
       logger.info("can't find Podfile file");
       return;
@@ -119,7 +115,7 @@ function handleUninstall (dir, pluginName, version, option) {
 
 function uninstallInPackage (dir, pluginName, version) {
   const packageJsonPath = path.join(dir, 'package.json');
-  //Update package.json
+  // Update package.json
   if (fs.existsSync(packageJsonPath)) {
     const packageJson = require(packageJsonPath);
     if (packageJson.dependencies[pluginName]) {
@@ -127,15 +123,15 @@ function uninstallInPackage (dir, pluginName, version) {
     }
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
   }
-  logger.info(`${chalk.blue.bold('\n=> Update plugins.json...\n')}`)
+  logger.info(`${chalk.blue.bold('\n=> Update plugins.json...\n')}`);
   // Update plugin.json in the project.
   pluginConfigs = utils.updatePluginConfigs(pluginConfigs, pluginName, {}, 'web');
   utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
 
-  logger.info(`${chalk.blue.bold('\n=> Building plugins...\n')}`)
+  logger.info(`${chalk.blue.bold('\n=> Building plugins...\n')}`);
   return utils.buildJS('build:plugin').then(() => {
-    logger.info(`${chalk.blue.bold('\n=> Building plugins successful.\n')}`)
-  })
+    logger.info(`${chalk.blue.bold('\n=> Building plugins successful.\n')}`);
+  });
 }
 
 module.exports = uninstall;
