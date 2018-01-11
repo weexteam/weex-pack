@@ -1,8 +1,13 @@
 const WebSocket = require('ws');
+const express = require('express');
+const http = require('http');
+const app = express();
 const detect = require('detect-port');
 const ip = require('ip').address();
+const path = require('path');
 const defaultPort = 8080;
 let wss;
+
 
 const logger = require('weexpack-common').CordovaLogger.get();
 const child_process = require('child_process');
@@ -20,12 +25,15 @@ const startJSServer = () => {
   }
 }
 
-const startWsServer = () => {
+const startWsServer = (root) => {
+  // put `dist` file into static server.
+  app.use(express.static(path.join(root,'dist')));
   return detect(defaultPort).then(open => {
     const host = `ws://${ip}:${open}`;
+    const port = open;
+    const server = http.createServer(app);
+    wss = new WebSocket.Server({server})
     
-    wss = new WebSocket.Server({ port: defaultPort })
-
     // Broadcast to all.
     wss.broadcast = function broadcast(data) {
       wss.clients.forEach(function each(client) {
@@ -46,8 +54,15 @@ const startWsServer = () => {
       });
     });
 
-    logger.info(`Hot Reload socket: ${host}`)
-    return host;
+    server.listen(port, () =>{
+      logger.info(`\nHot Reload socket: ${host}`)
+    });
+    
+    return {
+      host,
+      ip,
+      port
+    };
   })
 }
 

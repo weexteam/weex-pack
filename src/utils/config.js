@@ -29,8 +29,9 @@ const Platforms = {
 const replacer = {
   plist (source, key, value) {
     const r = new RegExp('(<key>' + key + '</key>\\s*<string>)[^<>]*?<\/string>', 'g');
-    if (!r.test(source) && (key === 'WXEntryBundleURL' || key === 'WXSocketConnectionURL')) {
-      return source.replace(/<\/dict>\n?\W*?<\/plist>\W*?\n?\W*?$/i, match => `  <key>${key}</key>\n  <string>${value}</string>\n${match}`);
+    console.log(key,888)
+    if ((key === 'WXEntryBundleURL' || key === 'WXSocketConnectionURL')) {
+      return source.replace(/<\/dict>\n?\W*?<\/plist>\W*?\n?\W*?\n?$/i, match => `  <key>${key}</key>\n  <string>${value}</string>\n${match}`);
     }
     return source.replace(r, '$1' + value + '</string>');
   },

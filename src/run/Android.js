@@ -6,6 +6,8 @@ const inquirer = require('inquirer');
 const copy = require('recursive-copy');
 const utils = require('../utils');
 const server = require('./server');
+const chokidar = require('chokidar');
+const WebSocket = require('ws');
 const _ = require('underscore');
 const logger = require('weexpack-common').CordovaLogger.get();
 const {
@@ -17,8 +19,7 @@ const {
 /**
  * compile jsbundle.
  */
-const copyJsbundleAssets = () => {
-  logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
+const copyJsbundleAssets = (dir, src, dist, quiet) => {
   const options = {
     filter: [
       '*.js',
@@ -26,19 +27,23 @@ const copyJsbundleAssets = () => {
     ],
     overwrite: true
   };
-  return copy(path.resolve('dist'), path.resolve('platforms/android/app/src/main/assets/dist'), options)
-  .on(copy.events.COPY_FILE_START, function(copyOperation) {
-    logger.info('Copying file ' + copyOperation.src + '...');
-  })
-  .on(copy.events.COPY_FILE_COMPLETE, function(copyOperation) {
-    logger.info('Copied to ' + copyOperation.dest);
-  })
-  .on(copy.events.ERROR, function(error, copyOperation) {
-    logger.error('Unable to copy ' + copyOperation.dest);
-  })
-  .then(result => {
-    logger.info(`Move ${result.length} files.`);
-  })
+  if (!quiet) {
+    logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
+    return copy(path.join(dir, src), path.join(dir, dist), options)
+    .on(copy.events.COPY_FILE_START, function(copyOperation) {
+      quiet && logger.info('\nCopying file ' + copyOperation.src + '...');
+    })
+    .on(copy.events.COPY_FILE_COMPLETE, function(copyOperation) {
+      logger.info('Copied to ' + copyOperation.dest);
+    })
+    .on(copy.events.ERROR, function(error, copyOperation) {
+      logger.error('Unable to copy ' + copyOperation.dest);
+    })
+    .then(result => {
+      logger.info(`Move ${result.length} files.`);
+    })
+  }
+  return copy(path.join(dir, src), path.join(dir, dist), options)
 }
 
 
@@ -70,7 +75,7 @@ const prepareAndroid = ({
       logger.info(`  You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add android')}  first`);
       reject();
     }
-    logger.info(`\n=> ${chalk.blue.bold('Will start Android app')} \n`);
+    logger.info(`\n=> ${chalk.blue.bold('start Android app')} \n`);
   
     // change working directory to android
     process.chdir(path.join(rootPath, 'platforms/android'));
@@ -139,14 +144,47 @@ const startHotReloadServer = (
     configs
   }
 ) => {
-  return server.startWsServer().then(host => {
-    configs = _.extend({Ws:host}, configs);
+  return server.startWsServer(rootPath).then(({host, ip, port}) => {
+    configs = _.extend({Ws:host, ip, port}, configs);
     return {
       options,
       rootPath,
       configs
     }
   })
+}
+
+/**
+ * @desc when the source file changed, tell native to reload the page.
+ * @param {Object} options
+ * @param {String} rootPath
+ * @param {Object} configs
+ */
+const registeFileWatcher = (
+  {
+    options,
+    rootPath,
+    configs
+  }
+) => {
+  const ws = new WebSocket(configs.Ws);
+  // build js on watch mode.
+  utils.buildJS('dev', true)
+  // file watch task
+  chokidar.watch(path.join(rootPath, 'dist'), {ignored: /\w*\.web\.js$/})
+  .on('change', (event) => {
+    copyJsbundleAssets(rootPath, 'dist', 'platforms/android/app/src/main/assets/dist', true).then(() => {
+      if (path.basename(event) === configs.WeexBundle) {
+        logger.info(`\n=> ${chalk.blue.bold('Reloading page...')} \n`);
+        ws.send(JSON.stringify({method: 'WXReloadBundle', params: `http://${configs.ip}:${configs.port}/${configs.WeexBundle}`}))
+      }
+    })
+  });
+  return {
+    options,
+    rootPath,
+    configs
+  }
 }
 
 /**
@@ -370,11 +408,12 @@ const runApp = ({
 const runAndroid = (options) => {
   logger.info(`\n=> ${chalk.blue.bold('npm run build')}`);
   utils.buildJS()
-  .then(copyJsbundleAssets)
+  .then(() => copyJsbundleAssets(process.cwd(), 'dist', 'platforms/android/app/src/main/assets/dist'))
   .then(() => passOptions(options))
   .then(prepareAndroid)
   .then(resolveConfig)
   .then(startHotReloadServer)
+  .then(registeFileWatcher)
   .then(findAndroidDevice)
   .then(chooseDevice)
   .then(reverseDevice)
@@ -382,9 +421,8 @@ const runAndroid = (options) => {
   .then(installApp)
   .then(runApp)
   .catch((err) => {
-    console.log(err.stack)
     if (err) {
-      logger.log(chalk.red('Error:', err));
+      logger.log(chalk.red('Error:', err.stack));
     }
   });
 }

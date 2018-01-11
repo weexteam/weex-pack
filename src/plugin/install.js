@@ -188,7 +188,7 @@ const handleInstall = (dir, pluginName, version, option) => {
       pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, option, 'android');
       utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
 
-      logger.info(`=> ${pluginName} has installed success in Android project`);
+      logger.info(`\n=> ${pluginName} has installed success in Android project`);
     }
   }
   else if (utils.isCordova(dir)) {
@@ -247,9 +247,15 @@ const installInPackage = (dir, pluginName, version, option) => {
     spinner.stop();
     const browserPluginName = option.web && option.web.name ? option.web.name : pluginName;
     if (option.web) {
+      logger.info(`${chalk.blue.bold('\n=> Update plugins.json...\n')}`)
       // Update plugin.json in the project.
       pluginConfigs = utils.updatePluginConfigs(pluginConfigs, browserPluginName, option, 'web');
       utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
+      logger.info(`${chalk.blue.bold('\n=> Building plugins...\n')}`)      
+      console.log(CONFIGS.rootPath, pluginConfigPath, pluginConfigs)
+      return utils.buildJS('build:plugin').then(() => {
+        logger.info(`${chalk.blue.bold('\n=> Building plugins successful.\n')}`)
+      })
     }
   })
 }

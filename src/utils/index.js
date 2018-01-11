@@ -5,6 +5,7 @@ const os = require('os');
 const npm = require('npm');
 const mkdirp = require('mkdirp');
 const chalk = require('chalk');
+const _ = require('underscore')
 const output = require('./output');
 const validator = require('./validator');
 
@@ -111,8 +112,8 @@ const utils = {
       }
     });
   },
-  buildJS (cmd = 'build') {
-    return utils.exec('npm run ' + cmd);
+  buildJS (cmd = 'build', quiet) {
+    return utils.exec('npm run ' + cmd, quiet);
   },
   getIOSProjectInfo () {
     const projectInfoText = child_process.execSync('xcodebuild  -list', { encoding: 'utf8' });
@@ -236,11 +237,11 @@ const utils = {
     const len = plugins[platform] && plugins[platform].length;
     for (let i =  len - 1; i >= 0; i --) {
       if (name && plugins[platform][i].name === name) {
-        if (option) {
+        if (!_.isEmpty(option)) {
           plugins[platform].splice(i,1,option[platform])
         }
         else {
-          plugins[platform].splice(i,1)
+          plugins[platform].splice(i,1);
         }
         return plugins;
       }

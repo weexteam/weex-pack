@@ -118,14 +118,24 @@ function handleUninstall (dir, pluginName, version, option) {
 }
 
 function uninstallInPackage (dir, pluginName, version) {
-  const p = path.join(dir, 'package.json');
-  if (fs.existsSync(p)) {
-    const pkg = require(p);
-    if (pkg.dependencies[pluginName]) {
-      delete pkg.dependencies[pluginName];
+  const packageJsonPath = path.join(dir, 'package.json');
+  //Update package.json
+  if (fs.existsSync(packageJsonPath)) {
+    const packageJson = require(packageJsonPath);
+    if (packageJson.dependencies[pluginName]) {
+      delete packageJson.dependencies[pluginName];
     }
-    fs.writeFileSync(p, JSON.stringify(pkg, null, 4));
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
   }
+  logger.info(`${chalk.blue.bold('\n=> Update plugins.json...\n')}`)
+  // Update plugin.json in the project.
+  pluginConfigs = utils.updatePluginConfigs(pluginConfigs, pluginName, {}, 'web');
+  utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
+
+  logger.info(`${chalk.blue.bold('\n=> Building plugins...\n')}`)
+  return utils.buildJS('build:plugin').then(() => {
+    logger.info(`${chalk.blue.bold('\n=> Building plugins successful.\n')}`)
+  })
 }
 
 module.exports = uninstall;

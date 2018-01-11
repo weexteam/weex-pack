@@ -6,15 +6,20 @@ const copy = require('recursive-copy');
 const fs = require('fs');
 const utils = require('../utils');
 const server = require('./server');
+const chokidar = require('chokidar');
+const WebSocket = require('ws');
 const _ = require('underscore');
 const logger = require('weexpack-common').CordovaLogger.get();
-const { PlatformConfig, iOSConfigResolver, Platforms } = require('../utils/config');
+const { 
+  PlatformConfig, 
+  iOSConfigResolver, 
+  Platforms 
+} = require('../utils/config');
 
 /**
  * compile jsbundle.
  */
-const copyJsbundleAssets = () => {
-  logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
+const copyJsbundleAssets = (dir, src, dist, quiet) => {
   const options = {
     filter: [
       '*.js',
@@ -22,19 +27,23 @@ const copyJsbundleAssets = () => {
     ],
     overwrite: true
   };
-  return copy(path.resolve('dist'), path.resolve('platforms/ios/bundlejs/'), options)
-  .on(copy.events.COPY_FILE_START, function(copyOperation) {
-    logger.info('Copying file ' + copyOperation.src + '...');
-  })
-  .on(copy.events.COPY_FILE_COMPLETE, function(copyOperation) {
-    logger.info('Copied to ' + copyOperation.dest);
-  })
-  .on(copy.events.ERROR, function(error, copyOperation) {
-    logger.error('Unable to copy ' + copyOperation.dest);
-  })
-  .then(result => {
-    logger.info(`Move ${result.length} files.`);
-  })
+  if (!quiet) {
+    logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
+    return copy(path.join(dir, 'dist'), path.join(dir, 'platforms/ios/bundlejs/'), options)
+    .on(copy.events.COPY_FILE_START, function(copyOperation) {
+      logger.info('Copying file ' + copyOperation.src + '...');
+    })
+    .on(copy.events.COPY_FILE_COMPLETE, function(copyOperation) {
+      logger.info('Copied to ' + copyOperation.dest);
+    })
+    .on(copy.events.ERROR, function(error, copyOperation) {
+      logger.error('Unable to copy ' + copyOperation.dest);
+    })
+    .then(result => {
+      logger.info(`Move ${result.length} files.`);
+    })
+  }
+  return copy(path.join(dir, 'dist'), path.join(dir, 'platforms/ios/bundlejs/'), options);
 }
 
 /**
@@ -94,8 +103,8 @@ const startHotReloadServer = (
     rootPath
   }
 ) => {
-  return server.startWsServer().then(host => {
-    configs = _.extend({}, {Ws:host});
+  return server.startWsServer(rootPath).then(({host, ip, port}) => {
+    configs = _.extend({}, {Ws:host, ip, port});
     return {
       xcodeProject,
       options,
@@ -103,6 +112,42 @@ const startHotReloadServer = (
       configs
     }
   })
+}
+
+/**
+ * @desc when the source file changed, tell native to reload the page.
+ * @param {Object} options
+ * @param {String} rootPath
+ * @param {Object} configs
+ */
+const registeFileWatcher = (
+  {
+    xcodeProject,
+    options,
+    rootPath,
+    configs
+  }
+) => {
+  const ws = new WebSocket(configs.Ws);
+  // build js on watch mode.
+  utils.buildJS('dev', true)
+  // file watch task
+  chokidar.watch(path.join(rootPath, 'dist'), {ignored: /\w*\.web\.js$/})
+  .on('change', (event) => {
+    copyJsbundleAssets(rootPath, 'dist', 'platforms/ios/bundlejs/', true).then(() => {
+      if (path.basename(event) === configs.WeexBundle) {
+        logger.info(`\n=> ${chalk.blue.bold('Reloading page...')} \n`);
+        ws.send(JSON.stringify({method: 'WXReloadBundle', params: `http://${configs.ip}:${configs.port}/${configs.WeexBundle}`}))
+      }
+    })
+  });
+
+  return {
+    xcodeProject,
+    options,
+    rootPath,
+    configs
+  }
 }
 
 /**
@@ -118,6 +163,7 @@ const resolveConfig = ({
 }) => {
   const iosConfig = new PlatformConfig(iOSConfigResolver, rootPath, Platforms.ios, configs);
   return iosConfig.getConfig().then((configs) => {
+    console.log(configs)
     iOSConfigResolver.resolve(configs);
     return {
       xcodeProject,
@@ -327,7 +373,7 @@ const _runAppOnSimulator = ({ device, xcodeProject, options, configs, resolve, r
   }
 
   try {
-    child_process.execSync(`xcrun simctl launch booted com.alibaba.www`, { encoding: 'utf8' });
+    child_process.execSync(`xcrun simctl launch booted ${configs.AppId}`, { encoding: 'utf8' });
   }
   catch (e) {
     reject(e);
@@ -391,10 +437,11 @@ const runIOS = (options) => {
   logger.info(`\n=> ${chalk.blue.bold('npm run build')}`);
   utils.checkAndInstallForIosDeploy()
     .then(utils.buildJS)
-    .then(copyJsbundleAssets)
+    .then(() => copyJsbundleAssets(process.cwd(), 'dist', 'platforms/ios/bundlejs/'))
     .then(() => passOptions(options))
     .then(prepareIOS)
     .then(startHotReloadServer)
+    .then(registeFileWatcher)
     .then(resolveConfig)
     .then(installDep)
     .then(findIOSDevice)
@@ -402,9 +449,8 @@ const runIOS = (options) => {
     .then(buildApp)
     .then(runApp)
     .catch((err) => {
-      console.log(err.stack)
       if (err) {
-        logger.error(chalk.red('Error:', err));
+        logger.error(chalk.red('Error:', err.stack));
       }
     });
 }
