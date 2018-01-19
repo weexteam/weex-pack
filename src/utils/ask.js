@@ -9,20 +9,6 @@ const promptMapping = {
 };
 
 /**
- * Ask questions, return results.
- *
- * @param {Object} prompts
- * @param {Object} data
- * @param {Function} done
- */
-
-module.exports = function ask (prompts, data, done) {
-  async.eachSeries(Object.keys(prompts), (key, next) => {
-    prompt(data, key, prompts[key], next);
-  }, done);
-};
-
-/**
  * Inquirer prompt wrapper.
  *
  * @param {Object} data
@@ -31,7 +17,7 @@ module.exports = function ask (prompts, data, done) {
  * @param {Function} done
  */
 
-function prompt (data, key, prompt, done) {
+const prompt = (data, key, prompt, done) => {
   // skip prompts whose when condition is not met
   if (prompt.when && !evaluate(prompt.when, data)) {
     return done();
@@ -67,3 +53,21 @@ function prompt (data, key, prompt, done) {
     done();
   }).catch(done);
 }
+
+/**
+ * Ask questions, return results.
+ *
+ * @param {Object} prompts
+ * @param {Object} data
+ * @param {Function} done
+ */
+const ask = (prompts, data, done) => {
+  async.eachSeries(Object.keys(prompts), (key, next) => {
+    prompt(data, key, prompts[key], next);
+  }, done);
+};
+
+
+module.exports = {
+  ask
+};

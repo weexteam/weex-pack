@@ -9,11 +9,11 @@ const merge = require('merge');
 const chalk = require('chalk');
 const ora = require('ora');
 const _ = require('underscore');
+const logger = utils.logger;
 
 const CONFIGS = require('./config');
 
 const weexpackCommon = require('weexpack-common');
-const logger = weexpackCommon.CordovaLogger.get();
 
 let pluginConfigs = CONFIGS.defaultConfig;
 
@@ -42,16 +42,16 @@ const installForWeb = (plugins) => {
     packageJson['dependencies'][plugin.name] = plugin.version;
   });
 
-  packageJson = utils.sortDependencies(packageJson);
+  packageJson = output.sortDependencies(packageJson);
 
   fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson, null, 2) + '\n');
 
-  logger.info(`${chalk.blue.bold('\n=> Downloading plugins...\n')}`);
+  logger.info(`Downloading plugins...`);
 
   utils.installNpmPackage().then(() => {
-    logger.info(`${chalk.blue.bold('\n=> Building plugins...\n')}`);
+    logger.info(`Building plugins...`);
     return utils.buildJS('build:plugin').then(() => {
-      logger.info(`${chalk.blue.bold('\n=> Building plugins successful.\n')}`);
+      logger.info(`Building plugins successful.`);
     });
   });
 };
@@ -64,7 +64,7 @@ const installForIOS = (plugins) => {
     const buildPatch = podfile.makeBuildPatch(plugin.name, plugin.version);
     // Build Podfile config.
     podfile.applyPatch(path.join(CONFIGS.iosPath, 'Podfile'), buildPatch);
-    logger.info(`\n=> ${plugin.name} has installed success in iOS project`);
+    logger.success(`${plugin.name} has installed success in iOS project`);
   });
 };
 const installForAndroid = (plugins) => {
@@ -74,7 +74,7 @@ const installForAndroid = (plugins) => {
   plugins.forEach(plugin => {
     // write .wx_config.json on `platform/android`
     androidPluginConfigs = utils.updateAndroidPluginConfigs(androidPluginConfigs, plugin.name, plugin);
-    logger.info(`\n=> ${plugin.name} has installed success in Android project`);
+    logger.success(`${plugin.name} has installed success in Android project`);
   });
   utils.writeAndroidPluginFile(CONFIGS.androidPath, androidPluginConfigPath, androidPluginConfigs);
 };
@@ -117,7 +117,7 @@ const install = (pluginName, args) => {
           handleInstall(dir, pluginName, version, result);
         }
         else {
-          logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`);
+          logger.warn(`This package of weex is not support anymore! Please choose other package.`);
         }
       });
     });
@@ -133,7 +133,7 @@ const install = (pluginName, args) => {
         }
       }
       else {
-        logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`);
+        logger.error(`This package of weex is not support anymore! Please choose other package.`);
       }
     });
   }
@@ -144,7 +144,7 @@ const handleInstall = (dir, pluginName, version, option) => {
   const project = utils.isIOSProject(dir);
   if (project) {
     if (!fs.existsSync(path.join(dir, 'Podfile'))) {
-      logger.info("can't find Podfile file");
+      logger.error("can't find Podfile file");
       return;
     }
     const iosPackageName = option.ios && option.ios.name ? option.ios.name : pluginName;
@@ -162,7 +162,8 @@ const handleInstall = (dir, pluginName, version, option) => {
       const buildPatch = podfile.makeBuildPatch(iosPackageName, iosVersion);
       // Build Podfile config.
       podfile.applyPatch(path.join(dir, 'Podfile'), buildPatch);
-      logger.info(`=> ${pluginName} has installed success in iOS project`);
+      logger.warn(`${pluginName} has installed success in iOS project.`);
+      logger.info(`if you want to update it, please use \`weex plugin update\` command.`)
       // Update plugin.json in the project.
       pluginConfigs = utils.updatePluginConfigs(pluginConfigs, iosPackageName, option, 'ios');
       utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
@@ -177,8 +178,8 @@ const handleInstall = (dir, pluginName, version, option) => {
       // Update plugin.json in the project.
       pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, option, 'android');
       utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
-
-      logger.info(`\n=> ${pluginName} has installed success in Android project`);
+      logger.warn(`${pluginName} has installed success in Android project.`);
+      logger.info(`if you want to update it, please use \`weex plugin update\` command.`)
     }
   }
   else if (utils.isCordova(dir)) {
@@ -193,7 +194,7 @@ const handleInstall = (dir, pluginName, version, option) => {
     }
   }
   else {
-    logger.info("can't recognize type of this project");
+    logger.info(`The project may not be a weex project, please use \`${chalk.white.bold('weex create [projectname]')}\``);
   }
 };
 
@@ -215,7 +216,7 @@ const installPList = (projectRoot, projectPath, config) => {
   }
 
   if (!fs.existsSync(plistFile)) {
-    console.error('Could not find *-Info.plist file');
+    logger.error('Could not find *-Info.plist file');
   }
   else {
     let obj = plist.parse(fs.readFileSync(plistFile, 'utf8'));
@@ -226,7 +227,7 @@ const installPList = (projectRoot, projectPath, config) => {
 
 const installInPackage = (dir, pluginName, version, option) => {
   const p = path.join(dir, 'package.json');
-  logger.info('\n=> Downloading plugin...\n')
+  logger.info('Downloading plugin...')
   if (fs.existsSync(p)) {
     const pkg = require(p);
     pkg.dependencies[pluginName] = version;
@@ -235,13 +236,13 @@ const installInPackage = (dir, pluginName, version, option) => {
   utils.installNpmPackage().then(() => {
     const browserPluginName = option.web && option.web.name ? option.web.name : pluginName;
     if (option.web) {
-      logger.info(`${chalk.blue.bold('\n=> Update plugins.json...\n')}`);
+      logger.info(`Update plugins.json...`);
       // Update plugin.json in the project.
       pluginConfigs = utils.updatePluginConfigs(pluginConfigs, browserPluginName, option, 'web');
       utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
-      logger.info(`${chalk.blue.bold('\n=> Building plugins...\n')}`);
+      logger.info(`Building plugins...`);
       return utils.buildJS('build:plugin').then(() => {
-        logger.info(`${chalk.blue.bold('\n=> Building plugins successful.\n')}`);
+        logger.success(`Building plugins successful.`);
       });
     }
   });

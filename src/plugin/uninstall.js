@@ -5,10 +5,8 @@ const fs = require('fs');
 const chalk = require('chalk');
 const gradle = require('./gradle');
 const podfile = require('./podfile');
-
 const CONFIGS = require('./config');
-const weexpackCommon = require('weexpack-common');
-const logger = weexpackCommon.CordovaLogger.get();
+const logger = utils.logger;
 
 let pluginConfigs = CONFIGS.defaultConfig;
 
@@ -41,7 +39,7 @@ function uninstall (pluginName, args) {
           }
         }
         else {
-          logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`);
+          logger.warn(`This package of weex is not support anymore! Please choose other package.`);
         }
       });
     });
@@ -59,9 +57,7 @@ function uninstall (pluginName, args) {
         }
       }
       else {
-        logger.info(`${chalk.red('This package of weex is not support anymore! Please choose other package.')}`);
-        // (args);
-        // cordova.raw["plugin"]("remove", [target]);
+        logger.error(`This package of weex is not support anymore! Please choose other package.`);
       }
     });
   }
@@ -71,7 +67,7 @@ function handleUninstall (dir, pluginName, version, option) {
   // check out the type of current project
   if (utils.isIOSProject(dir)) {
     if (!fs.existsSync(path.join(dir, 'Podfile'))) {
-      logger.info("can't find Podfile file");
+      logger.error("can't find Podfile file");
       return;
     }
     const iosPackageName = option.ios && option.ios.name ? option.ios.name : pluginName;
@@ -79,7 +75,7 @@ function handleUninstall (dir, pluginName, version, option) {
     const buildPatch = podfile.makeBuildPatch(iosPackageName, iosVersion);
     // Remove Podfile config.
     podfile.revokePatch(path.join(dir, 'Podfile'), buildPatch);
-    logger.info(`=> ${pluginName} has removed in iOS project`);
+    logger.info(`${pluginName} has removed from iOS project`);
     // Update plugin.json in the project.
     pluginConfigs = utils.updatePluginConfigs(pluginConfigs, iosPackageName, '', 'ios');
     utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
@@ -90,7 +86,7 @@ function handleUninstall (dir, pluginName, version, option) {
     const buildPatch = gradle.makeBuildPatch(androidPackageName, androidVersion, option.android.groupId || '');
     // Remove gradle config.
     gradle.revokePatch(path.join(dir, 'build.gradle'), buildPatch);
-    logger.info(`=> ${pluginName} has removed in Android project`);
+    logger.info(`${pluginName} has removed from Android project`);
     // Update plugin.json in the project.
     pluginConfigs = utils.updatePluginConfigs(pluginConfigs, androidPackageName, '', 'android');
     utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
@@ -109,7 +105,7 @@ function handleUninstall (dir, pluginName, version, option) {
     uninstallInPackage(dir, pluginName, version);
   }
   else {
-    logger.info("can't recognize type of this project");
+    logger.info(`The project may not be a weex project, please use \`${chalk.white.bold('weex create [projectname]')}\``);
   }
 }
 
@@ -123,14 +119,14 @@ function uninstallInPackage (dir, pluginName, version) {
     }
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
   }
-  logger.info(`${chalk.blue.bold('\n=> Update plugins.json...\n')}`);
+  logger.info(`Update plugins.json...`);
   // Update plugin.json in the project.
   pluginConfigs = utils.updatePluginConfigs(pluginConfigs, pluginName, {}, 'web');
   utils.writePluginFile(CONFIGS.rootPath, pluginConfigPath, pluginConfigs);
 
-  logger.info(`${chalk.blue.bold('\n=> Building plugins...\n')}`);
+  logger.info(`Building plugins...`);
   return utils.buildJS('build:plugin').then(() => {
-    logger.info(`${chalk.blue.bold('\n=> Building plugins successful.\n')}`);
+    logger.success(`Building plugins successful.`);
   });
 }
 

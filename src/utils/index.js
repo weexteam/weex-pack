@@ -8,6 +8,9 @@ const chalk = require('chalk');
 const _ = require('underscore');
 const output = require('./output');
 const validator = require('./validator');
+const logger = require('./logger');
+const gituser = require('./gituser');
+const ask = require('./ask');
 
 const utils = {
   copyAndReplace (src, dest, replacements) {
@@ -358,8 +361,18 @@ const utils = {
     }
     console.error('Hit an unhandled case in util.isCordova');
     return false;
+  },
+
+  fill(name, length) {
+    let space = length - name.length;
+    if (space > 0) {
+      while (space --) {
+        name+= ' '
+      }
+    }
+    return name;
   }
 
 };
 
-module.exports = Object.assign(utils, output, validator);
+module.exports = Object.assign(utils, output, validator, logger, gituser, ask);

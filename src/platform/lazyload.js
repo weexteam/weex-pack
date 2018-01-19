@@ -28,7 +28,7 @@ const events = require('weexpack-common').events;
 const config = require('./config');
 const Q = require('q');
 const npmhelper = require('./utils/npm-helper');
-const util = require('./util');
+const tools = require('./tools');
 
 const stubplatform = {
   url: undefined,
@@ -91,7 +91,7 @@ function gitHelper (platform) {
   plat.id = 'cordova';
 
     // We can't use a version range when getting from git, so if we have a range, find the latest release on npm that matches.
-  return util.getLatestMatchingNpmVersion(platform.packageName, platform.version).then(function (version) {
+  return tools.getLatestMatchingNpmVersion(platform.packageName, platform.version).then(function (version) {
     plat.version = version;
     if (/^...*:/.test(plat.url)) {
       plat.url = plat.url + ';a=snapshot;h=' + version + ';sf=tgz';
@@ -108,7 +108,7 @@ function npmHelper (platform) {
     // TODO: remove this once we fully switch to npm workflow.
     // If platform.version specifies a *range*, we need to determine what version we'll actually get from npm (the
     // latest version that matches the range) to know what local directory to look for.
-  return util.getLatestMatchingNpmVersion(platform.packageName, platform.version).then(function (version) {
+  return tools.getLatestMatchingNpmVersion(platform.packageName, platform.version).then(function (version) {
         // Note that because the version of npm we use internally doesn't support caret versions, in order to allow them
         // from the command line and in config.xml, we use the actual version returned by getLatestMatchingNpmVersion().
     return npmhelper.cachePackage(platform.packageName, version);
@@ -136,7 +136,7 @@ function custom (platforms, platform) {
   const uri = URL.parse(url);
   const isUri = uri.protocol && uri.protocol[1] !== ':'; // second part of conditional is for awesome windows support. fuuu windows
   if (isUri) {
-    downloadDir = path.join(util.libDirectory, platdir, id, version);
+    downloadDir = path.join(tools.libDirectory, platdir, id, version);
     libDir = path.join(downloadDir, subdir);
     if (fs.existsSync(downloadDir)) {
       events.emit('verbose', id + ' library for "' + platform + '" already exists. No need to download. Continuing.');

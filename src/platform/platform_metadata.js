@@ -18,7 +18,7 @@
 */
 
 const path = require('path');
-const utils = require('./util');
+const tools = require('./tools');
 const fs = require('fs');
 const Q = require('q');
 const childProcess = require('child_process');
@@ -62,7 +62,7 @@ function getPlatVersionsFromFile (platformsJsonFile) {
 
 // Returns a promise
 function getPlatVersionsFromFileSystem (projectRoot) {
-  const platforms = utils.listPlatforms(projectRoot);
+  const platforms = tools.listPlatforms(projectRoot);
   const platformVersions = platforms.map(function (platform) {
     const script = path.join(projectRoot, 'platforms', platform, 'cordova', 'version');
     return Q.ninvoke(childProcess, 'exec', script, {}).then(function (result) {

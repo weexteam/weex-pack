@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const childprocess = require('child_process');
 const utils = require('../utils');
 const copy = require('recursive-copy');
-const logger = require('weexpack-common').CordovaLogger.get();
+const logger = utils.logger;
 const {
   Platforms,
   PlatformConfig,

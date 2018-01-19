@@ -27,6 +27,8 @@ const url = require('url');
 const nopt = require('nopt');
 const Q = require('q');
 const semver = require('semver');
+const utils = require('../utils');
+const logger = utils.logger;
 
 // Global configuration paths
 let globalConfigPath = process.env['CORDOVA_HOME'];
@@ -178,7 +180,7 @@ function isCordova (dir) {
     }
     dir = parentDir;
   }
-  console.error('Hit an unhandled case in util.isCordova');
+  logger.error('Hit an unhandled case in util.isCordova');
   return false;
 }
 

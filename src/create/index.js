@@ -18,15 +18,15 @@
 */
 
 const create = require('weexpack-create');
-const events = require('weexpack-common').events;
+const _ = require('underscore');
 const fs = require('fs');
 const rm = require('rimraf').sync;
 const path = require('path');
 const ora = require('ora');
-const ask = require('../utils/ask');
-const gituser = require('../utils/gitUser');
-const _ = require('underscore');
-
+const utils = require('../utils');
+const events = utils.events;
+const ask = utils.ask;
+const gituser = utils.gituser;
 const defaultConfigs = {
   android: {
     AppName: 'WeexApp',
@@ -55,7 +55,7 @@ module.exports = function (dir, optionalId, optionalName, cfg, extEvents) {
     rm(tmp);
     spinner.stop();
   }
-    // Create a middleware for asking questions.
+  // Create a middleware for asking questions.
   const questions = {
     name:
     { type: 'string',
@@ -95,6 +95,7 @@ module.exports = function (dir, optionalId, optionalName, cfg, extEvents) {
       ]
     }
   };
+
   ask(questions, cfg, () => {
     cfg = _.extend(defaultConfigs, cfg);
     if (extEvents) {

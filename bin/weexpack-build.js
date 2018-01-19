@@ -2,6 +2,9 @@
 
 const program = require('commander');
 const chalk = require('chalk');
+const utils = require('../src/utils')
+const logger = utils.logger;
+
 const {
   buildAndroid,
   buildIOS,
@@ -13,17 +16,17 @@ program
   .parse(process.argv);
 
 function printExample() {
-  console.log('  Examples:')
-  console.log()
-  console.log(chalk.grey('    # build weex Android project'))
-  console.log('    $ ' + chalk.blue('weexpack build android'))
-  console.log()
-  console.log(chalk.grey('    # build weex iOS project'))
-  console.log('    $ ' + chalk.blue('weexpack build ios'))
-  console.log()
-  console.log(chalk.grey('    # build weex web project'))
-  console.log('    $ ' + chalk.blue('weexpack build web'))
-  console.log()
+  logger.log('  Examples:')
+  logger.log()
+  logger.log(chalk.grey('    # build weex Android project'))
+  logger.log('    $ ' + chalk.blue('weexpack build android'))
+  logger.log()
+  logger.log(chalk.grey('    # build weex iOS project'))
+  logger.log('    $ ' + chalk.blue('weexpack build ios'))
+  logger.log()
+  logger.log(chalk.grey('    # build weex web project'))
+  logger.log('    $ ' + chalk.blue('weexpack build web'))
+  logger.log()
 }
 
 program.on('--help', printExample)

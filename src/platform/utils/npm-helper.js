@@ -21,7 +21,7 @@ const npm = require('npm');
 const path = require('path');
 const Q = require('q');
 const unpack = require('./unpack');
-const util = require('../util');
+const tools = require('../tools');
 let cachedSettings = null;
 let cachedSettingsValues = null;
 /**
@@ -87,11 +87,11 @@ function cachePackage (packageName, packageVersion) {
   //     packageName = { fullname: packageName}
   // }
   return Q(packageName).then(function (data) {
-    const cacheDir = path.join(util.libDirectory, 'npm_cache');
+    const cacheDir = path.join(tools.libDirectory, 'npm_cache');
     // If already cached, use that rather than calling 'npm cache add' again.
     const packageCacheDir = path.resolve(cacheDir, packageName, packageVersion);
     const packageTGZ = path.resolve(packageCacheDir, 'package.tgz');
-    if (util.existsSync(packageTGZ)) {
+    if (tools.existsSync(packageTGZ)) {
       return unpack.unpackTgz(packageTGZ, path.resolve(packageCacheDir, 'package'));
     }
     const npmConfig = {

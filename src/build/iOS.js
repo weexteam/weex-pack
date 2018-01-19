@@ -69,9 +69,9 @@ const prepareIOS = ({ options }) => {
       resolve({ xcodeProject, options, rootPath });
     }
     else {
-      logger.info(`\n${chalk.red.bold('Could not find Xcode project files in ios folder')}`);
-      logger.info(`\nPlease make sure you have installed iOS Develop Environment and CocoaPods`);
-      logger.info(`\nSee ${chalk.cyan('http://alibaba.github.io/weex/doc/advanced/integrate-to-ios.html')}`);
+      logger.error(`Could not find Xcode project files in ios folder.`);
+      logger.info(`Please make sure you have installed iOS Develop Environment and CocoaPods`);
+      logger.info(`See ${chalk.cyan('http://alibaba.github.io/weex/doc/advanced/integrate-to-ios.html')}`);
       reject();
     }
   });

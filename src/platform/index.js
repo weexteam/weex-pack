@@ -17,7 +17,7 @@
  under the License.
  */
 
-const utils = require('./util');
+const tools = require('./tools');
 const fs = require('fs');
 const inquirer = require('inquirer');
 const path = require('path');
@@ -33,19 +33,17 @@ const PlatformApi = require('./PlatformApiPoly');
 const weexpackCommon = require('weexpack-common');
 const events = weexpackCommon.events;
 const CordovaError = weexpackCommon.CordovaError;
-const logger = weexpackCommon.CordovaLogger.get();
+const utils = require('../utils');
+const logger = utils.logger;
 
 const {
   installForNewPlatform
 } = require('../plugin');
-// Expose the platform parsers on top of this command
-// for (var p in platforms) {
-//   module.exports[p] = platforms[p];
-// }
+
 
 function remove (projectRoot, targets, opts) {
   if (!targets || !targets.length) {
-    return Q.reject(new CordovaError('No platform(s) specified. Please specify platform(s) to remove. See `' + utils.binname + ' platform list`.'));
+    return Q.reject(new CordovaError('No platform(s) specified. Please specify platform(s) to remove. See `' + tools.binname + ' platform list`.'));
   }
   return Q.when()
   .then(() => {
@@ -85,7 +83,7 @@ function remove (projectRoot, targets, opts) {
 function list (projectRoot, opts) {
   return Q.when()
   .then(function () {
-    return utils.getInstalledPlatformsWithVersions(projectRoot);
+    return tools.getInstalledPlatformsWithVersions(projectRoot);
   })
   .then(function (platformMap) {
     let platformsText = [];
@@ -124,7 +122,7 @@ function addHelper (cmd, projectRoot, targets, opts) {
   let msg;
   const cfg = {};
   if (!targets || !targets.length) {
-    msg = 'No platform specified. Please specify a platform to ' + cmd + '. ' + 'See `' + utils.binname + ' platform list`.';
+    msg = 'No platform specified. Please specify a platform to ' + cmd + '. ' + 'See `' + tools.binname + ' platform list`.';
     return Q.reject(new CordovaError(msg));
   }
   for (let i = 0; i < targets.length; i++) {
@@ -152,8 +150,8 @@ function addHelper (cmd, projectRoot, targets, opts) {
           spec = platforms[platform].version;
         }
         if (spec) {
-          const maybeDir = utils.fixRelativePath(spec);
-          if (utils.isDirectory(maybeDir)) {
+          const maybeDir = tools.fixRelativePath(spec);
+          if (tools.isDirectory(maybeDir)) {
             return getPlatformDetailsFromDir(maybeDir, platform);
           }
         }
@@ -179,10 +177,11 @@ function addHelper (cmd, projectRoot, targets, opts) {
               name: 'ok'
             }]).then(answers => {
               if (answers.ok) {
+                logger.info( `${(cmd === 'add' ? 'Adding' : 'Updating')} ${platform} weexpack-${platform}@${platDetails.version} ...`);
                 shell.rm('-rf', platformPath);
                 promise = PlatformApi.createPlatform(platformPath, cfg, options, events);
                 return promise.then(() => {
-                  logger.info((cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
+                  logger.success('Success!');
                   return platDetails;
                 });
               }
@@ -193,21 +192,23 @@ function addHelper (cmd, projectRoot, targets, opts) {
           }
           else {
             promise = PlatformApi.createPlatform(platformPath, cfg, options, events);
+            logger.info( `${(cmd === 'add' ? 'Adding' : 'Updating')} ${platform} weexpack-${platform}@${platDetails.version} ...`);
             return promise.then(() => {
-              logger.info((cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
+              logger.success('Success!');
               return platDetails;
             });
           }
         }
         else if (cmd === 'update') {
           if (!platformAlreadyAdded) {
-            throw new CordovaError('Platform "' + platform + '" is not yet added. See `' + utils.binname + ' platform list`.');
+            throw new CordovaError('Platform "' + platform + '" is not yet added. See `' + tools.binname + ' platform list`.');
           }
           else {
             promise = PlatformApi.updatePlatform(platformPath, options, events);
           }
+          logger.info( `${(cmd === 'add' ? 'Adding' : 'Updating')} ${platform} weexpack-${platform}@${platDetails.version} ...`);
           return promise.then(() => {
-            logger.info((cmd === 'add' ? 'Adding ' : 'Updating ') + platform + ' project@' + platDetails.version + '...');
+            logger.success('Success!');
             return platDetails;
           });
         }
@@ -237,7 +238,7 @@ function addHelper (cmd, projectRoot, targets, opts) {
 function downloadPlatform (projectRoot, platform, version, opts) {
   const target = version ? (platform + '@' + version) : platform;
   return Q().then(function () {
-    if (utils.isUrl(version)) {
+    if (tools.isUrl(version)) {
       logger.info('git cloning: ' + version);
       const parts = version.split('#');
       const gitUrl = parts[0];
@@ -336,7 +337,7 @@ function removePlatformPluginsJson (projectRoot, target) {
 
 const platform = (command, targets, opts) => {
   let msg;
-  const projectRoot = utils.cdProjectRoot();
+  const projectRoot = tools.cdProjectRoot();
   if (arguments.length === 0) command = 'ls';
 
   if (targets) {
@@ -356,7 +357,7 @@ const platform = (command, targets, opts) => {
       }
       else {
         // Neither path, git-url nor platform name - throw.
-        msg = `Platform ${t} not recognized as a core weex platform. See "${utils.binname} platform list".'`;
+        msg = `Platform ${t} not recognized as a core weex platform. See "${tools.binname} platform list".'`;
       }
       throw new CordovaError(msg);
     });

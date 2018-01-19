@@ -1,27 +1,37 @@
 #!/usr/bin/env node
 
 const program = require('commander')
-const chalk = require('chalk')
-
-const weexPackCommon = require('weexpack-common');
+const utils = require('../src/utils')
+const logger = utils.logger;
+const LOGLEVELS = utils.LOGLEVELS;
 
 program
   .version(require('../package').version)
   .usage('<command> [options]')
-  // .command('init [name]', 'initialize a standard weex project')
   .command('create [name]', 'initialize a standard weex project')
   .command('platform [command]', 'command for add or remove a  platform project')
   .command('run [platform]', 'run weex app on the specific platform')
   .command('build [platform]', 'build weex app generator package(apk or ipa)')
   .command('plugin [command]', 'command for add,create,login,publish weex plugins')
-  // .command('weexplugin [command]', 'create a project that is a manager of plugin')
-  .option('-d, --verbose', 'set loglevel to verbose')
+  .option('--verbose', 'display all logs of debugger server')
+  .option('--loglevel [loglevel]', 'set log level silent|error|warn|info|log|debug', 'error')
+  .parse(process.argv)
 
-program.parse(process.argv)
 
 if (program.args.length < 1) {
   program.help();
   process.exit();
+}
+
+if (program.loglevel) {
+  program.loglevel = program.loglevel.toLowercase && program.loglevel.toLowercase()
+  if(LOGLEVELS.indexOf(program.loglevel) > -1) {
+    logger.setLevel(program.loglevel)
+  }
+}
+
+if (program.verbose) {
+  logger.setLevel('verbose')
 }
 
 if(program.args.length >= 1){

@@ -1,6 +1,6 @@
 const exec = require('child_process').execSync;
 
-module.exports = () => {
+const gituser = () => {
   let name;
   let email;
 
@@ -13,4 +13,8 @@ module.exports = () => {
   name = name && JSON.stringify(name.toString().trim()).slice(1, -1);
   email = email && (' <' + email.toString().trim() + '>');
   return (name || '') + (email || '');
+};
+
+module.exports = {
+  gituser
 };

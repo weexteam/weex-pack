@@ -1,13 +1,13 @@
 /**
  * Created by godsong on 16/10/12.
  */
-const Fs = require('fs');
-const Path = require('path');
-const Inquirer = require('inquirer');
 const path = require('path');
+const inquirer = require('inquirer');
 const fs = require('fs');
+const chalk = require('chalk');
 const _ = require('underscore');
-const logger = require('weexpack-common').CordovaLogger.get();
+const utils = require('./index');
+const logger = utils.logger;
 
 const _resolveConfigDef = (source, configDef, config, key) => {
   if (configDef.type) {
@@ -99,11 +99,11 @@ class PlatformConfig {
         config = require(configPath);
       }
       config = _.extend(this.configs || {}, defaultConfig, config);
-      logger.info('\n============Build Config============');
+      logger.log('============Build Config============');
       this.properties.forEach(function (prop) {
         if (config[prop.name] !== undefined) {
           answers[prop.name] = config[prop.name];
-          logger.info(prop.name + ' => ' + answers[prop.name]);
+          logger.log(chalk.green(`${utils.fill(prop.name, 12)} : ${answers[prop.name]}`));
         }
         else {
           questions.push({
@@ -114,15 +114,15 @@ class PlatformConfig {
         }
       });
       if (questions.length > 0) {
-        Inquirer.prompt(questions)
+        inquirer.prompt(questions)
           .then((answers) => {
             Object.assign(config, answers);
-            Fs.writeFileSync(path.join(this.rootPath, `${this.platform}.config.json`), JSON.stringify(config, null, 4));
+            fs.writeFileSync(path.join(this.rootPath, `${this.platform}.config.json`), JSON.stringify(config, null, 4));
             resolve(config);
           });
       }
       else {
-        logger.info('\nIf you want to change build config.please modify ' + `${this.platform}.config.json`);
+        logger.info(`If you want to change build config.please modify ${this.platform}.config.json`);
         resolve(config);
       }
     });
@@ -135,13 +135,13 @@ class PlatformConfigResolver {
   }
   resolve (config, basePath) {
     basePath = basePath || process.cwd();
-    for (const path in this.def) {
-      if (this.def.hasOwnProperty(path)) {
-        const targetPath = Path.join(basePath, path);
-        let source = Fs.readFileSync(targetPath).toString();
-        for (const key in this.def[path]) {
-          if (this.def[path].hasOwnProperty(key)) {
-            const configDef = this.def[path][key];
+    for (const d in this.def) {
+      if (this.def.hasOwnProperty(d)) {
+        const targetPath = path.join(basePath, d);
+        let source = fs.readFileSync(targetPath).toString();
+        for (const key in this.def[d]) {
+          if (this.def[d].hasOwnProperty(key)) {
+            const configDef = this.def[d][key];
             if (_.isArray(configDef)) {
               configDef.forEach((def) => {
                 source = _resolveConfigDef(source, def, config, key);
@@ -152,7 +152,7 @@ class PlatformConfigResolver {
             }
           }
         }
-        Fs.writeFileSync(targetPath, source);
+        fs.writeFileSync(targetPath, source);
       }
     }
   }

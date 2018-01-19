@@ -7,9 +7,9 @@ const rm = require('rimraf').sync;
 const fs = require('fs');
 const path = require('path');
 const create = require('../src/create');
-const weexpackCommon = require('weexpack-common');
-const events = weexpackCommon.events;
-const logger = weexpackCommon.CordovaLogger.get();
+const utils = require('../src/utils')
+const logger = utils.logger;
+const events = utils.events;
 
 // For WeexpackError print only the message without stack trace unless we
 // are in a verbose mode.

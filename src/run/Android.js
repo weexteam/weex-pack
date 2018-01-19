@@ -8,8 +8,9 @@ const utils = require('../utils');
 const server = require('./server');
 const chokidar = require('chokidar');
 const WebSocket = require('ws');
+const exit = require('exit');
 const _ = require('underscore');
-const logger = require('weexpack-common').CordovaLogger.get();
+const logger = utils.logger;
 const {
   Platforms,
   PlatformConfig,
@@ -28,16 +29,16 @@ const copyJsbundleAssets = (dir, src, dist, quiet) => {
     overwrite: true
   };
   if (!quiet) {
-    logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
+    logger.info(`Move JSbundle to dist'`);
     return copy(path.join(dir, src), path.join(dir, dist), options)
     .on(copy.events.COPY_FILE_START, function (copyOperation) {
-      quiet && logger.info('\nCopying file ' + copyOperation.src + '...');
+      quiet && logger.info('Copying file ' + copyOperation.src + '...');
     })
     .on(copy.events.COPY_FILE_COMPLETE, function (copyOperation) {
       logger.info('Copied to ' + copyOperation.dest);
     })
     .on(copy.events.ERROR, function (error, copyOperation) {
-      logger.error('Error:' + error.stack);
+      logger.error(`Error: ${error||error.stack}`);
       logger.error('Unable to copy ' + copyOperation.dest);
     })
     .then(result => {
@@ -60,6 +61,21 @@ const passOptions = (options) => {
 };
 
 /**
+ * check if there has a android project.
+ */
+const shouldRunAndroid = () => {
+  return new Promise((resolve, reject) => {
+    const rootPath = process.cwd();
+    if (!utils.checkAndroid(rootPath)) {
+      logger.error('Android project not found!');
+      logger.log(`You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add android')}  first`);
+      reject();
+    }
+    resolve();
+  })
+}
+
+/**
  * Prepare
  * @param {Object} options
  */
@@ -68,23 +84,15 @@ const prepareAndroid = ({
 }) => {
   return new Promise((resolve, reject) => {
     const rootPath = process.cwd();
-    if (!utils.checkAndroid(rootPath)) {
-      logger.info(rootPath);
-      logger.info(chalk.red('Android project not found !'));
-      logger.info();
-      logger.info(`  You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add android')}  first`);
-      reject();
-    }
-    logger.info(`\n=> ${chalk.blue.bold('start Android app')} \n`);
+
+    logger.info(`start Android app \n`);
 
     // change working directory to android
     process.chdir(path.join(rootPath, 'platforms/android'));
     if (!process.env.ANDROID_HOME) {
-      logger.info();
-      logger.info(chalk.red('  Environment variable $ANDROID_HOME not found !'));
-      logger.info();
-      logger.info(`  You should set $ANDROID_HOME first.`);
-      logger.info(`  See ${chalk.cyan('http://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x')}`);
+      logger.error('Environment variable $ANDROID_HOME not found !');
+      logger.log(`You should set $ANDROID_HOME first.`);
+      logger.log(`See ${chalk.cyan('http://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x')}`);
       reject();
     }
     try {
@@ -175,7 +183,7 @@ const registeFileWatcher = (
   .on('change', (event) => {
     copyJsbundleAssets(rootPath, 'dist', 'platforms/android/app/src/main/assets/dist', true).then(() => {
       if (path.basename(event) === configs.WeexBundle) {
-        logger.info(`\n=> ${chalk.blue.bold('Reloading page...')} \n`);
+        logger.info(`Reloading page... \n`);
         ws.send(JSON.stringify({ method: 'WXReloadBundle', params: `http://${configs.ip}:${configs.port}/${configs.WeexBundle}` }));
       }
     });
@@ -305,7 +313,7 @@ const buildApp = ({
   configs
 }) => {
   return new Promise((resolve, reject) => {
-    logger.info(`\n=> ${chalk.blue.bold('Building app ...')}\n`);
+    logger.info(`Building app ...\n`);
     const clean = options.clean ? ' clean' : '';
     try {
       childprocess.execSync(process.platform === 'win32' ? `call gradlew.bat ${clean} assembleDebug` : `./gradlew ${clean} assembleDebug`, {
@@ -336,7 +344,7 @@ const installApp = ({
   configs
 }) => {
   return new Promise((resolve, reject) => {
-    logger.info(`\n=> ${chalk.blue.bold('Install app ...')}\n`);
+    logger.info(`Install app ...\n`);
     const apkName = 'app/build/outputs/apk/weex-app.apk';
     try {
       childprocess.execSync(`adb -s ${device} install -r  ${apkName}`, {
@@ -386,12 +394,13 @@ const runApp = ({
   configs
 }) => {
   return new Promise((resolve, reject) => {
-    logger.info(`\n=> ${chalk.blue.bold('Running app ...')}`);
+    logger.info(`Running app ...`);
     const packageName = fs.readFileSync('app/src/main/AndroidManifest.xml', 'utf8').match(/package="(.+?)"/)[1];
     try {
       childprocess.execSync(`adb -s ${device} shell am start -n ${packageName}/.SplashActivity -d ${stringifyConfigs({ Ws: configs.Ws })}`, {
         encoding: 'utf8'
       });
+      logger.success(`Success!`);
     }
     catch (e) {
       reject(e);
@@ -405,8 +414,9 @@ const runApp = ({
  * @param {Object} options
  */
 const runAndroid = (options) => {
-  logger.info(`\n=> ${chalk.blue.bold('npm run build')}`);
-  utils.buildJS()
+  
+  shouldRunAndroid()
+  .then(() => {logger.info(`npm run build`);return utils.buildJS()})
   .then(() => copyJsbundleAssets(process.cwd(), 'dist', 'platforms/android/app/src/main/assets/dist'))
   .then(() => passOptions(options))
   .then(prepareAndroid)
@@ -421,7 +431,8 @@ const runAndroid = (options) => {
   .then(runApp)
   .catch((err) => {
     if (err) {
-      logger.log(chalk.red('Error:', err.stack));
+      logger.error(`Error: ${err || err.stack}`);
+      exit(0);
     }
   });
 };

@@ -5,10 +5,11 @@ const app = express();
 const detect = require('detect-port');
 const ip = require('ip').address();
 const path = require('path');
+const utils = require('../utils');
 const defaultPort = 8080;
 let wss;
 
-const logger = require('weexpack-common').CordovaLogger.get();
+const logger = utils.logger;
 const childprocess = require('child_process');
 
 /**
@@ -54,7 +55,7 @@ const startWsServer = (root) => {
     });
 
     server.listen(port, () => {
-      logger.info(`\nHot Reload socket: ${host}`);
+      logger.info(`Hot Reload socket: ${host}`);
     });
 
     return {

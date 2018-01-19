@@ -2,11 +2,14 @@
 
 const program = require('commander')
 const chalk = require('chalk')
+const utils = require('../src/utils')
+const logger = utils.logger;
 const {
   runAndroid,
   runIOS,
   runWeb
 } = require('../src/run');
+const binname = 'weex';
 
 program
   .usage('<platform> [options]')
@@ -16,17 +19,13 @@ program
   .parse(process.argv)
 
 function printExample() {
-  console.log('\n  Examples:')
-  console.log()
-  console.log(chalk.grey('    # run weex Android project'))
-  console.log('    $ ' + chalk.blue('weexpack run android'))
-  console.log()
-  console.log(chalk.grey('    # run weex iOS project'))
-  console.log('    $ ' + chalk.blue('weexpack run ios'))
-  console.log()
-  console.log(chalk.grey('    # run weex web'))
-  console.log('    $ ' + chalk.blue('weexpack run web'))
-  console.log()
+  logger.log('Examples:')
+  logger.log(chalk.grey('  # run weex Android project'))
+  logger.log('  $ ' + chalk.blue(`${binname} run android`))
+  logger.log(chalk.grey('  # run weex iOS project'))
+  logger.log('  $ ' + chalk.blue(`${binname} run ios`))
+  logger.log(chalk.grey('  # run weex web'))
+  logger.log('  $ ' + chalk.blue(`${binname} run web`))
 }
 
 
@@ -59,9 +58,7 @@ if (isValidPlatform(program.args)) {
   // TODO: parse config file
   run(program.args[0], {configPath:program.config,clean:program.clean})
 } else {
-  console.log()
-  console.log(`${chalk.red('Unknown platform:')} ${chalk.yellow(program.args[0])}`)
-  console.log()
+  logger.error(`Unknown platform: ${chalk.yellow(program.args[0])}`)
   printExample()
   process.exit()
 }

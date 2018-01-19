@@ -9,7 +9,7 @@ const server = require('./server');
 const chokidar = require('chokidar');
 const WebSocket = require('ws');
 const _ = require('underscore');
-const logger = require('weexpack-common').CordovaLogger.get();
+const logger = utils.logger;
 const {
   PlatformConfig,
   iOSConfigResolver,
@@ -28,20 +28,20 @@ const copyJsbundleAssets = (dir, src, dist, quiet) => {
     overwrite: true
   };
   if (!quiet) {
-    logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
+    logger.info(`Move JSbundle to dist`);
     return copy(path.join(dir, 'dist'), path.join(dir, 'platforms/ios/bundlejs/'), options)
     .on(copy.events.COPY_FILE_START, function (copyOperation) {
-      logger.info('Copying file ' + copyOperation.src + '...');
+      logger.verbose('Copying file ' + copyOperation.src + '...');
     })
     .on(copy.events.COPY_FILE_COMPLETE, function (copyOperation) {
-      logger.info('Copied to ' + copyOperation.dest);
+      logger.verbose('Copied to ' + copyOperation.dest);
     })
     .on(copy.events.ERROR, function (error, copyOperation) {
       logger.error('Error:' + error.stack);
       logger.error('Unable to copy ' + copyOperation.dest);
     })
     .then(result => {
-      logger.info(`Move ${result.length} files.`);
+      logger.verbose(`Move ${result.length} files.`);
     });
   }
   return copy(path.join(dir, 'dist'), path.join(dir, 'platforms/ios/bundlejs/'), options);
@@ -52,6 +52,7 @@ const copyJsbundleAssets = (dir, src, dist, quiet) => {
  * @param {Object} options
  */
 const passOptions = (options) => {
+  logger.verbose(`passOptions ${options}.`);
   return new Promise((resolve, reject) => {
     resolve({
       options
@@ -64,11 +65,12 @@ const passOptions = (options) => {
  * @param {Object} options
  */
 const prepareIOS = ({ options }) => {
+  logger.verbose(`prepareIOS  with ${options}.`);
   return new Promise((resolve, reject) => {
     const rootPath = process.cwd();
     if (!utils.checkIOS(rootPath)) {
-      logger.info(chalk.red('  iOS project not found !'));
-      logger.info(`  You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add ios')} first`);
+      logger.error('iOS project not found !');
+      logger.info(`You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add ios')} first`);
       reject();
     }
     // change working directory to ios
@@ -77,13 +79,13 @@ const prepareIOS = ({ options }) => {
     const xcodeProject = utils.findXcodeProject(process.cwd());
 
     if (xcodeProject) {
-      logger.info(`\n=> ${chalk.blue.bold('start iOS app')}\n`);
+      logger.info(`start iOS app`);
       resolve({ xcodeProject, options, rootPath });
     }
     else {
-      logger.info(`\n${chalk.red.bold('Could not find Xcode project files in ios folder')}`);
-      logger.info(`\nPlease make sure you have installed iOS Develop Environment and CocoaPods`);
-      logger.info(`\nSee ${chalk.cyan('http://alibaba.github.io/weex/doc/advanced/integrate-to-ios.html')}`);
+      logger.info(`Could not find Xcode project files in ios folder.`);
+      logger.info(`Please make sure you have installed iOS Develop Environment and CocoaPods`);
+      logger.info(`See ${chalk.cyan('http://alibaba.github.io/weex/doc/advanced/integrate-to-ios.html')}`);
       reject();
     }
   });
@@ -103,6 +105,7 @@ const startHotReloadServer = (
     rootPath
   }
 ) => {
+  
   return server.startWsServer(rootPath).then(({ host, ip, port }) => {
     const configs = _.extend({}, { Ws: host, ip, port });
     return {
@@ -136,7 +139,7 @@ const registeFileWatcher = (
   .on('change', (event) => {
     copyJsbundleAssets(rootPath, 'dist', 'platforms/ios/bundlejs/', true).then(() => {
       if (path.basename(event) === configs.WeexBundle) {
-        logger.info(`\n=> ${chalk.blue.bold('Reloading page...')} \n`);
+        logger.info(`Reloading page...`);
         ws.send(JSON.stringify({ method: 'WXReloadBundle', params: `http://${configs.ip}:${configs.port}/${configs.WeexBundle}` }));
       }
     });
@@ -179,7 +182,7 @@ const resolveConfig = ({
  * @param {Object} options
  */
 const installDep = ({ xcodeProject, options, rootPath, configs }) => {
-  logger.info(`\n=> ${chalk.blue.bold('pod update')}\n`);
+  logger.info(`pod update`);
   return utils.exec('pod update').then(() => ({ xcodeProject, options, rootPath, configs }));
 };
 
@@ -276,7 +279,7 @@ const buildApp = ({ device, xcodeProject, options, rootPath, configs }) => {
  * @param {Object} options
  */
 const _buildOnSimulator = ({ scheme, device, rootPath, xcodeProject, options, configs, resolve, reject }) => {
-  logger.info(`\n=> ${chalk.blue.bold('Buiding project...')}\n`);
+  logger.info(`Buiding project...`);
   try {
     if (_.isEmpty(configs)) {
       reject(new Error('iOS config dir not detected.'));
@@ -329,7 +332,7 @@ const runApp = ({ device, xcodeProject, options, configs }) => {
  * @param {Object} options
  */
 const _runAppOnSimulator = ({ device, xcodeProject, options, configs, resolve, reject }) => {
-  logger.info(`\n=> ${chalk.blue.bold('Run iOS Simulator..')}\n`);
+  logger.info(`Run iOS Simulator..`);
   const inferredSchemeName = path.basename(xcodeProject.name, path.extname(xcodeProject.name));
   const appPath = `build/Build/Products/Debug-iphonesimulator/${inferredSchemeName}.app`;
   childprocess.execFileSync(
@@ -375,7 +378,7 @@ const _runAppOnSimulator = ({ device, xcodeProject, options, configs, resolve, r
   catch (e) {
     reject(e);
   }
-  logger.info('\nSuccess!');
+  logger.success('Success!');
   resolve();
 };
 
@@ -431,7 +434,7 @@ const _runAppOnDevice = ({ device, xcodeProject, options, resolve, reject }) => 
  * @param {Object} options
  */
 const runIOS = (options) => {
-  logger.info(`\n=> ${chalk.blue.bold('npm run build')}`);
+  logger.info(`npm run build`);
   utils.checkAndInstallForIosDeploy()
     .then(utils.buildJS)
     .then(() => copyJsbundleAssets(process.cwd(), 'dist', 'platforms/ios/bundlejs/'))
@@ -447,7 +450,7 @@ const runIOS = (options) => {
     .then(runApp)
     .catch((err) => {
       if (err) {
-        logger.error(chalk.red('Error:', err.stack));
+        logger.error(`Error:${err.stack}`);
       }
     });
 };

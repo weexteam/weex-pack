@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const logger = require('weexpack-common').CordovaLogger.get();
+const utils = require('../src/utils')
+const logger = utils.logger;
+const exit = require('exit');
 
 const {
   install,
@@ -24,8 +26,8 @@ program
   if (pluginName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
     create(pluginName, program.argv)
   } else {
-    console.log(`\n${chalk.red('Invalid plugin name:')} ${chalk.yellow(pluginName)}`);
-    process.exit();
+    logger.error(`Invalid plugin name:')} ${chalk.yellow(pluginName)}`);
+    exit();
   }
 });
 
