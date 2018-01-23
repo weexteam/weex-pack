@@ -18,7 +18,7 @@
 */
 
 const path = require('path');
-const tools = require('./tools');
+const tools = require('./utils/tools');
 const fs = require('fs');
 const Q = require('q');
 const childProcess = require('child_process');

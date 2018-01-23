@@ -20,8 +20,9 @@
 const npm = require('npm');
 const path = require('path');
 const Q = require('q');
+const fs = require('fs-extra');
 const unpack = require('./unpack');
-const tools = require('../tools');
+const tools = require('./tools');
 let cachedSettings = null;
 let cachedSettingsValues = null;
 /**
@@ -91,7 +92,7 @@ function cachePackage (packageName, packageVersion) {
     // If already cached, use that rather than calling 'npm cache add' again.
     const packageCacheDir = path.resolve(cacheDir, packageName, packageVersion);
     const packageTGZ = path.resolve(packageCacheDir, 'package.tgz');
-    if (tools.existsSync(packageTGZ)) {
+    if (fs.existsSync(packageTGZ)) {
       return unpack.unpackTgz(packageTGZ, path.resolve(packageCacheDir, 'package'));
     }
     const npmConfig = {

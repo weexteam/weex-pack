@@ -110,7 +110,7 @@ const utils = {
         child.stderr.pipe(process.stderr);
       }
       catch (e) {
-        console.error('execute command failed :', command);
+        logger.error('execute command failed :', command);
         reject(e);
       }
     });
@@ -133,7 +133,7 @@ const utils = {
     if (!hasIosDeploy) {
       let args = '';
       if (process.platform === 'win32') {
-        console.log('run ios unsupported on windows');
+        logger.log('run ios unsupported on windows');
         process.exit(1);
       }
       if (os.release() >= '15.0.0') {
@@ -192,7 +192,7 @@ const utils = {
               if (packages.web) {
                 supports.push('Web');
               }
-              console.log(chalk.green(`This plugin support for ${supports.join(',')} platforms.`));
+              logger.log(chalk.green(`This plugin support for ${supports.join(',')} platforms.`));
               callback({
                 ios: packages.ios,
                 android: packages.android,
@@ -217,14 +217,14 @@ const utils = {
     if (!fs.existsSync(root)) {
       mkdirp(root, function (err) {
         if (err) {
-          console.log(err);
+          logger.log(err);
         }
       });
     }
     if (!fs.existsSync(path)) {
       fs.open(path, 'w+', '0666', (err, fd) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
         }
         fs.writeFileSync(path, JSON.stringify(config, null, 2));
       });
@@ -258,14 +258,14 @@ const utils = {
     if (!fs.existsSync(root)) {
       mkdirp(root, function (err) {
         if (err) {
-          console.error(err);
+          logger.error(err);
         }
       });
     }
     if (!fs.existsSync(path)) {
       fs.open(path, 'w+', '0666', (err, fd) => {
         if (err) {
-          console.error(err);
+          logger.error(err);
         }
         fs.writeFileSync(path, JSON.stringify(config, null, 2));
       });
@@ -359,7 +359,7 @@ const utils = {
       }
       dir = parentDir;
     }
-    console.error('Hit an unhandled case in util.isCordova');
+    logger.error('Hit an unhandled case in util.isCordova');
     return false;
   },
 

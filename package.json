@@ -1,13 +1,13 @@
 {
     "name": "weexpack",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Weex pack tool",
     "main": "index.js",
     "scripts": {
         "test": "mocha ./test/*.test.js",
         "lint": "eslint src --fix",
         "build": "babel src --out-dir lib",
-        "dev": "babel src --out-dir lib --watch & babel scripts --out-dir bin --watch",
+        "dev": "babel src --out-dir lib --watch",
         "prepublish": "npm run build"
     },
     "repository": {

@@ -13,8 +13,6 @@ const logger = utils.logger;
 
 const CONFIGS = require('./config');
 
-const weexpackCommon = require('weexpack-common');
-
 let pluginConfigs = CONFIGS.defaultConfig;
 
 // Get plugin config in project.

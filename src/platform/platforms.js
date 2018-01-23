@@ -17,7 +17,27 @@
     under the License.
 */
 
-const platforms = require('./platformsConfig.json');
+const platforms = {
+    ios: {
+        "hostos": ["darwin"],
+        "parser_file": "../cordova/metadata/ios_parser",
+        "handler_file": "../plugman/platforms/ios",
+        "url": "https://github.com/weexteam/weexpack-iOS.git?",
+        "version": "^4.0.24",
+        "apiCompatibleSince": "4.0.",
+        "deprecated": false
+
+    },
+
+    android: {
+        "parser_file": "../cordova/metadata/android_parser",
+        "handler_file": "../plugman/platforms/android",
+        "url": "https://github.com/weexteam/weexpack-android",
+        "version": "^6.3.8",
+        "apiCompatibleSince": "5.0.0",
+        "deprecated": false
+    }
+};
 
 module.exports = platforms;
 

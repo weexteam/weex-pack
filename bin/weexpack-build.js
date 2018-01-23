@@ -2,14 +2,14 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const utils = require('../src/utils')
+const utils = require('../lib/utils')
 const logger = utils.logger;
 
 const {
   buildAndroid,
   buildIOS,
   buildWeb
-} = require('../src/build');
+} = require('../lib/build');
 
 program
   .usage('<platform> [options]')

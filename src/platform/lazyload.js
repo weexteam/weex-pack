@@ -28,7 +28,7 @@ const events = require('weexpack-common').events;
 const config = require('./config');
 const Q = require('q');
 const npmhelper = require('./utils/npm-helper');
-const tools = require('./tools');
+const tools = require('./utils/tools');
 
 const stubplatform = {
   url: undefined,
@@ -66,12 +66,12 @@ function basedOnConfig (projectRoot, platform, opts) {
     return custom(mixedPlatforms, platform);
   }
   else {
-    return cordova(platform, opts);
+    return download(platform, opts);
   }
 }
 
 // Returns a promise for the path to the lazy-loaded directory.
-function cordova (platform, opts) {
+function download (platform, opts) {
   platform = new Platform(platform);
   const useGit = platform.source === 'git';
   if (useGit) {
@@ -88,9 +88,8 @@ function gitHelper (platform) {
     return Q.reject(new Error('weex library "' + platform.name + '" not recognized.'));
   }
   const plat = mixedPlatforms[platform.name];
-  plat.id = 'cordova';
 
-    // We can't use a version range when getting from git, so if we have a range, find the latest release on npm that matches.
+  // We can't use a version range when getting from git, so if we have a range, find the latest release on npm that matches.
   return tools.getLatestMatchingNpmVersion(platform.packageName, platform.version).then(function (version) {
     plat.version = version;
     if (/^...*:/.test(plat.url)) {
@@ -134,6 +133,7 @@ function custom (platforms, platform) {
   const platdir = plat.altplatform || platform;
     // Return early for already-cached remote URL, or for local URLs.
   const uri = URL.parse(url);
+  console.log(uri)
   const isUri = uri.protocol && uri.protocol[1] !== ':'; // second part of conditional is for awesome windows support. fuuu windows
   if (isUri) {
     downloadDir = path.join(tools.libDirectory, platdir, id, version);
@@ -144,13 +144,13 @@ function custom (platforms, platform) {
     }
   }
   else {
-        // Local path.
+    // Local path.
     libDir = path.join(url, subdir);
     return Q(libDir);
   }
 }
 
-exports.cordova = cordova;
+exports.download = download;
 exports.gitHelper = gitHelper;
 exports.npmHelper = npmHelper;
 exports.custom = custom;
