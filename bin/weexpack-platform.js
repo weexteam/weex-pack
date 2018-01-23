@@ -2,8 +2,8 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const platform = require('../lib/platform');
-const utils = require('../lib/utils')
+const platform = require('../src/platform');
+const utils = require('../src/utils')
 const logger = utils.logger;
 
 program

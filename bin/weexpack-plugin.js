@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const utils = require('../lib/utils')
+const utils = require('../src/utils')
 const logger = utils.logger;
 const exit = require('exit');
 
@@ -10,7 +10,7 @@ const {
   uninstall,
   installForNewPlatform,
   create
-} = require('../lib/plugin');
+} = require('../src/plugin');
 
 process.on('uncaughtException', (err) => {
   logger.error(err.stack)

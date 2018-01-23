@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander')
-const utils = require('../lib/utils')
+const utils = require('../src/utils')
 const logger = utils.logger;
 const LOGLEVELS = utils.LOGLEVELS;
 
