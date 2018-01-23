@@ -2,13 +2,13 @@
 
 const program = require('commander')
 const chalk = require('chalk')
-const utils = require('../src/utils')
+const utils = require('../lib/utils')
 const logger = utils.logger;
 const {
   runAndroid,
   runIOS,
   runWeb
-} = require('../src/run');
+} = require('../lib/run');
 const binname = 'weex';
 
 program

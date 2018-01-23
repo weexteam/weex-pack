@@ -6,4 +6,3 @@ node_modules/
 .eslintrc
 
 npm-shrinkwrap.json
-build/

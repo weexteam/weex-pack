@@ -85,7 +85,7 @@ const prepareIOS = ({ options }) => {
     else {
       logger.info(`Could not find Xcode project files in ios folder.`);
       logger.info(`Please make sure you have installed iOS Develop Environment and CocoaPods`);
-      logger.info(`See ${chalk.cyan('http://alibaba.github.io/weex/doc/advanced/integrate-to-ios.html')}`);
+      logger.info(`See ${chalk.cyan('https://spring.io/guides/gs/android/')}`);
       reject();
     }
   });

@@ -4,3 +4,5 @@ node_modules/*
 .editorconfig
 .esdocrc
 .eslintrc
+
+src

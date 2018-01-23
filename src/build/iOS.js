@@ -11,7 +11,7 @@ const { PlatformConfig, iOSConfigResolver, Platforms } = require('../utils/confi
  * compile jsbundle.
  */
 const copyJsbundleAssets = () => {
-  logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
+  logger.info(`Move JSbundle to dist`);
   const options = {
     filter: [
       '*.js',
@@ -55,8 +55,8 @@ const prepareIOS = ({ options }) => {
   return new Promise((resolve, reject) => {
     const rootPath = process.cwd();
     if (!utils.checkIOS(rootPath)) {
-      logger.info(chalk.red('  iOS project not found !'));
-      logger.info(`  You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add ios')} first`);
+      logger.error('iOS project not found !');
+      logger.info(`You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add ios')} first`);
       reject();
     }
     // change working directory to ios
@@ -65,13 +65,13 @@ const prepareIOS = ({ options }) => {
     const xcodeProject = utils.findXcodeProject(process.cwd());
 
     if (xcodeProject) {
-      logger.info(`\n=> ${chalk.blue.bold('start iOS app')}\n`);
+      logger.info(`start iOS app`);
       resolve({ xcodeProject, options, rootPath });
     }
     else {
       logger.error(`Could not find Xcode project files in ios folder.`);
       logger.info(`Please make sure you have installed iOS Develop Environment and CocoaPods`);
-      logger.info(`See ${chalk.cyan('http://alibaba.github.io/weex/doc/advanced/integrate-to-ios.html')}`);
+      logger.info(`See ${chalk.cyan('https://spring.io/guides/gs/android/')}`);
       reject();
     }
   });
@@ -83,7 +83,7 @@ const prepareIOS = ({ options }) => {
  * @param {Object} options
  */
 const installDep = ({ xcodeProject, options, rootPath, configs }) => {
-  logger.info(`\n=> ${chalk.blue.bold('pod update')}\n`);
+  logger.info(`pod update`);
   return utils.exec('pod update').then(() => ({ xcodeProject, options, rootPath, configs }));
 };
 
@@ -127,7 +127,7 @@ const buildApp = ({ xcodeProject, options, rootPath, configs }) => {
 
     const scheme = projectInfo.project.schemes[0];
 
-    logger.info(`\n=> ${chalk.blue.bold('Buiding project...')}\n`);
+    logger.info(`Buiding project...`);
     try {
       if (_.isEmpty(configs)) {
         reject(new Error('iOS config dir not detected.'));
@@ -149,7 +149,7 @@ const copyReleaseAssets = ({
   rootPath,
   configs
 }) => {
-  logger.info(`\n=> ${chalk.blue.bold('Move Release File to `release/ios`')} \n`);
+  logger.info(`Move Release File to \`release/ios\``);
   const copyOptions = {
     filter: [
       '*.apk'
@@ -190,7 +190,7 @@ const buildIOS = (options) => {
       if (err) {
         logger.error(err);
         const errTips = 'You should config `CodeSign` and `Profile` in the `ios.config.json`\n\n    We suggest that you open the `platform/ios` directory.\n\n    Package your project as a normal ios project!';
-        logger.info(`\n=>  ${chalk.blue.bold(errTips)}`);
+        logger.error(errTips);
       }
     });
 };

@@ -2,14 +2,14 @@
 
 const program = require('commander');
 const chalk = require('chalk');
-const utils = require('../src/utils')
+const utils = require('../lib/utils')
 const logger = utils.logger;
 
 const {
   buildAndroid,
   buildIOS,
   buildWeb
-} = require('../src/build');
+} = require('../lib/build');
 
 program
   .usage('<platform> [options]')
@@ -42,7 +42,7 @@ const isValidPlatform = (args) => {
  * Run weex app on the specific platform
  * @param {String} platform
  */
-const build(platform, options) => {
+const build = (platform, options) => {
   switch (platform) {
     case 'android' : buildAndroid(options); break;
     case 'ios' : buildIOS(options); break;

@@ -6,8 +6,8 @@ const inquirer = require('inquirer');
 const rm = require('rimraf').sync;
 const fs = require('fs');
 const path = require('path');
-const create = require('../src/create');
-const utils = require('../src/utils')
+const create = require('../lib/create');
+const utils = require('../lib/utils')
 const logger = utils.logger;
 const events = utils.events;
 

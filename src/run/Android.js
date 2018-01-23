@@ -68,7 +68,7 @@ const shouldRunAndroid = () => {
     const rootPath = process.cwd();
     if (!utils.checkAndroid(rootPath)) {
       logger.error('Android project not found!');
-      logger.log(`You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add android')}  first`);
+      logger.log(`You should run ${chalk.yellow('weex create')} or ${chalk.yellow('weex platform add android')}  first`);
       reject();
     }
     resolve();
@@ -91,8 +91,8 @@ const prepareAndroid = ({
     process.chdir(path.join(rootPath, 'platforms/android'));
     if (!process.env.ANDROID_HOME) {
       logger.error('Environment variable $ANDROID_HOME not found !');
-      logger.log(`You should set $ANDROID_HOME first.`);
-      logger.log(`See ${chalk.cyan('http://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x')}`);
+      logger.log(`You should set ANDROID_HOME in your environment first.`);
+      logger.log(`See ${chalk.cyan('https://spring.io/guides/gs/android/')}`);
       reject();
     }
     try {

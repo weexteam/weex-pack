@@ -14,7 +14,7 @@ const {
  * compile jsbundle.
  */
 const copyJsbundleAssets = () => {
-  logger.info(`\n=> ${chalk.blue.bold('Move JSbundle to dist')} \n`);
+  logger.info(`Move JSbundle to dist')} \n`);
   const options = {
     filter: [
       '*.js',
@@ -61,21 +61,18 @@ const prepareAndroid = ({
     const rootPath = process.cwd();
     if (!utils.checkAndroid(rootPath)) {
       logger.info(rootPath);
-      logger.info(chalk.red('  Android project not found !'));
-      logger.info();
-      logger.info(`  You should run ${chalk.blue('weex create')} or ${chalk.blue('weex platform add android')}  first`);
+      logger.info(chalk.red('Android project not found !'));
+      logger.info(`You should run ${chalk.yellow('weex create')} or ${chalk.yellow('weex platform add android')}  first`);
       reject();
     }
-    logger.info(`\n=> ${chalk.blue.bold('Will start Android app')} \n`);
+    logger.info(`Will start Android app`);
 
     // change working directory to android
     process.chdir(path.join(rootPath, 'platforms/android'));
     if (!process.env.ANDROID_HOME) {
-      logger.info();
-      logger.info(chalk.red('  Environment variable $ANDROID_HOME not found !'));
-      logger.info();
-      logger.info(`  You should set $ANDROID_HOME first.`);
-      logger.info(`  See ${chalk.cyan('http://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x')}`);
+      logger.error('Environment variable ANDROID_HOME not found !');
+      logger.log(`You should set ANDROID_HOME in your environment first.`);
+      logger.log(`See ${chalk.cyan('https://spring.io/guides/gs/android/')}`);
       reject();
     }
     try {
@@ -130,14 +127,14 @@ const copyApkAssets = ({
   rootPath,
   configs
 }) => {
-  logger.info(`\n=> ${chalk.blue.bold('Move APK to `release/android`')} \n`);
+  logger.info(`Move APK to \`release/android\``);
   const copyOptions = {
     filter: [
       '*.apk'
     ],
     overwrite: true
   };
-  return copy(path.resolve('app/build/outputs/apk/'), path.resolve(path.join('../../release/android', configs.BuildVersion)), copyOptions)
+  return copy(path.resolve('app/build/outputs/apk/'), path.resolve(path.join('../../release/android', configs.BuildVersion || '')), copyOptions)
   .on(copy.events.COPY_FILE_START, function (copyOperation) {
     logger.info('Copying file ' + copyOperation.src + '...');
   })
@@ -164,7 +161,7 @@ const buildApp = ({
   configs
 }) => {
   return new Promise((resolve, reject) => {
-    logger.info(`\n=> ${chalk.blue.bold('Building app ...')}\n`);
+    logger.info(`Building app ...`);
     const clean = options.clean ? ' clean' : '';
     try {
       childprocess.execSync(process.platform === 'win32' ? `call gradlew.bat ${clean} assembleRelease` : `./gradlew ${clean} assembleRelease`, {
