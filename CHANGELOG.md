@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.0.10
+* 更新`weexpack-create`依赖版本至0.2.15. [weexpack-create/commit/acec5d91](https://github.com/weexteam/weexpack-create/commit/acec5d917a031390dce5f4993a0d4c8ff86e6143)
+
 ### 1.0.9
 * 修复 `src/utils` 中的 `logger` undefined 的问题. [weex-toolkit/issues/254](https://github.com/weexteam/weex-toolkit/issues/254)
 

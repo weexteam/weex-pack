@@ -4,13 +4,13 @@
 # Weex 工程开发套件
 
 [English Version](./README.en.md)
-
+|
 [如何开发Weex插件](./doc/cn/how-to-devloping-weex-plugin.md)
+|
+[更新日志](./CHANGELOG.md)
 
-## weexpack 介绍
-weexpack 是新一代的weex应用工程和插件工程开发套件，是基于weex快速搭建应用原型的利器。它能够帮助开发者通过命令行创建weex应用工程和插件工程，快速打包 weex 应用并安装到手机运行，对于具有分享精神的开发者而言还能够创建weex插件模版并发布插件到weex应用市场。 使用weexpack 能够方便的在在weex工程和native工程中安装插件。
 
-目前[weex-toolkit](https://github.com/weexteam/weex-toolkit)集成对weexpack的命令调用支持，你可以使用weex-toolkit命令来实现weexpack具备的功能。比如我们要实现添加iOS应用模板：
+目前[weex-toolkit](https://github.com/weexteam/weex-toolkit)集成对weexpack的命令调用支持，你可以使用weex-toolkit命令来实现weexpack具备的功能。如：
 ``` bash
 # 使用weexpack 命令
 $ weexpack platform add ios
@@ -322,95 +322,7 @@ ios平台，安装后 platforms 目录如下
 ## 示例
 [使用Weexpack打包出一个Weex版的 《One App》](https://github.com/weexteam/weex-pack/wiki/Create-Weex-One-App-with-Weexpack)
 
-
-
-## Changelog
-
-### 1.0.9
-* 修复 `src/utils` 中的 `logger` undefined 的问题. [weex-toolkit/issues/254](https://github.com/weexteam/weex-toolkit/issues/254)
-
-### 1.0.8
-* 移除部分代码对`weexpack-common`依赖，方便后续精简包大小。
-* 更新`weexpack-create`依赖，修改preview页面的url参数 [weex-toolkit/issues/250](https://github.com/weexteam/weex-toolkit/issues/250)
-
-### 1.0.7
-* 修复babel编译问题，将`json`文件转换为`js`文件形式引用，修复文件丢失问题。[weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
-
-### 1.0.6
-* issues修复 [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
-
-### 1.0.3
-* issues修复 [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
-
-### 1.0.2
-* 修复文件丢失问题
-
-### 1.0.1
-* 修复babel脚本编译问题，支持 node 6+ 设备
-
-### 1.0.0
-* 全新的插件开发以及集成机制,详情参考 [如何开发weex插件](./doc/plugin-devloping-weexpack.md)
-* 全新的 `weex` 模板项目，支持前端热更新、测试、开发、打包、构建一体化流程
-* 更加精简的 playground 模板，支持代码修改的实施同步功能，修改代码立即可在客户端中查看效果
-* 移除cordova依赖，重构代码以及移除冗余的逻辑
-* 修复 `weex run` 以及 `weex build` 功能同时优化用户提示
-
-### 0.4.7
-* 重构部分代码，修复功能为主
-
-### 0.4.0
-* 重构插件weex插件开发和安装机制
-
-### 0.3.13
-* 修复创建ali内部源问题
-
-
-### 0.3.12
-* 修复merge问题
-* 更新发测试用例
-* 修复插件发布的命名空间问题
-
-### 0.3.11
-* 修复安装插件时，ios平台ali内部出错问题
-* plugin remove 命令增加成功提示
-
-### 0.3.10
-* 实现weexpack plugin link dir 命令， 可以在demo中安装本地正在开发的插件。用于测试
-* 支持创建使用ali内部源的ios容器
-  - weexpack weexplugin create ios -a
-
-### 0.3.9
-* 支持单独创建插件容器命令
-  - weexpack weexplugin create ios 创建iOS插件容器
-  - weexpack weexplugin create android 创建android插件容器
-
-### 0.3.8
-* 添加命令选项 weexpack platform add ios -a , 创建支持内部源的iOS平台
-
-### 0.2.5
-* 修复weexpack build android在windows下的bug
-
-### 0.2.4
-* 修复weexpack run web的bug 并且加了自动打开浏览器的功能
-
-### 0.2.3
-* suppress adb reverse error(android 5.0- will cause error)
-
-### 0.2.2
-* 更换copy库 之前用的库还是存在windows的兼容问题，被坑了。
-
-### 0.2.1
-* 修复windows平台的bug 重新用bat重写了start脚本
-* 修复了错误把build文件夹ignore的问题。
-
-### 0.2.0
-* 优化操作流程，去掉了以前会重复出现的server窗口
-* 修复个别打包失败的错误 增强稳定性
-* 消除ios-deploy的依赖，只在ios打包时再动态安装ios-deploy
-* 修复了EI Capitan系统下安装失败的问题
-* 支持windows，不再依赖ios相关的环境
-* 以WeexOne作为测试用例
-
+## 参考
   [1]: https://nodejs.org/
   [2]: https://www.npmjs.com/
   [3]: https://itunes.apple.com/us/app/xcode/id497799835?mt=12
