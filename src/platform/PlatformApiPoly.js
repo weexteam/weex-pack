@@ -26,9 +26,8 @@ const knownPlatforms = require('./platforms');
 
 function copyPlatform (templateDir, projectDir) {
   const templateFiles = fs.readdirSync(templateDir);
-    // Remove directories, and files that are unwanted
-
-    // Copy each template file after filter
+  // Remove directories, and files that are unwanted
+  // Copy each template file after filter
   for (let i = 0; i < templateFiles.length; i++) {
     const p = path.resolve(templateDir, templateFiles[i]);
     shell.cp('-R', p, projectDir);

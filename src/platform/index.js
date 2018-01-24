@@ -31,6 +31,7 @@ const _ = require('underscore');
 const npmUninstall = require('cordova-fetch').uninstall;
 const platformMetadata = require('./platformMetadata');
 const platformApi = require('./platformApiPoly');
+const ora = require('ora');
 const utils = require('../utils');
 const logger = utils.logger;
 const events = utils.events;
@@ -119,6 +120,7 @@ function add (projectRoot, targets, opts) {
 
 function addHelper (cmd, projectRoot, targets, opts) {
   let msg;
+  let spinner;
   const cfg = {};
   if (!targets || !targets.length) {
     msg = 'No platform specified. Please specify a platform to ' + cmd + '. ' + 'See `' + tools.binname + ' platform list`.';
@@ -154,9 +156,12 @@ function addHelper (cmd, projectRoot, targets, opts) {
             return getPlatformDetailsFromDir(maybeDir, platform);
           }
         }
+        spinner = ora(`Download ${platform}@${spec}...`)
+        spinner.start();
         return downloadPlatform(projectRoot, platform, spec, opts);
       })
       .then((platDetails) => {
+        spinner.stop();
         const platformPath = path.join(projectRoot, 'platforms', platform);
         const platformAlreadyAdded = fs.existsSync(platformPath);
         const options = {
@@ -345,7 +350,7 @@ const platform = (command, targets, opts) => {
     logger.error(e)
     return;
   }
-
+  
   if (arguments.length === 0) command = 'ls';
 
   if (targets) {

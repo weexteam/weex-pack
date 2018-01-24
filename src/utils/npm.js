@@ -7,11 +7,16 @@ const fs = require('fs');
 
 const tar = require('tar');
 const zlib = require('zlib');
+const {logger} = require('./logger');
 
 exports.getLastestVersion = function (name, callback) {
   let trynum = 0;
   npm.load(function () {
     const load = function (npmName) {
+      if (!npmName) {
+        logger.error(`Please provide a plugin name.`);
+        return;
+      }
       npm.commands.info([npmName, 'version'], true, function (error, result) {
         let prefix;
         if (error && trynum === 0) {
@@ -25,7 +30,8 @@ exports.getLastestVersion = function (name, callback) {
           load(prefix + npmName);
         }
         else if (error && trynum !== 0) {
-          throw new Error(error);
+          logger.error(error);
+          return;
         }
         else {
           let version;
@@ -36,7 +42,6 @@ exports.getLastestVersion = function (name, callback) {
         }
       });
     };
-
     load(name);
   });
 };
@@ -45,7 +50,8 @@ exports.fetchCache = function (npmName, version, callback) {
   npm.load(function () {
     npm.commands.cache(['add', (npmName + '@' + version)], function (error, result) {
       if (error) {
-        throw new Error(error);
+        logger.error(error);
+        return;
       }
       else {
         const packageDir = path.resolve(npm.cache, result.name, result.version, 'package');
@@ -61,15 +67,15 @@ exports.unpackTgz = function (packageTgz, unpackTarget, callback) {
 
   fs.createReadStream(packageTgz)
         .on('error', function (err) {
-          console.warn('Unable to open tarball ' + packageTgz + ': ' + err);
+          logger.warn('Unable to open tarball ' + packageTgz + ': ' + err);
         })
         .pipe(zlib.createUnzip())
         .on('error', function (err) {
-          console.warn('Error during unzip for ' + packageTgz + ': ' + err);
+          logger.warn('Error during unzip for ' + packageTgz + ': ' + err);
         })
         .pipe(tar.Extract(extractOpts))
         .on('error', function (err) {
-          console.warn('Error during untar for ' + packageTgz + ': ' + err);
+          logger.warn('Error during untar for ' + packageTgz + ': ' + err);
         })
         .on('end', function (result) {
           callback(result);

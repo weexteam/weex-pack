@@ -111,7 +111,7 @@ function isWeex (dir) {
       bestReturnValueSoFar = dir;
     }
     const parentDir = path.normalize(path.join(dir, '..'));
-        // Detect fs root.
+    // Detect fs root.
     if (parentDir === dir) {
       return bestReturnValueSoFar;
     }
@@ -123,8 +123,12 @@ function isWeex (dir) {
 function isRootDir (dir) {
   if (fs.existsSync(path.join(dir, 'platforms'))) {
     if (fs.existsSync(path.join(dir, 'web'))) {
-      // For sure is.
-      return 1;
+      if (fs.existsSync(path.join(dir, '.wx/config.json'))) {
+        return 2;
+      }
+      else {
+        return 1;
+      }
     }
   }
   return 0;

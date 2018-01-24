@@ -103,10 +103,10 @@ function npmHelper (platform) {
   if (!(platform.name in platforms)) {
     return Q.reject(new Error('weex library "' + platform.name + '" not recognized.'));
   }
-    // Check if this version was already downloaded from git, if yes, use that copy.
-    // TODO: remove this once we fully switch to npm workflow.
-    // If platform.version specifies a *range*, we need to determine what version we'll actually get from npm (the
-    // latest version that matches the range) to know what local directory to look for.
+  // Check if this version was already downloaded from git, if yes, use that copy.
+  // TODO: remove this once we fully switch to npm workflow.
+  // If platform.version specifies a *range*, we need to determine what version we'll actually get from npm (the
+  // latest version that matches the range) to know what local directory to look for.
   return tools.getLatestMatchingNpmVersion(platform.packageName, platform.version).then(function (version) {
         // Note that because the version of npm we use internally doesn't support caret versions, in order to allow them
         // from the command line and in config.xml, we use the actual version returned by getLatestMatchingNpmVersion().
@@ -133,7 +133,6 @@ function custom (platforms, platform) {
   const platdir = plat.altplatform || platform;
     // Return early for already-cached remote URL, or for local URLs.
   const uri = URL.parse(url);
-  console.log(uri)
   const isUri = uri.protocol && uri.protocol[1] !== ':'; // second part of conditional is for awesome windows support. fuuu windows
   if (isUri) {
     downloadDir = path.join(tools.libDirectory, platdir, id, version);

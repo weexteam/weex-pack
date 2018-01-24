@@ -8,10 +8,10 @@ const chalk = require('chalk');
 const _ = require('underscore');
 const output = require('./output');
 const validator = require('./validator');
-const logger = require('./logger');
+const log = require('./logger');
+const logger = log.logger;
 const gituser = require('./gituser');
 const ask = require('./ask');
-
 const utils = {
   copyAndReplace (src, dest, replacements) {
     if (fs.lstatSync(src).isDirectory()) {
@@ -375,4 +375,4 @@ const utils = {
 
 };
 
-module.exports = Object.assign(utils, output, validator, logger, gituser, ask);
+module.exports = Object.assign(utils, output, validator, log, gituser, ask);
