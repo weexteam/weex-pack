@@ -5,6 +5,8 @@
 
 [English Version](./README.en.md)
 
+[如何开发Weex插件](./doc/cn/how-to-devloping-weex-plugin.md)
+
 ## weexpack 介绍
 weexpack 是新一代的weex应用工程和插件工程开发套件，是基于weex快速搭建应用原型的利器。它能够帮助开发者通过命令行创建weex应用工程和插件工程，快速打包 weex 应用并安装到手机运行，对于具有分享精神的开发者而言还能够创建weex插件模版并发布插件到weex应用市场。 使用weexpack 能够方便的在在weex工程和native工程中安装插件。
 
@@ -18,14 +20,14 @@ $ weex platform add  ios
 
 ```
 
-又或者添加 weex-action-sheet插件
+又或者添加 weex-plugin-lottie插件
 
 ``` bash
 # 使用weexpack 命令
-$ weexpack plugin add weex-action-sheet
+$ weexpack plugin add weex-plugin-lottie
 
 # 使用weex-toolkit
-$ weex plugin add  weex-action-sheet
+$ weex plugin add  weex-plugin-lottie
 
 ```
 
@@ -243,9 +245,9 @@ ios平台，安装后 platforms 目录如下
 
 		$ weexpack plugin add plugin-name
 
-* 从插件市场添加插件，例如 weex-action-sheet。
+* 从插件市场添加插件，例如 weex-plugin-lottie。
 
-		$ weexpack plugin add weex-action-sheet
+		$ weexpack plugin add weex-plugin-lottie
 
 * 查看已安装插件
 
@@ -256,11 +258,11 @@ ios平台，安装后 platforms 目录如下
  - 在android工程中weexpack将插件作为依赖安装到build.gradle中。你可以在文件的依赖中看到安装过的插件
 
 
-如果想要删除某个不需要的插件可以使用 weexpack plugin remove 移除，比如weex-action-sheet
+如果想要删除某个不需要的插件可以使用 weexpack plugin remove 移除，比如weex-plugin-lottie
 
-* 移除插件，例如weex-chart
+* 移除插件，例如weex-plugin-lottie
 
-		$ weexpack plugin remove weex-action-sheet
+		$ weexpack plugin remove weex-plugin-lottie
 
 
 
@@ -315,52 +317,6 @@ ios平台，安装后 platforms 目录如下
 
 
 ## 插件开发文档
-
-如果想扩展weex功能，你可以使用weexpack 命令快速创建一个weex工程。
-
-
-     $ weexpack plugin create weex-plguin-demo
-
-工程目录如下
-
-
-      ├── android(Android插件工程目录)
-      │    ├── library(Android插件module目录，已被include到example工程中)
-      ├── ios(ios插件工程)
-      ├── js(h5插件工程)
-      ├── example(例子,开发者用来测试问题)
-      │    └── index.we
-      ├── playground
-      │    ├── android(Android demo工程，集成了playground功能并默认引用了插件module)
-      │    ├── ios(demo)
-      │    ├── browser(demo)
-           ├── start(weex编译命令)
-      ├── ****.podspec(ios发布文件)
-      ├── start(native端weex编译命令)
-      ├── start-web(浏览器端weex编译命令)
-      ├── package.json(js发布文件)
-      ├── README.md
-
-
-生成工程中为你准备好了ios、android、js的插件模块的实现的例子和demo。同时也为你准备好了example，这些example经过编译之后,
-
-    $ ./start
-
-可以在playground下的各端的个demo工程运行调试。详细的开发过程可以参考下以文档：
-
-
-+ [使用weexpack开发插件](./doc/plugin-devloping-weexpack.md)
-
-+ [开发html5的插件教程](./doc/plugin-devloping-web.md)
-
-
-
-
-## 插件发布
-
-对于插件开发者来说，也有一组用于创建和发布插件的命令，[前往](./README_plugin.md) 查看详细文档
-
-![weexpack2](https://img.alicdn.com/tps/TB18hxjPXXXXXXgapXXXXXXXXXX-248-258.png)
 
 
 ## 示例
