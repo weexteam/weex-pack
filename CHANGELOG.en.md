@@ -1,18 +1,18 @@
 ## Changelog
 
 ### 1.0.11
-* 更新`weexpack-create`依赖版本至0.2.16. [weexpack-create/commit/6a3427](https://github.com/weexteam/weexpack-create/commit/6a3427c7e91e6837350165f3ef277f08971ffe0c)
-支持多页面模式开发，仅需在`src`中增加`.vue`文件,同时在url中指明`?page=xxx.js`即可预览`xxx.vue`文件的页面。
+* Upgrade `weexpack-create` to 0.2.16. [weexpack-create/commit/6a3427](https://github.com/weexteam/weexpack-create/commit/6a3427c7e91e6837350165f3ef277f08971ffe0c)
+support muti page develop, you can just add `xxx.vue` in to the `src` folder, and modify the `?page=xxx.js` options on url to the page you want to preview, like `?page=demo.js`.
 
 ### 1.0.10
-* 更新`weexpack-create`依赖版本至0.2.15. [weexpack-create/commit/acec5d91](https://github.com/weexteam/weexpack-create/commit/acec5d917a031390dce5f4993a0d4c8ff86e6143)
+* Upgrade `weexpack-create` to 0.2.15. [weexpack-create/commit/acec5d91](https://github.com/weexteam/weexpack-create/commit/acec5d917a031390dce5f4993a0d4c8ff86e6143)
 
 ### 1.0.9
-* 修复 `src/utils` 中的 `logger` undefined 的问题. [weex-toolkit/issues/254](https://github.com/weexteam/weex-toolkit/issues/254)
+* Fix issue [weex-toolkit/issues/254](https://github.com/weexteam/weex-toolkit/issues/254)
 
 ### 1.0.8
-* 移除部分代码对`weexpack-common`依赖，方便后续精简包大小。
-* 更新`weexpack-create`依赖，修改preview页面的url参数 [weex-toolkit/issues/250](https://github.com/weexteam/weex-toolkit/issues/250)
+* Remove `weexpack-common` dependence.
+* Upgrade `weexpack-create` to 0.2.14.[weex-toolkit/issues/250](https://github.com/weexteam/weex-toolkit/issues/250)
 
 ### 1.0.7
 * 修复babel编译问题，将`json`文件转换为`js`文件形式引用，修复文件丢失问题。[weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
