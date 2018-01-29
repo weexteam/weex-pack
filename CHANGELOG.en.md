@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.0.12
+* Fix `gituser.js` module not found on ubuntu or other linux platform [weexteam/weex-toolkit/issues/252](https://github.com/weexteam/weex-toolkit/issues/252)
+
 ### 1.0.11
 * Upgrade `weexpack-create` to 0.2.16. [weexpack-create/commit/6a3427](https://github.com/weexteam/weexpack-create/commit/6a3427c7e91e6837350165f3ef277f08971ffe0c)
 support muti page develop, you can just add `xxx.vue` in to the `src` folder, and modify the `?page=xxx.js` options on url to the page you want to preview, like `?page=demo.js`.

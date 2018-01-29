@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.0.12
+
+* 修复大小写敏感系统（如Ubuntu，linux）下`gituser.js`模块找不到的问题[weexteam/weex-toolkit/issues/252](https://github.com/weexteam/weex-toolkit/issues/252)
+
 ### 1.0.11
 * 更新`weexpack-create`依赖版本至0.2.16. [weexpack-create/commit/6a3427](https://github.com/weexteam/weexpack-create/commit/6a3427c7e91e6837350165f3ef277f08971ffe0c)
 支持多页面模式开发，仅需在`src`中增加`.vue`文件,同时在url中指明`?page=xxx.js`即可预览`xxx.vue`文件的页面。
