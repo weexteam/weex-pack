@@ -1,7 +1,9 @@
 ## Changelog
 
-### 1.0.12
+### 1.0.13
+* 修复模块引入作用域提升问题 [weex-ui/issues/135](https://github.com/alibaba/weex-ui/issues/135).
 
+### 1.0.12
 * 修复大小写敏感系统（如Ubuntu，linux）下`gituser.js`模块找不到的问题[weexteam/weex-toolkit/issues/252](https://github.com/weexteam/weex-toolkit/issues/252)
 
 ### 1.0.11

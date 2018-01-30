@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.0.13
+* Fix Hosting error [weex-ui/issues/135](https://github.com/alibaba/weex-ui/issues/135).
+
 ### 1.0.12
 * Fix `gituser.js` module not found on ubuntu or other linux platform [weexteam/weex-toolkit/issues/252](https://github.com/weexteam/weex-toolkit/issues/252)
 
