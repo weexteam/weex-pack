@@ -14,24 +14,34 @@
   * Component 
       Please use `@ WeexComponent` to annotate the Component implementation class in the plugin. The @WeexComponent contains the following parameters:
       * String [] names: Specify one or more names for the Component, which can not be null
-      * boolean appenndTree: Whether to apply the append = tree attribute to this Component, the default is `false`
-      * boolean usingHolder: Whether to initialize the Component with `SimpleComponentHolder`, the default is` false`
-      * boolean canOverrideExistingComponent: Can overwrite the existing Component with the same name in the current environment, defaults to `true`
-      * String creator: The fully qualified name of the ComponentCreator implementation class used to instantiate the Component, which must have a constructor that takes no arguments. This property must be set when `usingHolder` is true, and defaults to` NULL`.
+      
+      * boolean appenndTree: Whether to apply the append = tree attribute to this Component, the default is `false`
+      
+      * boolean usingHolder: Whether to initialize the Component with `SimpleComponentHolder`, the default is` false`
+      
+      * boolean canOverrideExistingComponent: Can overwrite the existing Component with the same name in the current environment, defaults to `true`
+      
+      * String creator: The fully qualified name of the ComponentCreator implementation class used to instantiate the Component, which must have a constructor that takes no arguments. This property must be set when `usingHolder` is true, and defaults to` NULL`.
   * Module
       Use `@ WeexModule` to add annotations to the Module implementation class in the plug-in. The` @ WeexModule` contains the following parameters:
       * String name: specify a name for the Module, can not be empty
-      * boolean canOverrideExistingModule: Can overwrite the existing Module with the same name in the current environment, the default is `true`
-      * boolean globalRegistration: whether to register the module globally, the default is false
-      * boolean lazyLoad: lazy load the Module, the default is false (lazy loading function is currently not yet implemented, you can ignore the parameter)
+      
+      * boolean canOverrideExistingModule: Can overwrite the existing Module with the same name in the current environment, the default is `true`
+      
+      * boolean globalRegistration: whether to register the module globally, the default is false
+      
+      * boolean lazyLoad: lazy load the Module, the default is false (lazy loading function is currently not yet implemented, you can ignore the parameter)
   * Adapter
       Please use `@ WeexAdapter` to annotate the Adapter class implemented in the plugin. The @WeexAdapter contains the following parameters:
       * Class type: Plug Adapter adapter interface class, can not be empty. For example, if the current plugin class is an implementation class of `IWXHttpAdapter`, you need to add an annotation of` @WeexAdapter (type = IWXHttpAdapter.class) `. Currently, only the adapter types defined in weex sdk are supported
-      * boolean canOverrideExistingAdapter: Can overwrite existing Adapter of the same type in current environment, default is `true`
-  DomObject
+      
+      * boolean canOverrideExistingAdapter: Can overwrite existing Adapter of the same type in current environment, default is `true`
+  * DomObject
       Use '@ WeexDomObject` to add annotations to the custom DomObject in the plug-in, with the following parameters: @ WeexDomObject.
-      * String type: DomObject type, can not be empty
-      * boolean canOverrideExistingDomObject: Can overwrite DomObject with the same name in the current environment, default is `true`.
+      
+      * String type: DomObject type, can not be empty
+      
+      * boolean canOverrideExistingDomObject: Can overwrite DomObject with the same name in the current environment, default is `true`.
 
 ### Test
 After the plug-in development is complete, please compile the example project and install it on the device for testing. After the playground starts, the plug-in will be automatically registered in the weex runtime. At this time, you can write your test script on [Dotwe](http://dotwe.org/vue/) and scan the qrcode for testing.
