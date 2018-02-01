@@ -1,7 +1,11 @@
 ## Changelog
 
+### 1.0.15
+* Fix issue [weex-pack/issues/222](https://github.com/weexteam/weex-pack/issues/222).
+* Add English document about how to devloping weex, see [How to devloping weex plugin](./doc/en/how-to-devloping-weex-plugin.md)
+
 ### 1.0.14
-* Fix issues [weex-pack/issues/224](https://github.com/weexteam/weex-pack/issues/224).
+* Fix issue [weex-pack/issues/224](https://github.com/weexteam/weex-pack/issues/224).
 * Remove `installIosDeploy.sh`.
 
 ### 1.0.13

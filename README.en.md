@@ -1,9 +1,10 @@
 # Weex Engineering Development Kit
 
 [中文版文档](./README.md)
-
+|
 [How to devloping weex plugin](./doc/en/how-to-devloping-weex-plugin.md)
-
+|
+[Changelog](./CHANGELOG.en.md)
 
 ## Weexpack introduction
 Weexpack is our next generation of engineering development kits, it helps to setup weex application from scratch quickly. With simple commands, developers could create a weex project, add different platform template, could install plugins from local, GitHub or weex market, could pack up his application project and run on mobile. For those who would like to share his own plugins, he could publish them to the weex market.
@@ -182,49 +183,13 @@ Please use remove command to remove unnecessary platform, for example user want 
 
 #### 3. install weex plugin（optional）
 
-* add plugins from local
+* add plugins from npm，for example weex-plugin-lottie
 
-		$ weexpack plugin add path/to/plugin
+		$ weexpack plugin add weex-plugin-lottie
 
-* add plugins from weex market，for example weex-chart
+* remove installed plugin，for example weex-plugin-lottie
 
-		$ weexpack plugin add weex-chart
-
-    weexplugin directory was the target directory where plugin was installed. Take android as an example：
-
-    ```
-      weexplugin
-      ├── build.gradle  //  plugin build script, maintained by weexpack tool
-      ├── libs
-      ├── proguard-rules.pro
-      ├── src
-      │   └── main
-      │       ├── AndroidManifest.xml // plugin android manifest file
-      │       ├── java
-      │       │   ├── // 插件src安装目录
-      │       │   └── com
-      │       │       └── alibaba
-      │       │           └── weex
-      │       │               └── plugin
-      │       │                   ├── ConfigXmlParser.java // config file parser
-      │       │                   ├── PluginConfig.java    // external interface
-      │       │                   ├── PluginEntry.java     // plugin description
-      │       │                   └── PluginManager.java   // plugin manager
-      │       └── res // plugin resource path
-      │           ├── drawable
-      │           ├── values
-      │           │   └── strings.xml
-      │           └── xml
-      │               └── config.xml // plugin config file, which used by PluginManager when install
-    ```
-
-* query installed plugins
-
-		$ weexpack plugin list
-
-* remove installed plugin，for example weex-chart
-
-		$ weexpack plugin remove weex-chart
+		$ weexpack plugin remove weex-plugin-lottie
 
 #### 4. pack application and run
 

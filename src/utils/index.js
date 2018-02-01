@@ -139,7 +139,7 @@ const utils = {
       if (os.release() >= '15.0.0') {
         args = ' --unsafe-perm=true --allow-root';
       }
-      return Promise.reject(`Please run 'npm install ios-deploy' on your project(only support for mac os)`)
+      return this.exec(path.join(__dirname, '/installIosDeploy.sh', args));
     }
     else {
       return Promise.resolve();

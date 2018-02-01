@@ -52,11 +52,11 @@ export default {
 }
 ```
 
-** 模块开发代码示例：（alert为例）**
+** 模块开发代码示例：（weexalert为例）**
 ```
-const alert = {
+const weexalert = {
   show() {
-      alert("module WeexPluginDemo is created sucessfully ")
+      weexalert("module WeexPluginDemo is created sucessfully ")
   }
 };
 const meta = {
@@ -66,7 +66,7 @@ const meta = {
   }]
 };
 function init(weex) {
-  weex.registerModule('alert', alert, meta);
+  weex.registerModule('weexalert', weexalert, meta);
 }
 export default {
   init:init

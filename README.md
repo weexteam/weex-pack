@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/weexteam/weex-pack.svg?branch=master)](https://travis-ci.org/weexteam/weex-pack)
 # Weex 工程开发套件
 
-[English Version](./README.en.md)
+[English Document](./README.en.md)
 |
 [如何开发Weex插件](./doc/cn/how-to-devloping-weex-plugin.md)
 |

@@ -1,7 +1,11 @@
 ## Changelog
 
+### 1.0.15
+* 修复issue [weex-pack/issues/222](https://github.com/weexteam/weex-pack/issues/222).
+* 新增英文插件开发文档，见 [How to devloping weex plugin](./doc/en/how-to-devloping-weex-plugin.md)
+
 ### 1.0.14
-* 修复issues [weex-pack/issues/224](https://github.com/weexteam/weex-pack/issues/224).
+* 修复issue [weex-pack/issues/224](https://github.com/weexteam/weex-pack/issues/224).
 * 移除对`installIosDeploy.sh`的引用.
 
 ### 1.0.13

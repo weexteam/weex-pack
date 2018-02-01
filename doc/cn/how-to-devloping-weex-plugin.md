@@ -21,17 +21,17 @@ $ weex plugin create weex-plugin-lottie
 生成的文件结构如下：
 ```
  ├── android(Android插件工程目录)
- │    ├── library(Android插件module目录，已被include到example工程中)
- ├── ios(ios插件工程)
- ├── js(h5插件工程)
- ├── playground(例子,开发者用来测试问题)
- │    ├── android(Android demo工程，集成了playground功能并默认引用了插件module)
- │    ├── ios(ios demo工程，集成了playground功能并默认引用了插件module)
- │    ├── browser(browser demo工程，集成了playground功能并默认引用了插件module)
- ├── examples(三端使用的共同例子)
- ├── ****.podspec(ios发布文件)
- ├── start(weex编译命令)
- ├── package.json(js发布文件)
+ │    ├── library  (Android插件module目录，已被include到example工程中)
+ ├── ios  (iOS插件工程)
+ ├── js  (Web插件工程)
+ ├── playground  (例子,开发者用来测试问题)
+ │    ├── android  (Android demo工程，集成了playground功能并默认引用了插件module)
+ │    ├── ios  (iOS demo工程，集成了playground功能并默认引用了插件module)
+ │    ├── browser  (Browser demo工程，集成了playground功能并默认引用了插件module)
+ ├── examples  (三端使用的共同例子)
+ ├── ****.podspec  (ios发布文件)
+ ├── start  (weex编译命令)
+ ├── package.json  (js发布文件)
  ├── README.md
 ```
 工程创建完成后进入`weex-plugin-lottie`项目中运行`npm install` 安装项目依赖。
@@ -39,7 +39,9 @@ $ weex plugin create weex-plugin-lottie
 ### 开发
 
 [如何开发web插件](./how-to-devloping-web-plugin.md)
+|
 [如何开发android插件](./how-to-devloping-android-plugin.md)
+|
 [如何开发ios插件](./how-to-devloping-ios-plugin.md)
 
 ### 发布
@@ -71,7 +73,7 @@ maven发布参考
     "groupId": "org.weex.plugin",
     "name": "weex-plugin-lottie",
     "version": "0.0.1",
-    //或是
+    // 或是
     "dependency": "org.weex.plugin:weex-plugin-lottie:0.0.1"
   },
   "ios": {
