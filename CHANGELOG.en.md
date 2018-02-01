@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.0.14
+* Fix issues [weex-pack/issues/224](https://github.com/weexteam/weex-pack/issues/224).
+* Remove `installIosDeploy.sh`.
+
 ### 1.0.13
 * Fix Hosting error [weex-ui/issues/135](https://github.com/alibaba/weex-ui/issues/135).
 

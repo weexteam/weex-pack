@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.0.14
+* 修复issues [weex-pack/issues/224](https://github.com/weexteam/weex-pack/issues/224).
+* 移除对`installIosDeploy.sh`的引用.
+
 ### 1.0.13
 * 修复模块引入作用域提升问题 [weex-ui/issues/135](https://github.com/alibaba/weex-ui/issues/135).
 
