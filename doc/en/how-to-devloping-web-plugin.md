@@ -73,6 +73,8 @@ export default {
   init:init
 }
 ```
+More detail you can see [extend-web-render](http://weex.apache.org/guide/extend-web-render.html).
+
 ### Test
 
 You can run `npm start` and  visit `http://localhost:12580/` to see the plug-in presentation.
