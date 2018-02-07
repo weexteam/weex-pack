@@ -21,10 +21,11 @@ process.on('unhandledRejection', (err) => {
 
 program
 .command('create [plugin_name]')
+.option('--telemetry', 'upload usage data to help us improve the toolkit')
 .description('create a empty plugin project')
-.action(function (pluginName) {
+.action((pluginName, options) => {
   if (pluginName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
-    create(pluginName, program.argv)
+    create(pluginName, program.argv, options)
   } else {
     logger.error(`Invalid plugin name:')} ${chalk.yellow(pluginName)}`);
     exit();
@@ -33,23 +34,26 @@ program
 
 program
   .command('add [plugin_name]')
+  .option('--telemetry', 'upload usage data to help us improve the toolkit')
   .description('Add a plugin into you project')
-  .action(function (pluginName) {
-    return install(pluginName, program.argv);
+  .action((pluginName, options) => {
+    return install(pluginName, program.argv, options);
   });
 
 
 program
   .command('remove [plugin_name]')
+  .option('--telemetry', 'upload usage data to help us improve the toolkit')
   .description('Remove a plugin into you project')
-  .action(function (pluginName) {
+  .action((pluginName, options) => {
     return uninstall(pluginName, program.argv);
   });
 
 program
   .command('install [platformName]')
+  .option('--telemetry', 'upload usage data to help us improve the toolkit')
   .description('Install plugins into you project')
-  .action(function (platformName) {
+  .action((pluginName, options) => {
     if (platformName) {
       return installForNewPlatform(platformName)
     }

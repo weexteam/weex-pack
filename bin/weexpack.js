@@ -15,6 +15,7 @@ program
   .command('plugin [command]', 'command for add,create,login,publish weex plugins')
   .option('--verbose', 'display all logs of debugger server')
   .option('--loglevel [loglevel]', 'set log level silent|error|warn|info|log|debug', 'error')
+  .option('--telemetry', 'upload usage data to help us improve the toolkit')
   .parse(process.argv)
 
 
