@@ -107,7 +107,7 @@ const utils = {
         if (!quiet) {
           child.stdout.pipe(process.stdout);
         }
-        child.stderr.pipe(process.stderr);
+        // child.stderr.pipe(process.stderr);
       }
       catch (e) {
         logger.error('execute command failed :', command);

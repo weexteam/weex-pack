@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Weex pack tool for Android、iOS and Web plartform.",
   "main": "bin/weexpack.js",
   "scripts": {

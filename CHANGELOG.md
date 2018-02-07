@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.0.18
+* 格式化日志事件为 'hh:mm:ss'。
+* 修复使用`weex plugin add/remove`命令时会重复调用 `npm install pluginname` 以及 `npm run build:plugin` 的问题。
+
 ### 1.0.17
 * 修复issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
 * 删除根目录下无用的文件

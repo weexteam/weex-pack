@@ -10,60 +10,22 @@ const logger = utils.logger;
 
 let pluginConfigs = CONFIGS.defaultConfig;
 
+// should uninstall npm package into project or not. default: false
+let shouldUninstallPackage = false;
+
 // Get plugin config in project.
 const pluginConfigPath = path.join(CONFIGS.rootPath, CONFIGS.filename);
 if (fs.existsSync(pluginConfigPath)) {
   pluginConfigs = require(pluginConfigPath);
 }
 
-function uninstall (pluginName, args) {
-  let version;
-  if (/@/ig.test(pluginName)) {
-    const temp = pluginName.split('@');
-    pluginName = temp[0];
-    version = temp[1];
+const handleUninstall = (dir, pluginName, version, option) => {
+
+  if(option.web) {
+    // should install npm package into project or not.
+    shouldUninstallPackage = true;
   }
 
-  const dir = process.cwd();
-
-  // get the lastest version
-  if (!version) {
-    npmHelper.getLastestVersion(pluginName, function (version) {
-      utils.isNewVersionPlugin(pluginName, version, function (result) {
-        if (result) {
-          handleUninstall(dir, pluginName, version, result);
-          if (result.pluginDependencies) {
-            for (const pn in result.pluginDependencies) {
-              uninstall(pn, result.pluginDependencies[pn]);
-            }
-          }
-        }
-        else {
-          logger.warn(`This package of weex is not support anymore! Please choose other package.`);
-        }
-      });
-    });
-  }
-  else {
-    utils.isNewVersionPlugin(pluginName, version, function (result) {
-      if (result) {
-        handleUninstall(dir, pluginName, version, result);
-        if (result.pluginDependencies) {
-          if (result.pluginDependencies) {
-            for (const pn in result.pluginDependencies) {
-              uninstall(pn, result.pluginDependencies[pn]);
-            }
-          }
-        }
-      }
-      else {
-        logger.error(`This package of weex is not support anymore! Please choose other package.`);
-      }
-    });
-  }
-}
-
-function handleUninstall (dir, pluginName, version, option) {
   // check out the type of current project
   if (utils.isIOSProject(dir)) {
     if (!fs.existsSync(path.join(dir, 'Podfile'))) {
@@ -93,10 +55,6 @@ function handleUninstall (dir, pluginName, version, option) {
   }
   else if (utils.isCordova(dir)) {
     const platformList = utils.listPlatforms(dir);
-    if (option.web) {
-      // npm uninstall
-      uninstallInPackage(dir, pluginName, version);
-    }
     for (let i = 0; i < platformList.length; i++) {
       handleUninstall(path.join(dir, 'platforms', platformList[i].toLowerCase()), pluginName, version, option);
     }
@@ -109,7 +67,7 @@ function handleUninstall (dir, pluginName, version, option) {
   }
 }
 
-function uninstallInPackage (dir, pluginName, version) {
+const uninstallInPackage = (dir, pluginName, version) => {
   const packageJsonPath = path.join(dir, 'package.json');
   // Update package.json
   if (fs.existsSync(packageJsonPath)) {
@@ -128,6 +86,41 @@ function uninstallInPackage (dir, pluginName, version) {
   return utils.buildJS('build:plugin').then(() => {
     logger.success(`Building plugins successful.`);
   });
+}
+
+const uninstallNewPlugin = (dir, pluginName, version) => {
+  utils.isNewVersionPlugin(pluginName, version, function (result) {
+    if (result) {
+      handleUninstall(dir, pluginName, version, result);
+      if (shouldUninstallPackage) {
+        uninstallInPackage(dir, pluginName, version);
+      }
+    }
+    else {
+      logger.error(`This package of weex is not support anymore! Please choose other package.`);
+    }
+  });
+}
+
+const uninstall = (pluginName, args) => {
+  let version;
+  if (/@/ig.test(pluginName)) {
+    const temp = pluginName.split('@');
+    pluginName = temp[0];
+    version = temp[1];
+  }
+
+  const dir = process.cwd();
+
+  // get the lastest version
+  if (!version) {
+    npmHelper.getLastestVersion(pluginName, (version) => {
+      uninstallNewPlugin(dir, pluginName, version)
+    });
+  }
+  else {
+    uninstallNewPlugin(dir, pluginName, version)
+  }
 }
 
 module.exports = uninstall;

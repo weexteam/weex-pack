@@ -15,6 +15,9 @@ const CONFIGS = require('./config');
 
 let pluginConfigs = CONFIGS.defaultConfig;
 
+// should install npm package into project or not. default: false
+let shouldInstallPackage = false;
+
 // Get plugin config in project.
 const pluginConfigPath = path.join(CONFIGS.rootPath, CONFIGS.filename);
 if (fs.existsSync(pluginConfigPath)) {
@@ -65,6 +68,7 @@ const installForIOS = (plugins) => {
     logger.success(`${plugin.name} has installed success in iOS project`);
   });
 };
+
 const installForAndroid = (plugins) => {
   if (_.isEmpty(plugins) && !_.isArray(plugins)) {
     return;
@@ -99,6 +103,20 @@ const installForNewPlatform = (platforms) => {
   });
 };
 
+const installNewPlugin = (dir, pluginName, version) => {
+  utils.isNewVersionPlugin(pluginName, version, function (result) {
+    if (result) {
+      handleInstall(dir, pluginName, version, result);
+      if (shouldInstallPackage) {
+        installInPackage(dir, pluginName, version, result);
+      }
+    }
+    else {
+      logger.warn(`This package of weex is not support anymore! Please choose other package.`);
+    }
+  });
+}
+
 const install = (pluginName, args) => {
   let version;
   if (/@/ig.test(pluginName)) {
@@ -110,37 +128,24 @@ const install = (pluginName, args) => {
   // get the lastest version
   if (!version) {
     npmHelper.getLastestVersion(pluginName, function (version) {
-      utils.isNewVersionPlugin(pluginName, version, function (result) {
-        if (result) {
-          handleInstall(dir, pluginName, version, result);
-        }
-        else {
-          logger.warn(`This package of weex is not support anymore! Please choose other package.`);
-        }
-      });
+      installNewPlugin(dir, pluginName, version)
     });
   }
   else {
-    utils.isNewVersionPlugin(pluginName, version, function (result) {
-      if (result) {
-        handleInstall(dir, pluginName, version, result);
-        if (result.pluginDependencies) {
-          for (const pn in result.pluginDependencies) {
-            install(pn, result.pluginDependencies[pn]);
-          }
-        }
-      }
-      else {
-        logger.error(`This package of weex is not support anymore! Please choose other package.`);
-      }
-    });
+    installNewPlugin(dir, pluginName, version);
   }
 };
 
 const handleInstall = (dir, pluginName, version, option) => {
+  
+  if (option.web) {
+    // should install npm package into project or not.
+    shouldInstallPackage = true;
+  }
+
   // check out the type of current project
-  const project = utils.isIOSProject(dir);
-  if (project) {
+  if (utils.isIOSProject(dir)) {
+    const project = utils.isIOSProject(dir);
     if (!fs.existsSync(path.join(dir, 'Podfile'))) {
       logger.error("can't find Podfile file");
       return;
@@ -182,10 +187,6 @@ const handleInstall = (dir, pluginName, version, option) => {
   }
   else if (utils.isCordova(dir)) {
     const platformList = utils.listPlatforms(dir);
-    if (option.web) {
-      // npm install
-      installInPackage(dir, pluginName, version, option);
-    }
     for (let i = 0; i < platformList.length; i++) {
       const platformDir = path.join(dir, 'platforms', platformList[i].toLowerCase());
       handleInstall(platformDir, pluginName, version, option);

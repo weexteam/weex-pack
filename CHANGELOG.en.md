@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.0.18
+* Formate log date to 'hh:mm:ss'.
+* Fixed bug of call `npm install pluginname` and `npm run build:plugin` repeatedly while using `weex plugin add/remove` command.
+
 ### 1.0.17
 * Fixed issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
 * Remove useless source on the root folder.
