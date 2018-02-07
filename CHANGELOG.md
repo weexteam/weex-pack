@@ -1,5 +1,13 @@
 ## Changelog
 
+### 1.0.17
+* 修复issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
+* 删除根目录下无用的文件
+* 修复`plugin install`命令
+
+### 1.0.16
+* 修复issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
+
 ### 1.0.15
 * 修复issue [weex-pack/issues/222](https://github.com/weexteam/weex-pack/issues/222).
 * 新增英文插件开发文档，见 [How to devloping weex plugin](./doc/en/how-to-devloping-weex-plugin.md)

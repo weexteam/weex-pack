@@ -40,7 +40,7 @@ const installForWeb = (plugins) => {
     packageJson['dependencies'][plugin.name] = plugin.version;
   });
 
-  packageJson = output.sortDependencies(packageJson);
+  packageJson = utils.output.sortDependencies(packageJson);
 
   fs.writeFileSync(packageJsonFile, JSON.stringify(packageJson, null, 2) + '\n');
 

@@ -1,8 +1,8 @@
 {
   "name": "weexpack",
-  "version": "1.0.16",
-  "description": "Weex pack tool",
-  "main": "index.js",
+  "version": "1.0.17",
+  "description": "Weex pack tool for Android、iOS and Web plartform.",
+  "main": "bin/weexpack.js",
   "scripts": {
     "lint": "eslint src --fix",
     "build": "babel src --out-dir lib",

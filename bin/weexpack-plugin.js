@@ -53,7 +53,7 @@ program
   .command('install [platformName]')
   .option('--telemetry', 'upload usage data to help us improve the toolkit')
   .description('Install plugins into you project')
-  .action((pluginName, options) => {
+  .action((platformName, options) => {
     if (platformName) {
       return installForNewPlatform(platformName)
     }

@@ -32,7 +32,7 @@ program
 
 program
 .command('list [options]')
-// .option('--telemetry', 'upload usage data to help us improve the toolkit')
+.option('--telemetry', 'upload usage data to help us improve the toolkit')
 .description('all installed platform project')
 .action((pluginName, options) => {
   platform('list', pluginName, options);

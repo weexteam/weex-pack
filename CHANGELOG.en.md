@@ -1,5 +1,13 @@
 ## Changelog
 
+### 1.0.17
+* Fixed issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
+* Remove useless source on the root folder.
+* Fixed `plugin install`命令
+
+### 1.0.16
+* Fixed issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
+
 ### 1.0.15
 * Fix issue [weex-pack/issues/222](https://github.com/weexteam/weex-pack/issues/222).
 * Add English document about how to devloping weex, see [How to devloping weex plugin](./doc/en/how-to-devloping-weex-plugin.md)
