@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.1.1
+* Fixed `cfg is not defined` error.
+* Fixed `weex run web` command.
+
 ### 1.1.0
 * After this version, the `weex create` command can supports remote templates, which can be created remotely from` weex create <template> [projectname] `, such as` weex create weex-templates/webpack my-project` and by using the `--offline` option Use locally cached templates. Detailed <template> writing rules can refer to[download-git-repo#examples](https://www.npmjs.com/package/download-git-repo#examples), template writing rules reference[weex-templates/webpack](https://github.com/weex-templates/webpack).
 

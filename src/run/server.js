@@ -18,10 +18,11 @@ const childprocess = require('child_process');
  */
 const startJSServer = () => {
   try {
-    childprocess.exec(process.platform === 'win32' ? 'start start.bat' : `open ./start`, { encoding: 'utf8' });
+    // start the web server
+    utils.buildJS('serve', false);
   }
   catch (e) {
-    console.error(e);
+    logger.error(e);
   }
 };
 

@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.1.1
+* 修复 `cfg is not defined` 报错.
+* 修复 `weex run web` 功能.
+
 ### 1.1.0
 * `weex create` 命令支持远程模板，可以通过 `weex create <template> [projectname]` 的方式从远程创建模板，如 `weex create weex-templates/webpack my-project`, 同时可以通过使用`--offline`选项使用本地缓存过的模板。详细<template>书写规则可参考[download-git-repo#examples](https://www.npmjs.com/package/download-git-repo#examples), 模板编写规则参照[weex-templates/webpack](https://github.com/weex-templates/webpack).
 
