@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const platform = require('../lib/platform');
 const utils = require('../lib/utils')
 const logger = utils.logger;
+const binname = 'weex';
 
 program
 .command('add [platform-name]')
@@ -38,4 +39,29 @@ program
   platform('list', pluginName, options);
 });
 
-program.parse(process.argv);
+program.on('--help', () => {
+  console.log()
+  logger.log('Examples:')
+  console.log()
+  logger.log(chalk.bold('  # add weex platform'))
+  logger.log('  $ ' + chalk.yellow(`${binname} platform add [ios|android]`))
+  console.log()
+  logger.log(chalk.bold('  # remove weex platform'))
+  logger.log('  $ ' + chalk.yellow(`${binname} platform remove [ios|android]`))
+  console.log()
+  logger.log(chalk.bold('  # update weex platform'))
+  logger.log('  $ ' + chalk.yellow(`${binname} platform update [ios|android]`))
+  console.log()
+  logger.log(chalk.bold('  # list weex platform'))
+  logger.log('  $ ' + chalk.yellow(`${binname} platform list`))
+})
+
+/**
+ * Help.
+ */
+const help = () => {
+  program.parse(process.argv)
+  if (program.args.length < 1) return program.help()
+}
+
+help()

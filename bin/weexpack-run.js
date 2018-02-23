@@ -15,19 +15,29 @@ program
   .usage('<platform> [options]')
   .option('--config [path]', 'specify the configuration file')
   .option('--clean','clean project before build android app')
-  .on('--help', printExample)
-  .parse(process.argv)
 
-function printExample() {
+program.on('--help', () => {
+  console.log()
   logger.log('Examples:')
-  logger.log(chalk.grey('  # run weex Android project'))
-  logger.log('  $ ' + chalk.blue(`${binname} run android`))
-  logger.log(chalk.grey('  # run weex iOS project'))
-  logger.log('  $ ' + chalk.blue(`${binname} run ios`))
-  logger.log(chalk.grey('  # run weex web'))
-  logger.log('  $ ' + chalk.blue(`${binname} run web`))
+  console.log()
+  logger.log(chalk.bold('  # run weex Android project'))
+  logger.log('  $ ' + chalk.yellow(`${binname} run android`))
+  console.log()
+  logger.log(chalk.bold('  # run weex iOS project'))
+  logger.log('  $ ' + chalk.yellow(`${binname} run ios`))
+  console.log()
+  logger.log(chalk.bold('  # run weex web'))
+  logger.log('  $ ' + chalk.yellow(`${binname} run web`))
+})
+/**
+ * Help.
+ */
+const help = () => {
+  program.parse(process.argv)
+  if (program.args.length < 1) return program.help()
 }
 
+help()
 
 function isValidPlatform(args) {
   if (args && args.length) {
