@@ -4,6 +4,8 @@ const program = require('commander');
 const utils = require('../lib/utils')
 const logger = utils.logger;
 const exit = require('exit');
+const chalk = require('chalk')
+const binname = 'weex';
 
 const {
   install,
@@ -60,4 +62,26 @@ program
     return installForNewPlatform(['web', 'ios', 'android']);
   });
 
-program.parse(process.argv);
+program.on('--help', () => {
+  console.log()
+  logger.log('Examples:')
+  console.log()
+  logger.log(chalk.bold('  # add weex plugin'))
+  logger.log('  $ ' + chalk.yellow(`${binname} plugin add [plugin-name]`))
+  console.log()
+  logger.log(chalk.bold('  # remove weex plugin'))
+  logger.log('  $ ' + chalk.yellow(`${binname} plugin remove [plugin-name]`))
+  console.log()
+  logger.log(chalk.bold('  # install plugin for the platform'))
+  logger.log('  $ ' + chalk.yellow(`${binname} plugin install [ios|android|web]`))
+})
+
+/**
+ * Help.
+ */
+const help = () => {
+  program.parse(process.argv)
+  if (program.args.length < 1) return program.help()
+}
+
+help()

@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "1.0.18",
+  "version": "1.1.0",
   "description": "Weex pack tool for Android、iOS and Web plartform.",
   "main": "bin/weexpack.js",
   "scripts": {
@@ -91,12 +91,14 @@
     "semver": "^4.3.x",
     "shelljs": "^0.3.0",
     "tar": "^1.0.2",
+    "tildify": "^1.2.0",
     "underscore": "1.7.0",
     "unorm": "1.3.3",
     "update-notifier": "^2.3.0",
+    "user-home": "^2.0.0",
     "valid-identifier": "0.0.1",
     "weexpack-common": "^0.1.2",
-    "weexpack-create": "^0.2.17",
+    "weexpack-create": "^0.2.18",
     "weexpack-lib": "^0.1.0",
     "ws": "^4.0.0",
     "xcode": "^0.8.5",

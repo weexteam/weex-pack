@@ -4,6 +4,7 @@ const program = require('commander');
 const chalk = require('chalk');
 const utils = require('../lib/utils')
 const logger = utils.logger;
+const binname = 'weex';
 
 const {
   buildAndroid,
@@ -13,23 +14,30 @@ const {
 
 program
   .usage('<platform> [options]')
-  .parse(process.argv);
 
-function printExample() {
-  logger.log('  Examples:')
-  logger.log()
-  logger.log(chalk.grey('    # build weex Android project'))
-  logger.log('    $ ' + chalk.blue('weexpack build android'))
-  logger.log()
-  logger.log(chalk.grey('    # build weex iOS project'))
-  logger.log('    $ ' + chalk.blue('weexpack build ios'))
-  logger.log()
-  logger.log(chalk.grey('    # build weex web project'))
-  logger.log('    $ ' + chalk.blue('weexpack build web'))
-  logger.log()
+program.on('--help', () => {
+  console.log()
+  logger.log('Examples:')
+  console.log()
+  logger.log(chalk.bold('  # build weex Android project'))
+  logger.log('  $ ' + chalk.yellow(`${binname} build android`))
+  console.log()
+  logger.log(chalk.bold('  # build weex iOS project'))
+  logger.log('  $ ' + chalk.yellow(`${binname} build ios`))
+  console.log()
+  logger.log(chalk.bold('  # build weex web'))
+  logger.log('  $ ' + chalk.yellow(`${binname} build web`))
+})
+
+/**
+ * Help.
+ */
+const help = () => {
+  program.parse(process.argv)
+  if (program.args.length < 1) return program.help()
 }
 
-program.on('--help', printExample)
+help()
 
 const isValidPlatform = (args) => {
   if (args && args.length) {
