@@ -5,7 +5,8 @@
 * Fixed `weex run web` command.
 
 ### 1.1.0
-* After this version, the `weex create` command can supports remote templates, which can be created remotely from` weex create <template> [projectname] `, such as` weex create weex-templates/webpack my-project` and by using the `--offline` option Use locally cached templates. Detailed <template> writing rules can refer to[download-git-repo#examples](https://www.npmjs.com/package/download-git-repo#examples), template writing rules reference[weex-templates/webpack](https://github.com/weex-templates/webpack).
+* After this version, the `weex create` command can supports remote templates, which can be created remotely from` weex create <template> [projectname] `, such as` weex create weex-templates/webpack my-project` and by using the `--offline` option Use locally cached templates.
+* [How to create your own template](https://github.com/weex-templates/How-to-create-your-own-template/tree/master)
 
 ### 1.0.18
 * Formate log date to 'hh:mm:ss'.
@@ -14,7 +15,7 @@
 ### 1.0.17
 * Fixed issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
 * Remove useless source on the root folder.
-* Fixed `plugin install`命令
+* Fixed `plugin install` command.
 
 ### 1.0.16
 * Fixed issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
