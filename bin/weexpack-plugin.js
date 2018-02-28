@@ -22,7 +22,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 // rename the cmdname for weex-toolkit
-program._name = binname;
+program._name = `${binname} plugin`;
 
 program
 .command('create [plugin_name]')

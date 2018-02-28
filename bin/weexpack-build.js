@@ -13,7 +13,7 @@ const {
 } = require('../lib/build');
 
 // rename the cmdname for weex-toolkit
-program._name = binname;
+program._name = `${binname} build`;
 
 program
   .option('--telemetry', 'upload usage data to help us improve the toolkit')

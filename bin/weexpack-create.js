@@ -26,7 +26,7 @@ process.on('unhandledRejection', (err) => {
 logger.subscribe(events);
 
 // rename the cmdname for weex-toolkit
-program._name = binname;
+program._name = `${binname} create`;
 
 program
 .option('--offline', 'use cached template')

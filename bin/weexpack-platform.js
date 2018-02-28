@@ -15,7 +15,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 // rename the cmdname for weex-toolkit
-program._name = binname;
+program._name = `${binname} platform`;
 
 program
 .command('add [platform-name]')
