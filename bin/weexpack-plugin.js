@@ -21,6 +21,9 @@ process.on('unhandledRejection', (err) => {
   logger.error(err.stack);
 });
 
+// rename the cmdname for weex-toolkit
+program._name = binname;
+
 program
 .command('create [plugin_name]')
 .option('--telemetry', 'upload usage data to help us improve the toolkit')

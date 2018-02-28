@@ -12,6 +12,9 @@ const {
   buildWeb
 } = require('../lib/build');
 
+// rename the cmdname for weex-toolkit
+program._name = binname;
+
 program
   .option('--telemetry', 'upload usage data to help us improve the toolkit')
   .usage('<platform> [options]')

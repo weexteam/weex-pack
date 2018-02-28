@@ -11,6 +11,16 @@ const {
 } = require('../lib/run');
 const binname = 'weex';
 
+process.on('uncaughtException', (err) => {
+  logger.error(err.stack)
+});
+process.on('unhandledRejection', (err) => {
+  logger.error(err.stack);
+});
+
+// rename the cmdname for weex-toolkit
+program._name = binname;
+
 program
   .usage('<platform> [options]')
   .option('--config [path]', 'specify the configuration file')

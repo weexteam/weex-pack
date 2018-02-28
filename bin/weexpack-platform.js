@@ -7,6 +7,16 @@ const utils = require('../lib/utils')
 const logger = utils.logger;
 const binname = 'weex';
 
+process.on('uncaughtException', (err) => {
+  logger.error(err.stack)
+});
+process.on('unhandledRejection', (err) => {
+  logger.error(err.stack);
+});
+
+// rename the cmdname for weex-toolkit
+program._name = binname;
+
 program
 .command('add [platform-name]')
 .option('--telemetry', 'upload usage data to help us improve the toolkit')

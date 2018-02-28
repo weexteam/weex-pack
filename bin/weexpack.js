@@ -4,6 +4,17 @@ const program = require('commander')
 const utils = require('../lib/utils')
 const logger = utils.logger;
 const LOGLEVELS = utils.LOGLEVELS;
+const binname = 'weex';
+
+process.on('uncaughtException', (err) => {
+  logger.error(err.stack)
+});
+process.on('unhandledRejection', (err) => {
+  logger.error(err.stack);
+});
+
+// rename the cmdname for weex-toolkit
+program._name = binname;
 
 program
   .version(require('../package').version)

@@ -14,9 +14,19 @@ const logger = utils.logger;
 const events = utils.events;
 const binname = 'weex';
 
+process.on('uncaughtException', (err) => {
+  logger.error(err.stack)
+});
+process.on('unhandledRejection', (err) => {
+  logger.error(err.stack);
+});
+
 // For WeexpackError print only the message without stack trace unless we
 // are in a verbose mode.
 logger.subscribe(events);
+
+// rename the cmdname for weex-toolkit
+program._name = binname;
 
 program
 .option('--offline', 'use cached template')
