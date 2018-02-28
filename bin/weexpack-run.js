@@ -15,6 +15,7 @@ program
   .usage('<platform> [options]')
   .option('--config [path]', 'specify the configuration file')
   .option('--clean','clean project before build android app')
+  .option('--telemetry', 'upload usage data to help us improve the toolkit')  
 
 program.on('--help', () => {
   console.log()

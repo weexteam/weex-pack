@@ -21,6 +21,7 @@ logger.subscribe(events);
 program
 .option('--offline', 'use cached template')
 .option('--clone', 'use git clone')
+.option('--telemetry', 'upload usage data to help us improve the toolkit')
 .usage('<template-name> [project-name]')
 
 program.on('--help', () => {

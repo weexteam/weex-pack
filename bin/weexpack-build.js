@@ -13,6 +13,7 @@ const {
 } = require('../lib/build');
 
 program
+  .option('--telemetry', 'upload usage data to help us improve the toolkit')
   .usage('<platform> [options]')
 
 program.on('--help', () => {
