@@ -4,6 +4,7 @@
   "description": "Weex pack tool for Android、iOS and Web plartform.",
   "main": "bin/weexpack.js",
   "scripts": {
+    "test": "echo 'Need tested'",
     "lint": "eslint src --fix",
     "build": "babel src --out-dir lib",
     "dev": "babel src --out-dir lib --watch",
