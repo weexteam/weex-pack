@@ -278,9 +278,12 @@ const utils = {
   updateAndroidPluginConfigs: function (configs, name, option) {
     const plugins = configs.slice(0);
     const len = plugins && plugins.length;
+    if (!option['dependency']) {
+      option['dependency'] = `${option.groupId}:${option.name}:${option.version}`;
+    }
     for (let i = len - 1; i >= 0; i--) {
       const plugin = plugins[i];
-      if (!plugin['dependency']) {
+      if (typeof plugin['dependency'] === 'undefined') {
         plugin['dependency'] = `${plugin.groupId}:${plugin.name}:${plugin.version}`;
       }
       if (name && plugin.name === name) {
