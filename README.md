@@ -58,4 +58,4 @@ $ weex plugin add  weex-plugin-lottie
 
 ## License
 
-React Native is [MIT licensed](./LICENSE).
+Weex Pack is [MIT licensed](./LICENSE).
