@@ -26,6 +26,7 @@ program
   .option('--config [path]', 'specify the configuration file')
   .option('--clean','clean project before build android app')
   .option('--telemetry', 'upload usage data to help us improve the toolkit')  
+  .option('--iosBuildPath', 'set XCode Deviced Data path if you have been custome it')  
 
 program.on('--help', () => {
   console.log()

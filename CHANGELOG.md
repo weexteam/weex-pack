@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.1.6
+* 添加对'pod'脚本缺失时的代码提示。
+* 添加 'iosBuildPath' 选项用于配置用户自定义Xcode的编译路径。
+
 ### 1.1.1
 * 修复 `cfg is not defined` 报错.
 * 修复 `weex run web` 功能.

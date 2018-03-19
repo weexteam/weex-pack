@@ -101,13 +101,20 @@ const utils = {
   exec (command, quiet) {
     return new Promise((resolve, reject) => {
       try {
-        const child = childProcess.exec(command, { encoding: 'utf8', wraning: false }, function () {
-          resolve();
+        const child = childProcess.exec(command, { encoding: 'utf8', wraning: false }, (error, stdout, stderr) => {
+          if (error) {
+            logger.error(error);
+            logger.info('Maybe you are not setup CocoaPods or see if you have the same issue here: https://github.com/weexteam/weex-toolkit/issues/337');
+            reject(error);
+          }
+          else {
+            resolve();
+          }
         });
         if (!quiet) {
           child.stdout.pipe(process.stdout);
         }
-        // child.stderr.pipe(process.stderr);
+        child.stderr.pipe(process.stderr);
       }
       catch (e) {
         logger.error('execute command failed :', command);

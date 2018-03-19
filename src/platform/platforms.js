@@ -23,7 +23,7 @@ const platforms = {
         "parser_file": "../cordova/metadata/ios_parser",
         "handler_file": "../plugman/platforms/ios",
         "url": "https://github.com/weexteam/weexpack-iOS.git?",
-        "version": "^4.0.24",
+        "version": "^4.1.6",
         "apiCompatibleSince": "4.0.",
         "deprecated": false
 

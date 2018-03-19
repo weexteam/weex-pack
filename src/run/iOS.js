@@ -8,6 +8,8 @@ const utils = require('../utils');
 const server = require('./server');
 const chokidar = require('chokidar');
 const WebSocket = require('ws');
+const home = require('user-home')
+const exit = require('exit');
 const _ = require('underscore');
 const logger = utils.logger;
 const {
@@ -133,17 +135,17 @@ const registeFileWatcher = (
   const ws = new WebSocket(configs.Ws);
   // build js on watch mode.
   utils.buildJS('dev', true);
+
   // file watch task
   chokidar.watch(path.join(rootPath, 'dist'), { ignored: /\w*\.web\.js$/ })
   .on('change', (event) => {
     copyJsbundleAssets(rootPath, 'dist', 'platforms/ios/bundlejs/', true).then(() => {
       if (path.basename(event) === configs.WeexBundle) {
-        logger.info(`Reloading page...`);
+        logger.log(`Wait Reload...`);
         ws.send(JSON.stringify({ method: 'WXReloadBundle', params: `http://${configs.ip}:${configs.port}/${configs.WeexBundle}` }));
       }
     });
   });
-
   return {
     xcodeProject,
     options,
@@ -319,7 +321,8 @@ const runApp = ({ device, xcodeProject, options, configs }) => {
       _runAppOnSimulator({ device, xcodeProject, options, configs, resolve, reject });
     }
     else {
-      _runAppOnDevice({ device, xcodeProject, options, configs, resolve, reject });
+      reject(`weex don't support run on real device, please use simulator on Xcode.`)
+      // _runAppOnDevice({ device, xcodeProject, options, configs, resolve, reject });
     }
   });
 };
@@ -331,31 +334,51 @@ const runApp = ({ device, xcodeProject, options, configs }) => {
  * @param {Object} options
  */
 const _runAppOnSimulator = ({ device, xcodeProject, options, configs, resolve, reject }) => {
-  logger.info(`Run iOS Simulator..`);
   const inferredSchemeName = path.basename(xcodeProject.name, path.extname(xcodeProject.name));
-  const appPath = `build/Build/Products/Debug-iphonesimulator/${inferredSchemeName}.app`;
-  childprocess.execFileSync(
-    '/usr/libexec/PlistBuddy',
-    ['-c', 'Print:CFBundleIdentifier', path.join(appPath, 'Info.plist')],
-    { encoding: 'utf8' }
-  ).trim();
+  let appPath;
+  if (options.iosBuildPath && fs.existsSync(options.iosBuildPath)) {
+    appPath = options.iosBuildPath;
+  }
+  else if (fs.existsSync(path.join(home, `Library/Developer/Xcode/DerivedData/Build/Products/Debug-iphonesimulator/${inferredSchemeName}.app`))) {
+    appPath = path.join(home, `Library/Developer/Xcode/DerivedData/Build/Products/Debug-iphonesimulator/${inferredSchemeName}.app`);
+  }
+  else if(fs.existsSync(`build/Build/Products/Debug-iphonesimulator/${inferredSchemeName}.app`)) {
+    appPath = `build/Build/Products/Debug-iphonesimulator/${inferredSchemeName}.app`
+  }
+  else {
+    reject(`You may had custome your XCode Deviced Data path, please use \`--iosBuildPath\` to set your path.`);
+    return;
+  }
+  logger.info(`Run iOS Simulator..`);
+  try {
+    childprocess.execFileSync(
+      '/usr/libexec/PlistBuddy',
+      ['-c', 'Print:CFBundleIdentifier', path.join(appPath, 'Info.plist')],
+      { encoding: 'utf8' }
+    ).trim();
+  } catch (e) {
+    reject(e);
+    return;
+  }
   let simctlInfo = '';
   try {
     simctlInfo = childprocess.execSync('xcrun simctl list --json devices', { encoding: 'utf8' });
   }
   catch (e) {
     reject(e);
+    return;
   }
   simctlInfo = JSON.parse(simctlInfo);
 
   if (!simulatorIsAvailable(simctlInfo, device)) {
     reject('simulator is not available!');
+    return;    
   }
 
   logger.info(`Launching ${device.name}...`);
 
   try {
-    childprocess.execSync(`xcrun instruments -w ${device.udid}`, { encoding: 'utf8' });
+    childprocess.execSync(`xcrun instruments -w ${device.udid}`, { encoding: 'utf8', stdio: 'ignore' });
   }
   catch (e) {
     // instruments always fail with 255 because it expects more arguments,
@@ -369,6 +392,7 @@ const _runAppOnSimulator = ({ device, xcodeProject, options, configs, resolve, r
   }
   catch (e) {
     reject(e);
+    return;
   }
 
   try {
@@ -376,6 +400,7 @@ const _runAppOnSimulator = ({ device, xcodeProject, options, configs, resolve, r
   }
   catch (e) {
     reject(e);
+    return;
   }
   logger.success('Success!');
   resolve();
@@ -420,12 +445,11 @@ const _runAppOnDevice = ({ device, xcodeProject, options, resolve, reject }) => 
     }
 
     logger.info(childprocess.execSync(`../../node_modules/.bin/ios-deploy --justlaunch --debug --id ${deviceId} --bundle ${path.resolve(appPath)}`, { encoding: 'utf8' }));
+    logger.info('Success!');
   }
   catch (e) {
     reject(e);
   }
-  logger.info('Success!');
-  // reject('Weex-Pack don\'t support run on real device. see you next version!')
 };
 
 /**
@@ -449,7 +473,8 @@ const runIOS = (options) => {
     .then(runApp)
     .catch((err) => {
       if (err) {
-        logger.error(`Error:${err.stack}`);
+        logger.error(`Error:${err.stack || err}`);
+        exit(0);
       }
     });
 };

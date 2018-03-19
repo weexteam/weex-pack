@@ -431,7 +431,7 @@ const runAndroid = (options) => {
   .then(runApp)
   .catch((err) => {
     if (err) {
-      logger.error(`Error: ${err || err.stack}`);
+      logger.error(`Error: ${err.stack || err}`);
       exit(0);
     }
   });

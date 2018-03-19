@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.1.6
+* Add tips on 'pod update' command.
+* Add 'iosBuildPath' option to custom Xcode Deviced.
+
 ### 1.1.1
 * Fixed `cfg is not defined` error.
 * Fixed `weex run web` command.
@@ -52,16 +56,16 @@ support muti page develop, you can just add `xxx.vue` in to the `src` folder, an
 * 修复babel编译问题，将`json`文件转换为`js`文件形式引用，修复文件丢失问题。[weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
 
 ### 1.0.6
-* issues修复 [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
+* Fixed [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
 
 ### 1.0.3
-* issues修复 [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
+* Fixed [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
 
 ### 1.0.2
-* 修复文件丢失问题
+* Fixed file missing bug.
 
 ### 1.0.1
-* 修复babel脚本编译问题，支持 node 6+ 设备
+* Fix babel compile issue.
 
 ### 1.0.0
 * 全新的插件开发以及集成机制,详情参考 [如何开发weex插件](./doc/plugin-devloping-weexpack.md)

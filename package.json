@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Weex pack tool for Android、iOS and Web plartform.",
   "main": "bin/weexpack.js",
   "scripts": {
@@ -61,11 +61,10 @@
     "detect-port": "^1.2.2",
     "elementtree": "0.1.6",
     "eslint": "^3.5.0",
-    "exit": "^0.1.2",
+    "exit": "https://registry.npmjs.org/exit/-/exit-0.1.2.tgz",
     "express": "^4.13.3",
     "fs-extra": "^3.0.1",
     "gauge": "^2.7.2",
-    "generator-weex-plugin": "^0.1.32",
     "glob": "^5.0.3",
     "init-package-json": "^1.2.0",
     "inquirer": "^3.3.0",
