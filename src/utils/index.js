@@ -101,10 +101,9 @@ const utils = {
   exec (command, quiet) {
     return new Promise((resolve, reject) => {
       try {
-        const child = childProcess.exec(command, { encoding: 'utf8', wraning: false }, (error, stdout, stderr) => {
+        const child = childProcess.exec(command, { encoding: 'utf8', wraning: false, maxBuffer: 1024 * 1024 }, (error, stdout, stderr) => {
           if (error) {
-            logger.error(error);
-            logger.info('Maybe you are not setup CocoaPods or see if you have the same issue here: https://github.com/weexteam/weex-toolkit/issues/337');
+            logger.warn('Command run error, please check if there has the same issue here: https://github.com/weexteam/weex-toolkit/issues/337');
             reject(error);
           }
           else {
