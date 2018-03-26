@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.1.7
+* Fixed issue [weex-toolkit/issues/344](https://github.com/weexteam/weex-toolkit/issues/344).
+
 ### 1.1.6
 * Add tips on 'pod update' command.
 * Add 'iosBuildPath' option to custom Xcode Deviced.

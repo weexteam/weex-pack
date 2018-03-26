@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.1.7
+* 修复issue [weex-toolkit/issues/344](https://github.com/weexteam/weex-toolkit/issues/344)。
+
 ### 1.1.6
 * 添加对'pod'脚本缺失时的代码提示。
 * 添加 'iosBuildPath' 选项用于配置用户自定义Xcode的编译路径。
