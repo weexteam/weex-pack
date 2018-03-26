@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.1.8
+* 修复子目录下的文件拷贝问题。
+
 ### 1.1.7
 * 修复issue [weex-toolkit/issues/344](https://github.com/weexteam/weex-toolkit/issues/344)。
 

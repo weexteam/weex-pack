@@ -17,8 +17,8 @@ const copyJsbundleAssets = () => {
   logger.info(`Move JSbundle to dist')} \n`);
   const options = {
     filter: [
-      '*.js',
-      '!*.web.js'
+      '**/*.js',
+      '!**/*.web.js'
     ],
     overwrite: true
   };
@@ -130,7 +130,7 @@ const copyApkAssets = ({
   logger.info(`Move APK to \`release/android\``);
   const copyOptions = {
     filter: [
-      '*.apk'
+      '**/*.apk'
     ],
     overwrite: true
   };

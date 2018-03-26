@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.1.8
+* Fixed issue [weex-toolkit/issues/349](https://github.com/weexteam/weex-toolkit/issues/349).
+
 ### 1.1.7
 * Fixed issue [weex-toolkit/issues/344](https://github.com/weexteam/weex-toolkit/issues/344).
 

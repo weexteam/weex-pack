@@ -23,8 +23,8 @@ const {
 const copyJsbundleAssets = (dir, src, dist, quiet) => {
   const options = {
     filter: [
-      '*.js',
-      '!*.web.js'
+      '**/*.js',
+      '!**/*.web.js'
     ],
     overwrite: true
   };
