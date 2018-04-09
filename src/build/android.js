@@ -130,7 +130,8 @@ const copyApkAssets = ({
   logger.info(`Move APK to \`release/android\``);
   const copyOptions = {
     filter: [
-      '**/*.apk'
+      '**/*.apk',
+      'debug/**/*.apk'
     ],
     overwrite: true
   };

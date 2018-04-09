@@ -6,11 +6,11 @@
 ![Node Version](https://img.shields.io/node/v/weex-pack.svg "Node Version")
 [![Build Status](https://travis-ci.org/weexteam/weex-pack.svg?branch=master)](https://travis-ci.org/weexteam/weex-pack)
 
-[English Document](./README.en.md)
+[English Document](./README.md)
 |
 [如何开发Weex插件](./doc/cn/how-to-devloping-weex-plugin.md)
 |
-[更新日志](./CHANGELOG.md)
+[更新日志](./CHANGELOG.zh.md)
 
 
 

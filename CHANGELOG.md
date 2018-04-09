@@ -1,77 +1,81 @@
 ## Changelog
 
+### 1.1.9
+* Fixed [issue 354](https://github.com/weexteam/weex-toolkit/issues/354)。
+* Fixed [337#issuecomment-378912469](https://github.com/weexteam/weex-toolkit/issues/337#issuecomment-378912469)。
+
 ### 1.1.8
-* 修复子目录下的文件拷贝问题。
+* Fixed issue [weex-toolkit/issues/349](https://github.com/weexteam/weex-toolkit/issues/349).
 
 ### 1.1.7
-* 修复issue [weex-toolkit/issues/344](https://github.com/weexteam/weex-toolkit/issues/344)。
+* Fixed issue [weex-toolkit/issues/344](https://github.com/weexteam/weex-toolkit/issues/344).
 
 ### 1.1.6
-* 添加对'pod'脚本缺失时的代码提示。
-* 添加 'iosBuildPath' 选项用于配置用户自定义Xcode的编译路径。
+* Add tips on 'pod update' command.
+* Add 'iosBuildPath' option to custom Xcode Deviced.
 
 ### 1.1.1
-* 修复 `cfg is not defined` 报错.
-* 修复 `weex run web` 功能.
+* Fixed `cfg is not defined` error.
+* Fixed `weex run web` command.
 
 ### 1.1.0
-* `weex create` 命令支持远程模板，可以通过 `weex create <template> [projectname]` 的方式从远程创建模板，如 `weex create weex-templates/webpack my-project`, 同时可以通过使用`--offline`选项使用本地缓存过的模板。
+* After this version, the `weex create` command can supports remote templates, which can be created remotely from` weex create <template> [projectname] `, such as` weex create weex-templates/webpack my-project` and by using the `--offline` option Use locally cached templates.
 * [How to create your own template](https://github.com/weex-templates/How-to-create-your-own-template/tree/master)
 
 ### 1.0.18
-* 格式化日志事件为 'hh:mm:ss'。
-* 修复使用`weex plugin add/remove`命令时会重复调用 `npm install pluginname` 以及 `npm run build:plugin` 的问题。
+* Formate log date to 'hh:mm:ss'.
+* Fixed bug of call `npm install pluginname` and `npm run build:plugin` repeatedly while using `weex plugin add/remove` command.
 
 ### 1.0.17
-* 修复issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
-* 删除根目录下无用的文件
-* 修复`plugin install`命令
+* Fixed issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
+* Remove useless source on the root folder.
+* Fixed `plugin install` command.
 
 ### 1.0.16
-* 修复issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
+* Fixed issue [weex-pack/issues/284](https://github.com/weexteam/weex-toolkit/issues/284).
 
 ### 1.0.15
-* 修复issue [weex-pack/issues/222](https://github.com/weexteam/weex-pack/issues/222).
-* 新增英文插件开发文档，见 [How to devloping weex plugin](./doc/en/how-to-devloping-weex-plugin.md)
+* Fix issue [weex-pack/issues/222](https://github.com/weexteam/weex-pack/issues/222).
+* Add English document about how to devloping weex, see [How to devloping weex plugin](./doc/en/how-to-devloping-weex-plugin.md)
 
 ### 1.0.14
-* 修复issue [weex-pack/issues/224](https://github.com/weexteam/weex-pack/issues/224).
-* 移除对`installIosDeploy.sh`的引用.
+* Fix issue [weex-pack/issues/224](https://github.com/weexteam/weex-pack/issues/224).
+* Remove `installIosDeploy.sh`.
 
 ### 1.0.13
-* 修复模块引入作用域提升问题 [weex-ui/issues/135](https://github.com/alibaba/weex-ui/issues/135).
+* Fix Hosting error [weex-ui/issues/135](https://github.com/alibaba/weex-ui/issues/135).
 
 ### 1.0.12
-* 修复大小写敏感系统（如Ubuntu，linux）下`gituser.js`模块找不到的问题[weexteam/weex-toolkit/issues/252](https://github.com/weexteam/weex-toolkit/issues/252)
+* Fix `gituser.js` module not found on ubuntu or other linux platform [weexteam/weex-toolkit/issues/252](https://github.com/weexteam/weex-toolkit/issues/252)
 
 ### 1.0.11
-* 更新`weexpack-create`依赖版本至0.2.16. [weexpack-create/commit/6a3427](https://github.com/weexteam/weexpack-create/commit/6a3427c7e91e6837350165f3ef277f08971ffe0c)
-支持多页面模式开发，仅需在`src`中增加`.vue`文件,同时在url中指明`?page=xxx.js`即可预览`xxx.vue`文件的页面。
+* Upgrade `weexpack-create` to 0.2.16. [weexpack-create/commit/6a3427](https://github.com/weexteam/weexpack-create/commit/6a3427c7e91e6837350165f3ef277f08971ffe0c)
+support muti page develop, you can just add `xxx.vue` in to the `src` folder, and modify the `?page=xxx.js` options on url to the page you want to preview, like `?page=demo.js`.
 
 ### 1.0.10
-* 更新`weexpack-create`依赖版本至0.2.15. [weexpack-create/commit/acec5d91](https://github.com/weexteam/weexpack-create/commit/acec5d917a031390dce5f4993a0d4c8ff86e6143)
+* Upgrade `weexpack-create` to 0.2.15. [weexpack-create/commit/acec5d91](https://github.com/weexteam/weexpack-create/commit/acec5d917a031390dce5f4993a0d4c8ff86e6143)
 
 ### 1.0.9
-* 修复 `src/utils` 中的 `logger` undefined 的问题. [weex-toolkit/issues/254](https://github.com/weexteam/weex-toolkit/issues/254)
+* Fix issue [weex-toolkit/issues/254](https://github.com/weexteam/weex-toolkit/issues/254)
 
 ### 1.0.8
-* 移除部分代码对`weexpack-common`依赖，方便后续精简包大小。
-* 更新`weexpack-create`依赖，修改preview页面的url参数 [weex-toolkit/issues/250](https://github.com/weexteam/weex-toolkit/issues/250)
+* Remove `weexpack-common` dependence.
+* Upgrade `weexpack-create` to 0.2.14.[weex-toolkit/issues/250](https://github.com/weexteam/weex-toolkit/issues/250)
 
 ### 1.0.7
 * 修复babel编译问题，将`json`文件转换为`js`文件形式引用，修复文件丢失问题。[weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
 
 ### 1.0.6
-* issues修复 [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
+* Fixed [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
 
 ### 1.0.3
-* issues修复 [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
+* Fixed [weex-toolkit/issues/249](https://github.com/weexteam/weex-toolkit/issues/249)
 
 ### 1.0.2
-* 修复文件丢失问题
+* Fixed file missing bug.
 
 ### 1.0.1
-* 修复babel脚本编译问题，支持 node 6+ 设备
+* Fix babel compile issue.
 
 ### 1.0.0
 * 全新的插件开发以及集成机制,详情参考 [如何开发weex插件](./doc/plugin-devloping-weexpack.md)

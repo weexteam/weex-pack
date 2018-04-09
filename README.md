@@ -10,7 +10,7 @@
 |
 [How to devloping weex plugin](./doc/en/how-to-devloping-weex-plugin.md)
 |
-[Changelog](./CHANGELOG.en.md)
+[Changelog](./CHANGELOG.md)
 
 ## Usage
 

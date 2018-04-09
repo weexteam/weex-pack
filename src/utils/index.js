@@ -98,10 +98,10 @@ const utils = {
     }
     return devices;
   },
-  exec (command, quiet) {
+  exec (command, quiet, options) {
     return new Promise((resolve, reject) => {
       try {
-        const child = childProcess.exec(command, { encoding: 'utf8', wraning: false, maxBuffer: 1024 * 1024 }, (error, stdout, stderr) => {
+        const child = childProcess.exec(command, Object.assign({ encoding: 'utf8', wraning: false, maxBuffer: Infinity}, options), (error, stdout, stderr) => {
           if (error) {
             logger.warn('Command run error, please check if there has the same issue here: https://github.com/weexteam/weex-toolkit/issues/337');
             reject(error);
@@ -136,16 +136,17 @@ const utils = {
   },
   checkAndInstallForIosDeploy () {
     const hasIosDeploy = fs.existsSync('./node_modules/.bin/ios-deploy');
-    if (!hasIosDeploy) {
+    if (hasIosDeploy) {
       let args = '';
       if (process.platform === 'win32') {
-        logger.log('run ios unsupported on windows');
+        logger.log('Run ios command is unsupported on windows');
         process.exit(1);
       }
       if (os.release() >= '15.0.0') {
         args = ' --unsafe-perm=true --allow-root';
       }
-      return this.exec(path.join(__dirname, '/installIosDeploy.sh', args));
+      logger.log('Instailling ios-deploy ...');
+      return this.exec(`npm i ios-deploy --save ${args}`, false, {cwd: path.join(__dirname, '../..')});
     }
     else {
       return Promise.resolve();
