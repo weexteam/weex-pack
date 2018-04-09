@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.1.10
+* 修复对 `ios-deploy` 是否安装的判断。
+
 ### 1.1.9
 * 修复 [issue 354](https://github.com/weexteam/weex-toolkit/issues/354)。
 * 修复 [337#issuecomment-378912469](https://github.com/weexteam/weex-toolkit/issues/337#issuecomment-378912469)。

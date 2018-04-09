@@ -136,7 +136,7 @@ const utils = {
   },
   checkAndInstallForIosDeploy () {
     const hasIosDeploy = fs.existsSync('./node_modules/.bin/ios-deploy');
-    if (hasIosDeploy) {
+    if (!hasIosDeploy) {
       let args = '';
       if (process.platform === 'win32') {
         logger.log('Run ios command is unsupported on windows');
