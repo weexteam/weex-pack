@@ -20,12 +20,13 @@
 // commands for packing and unpacking tarballs
 // this file is used by lib/cache.js
 
-const events = require('weexpack-common').events;
+const utils = require('../../utils')
 const fs = require('fs');
 const Q = require('q');
 const tar = require('tar');
 const zlib = require('zlib');
 
+const events = utils.events;
 exports.unpackTgz = unpackTgz;
 
 // Returns a promise for the path to the unpacked tarball (unzip + untar).

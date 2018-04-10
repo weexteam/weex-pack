@@ -4,7 +4,7 @@ const childprocess = require('child_process');
 const copy = require('recursive-copy');
 const utils = require('../utils');
 const _ = require('underscore');
-const logger = require('weexpack-common').CordovaLogger.get();
+const logger = utils.logger;
 const { PlatformConfig, iOSConfigResolver, Platforms } = require('../utils/config');
 
 /**

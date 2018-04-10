@@ -24,7 +24,9 @@ const path = require('path');
 const _ = require('underscore');
 const fs = require('fs');
 const platforms = require('./platforms');
-const events = require('weexpack-common').events;
+const utils = require('../utils')
+const events = utils.events;
+
 const config = require('./config');
 const Q = require('q');
 const npmhelper = require('./utils/npm-helper');

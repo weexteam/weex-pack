@@ -21,8 +21,10 @@ const Q = require('q');
 const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
-
 const knownPlatforms = require('./platforms');
+
+const utils = require('../utils')
+const defaultEvents = utils.events;
 
 function copyPlatform (templateDir, projectDir) {
   const templateFiles = fs.readdirSync(templateDir);
@@ -50,7 +52,7 @@ function PlatformApiPoly (platform, platformRootDir, events) {
 
   this.root = platformRootDir;
   this.platform = platform;
-  this.events = events || require('weexpack-common').events;
+  this.events = events || defaultEvents;
 
   if (!(platform in knownPlatforms)) { throw new Error('Unknown platform ' + platform); }
 
