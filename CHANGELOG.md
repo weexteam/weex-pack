@@ -1,5 +1,12 @@
 ## Changelog
 
+### 1.2.0
+* Fix the judgment logic for the weex project root.
+* Remove all useless dependences from package.json.
+
+### 1.1.10
+* Fix the dugement about `ios-deploy` installed or not.
+
 ### 1.1.9
 * Fixed [issue 354](https://github.com/weexteam/weex-toolkit/issues/354)。
 * Fixed [337#issuecomment-378912469](https://github.com/weexteam/weex-toolkit/issues/337#issuecomment-378912469)。
