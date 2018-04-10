@@ -20,16 +20,12 @@ program
   .usage('<platform> [options]')
 
 program.on('--help', () => {
-  console.log()
-  logger.log('Examples:')
-  console.log()
-  logger.log(chalk.bold('  # build weex Android project'))
+  logger.log('\nExamples:')
+  logger.log(chalk.bold('\n  # build weex Android project'))
   logger.log('  $ ' + chalk.yellow(`${binname} build android`))
-  console.log()
-  logger.log(chalk.bold('  # build weex iOS project'))
+  logger.log(chalk.bold('\n  # build weex iOS project'))
   logger.log('  $ ' + chalk.yellow(`${binname} build ios`))
-  console.log()
-  logger.log(chalk.bold('  # build weex web'))
+  logger.log(chalk.bold('\n  # build weex web'))
   logger.log('  $ ' + chalk.yellow(`${binname} build web`))
 })
 
@@ -73,9 +69,7 @@ if (isValidPlatform(program.args)) {
   build(program.args[0], {configPath:program.config,clean:program.clean})
 
 } else {
-  console.log()
-  console.log(`  ${chalk.red('Unknown platform:')} ${chalk.yellow(program.args[0])}`)
-  console.log()
+  logger.log(`\n  ${chalk.red('Unknown platform:')} ${chalk.yellow(program.args[0])}\n`)
   printExample()
   process.exit()
 }

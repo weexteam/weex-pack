@@ -123,7 +123,7 @@ function isWeex (dir) {
 function isRootDir (dir) {
   if (fs.existsSync(path.join(dir, 'platforms'))) {
     if (fs.existsSync(path.join(dir, 'web'))) {
-      if (fs.existsSync(path.join(dir, '.wx/config.json'))) {
+      if (fs.existsSync(path.join(dir, 'android.config.json')) && fs.existsSync(path.join(dir, 'ios.config.json'))) {
         return 2;
       }
       else {

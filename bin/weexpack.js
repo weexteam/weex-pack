@@ -54,7 +54,7 @@ if(program.args.length >= 1){
     isSupport = true;
   }
   if(!isSupport){
-    console.log("  error: unknown command '"+ program.args[0]+ "'")
+    logger.error("  error: unknown command '"+ program.args[0]+ "'")
     process.exit();
   }
 }

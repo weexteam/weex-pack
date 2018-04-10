@@ -29,16 +29,12 @@ program
   .option('--iosBuildPath', 'set XCode Deviced Data path if you have been custome it')  
 
 program.on('--help', () => {
-  console.log()
-  logger.log('Examples:')
-  console.log()
-  logger.log(chalk.bold('  # run weex Android project'))
+  logger.log('\nExamples:')
+  logger.log(chalk.bold('\n  # run weex Android project'))
   logger.log('  $ ' + chalk.yellow(`${binname} run android`))
-  console.log()
-  logger.log(chalk.bold('  # run weex iOS project'))
+  logger.log(chalk.bold('\n  # run weex iOS project'))
   logger.log('  $ ' + chalk.yellow(`${binname} run ios`))
-  console.log()
-  logger.log(chalk.bold('  # run weex web'))
+  logger.log(chalk.bold('\n  # run weex web'))
   logger.log('  $ ' + chalk.yellow(`${binname} run web`))
 })
 /**

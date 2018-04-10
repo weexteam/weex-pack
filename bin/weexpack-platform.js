@@ -50,19 +50,14 @@ program
 });
 
 program.on('--help', () => {
-  console.log()
-  logger.log('Examples:')
-  console.log()
-  logger.log(chalk.bold('  # add weex platform'))
+  logger.log('\nExamples:')
+  logger.log(chalk.bold('\n  # add weex platform'))
   logger.log('  $ ' + chalk.yellow(`${binname} platform add [ios|android]`))
-  console.log()
-  logger.log(chalk.bold('  # remove weex platform'))
+  logger.log(chalk.bold('\n  # remove weex platform'))
   logger.log('  $ ' + chalk.yellow(`${binname} platform remove [ios|android]`))
-  console.log()
-  logger.log(chalk.bold('  # update weex platform'))
+  logger.log(chalk.bold('\n  # update weex platform'))
   logger.log('  $ ' + chalk.yellow(`${binname} platform update [ios|android]`))
-  console.log()
-  logger.log(chalk.bold('  # list weex platform'))
+  logger.log(chalk.bold('\n  # list weex platform'))
   logger.log('  $ ' + chalk.yellow(`${binname} platform list`))
 })
 

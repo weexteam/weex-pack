@@ -66,16 +66,12 @@ program
   });
 
 program.on('--help', () => {
-  console.log()
-  logger.log('Examples:')
-  console.log()
-  logger.log(chalk.bold('  # add weex plugin'))
-  logger.log('  $ ' + chalk.yellow(`${binname} plugin add [plugin-name]`))
-  console.log()
-  logger.log(chalk.bold('  # remove weex plugin'))
+  logger.log('\nExamples:')
+  logger.log(chalk.bold('\n  # add weex plugin'))
+  logger.log('\n  $ ' + chalk.yellow(`${binname} plugin add [plugin-name]`))
+  logger.log(chalk.bold('\n  # remove weex plugin'))
   logger.log('  $ ' + chalk.yellow(`${binname} plugin remove [plugin-name]`))
-  console.log()
-  logger.log(chalk.bold('  # install plugin for the platform'))
+  logger.log(chalk.bold('\n  # install plugin for the platform'))
   logger.log('  $ ' + chalk.yellow(`${binname} plugin install [ios|android|web]`))
 })
 
