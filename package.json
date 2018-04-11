@@ -97,6 +97,7 @@
     "messages": [
       "Fixed `installIosDeploy.sh not found` issue.",
       "Fixed `stdout maxBuffer exceeded` issue."
-    ]
+    ],
+    "url": "https://github.com/weexteam/weex-pack/blob/master/README.md"
   }
 }
