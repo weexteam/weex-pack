@@ -54,7 +54,7 @@ const formatError = (error, isVerbose) => {
   }
   if (typeof message === 'string' && message.toUpperCase().indexOf('ERROR:') !== 0) {
     // Needed for backward compatibility with external tools
-    message = 'Error: ' + message;
+    message = message;
   }
   return message;
 }

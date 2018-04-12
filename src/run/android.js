@@ -345,7 +345,11 @@ const installApp = ({
 }) => {
   return new Promise((resolve, reject) => {
     logger.info(`Install app ...\n`);
-    const apkName = 'app/build/outputs/apk/weex-app.apk';
+    let apkName = 'app/build/outputs/apk/weex-app.apk';
+    if (!fs.existsSync(path.resolve(apkName))) {
+      // Android Studio 3.0
+      apkName = 'app/build/outputs/apk/debug/weex-app.apk';
+    }
     try {
       childprocess.execSync(`adb -s ${device} install -r  ${apkName}`, {
         encoding: 'utf8'

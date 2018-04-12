@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Weex pack tool for Android、iOS and Web plartform.",
   "main": "bin/weexpack.js",
   "scripts": {
@@ -95,8 +95,7 @@
   },
   "changelog": {
     "messages": [
-      "Fixed `installIosDeploy.sh not found` issue.",
-      "Fixed `stdout maxBuffer exceeded` issue."
+      "Support Android Studio 3.0 default output configuration."
     ],
     "url": "https://github.com/weexteam/weex-pack/blob/master/README.md"
   }
