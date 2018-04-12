@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.2.1
+* Support Android Studio 3.0 default output configuration.
+
 ### 1.2.0
 * Fix the judgment logic for the weex project root.
 * Remove all useless dependences from package.json.
