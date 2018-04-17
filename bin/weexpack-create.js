@@ -29,21 +29,17 @@ logger.subscribe(events);
 program._name = `${binname} create`;
 
 program
-.option('--offline', 'use cached template')
-.option('--clone', 'use git clone')
+.option('-o, --offline', 'use cached template')
+.option('-c, --clone', 'use git clone')
 .option('--telemetry', 'upload usage data to help us improve the toolkit')
 .usage('<template-name> [project-name]')
 
 program.on('--help', () => {
-  console.log()
-  console.log('  Examples:');
-  console.log()
-  console.log(chalk.bold('    # create a new project with an official template'));
-  console.log('    $ ' + chalk.yellow(`${binname} create my-project`));
-  console.log()
-  console.log(chalk.bold('    # create a new project straight from a github template'));
-  console.log('    $ ' + chalk.yellow(`${binname} create username/repo my-project`));
-  console.log();
+  logger.log('\n  Examples:');
+  logger.log(chalk.bold('\n    # create a new project with an official template'));
+  logger.log('    $ ' + chalk.yellow(`${binname} create my-project`));
+  logger.log(chalk.bold('\n    # create a new project straight from a github template'));
+  logger.log('    $ ' + chalk.yellow(`${binname} create username/repo my-project\n`));
 })
 
 /**

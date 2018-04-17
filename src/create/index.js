@@ -18,7 +18,6 @@
 */
 
 const create = require('weexpack-create');
-const _ = require('underscore');
 const fs = require('fs');
 const rm = require('rimraf').sync;
 const path = require('path');

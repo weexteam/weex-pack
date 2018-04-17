@@ -1,5 +1,10 @@
 ## Changelog
 
+### 1.2.2
+* Refactored weex plugin development project, you can using `weex plugin create [projectname]` to create a plugin develop project.
+* Replace `--offline` option with `--update` option while using `weex plugin create [projectname]` command because of the large project size, that meams you will using cached template instead of remote template, you can add `--update` flag to upgrade your local template.
+* Remove `yeoman` denpendences.
+
 ### 1.2.1
 * Support Android Studio 3.0 default output configuration.
 

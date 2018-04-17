@@ -1,5 +1,11 @@
 ## Changelog
 
+
+### 1.2.2
+* 重构插件工程模板, 你可以使用 `weex plugin create [projectname]` 命令创建最新的 weex 插件工程。
+* 由于weex plugin的工程项目较大，过长的下载时间会影响用户体验，故替换 `--offline` 选项成 `--update`选项，工程创建只会在第一次默认从远端拉取最新工程项目，后续如需更新，请添加 `--update` 选项进行本地模板更新。
+* 移除了对 `yeoman` 的依赖。
+
 ### 1.2.1
 * 修复升级Android Studio到3.0版本后，产物路径变化导致无法安装包的问题。
 

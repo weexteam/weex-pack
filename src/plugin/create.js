@@ -1,23 +1,57 @@
-const yeoman = require('yeoman-environment');
+const create = require('weexpack-create');
+const path = require('path');
+const fs = require('fs');
+const rm = require('rimraf').sync;
+const ora = require('ora');
+const inquirer = require('inquirer');
+const chalk = require('chalk');
+const tildify = require('tildify');
+const utils = require('../utils');
+const home = require('user-home');
+const events = utils.events;
+const logger = utils.logger;
 
 /**
- * Initialize a standard weex project
+ * Initialize a standard weex plugin project
  * @param {String} project name
  * @param {String} config file path
  */
-function init (projectName, configFile) {
-  const env = yeoman.createEnv();
+module.exports = function (template, projectname, options) {
+  if (!projectname) {
+    projectname = template;
+    template = 'weex-plugin-template';
+  }
 
-  env.register(require.resolve('generator-weex-plugin'), 'weex:plugin');
+  const hasSlash = template.indexOf('/') > -1
+  const target = path.resolve(projectname);
 
-  // TODO: get generator configs from configFile
-  const args = [projectName];
+  if (!hasSlash) {
+    // use official templates
+    template = 'weex-templates/' + template
+  }
 
-  const generator = env.create('weex:plugin', {
-    args
-  });
+  const tmp = path.join(home, '.weex-templates', template.replace(/\//g, '-'))
 
-  generator.run();
+  if (fs.existsSync(tmp) && !options.update) {
+    logger.log(`\n > You are Using the cached template at ${chalk.yellow(tildify(tmp))}, you can use \`--update\` option to update your template.\n`)
+    template = tmp
+  }
+
+  if (fs.existsSync(target)) {
+    inquirer.prompt([{
+      type: 'confirm',
+      message: 'Target directory exists. Continue?',
+      name: 'ok'
+    }]).then(answers => {
+      if (answers.ok) {
+        const spinner = ora(`Remove ${target} ...`).start();
+        rm(target);
+        spinner.stop();
+        return create(target, projectname, template, events, options);
+      }
+    }).catch(logger.error)
+  } else {
+    return create(target, projectname, template, events, options);
+  }
 }
 
-module.exports = init;

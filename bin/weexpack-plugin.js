@@ -4,7 +4,7 @@ const program = require('commander');
 const utils = require('../lib/utils')
 const logger = utils.logger;
 const exit = require('exit');
-const chalk = require('chalk')
+const chalk = require('chalk');
 const binname = 'weex';
 
 const {
@@ -25,12 +25,13 @@ process.on('unhandledRejection', (err) => {
 program._name = `${binname} plugin`;
 
 program
-.command('create [plugin_name]')
+.command('create <template-name> [project-name]')
+.option('-u, --update', 'update cached template')
 .option('--telemetry', 'upload usage data to help us improve the toolkit')
 .description('create a empty plugin project')
-.action((pluginName, options) => {
-  if (pluginName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
-    create(pluginName, program.argv, options)
+.action((template, project, options) => {
+  if (template.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
+    create(template, project, options)
   } else {
     logger.error(`Invalid plugin name:')} ${chalk.yellow(pluginName)}`);
     exit();
