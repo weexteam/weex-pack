@@ -16,7 +16,7 @@ If you have any problem while install the `weex-toolkit`, you can see the FAQ or
 You can run `weex plugin create` to create a plugin project
 
 ```
-$ weex plugin create weex-plugin-lottie
+$ weex plugin create [projectname]
 ```
 
 The resulting file structure is as follows:
@@ -25,18 +25,19 @@ The resulting file structure is as follows:
  ├── android  (Plugin folder for Android)
  │    ├── library  (Module folder for Android plugin，should be include into the examples)
  ├── ios  (Plugin folder for iOS)
- ├── js  (Plugin folder for Web)
+ ├── src  (Plugin folder for Web or other custom logic)
+ ├── configs  (develop scripts)
  ├── playground  (A playground demo)
  │    ├── android  (Android demo, default include the plugin module)
  │    ├── ios  (iOS demo, default include the plugin module)
  │    ├── browser  (Browser demo, default include the plugin module)
  ├── examples  (Written by vue examples)
- ├── ****.podspec  (Pod pulish file)
- ├── start  (Command to start develop)
  ├── package.json  (npm pulish file, need to be config before publish)
  ├── README.md
+ ├── webpack.config.js
+ ├── package.json
 ```
-After the project is created, you can run the `npm install` installation project dependency in the` weex-plugin-lottie` project.
+After the project is created, you can run the `npm start` to start your project.
 
 ### Develop
 
