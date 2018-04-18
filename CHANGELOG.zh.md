@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.2.3
+* 更新 `npm-shrinkwrap.json` 文件.
+* 修复找不到 `config-chain` 模块的问题.
 
 ### 1.2.2
 * 重构插件工程模板, 你可以使用 `weex plugin create [projectname]` 命令创建最新的 weex 插件工程。
