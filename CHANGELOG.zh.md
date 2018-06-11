@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.2.4
+* 修复 [Cannot find module 'chokidar'](https://github.com/weexteam/weex-toolkit/issues/412).
+
 ### 1.2.3
 * 更新 `npm-shrinkwrap.json` 文件.
 * 修复找不到 `config-chain` 模块的问题.

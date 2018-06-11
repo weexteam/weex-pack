@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Weex pack tool for Android、iOS and Web plartform.",
   "main": "bin/weexpack.js",
   "scripts": {
@@ -46,6 +46,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "chalk": "^2.4.0",
+    "chokidar": "^2.0.3",
     "commander": "^2.9.0",
     "cordova-fetch": "^1.0.1",
     "detect-port": "^1.2.2",
@@ -93,9 +94,7 @@
   },
   "changelog": {
     "messages": [
-      "Refactored weex plugin development project, you can using `weex plugin create [projectname]` to create a plugin develop project.",
-      "Replace `--offline` option with `--update` option while using `weex plugin create [projectname]` command because of the large project size, that meams you will using cached template instead of remote template, you can add `--update` flag to upgrade your local template.",
-      "Remove `yeoman` denpendences."
+      "Fixed issue https://github.com/weexteam/weex-toolkit/issues/412."
     ],
     "url": "https://github.com/weexteam/weex-pack/blob/master/README.md"
   }
