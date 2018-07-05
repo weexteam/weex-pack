@@ -1,5 +1,9 @@
 ## Changelog
 
+
+### 1.2.5
+* 修复 `weex plugin create <remote or local> [projectname]` 命令.
+
 ### 1.2.4
 * 修复 [Cannot find module 'chokidar'](https://github.com/weexteam/weex-toolkit/issues/412).
 

@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.2.5
+* Fixed `weex plugin create <remote or local> [projectname]` command.
+
+
 ### 1.2.4
 * Fixed issue [Cannot find module 'chokidar'](https://github.com/weexteam/weex-toolkit/issues/412).
 

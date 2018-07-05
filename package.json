@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Weex pack tool for Android、iOS and Web plartform.",
   "main": "bin/weexpack.js",
   "scripts": {
@@ -94,7 +94,7 @@
   },
   "changelog": {
     "messages": [
-      "Fixed issue https://github.com/weexteam/weex-toolkit/issues/412."
+      "Fixed create plugin template command."
     ],
     "url": "https://github.com/weexteam/weex-pack/blob/master/README.md"
   }

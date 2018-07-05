@@ -30,12 +30,22 @@ program
 .option('--telemetry', 'upload usage data to help us improve the toolkit')
 .description('create a empty plugin project')
 .action((template, project, options) => {
-  if (template.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
-    create(template, project, options)
+  let projectName;
+  let templateName;
+  if (project) {
+    projectName = project;
+    templateName = template;
+  }
+  else {
+    projectName = template;
+  }
+  if (projectName.match(/^[$A-Z_][0-9A-Z_-]*$/i)) {
+    create(templateName, projectName, options)
   } else {
-    logger.error(`Invalid plugin name:')} ${chalk.yellow(pluginName)}`);
+    logger.error(`Invalid plugin name:')} ${chalk.yellow(projectName)}`);
     exit();
   }
+  
 });
 
 program
