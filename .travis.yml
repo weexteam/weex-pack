@@ -6,8 +6,13 @@ os:
 node_js:
   - 6
   - 7
-script: ./node_modules/mocha/bin/mocha tests/*.test.js
+  - 8
+  - 9
+  - 10
+  
+script: 
+  #./node_modules/mocha/bin/mocha tests/*.test.js
 before_install:
-  - brew install nvm;
+  - npm install
 #  - brew install android-platform-tools;
-  - gem install -n /usr/local/bin cocoapods
+  - gem install cocoapods

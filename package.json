@@ -1,6 +1,6 @@
 {
   "name": "weexpack",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Weex pack tool for Android、iOS and Web plartform.",
   "main": "bin/weexpack.js",
   "scripts": {
@@ -56,7 +56,7 @@
     "fs-extra": "^3.0.1",
     "gauge": "^2.7.2",
     "glob": "^5.0.3",
-    "inquirer": "^3.3.0",
+    "inquirer": "^6.1.0",
     "ip": "^1.1.5",
     "merge": "^1.2.0",
     "metalsmith": "^2.3.0",
@@ -78,7 +78,7 @@
     "underscore": "1.7.0",
     "user-home": "^2.0.0",
     "valid-identifier": "0.0.1",
-    "weexpack-create": "^0.3.0",
+    "weexpack-create": "^0.3.1",
     "ws": "^4.0.0",
     "xcode": "^0.8.5"
   },
