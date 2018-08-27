@@ -17,12 +17,11 @@ const logger = utils.logger;
  * @param {String} config file path
  */
 module.exports = function (template, projectname, options) {
-  if (!projectname) {
-    projectname = template;
+  if (!template) {
     template = 'weex-plugin-template';
   }
 
-  const hasSlash = template.indexOf('/') > -1
+  const hasSlash = template && template.indexOf('/') > -1
   const target = path.resolve(projectname);
 
   if (!hasSlash) {
