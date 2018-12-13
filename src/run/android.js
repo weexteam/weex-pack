@@ -182,7 +182,7 @@ const registeFileWatcher = (
   chokidar.watch(path.join(rootPath, 'dist'), { ignored: /\w*\.web\.js$/ })
   .on('change', (event) => {
     copyJsbundleAssets(rootPath, 'dist', 'platforms/android/app/src/main/assets/dist', true).then(() => {
-      if (path.basename(event) === configs.WeexBundle) {
+      if (event && event.endsWith(configs.WeexBundle)) {
         logger.info(`Reloading page... \n`);
         ws.send(JSON.stringify({ method: 'WXReloadBundle', params: `http://${configs.ip}:${configs.port}/${configs.WeexBundle}` }));
       }
