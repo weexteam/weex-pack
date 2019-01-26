@@ -145,7 +145,7 @@ const utils = {
       if (os.release() >= '15.0.0') {
         args = ' --unsafe-perm=true --allow-root';
       }
-      logger.log('Instailling ios-deploy ...');
+      logger.log('Installing ios-deploy ...');
       return this.exec(`npm i ios-deploy --save ${args}`, false, {cwd: path.join(__dirname, '../..')});
     }
     else {
